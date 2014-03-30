@@ -1,0 +1,28 @@
+﻿Available commands
+
+c1  Command 1 a file.
+    
+    c1 <filename> [options]
+    
+    Parameters:
+    
+    filename  The name of the file.
+    
+    Options:
+    
+    /delete   Delete the file after processing.
+    /archive  Archive after processing
+
+c2  Command 2 an archive
+    
+    c2 <name> <keep> [options]
+    
+    Parameters:
+    
+    name  The name of the archive.
+    keep  The number of days to keep the archive
+    
+    Options:
+    
+    /maxSize  The maximum size of the archive.
+

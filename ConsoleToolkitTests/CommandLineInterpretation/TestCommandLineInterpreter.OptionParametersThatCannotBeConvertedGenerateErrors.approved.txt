@@ -1,0 +1,24 @@
+﻿Byte -opt:X : Command is null
+The parameter "X" of the opt option has an invalid value.
+Char -opt:fred : Command is null
+The parameter "fred" of the opt option has an invalid value.
+Int16 -opt:X : Command is null
+The parameter "X" of the opt option has an invalid value.
+UInt16 -opt:X : Command is null
+The parameter "X" of the opt option has an invalid value.
+Int32 -opt:X : Command is null
+The parameter "X" of the opt option has an invalid value.
+UInt32 -opt:X : Command is null
+The parameter "X" of the opt option has an invalid value.
+Int64 -opt:X : Command is null
+The parameter "X" of the opt option has an invalid value.
+UInt64 -opt:X : Command is null
+The parameter "X" of the opt option has an invalid value.
+Double -opt:X : Command is null
+The parameter "X" of the opt option has an invalid value.
+Single -opt:X : Command is null
+The parameter "X" of the opt option has an invalid value.
+Decimal -opt:X : Command is null
+The parameter "X" of the opt option has an invalid value.
+DateTime -opt:X : Command is null
+The parameter "X" of the opt option has an invalid value.

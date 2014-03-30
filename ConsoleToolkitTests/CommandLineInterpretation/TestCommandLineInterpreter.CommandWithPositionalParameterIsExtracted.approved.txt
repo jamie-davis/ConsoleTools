@@ -1,0 +1,11 @@
+﻿PositionalTest
+
+Argument list:
+  0: positionalTest
+  1: parameter
+
+
+
+Command type: PositionalTest
+
+Command positionaltest parameter Option: False Option2:  OptionInt: 0

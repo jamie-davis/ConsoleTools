@@ -1,0 +1,12 @@
+﻿PByte 10 : CMD[pbyte] Option[10] VALIDATED
+PChar A : CMD[pchar] Option[A] VALIDATED
+PInt16 10 : CMD[pint16] Option[10] VALIDATED
+PUInt16 10 : CMD[puint16] Option[10] VALIDATED
+PInt32 10 : CMD[pint32] Option[10] VALIDATED
+PUInt32 10 : CMD[puint32] Option[10] VALIDATED
+PInt64 10 : CMD[pint64] Option[10] VALIDATED
+PUInt64 10 : CMD[puint64] Option[10] VALIDATED
+PDouble 10.567 : CMD[pdouble] Option[10.567] VALIDATED
+PSingle 10.567 : CMD[psingle] Option[10.567] VALIDATED
+PDecimal 10.567 : CMD[pdecimal] Option[10.567] VALIDATED
+PDateTime 2014-02-05 : CMD[pdatetime] Option[05/02/2014 00:00:00] VALIDATED

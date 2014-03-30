@@ -1,0 +1,8 @@
+﻿Tokens extracted from:
+-->simple args are space delimited<--
+
+0: [simple]
+1: [args]
+2: [are]
+3: [space]
+4: [delimited]

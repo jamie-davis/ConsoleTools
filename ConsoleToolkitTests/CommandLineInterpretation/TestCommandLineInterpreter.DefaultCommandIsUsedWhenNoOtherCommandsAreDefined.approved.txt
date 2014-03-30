@@ -1,0 +1,11 @@
+﻿DefaultCommandType
+
+Argument list:
+  0: parameter
+  1: -opt2:value
+
+
+
+Command type: DefaultCommandType
+
+CMD[default] Option[False] Option2[value] OptionInt[0]

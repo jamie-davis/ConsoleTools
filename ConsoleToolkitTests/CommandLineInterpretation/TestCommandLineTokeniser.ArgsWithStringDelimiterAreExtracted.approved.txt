@@ -1,0 +1,5 @@
+﻿Tokens extracted from:
+-->simple "this one is delimited"<--
+
+0: [simple]
+1: [this one is delimited]

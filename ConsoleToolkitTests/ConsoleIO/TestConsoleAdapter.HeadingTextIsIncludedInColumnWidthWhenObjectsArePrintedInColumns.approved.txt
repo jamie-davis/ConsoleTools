@@ -1,0 +1,10 @@
+﻿12345678901234567890123456789012345678901234567890
+TextWithALongName Len
+----------------- ---
+The quick           9
+Brown fox           9
+Jumped over        11
+The                 3
+Lazy                4
+Dog                 3
+                    0

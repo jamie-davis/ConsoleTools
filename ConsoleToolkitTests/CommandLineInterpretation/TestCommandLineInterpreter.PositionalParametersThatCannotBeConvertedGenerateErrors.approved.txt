@@ -1,0 +1,24 @@
+﻿PByte X : Command is null
+The parm parameter value "X" is invalid.
+PChar fred : Command is null
+The parm parameter value "fred" is invalid.
+PInt16 X : Command is null
+The parm parameter value "X" is invalid.
+PUInt16 X : Command is null
+The parm parameter value "X" is invalid.
+PInt32 X : Command is null
+The parm parameter value "X" is invalid.
+PUInt32 X : Command is null
+The parm parameter value "X" is invalid.
+PInt64 X : Command is null
+The parm parameter value "X" is invalid.
+PUInt64 X : Command is null
+The parm parameter value "X" is invalid.
+PDouble X : Command is null
+The parm parameter value "X" is invalid.
+PSingle X : Command is null
+The parm parameter value "X" is invalid.
+PDecimal X : Command is null
+The parm parameter value "X" is invalid.
+PDateTime X : Command is null
+The parm parameter value "X" is invalid.

@@ -1,0 +1,10 @@
+﻿Argument list:
+  0: positionalTest
+  1: parameter
+  2: -opt2
+  3: -opt
+
+Command is null.
+
+Not enough parameters for the opt2 option.
+

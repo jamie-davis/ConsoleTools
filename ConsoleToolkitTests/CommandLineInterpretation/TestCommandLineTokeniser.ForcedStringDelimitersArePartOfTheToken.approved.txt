@@ -1,0 +1,5 @@
+﻿Tokens extracted from:
+-->simple "containing ""embedded speech"""<--
+
+0: [simple]
+1: [containing "embedded speech"]

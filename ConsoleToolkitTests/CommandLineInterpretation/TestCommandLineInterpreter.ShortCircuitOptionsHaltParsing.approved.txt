@@ -1,0 +1,11 @@
+﻿DefaultCommandType
+
+Argument list:
+  0: x
+  1: -h
+
+
+
+Command type: DefaultCommandType
+
+CMD[default] Option[True] Option2[] OptionInt[0]

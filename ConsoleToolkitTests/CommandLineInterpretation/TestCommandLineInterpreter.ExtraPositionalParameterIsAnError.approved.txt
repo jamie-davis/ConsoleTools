@@ -1,0 +1,9 @@
+﻿Argument list:
+  0: positionalTest
+  1: one
+  2: two
+
+Command is null.
+
+Unexpected argument "two"
+

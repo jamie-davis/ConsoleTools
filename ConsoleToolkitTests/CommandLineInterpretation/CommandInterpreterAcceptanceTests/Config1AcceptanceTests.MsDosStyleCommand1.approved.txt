@@ -1,0 +1,53 @@
+﻿Test: c1 file
+
+C1Data
+{
+    CommandName = c1
+    FileName = file
+    DeleteAfter = False
+    ArchiveLocation = 
+}
+
+
+Test: c1 file /delete /A:location
+
+C1Data
+{
+    CommandName = c1
+    FileName = file
+    DeleteAfter = True
+    ArchiveLocation = location
+}
+
+
+Test: c1 file /D /archive:location
+
+C1Data
+{
+    CommandName = c1
+    FileName = file
+    DeleteAfter = True
+    ArchiveLocation = location
+}
+
+
+Test: c1
+
+Not enough parameters specified.
+
+
+Test: c1 /D /A:loc
+
+Not enough parameters specified.
+
+
+Test: c1 /A
+
+Not enough parameters for the archive option.
+
+
+Test: c1 /A:b,56
+
+The archive option has too many parameters.
+
+
