@@ -42,7 +42,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
                 })
                     .Alias("1")
                     .Alias("one")
-                .Option("opt2", c => c.Opt2 = true)
+                .Option("opt2", (c, b) => c.Opt2 = b)
                     .Alias("2")
                     .Alias("two")
                 .Option<string>("opt3", (c, s) => c.Opt3 = s)

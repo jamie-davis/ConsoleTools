@@ -53,6 +53,50 @@ C1Data
 }
 
 
+Test: c1 file -D:false -A:loc
+
+C1Data
+{
+    CommandName = c1
+    FileName = file
+    DeleteAfter = False
+    ArchiveLocation = loc
+}
+
+
+Test: c1 file -D:true -A:loc
+
+C1Data
+{
+    CommandName = c1
+    FileName = file
+    DeleteAfter = True
+    ArchiveLocation = loc
+}
+
+
+Test: c1 file -delete:false -A:loc
+
+C1Data
+{
+    CommandName = c1
+    FileName = file
+    DeleteAfter = False
+    ArchiveLocation = loc
+}
+
+
+Test: c1 file -delete:true -A:loc
+
+C1Data
+{
+    CommandName = c1
+    FileName = file
+    DeleteAfter = True
+    ArchiveLocation = loc
+}
+
+
 Test: c1
 
 Not enough parameters specified.

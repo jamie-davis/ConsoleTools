@@ -133,7 +133,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             _config = new CommandLineInterpreterConfiguration();
             _config.Command("positionalTest", word => new PositionalTest(word))
                 .Positional<string>("firstParam", (p, s) => p.Param1 = s)
-                .Option("opt", c => c.Option = true)
+                .Option("opt", (c, b) => c.Option = b)
                 .Option<string>("opt2", (c, s) => c.Option2 = s)
                 .Option<int>("optInt", (c, i) => c.OptionInt = i);
 
@@ -232,7 +232,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var config = new CommandLineInterpreterConfiguration();
             config.Parameters(() => new DefaultCommandType())
                 .Positional<string>("firstParam", (p, s) => p.Param1 = s)
-                .Option("opt", c => c.Option = true)
+                .Option("opt", (c, b) => c.Option = b)
                 .Option<string>("opt2", (c, s) => c.Option2 = s)
                 .Option<int>("optInt", (c, i) => c.OptionInt = i);
 
@@ -248,7 +248,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             _config = new CommandLineInterpreterConfiguration();
             _config.Parameters(() => new PositionalTest(null))
                 .Positional<string>("firstParam", (p, s) => p.Param1 = s)
-                .Option("opt", c => c.Option = true)
+                .Option("opt", (c, b) => c.Option = b)
                 .Option<string>("opt2", (c, s) => c.Option2 = s)
                 .Option<int>("optInt", (c, i) => c.OptionInt = i);
         }
@@ -414,7 +414,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var config = new CommandLineInterpreterConfiguration(customParser);
             config.Parameters(() => new DefaultCommandType())
                 .Positional<string>("firstParam", (p, s) => p.Param1 = s)
-                .Option("opt", c => c.Option = true)
+                .Option("opt", (c, b) => c.Option = b)
                 .Option<string>("opt2", (c, s) => c.Option2 = s)
                 .Option<int>("optInt", (c, i) => c.OptionInt = i);
 
@@ -432,7 +432,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var config = new CommandLineInterpreterConfiguration(customParser);
             config.Parameters(() => new DefaultCommandType())
                 .Positional<string>("firstParam", (p, s) => p.Param1 = s)
-                .Option("opt", c => c.Option = true)
+                .Option("opt", (c, b) => c.Option = b)
                 .Option<string>("opt2", (c, s) => c.Option2 = s)
                 .Alias("opt2Alias")
                 .Option<int>("optInt", (c, i) => c.OptionInt = i)
@@ -453,7 +453,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             config.Parameters(() => new DefaultCommandType())
                 .Positional<string>("firstParam", (p, s) => p.Param1 = s)
                 .Positional<string>("secondParam", (p, s) => p.Param1 = s)
-                .Option("opt", c => c.Option = true)
+                .Option("opt", (c, b) => c.Option = b)
                 .Option<string>("opt2", (c, s) => c.Option2 = s)
                 .Option<int>("optInt", (c, i) => c.OptionInt = i);
 
@@ -471,7 +471,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             config.Parameters(() => new DefaultCommandType())
                 .Positional<string>("firstParam", (p, s) => p.Param1 = s)
                 .Positional<string>("secondParam", (p, s) => p.Param1 = s)
-                .Option("h", c => c.Option = true)
+                .Option("h", (c, b) => c.Option = b)
                 .ShortCircuitOption();
  
             var interpreter = new CommandLineInterpreter(config);

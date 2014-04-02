@@ -21,6 +21,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
         private static readonly Dictionary<Type, Func<string, object>> Converters = new Dictionary<Type, Func<string, object>>
         {
+            {typeof(bool), TryParse<bool>},
             {typeof(short), TryParse<short>},
             {typeof(ushort), TryParse<ushort>},
             {typeof(int), TryParse<int>},
@@ -289,6 +290,12 @@ namespace ConsoleToolkit.CommandLineInterpretation
                             }
                         }
 
+                        if (IsBoolean && index == 0)
+                        {
+                            callParameters = new[] { command, true };
+                            return true;
+                        }
+
                         if (ParameterCount == 0)
                         {
                             callParameters = new [] { command };
@@ -359,13 +366,15 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
             /// <summary>
             /// Specifies the simplest possible option type - there are no parameters, the option is simply present.
+            /// However, some parsing conventions allow for a boolean to be specified allowing a false to be supplied.
+            /// In order to support this, the option must accept a boolean and apply it appropriately.
             /// </summary>
             /// <param name="optionName">The name of the option.</param>
-            /// <param name="optionInitialiser">The lambda that applies the option to the command parameters type.</param>
+            /// <param name="optionInitialiser">The lambda that applies the option to the command parameters type. Note that this must accept a boolean.</param>
             /// <returns>The command config.</returns>
-            public CommandConfig<T> Option(string optionName, Action<T> optionInitialiser)
+            public CommandConfig<T> Option(string optionName, Action<T, bool> optionInitialiser)
             {
-                var commandOption = new CommandOption<Action<T>>(optionName, optionInitialiser);
+                var commandOption = new CommandOption<Action<T, bool>>(optionName, optionInitialiser) { IsBoolean = true};
                 Options.Add(commandOption);
                 _currentContext = commandOption;
                 return this;
@@ -515,10 +524,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
             public abstract void Apply(object command, IEnumerable<string> parameters, out string error);
             public string Description { get; set; }
 
-            public bool IsBoolean
-            {
-                get { return ParameterCount == 0; }
-            }
+            public bool IsBoolean { get; internal set; }
 
             public bool IsShortCircuit { get; set; }
 

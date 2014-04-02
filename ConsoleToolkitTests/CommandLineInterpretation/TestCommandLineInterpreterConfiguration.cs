@@ -60,7 +60,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             _config
                 .Command("third", s => new TestCommand())
                 .Description("The third command has a number of options but no parameters.")
-                .Option("on", command => {})
+                .Option("on", (command, b) => {})
                     .Description("A simple option with no argument.")
                 .Option<string, int>("fiddly", (command, s, n) => {})
                     .Alias("f")
@@ -72,7 +72,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
                     .Description("The date the complicated nonsense should be forgotten.")
                 .Positional<string>("crpyticnum", (command, s) => { })
                     .Description("The amount of nonsense the user needs to forget.")
-                .Option("ignore", command => {})
+                .Option("ignore", (command, b) => {})
                     .Description("Use this option to consign this command to history, where it belongs.")
                 .Option<string, int>("more", (command, s, n) => {})
                     .Description("Even more.");
@@ -85,7 +85,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
                 .Positional<string>("pos", (command, s) => { })
                     .Description(@"A parameter with
 a line break.")
-                .Option("lb", command => { })
+                .Option("lb", (command, b) => { })
                     .Description("Another\nbreak.");
         }
 
@@ -258,7 +258,7 @@ a line break.")
                 .Description("Description of the whole program.")
                 .Positional<string>("pos", (command, s) => { })
                     .Description("A positional parameter.")
-                .Option("h", o => { })
+                .Option("h", (o, b) => { })
                 .ShortCircuitOption();
         }
 

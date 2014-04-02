@@ -49,7 +49,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 .Description("Command 1 a file.")
                 .Positional<string>("filename", (c, s) => c.FileName = s)
                 .Description("The name of the file.")
-                .Option("delete", c => c.DeleteAfter = true)
+                .Option("delete", (c, b) => c.DeleteAfter = b)
                 .Alias("D")
                 .Description("Delete the file after processing.")
                 .Option<string>("archive", (c, s) => c.ArchiveLocation = s)
@@ -118,6 +118,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 @"c1 file -delete -A location",
                 @"c1 file -D -archive:location",
                 @"c1 file -D -archive location",
+                @"c1 file -D:false -A:loc",
+                @"c1 file -D:true -A:loc",
+                @"c1 file -delete:false -A:loc",
+                @"c1 file -delete:true -A:loc",
                 @"c1",
                 @"c1 -D -A:loc",
                 @"c1 -A",

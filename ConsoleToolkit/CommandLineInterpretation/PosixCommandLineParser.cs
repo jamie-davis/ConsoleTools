@@ -47,7 +47,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
             var option = shortOptions.FirstOrDefault(o => o.Name == GetShortOptionName(arg));
             if (option != null)
             {
-                if (option.ParameterCount == 0)
+                if (option.ParameterCount == 0 || option.IsBoolean)
                 {
                     foreach (var optionChar in arg)
                     {
