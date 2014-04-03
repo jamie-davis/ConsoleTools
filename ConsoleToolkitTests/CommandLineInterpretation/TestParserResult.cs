@@ -10,7 +10,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
     public class TestParserResult
     {
         private ParserResult _parserResult;
-        private CommandLineInterpreterConfiguration.BaseCommandConfig _command;
+        private BaseCommandConfig _command;
         private CommandLineInterpreterConfiguration _config;
 
         class CommandParams

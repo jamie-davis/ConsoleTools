@@ -10,9 +10,9 @@ namespace ConsoleToolkit.CommandLineInterpretation
     }
     public class ParserResult : IParserResult
     {
-        private List<CommandLineInterpreterConfiguration.BasePositional> _positionals;
-        private Dictionary<string, CommandLineInterpreterConfiguration.BaseOption> _options;
-        private List<CommandLineInterpreterConfiguration.BaseOption> _usedOptions;
+        private List<BasePositional> _positionals;
+        private Dictionary<string, BaseOption> _options;
+        private List<BaseOption> _usedOptions;
         private List<string> _usedPositionals;
 
         public object ParamObject { get; set; }
@@ -20,32 +20,32 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
         public ParseStatus Status { get; private set; }
 
-        public ParserResult(CommandLineInterpreterConfiguration.BaseCommandConfig command, string name)
+        public ParserResult(BaseCommandConfig command, string name)
         {
             _positionals = command.Positionals.ToList();
             _usedPositionals = new List<string>();
             _options = command.Options
                 .SelectMany(o => new[] { OptionCollectionEntry(o) }.Concat(OptionAliases(o)))
                 .ToDictionary(c => c.Key, c => c.Value);
-            _usedOptions = new List<CommandLineInterpreterConfiguration.BaseOption>();
+            _usedOptions = new List<BaseOption>();
             ParamObject = command.Create(name);
             Status = ParseStatus.Incomplete;
         }
 
-        private static IEnumerable<KeyValuePair<string, CommandLineInterpreterConfiguration.BaseOption>> OptionAliases(CommandLineInterpreterConfiguration.BaseOption o)
+        private static IEnumerable<KeyValuePair<string, BaseOption>> OptionAliases(BaseOption o)
         {
             return o.Aliases.Select(
-                a => new KeyValuePair<string, CommandLineInterpreterConfiguration.BaseOption>(a, o));
+                a => new KeyValuePair<string, BaseOption>(a, o));
         }
 
-        private static KeyValuePair<string, CommandLineInterpreterConfiguration.BaseOption> OptionCollectionEntry(CommandLineInterpreterConfiguration.BaseOption o)
+        private static KeyValuePair<string, BaseOption> OptionCollectionEntry(BaseOption o)
         {
-            return new KeyValuePair<string, CommandLineInterpreterConfiguration.BaseOption>(o.Name, o);
+            return new KeyValuePair<string, BaseOption>(o.Name, o);
         }
 
         public ParseOutcome OptionExtracted(string optionName, string[] arguments)
         {
-            CommandLineInterpreterConfiguration.BaseOption option;
+            BaseOption option;
             if (_options.TryGetValue(optionName, out option))
             {
                 if (_usedOptions.Contains(option))
@@ -97,7 +97,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
             return ParseOutcome.Halt;
         }
 
-        private bool AcceptPositional(string value, CommandLineInterpreterConfiguration.BasePositional positional)
+        private bool AcceptPositional(string value, BasePositional positional)
         {
             _positionals.Remove(positional);
             _usedPositionals.Add(positional.ParameterName);

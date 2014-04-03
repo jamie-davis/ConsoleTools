@@ -40,15 +40,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandLineInterpretation\AliasNotSupported.cs" />
+    <Compile Include="CommandLineInterpretation\BaseCommandConfig.cs" />
+    <Compile Include="CommandLineInterpretation\BaseOption.cs" />
+    <Compile Include="CommandLineInterpretation\BasePositional.cs" />
     <Compile Include="CommandLineInterpretation\BuiltInCommandLineParsers.cs" />
     <Compile Include="CommandLineInterpretation\CommandAlreadySpecified.cs" />
+    <Compile Include="CommandLineInterpretation\CommandConfig.cs" />
     <Compile Include="CommandLineInterpretation\CommandConfigurationInvalid.cs" />
     <Compile Include="CommandLineInterpretation\CommandLineInterpreter.cs" />
     <Compile Include="CommandLineInterpretation\CommandLineInterpreterConfiguration.cs" />
     <Compile Include="CommandLineInterpretation\CommandLineParserConventions.cs" />
     <Compile Include="CommandLineInterpretation\CommandLineTokeniser.cs" />
+    <Compile Include="CommandLineInterpretation\CommandOption.cs" />
     <Compile Include="CommandLineInterpretation\CustomParserNotFound.cs" />
     <Compile Include="CommandLineInterpretation\DuplicateOptionName.cs" />
+    <Compile Include="CommandLineInterpretation\ExpressionCommandOption.cs" />
     <Compile Include="CommandLineInterpretation\MemberReferenceExpected.cs" />
     <Compile Include="CommandLineInterpretation\SetterBuilder.cs" />
     <Compile Include="CommandLineInterpretation\ShortCircuitInvalid.cs" />

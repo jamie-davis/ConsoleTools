@@ -27,7 +27,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
                 return null;
             }
 
-            CommandLineInterpreterConfiguration.BaseCommandConfig command;
+            BaseCommandConfig command;
             string commandName = null;
             int firstArgumentIndex;
             if (_config.Commands.Any())
@@ -77,13 +77,13 @@ namespace ConsoleToolkit.CommandLineInterpretation
         /// </summary>
         private class OptionAlias : IOption
         {
-            private readonly CommandLineInterpreterConfiguration.BaseOption _option;
+            private readonly BaseOption _option;
             private readonly string _alias;
             public string Name { get { return _alias; } }
             public bool IsBoolean { get { return _option.IsBoolean; } }
             public int ParameterCount { get { return _option.ParameterCount; } }
 
-            public OptionAlias(CommandLineInterpreterConfiguration.BaseOption option, string alias)
+            public OptionAlias(BaseOption option, string alias)
             {
                 _option = option;
                 _alias = alias;
@@ -95,7 +95,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
         /// </summary>
         /// <param name="command">The command.</param>
         /// <returns>A list of IOption implementations.</returns>
-        private IEnumerable<IOption> GetOptionsAndAliases(CommandLineInterpreterConfiguration.BaseCommandConfig command)
+        private IEnumerable<IOption> GetOptionsAndAliases(BaseCommandConfig command)
         {
             return command
                 .Options
