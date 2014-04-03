@@ -2,7 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using ConsoleToolkit.Utilities;
 
@@ -12,7 +15,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
     /// Fluent command configuration construction object.
     ///
     /// Either the default command, or at least one named command must be configured. 
-    /// See <see cref="Parameters{T}(System.Func{T})"/>"/>, and <see cref="Command{T}"/>.
+    /// See <see cref="Parameters{T}(System.Func{T})"/>"/>, and <see cref="Command{T}(string)"/> overloads.
     /// </summary>
     public class CommandLineInterpreterConfiguration
     {
@@ -99,9 +102,26 @@ namespace ConsoleToolkit.CommandLineInterpretation
             if (DefaultCommand != null)
                 throw new NamedCommandConflict();
 
-            if (_commands.Any(c => string.Compare(c.Name, command, true) == 0))
+            if (_commands.Any(c => string.Compare(c.Name, command, true, CultureInfo.CurrentCulture) == 0))
                 throw new CommandAlreadySpecified(command);
             var commandConfig = new CommandConfig<T>(initialiser) { Name = command.ToLower() };
+            _commands.Add(commandConfig);
+            return commandConfig;
+        }
+
+        /// <summary>
+        /// Adds a command to the configuration, with an auto generated initialiser. This is only possible where T has a parameterless constructor.
+        /// </summary>
+        /// <typeparam name="T">The type of the command that is created. Must have a parameterless constructor to be used with this overload.</typeparam>
+        /// <param name="command">The name of the command i.e. the string that the user will enter to identify the command.</param>
+        public CommandConfig<T> Command<T>(string command) where T : class, new()
+        {
+            if (DefaultCommand != null)
+                throw new NamedCommandConflict();
+
+            if (_commands.Any(c => string.Compare(c.Name, command, true, CultureInfo.CurrentCulture) == 0))
+                throw new CommandAlreadySpecified(command);
+            var commandConfig = new CommandConfig<T>(w => new T()) { Name = command.ToLower() };
             _commands.Add(commandConfig);
             return commandConfig;
         }
@@ -147,7 +167,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
         /// <summary>
         /// The default command. If this is set, this will be used when no commands are configured. Either the default command,
-        /// or at least one named command must be configured. See <see cref="Parameters{T}(System.Func{T})"/>"/>, and <see cref="Command{T}"/>.
+        /// or at least one named command must be configured. See <see cref="Parameters{T}(System.Func{T})"/>"/>, and <see cref="Command{T}(string)"/> overloads.
         /// </summary>
         public BaseCommandConfig DefaultCommand { get; set; }
 
@@ -203,6 +223,29 @@ namespace ConsoleToolkit.CommandLineInterpretation
                         throw new InvalidParameterType(typeof(TParameter));
                 }
 
+                public CommandPositional(string parameterName, Expression<Func<T, TParameter>> positionalIdentifier)
+                    : base(parameterName)
+                {
+                    _positionalInitialiser = InitialiserFromExpression(positionalIdentifier);
+                    if (!Converters.TryGetValue(typeof(TParameter), out _converter))
+                        throw new InvalidParameterType(typeof(TParameter));
+                }
+
+                private Action<T, TParameter> InitialiserFromExpression(Expression<Func<T, TParameter>> positionalIdentifier)
+                {
+                    var inputMemberExpression = positionalIdentifier.Body as MemberExpression;
+                    if (inputMemberExpression == null)
+                        throw new MemberReferenceExpected();
+
+                    var commandTypeInstance = Expression.Parameter(typeof (T));
+                    var convertedParameterValue = Expression.Parameter(typeof (TParameter));
+                    var memberAccess = Expression.MakeMemberAccess(commandTypeInstance, inputMemberExpression.Member);
+                    var expression = Expression.Assign(memberAccess, convertedParameterValue);
+                    var lambdaExpression = Expression.Lambda<Action<T, TParameter>>(expression,
+                        new[] {commandTypeInstance, convertedParameterValue});
+                    return lambdaExpression.Compile();
+                }
+
                 public override string Accept(object command, string value)
                 {
                     var typeCastCommand = command as T;
@@ -225,7 +268,6 @@ namespace ConsoleToolkit.CommandLineInterpretation
             {
                 private readonly TAction _optionInitialiser;
                 private List<Type> _paramTypes;
-                private Type _commandType;
                 private Type _actionType;
 
                 public CommandOption(string optionName, TAction optionInitialiser)
@@ -242,7 +284,6 @@ namespace ConsoleToolkit.CommandLineInterpretation
                     if (_actionType.IsGenericType)
                     {
                         var genericArguments = _actionType.GetGenericArguments();
-                        _commandType = genericArguments.First();
                         _paramTypes = genericArguments.Skip(1).ToList();
                         ParameterCount = _paramTypes.Count();
 
@@ -346,6 +387,20 @@ namespace ConsoleToolkit.CommandLineInterpretation
             }
 
             /// <summary>
+            /// Add a positional parameter.
+            /// </summary>
+            /// <typeparam name="T1">The data type of the paramter value.</typeparam>
+            /// <param name="parameterName">The name of the parameter</param>
+            /// <param name="positionalVariableIdentifier">An expression that returns the property in the command type that should receive the value.</param>
+            public CommandConfig<T> Positional<T1>(string parameterName, Expression<Func<T, T1>> positionalVariableIdentifier)
+            {
+                var commandPositional = new CommandPositional<T1>(parameterName, positionalVariableIdentifier);
+                Positionals.Add(commandPositional);
+                _currentContext = commandPositional;
+                return this;
+            }
+
+            /// <summary>
             /// Short circuit the parsing process. This allows options to be specified that bypass the usual validation of
             /// missing parameters. Options that display help text are a good example of where this could be useful.
             /// </summary>
@@ -375,6 +430,36 @@ namespace ConsoleToolkit.CommandLineInterpretation
             public CommandConfig<T> Option(string optionName, Action<T, bool> optionInitialiser)
             {
                 var commandOption = new CommandOption<Action<T, bool>>(optionName, optionInitialiser) { IsBoolean = true};
+                Options.Add(commandOption);
+                _currentContext = commandOption;
+                return this;
+            }
+
+            /// <summary>
+            /// Specifies the simplest possible option type - there are no parameters, the option is simply present.
+            /// However, some parsing conventions allow for a boolean to be specified allowing a false to be supplied.
+            /// In order to support this, the option must accept a boolean and apply it appropriately.
+            /// </summary>
+            /// <param name="optionName">The name of the option.</param>
+            /// <param name="optionVariableIndicator">The expression that identifies the boolean that should be set in the command type.</param>
+            /// <returns>The command config.</returns>
+            public CommandConfig<T> Option(string optionName, Expression<Func<T, bool>> optionVariableIndicator)
+            {
+                var commandOption = ExpressionCommandOption.Create<T>(optionName, optionVariableIndicator, true);
+                Options.Add(commandOption);
+                _currentContext = commandOption;
+                return this;
+            }
+
+            /// <summary>
+            /// Specifies an option taking a single parameter.
+            /// </summary>
+            /// <param name="optionName">The name of the option.</param>
+            /// <param name="optionVariableIndicator">The expression that identifies the member that should be set in the command type. The type of the member determines the data type of the option.</param>
+            /// <returns>The command config.</returns>
+            public CommandConfig<T> Option<TParam>(string optionName, Expression<Func<T, TParam>> optionVariableIndicator)
+            {
+                var commandOption = ExpressionCommandOption.Create<T>(optionName, optionVariableIndicator, false);
                 Options.Add(commandOption);
                 _currentContext = commandOption;
                 return this;
@@ -662,6 +747,25 @@ namespace ConsoleToolkit.CommandLineInterpretation
             }
 
             return sb.ToString();
+        }
+    }
+
+    internal static class ExpressionCommandOption
+    {
+        public static CommandLineInterpreterConfiguration.BaseOption Create<TCommand>(string optionName, 
+            LambdaExpression optionVariableIndicator, 
+            bool isBooleanOption) where TCommand : class
+        {
+            var setter = SetterBuilder.Build<TCommand>(optionVariableIndicator.Body);
+
+            var optionGenericType = typeof(CommandLineInterpreterConfiguration.CommandConfig<TCommand>).GetNestedType("CommandOption`1", BindingFlags.Public);
+            var optionType = optionGenericType.MakeGenericType(new[] {typeof(TCommand), setter.GetType()});
+
+            var option = Activator.CreateInstance(optionType, new[] {optionName, setter}) as CommandLineInterpreterConfiguration.BaseOption;
+            if (option != null)
+                option.IsBoolean = isBooleanOption;
+
+            return option;
         }
     }
 }

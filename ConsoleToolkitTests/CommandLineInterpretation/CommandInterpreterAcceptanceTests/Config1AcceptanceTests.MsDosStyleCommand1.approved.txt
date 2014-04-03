@@ -51,3 +51,14 @@ Test: c1 /A:b,56
 The archive option has too many parameters.
 
 
+Test: c2 name 5 /M:5
+
+C2Data
+{
+    CommandName = 
+    DaysToKeep = 5
+    ArchiveName = name
+    MaxSize = 5
+}
+
+

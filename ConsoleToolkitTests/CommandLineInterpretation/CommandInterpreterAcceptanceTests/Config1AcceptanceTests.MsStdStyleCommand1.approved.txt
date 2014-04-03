@@ -133,3 +133,14 @@ C1Data
 }
 
 
+Test: c2 name 4 -maxSize:5
+
+C2Data
+{
+    CommandName = 
+    DaysToKeep = 4
+    ArchiveName = name
+    MaxSize = 5
+}
+
+

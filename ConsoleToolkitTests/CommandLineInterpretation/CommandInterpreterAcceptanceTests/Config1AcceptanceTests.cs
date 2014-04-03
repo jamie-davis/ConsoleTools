@@ -18,7 +18,11 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
 
         class C1Data
         {
-            public string CommandName { get; set; }
+            public C1Data(string name)
+            {
+                CommandName = name;
+            }
+            public string CommandName { get; private set; }
             public string FileName { get; set; }
             public bool DeleteAfter { get; set; }
             public string ArchiveLocation { get; set; }
@@ -45,26 +49,26 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
 
         private void Configure(CommandLineInterpreterConfiguration config)
         {
-            config.Command("c1", s => new C1Data {CommandName = s})
+            config.Command("c1", s => new C1Data(s))
                 .Description("Command 1 a file.")
                 .Positional<string>("filename", (c, s) => c.FileName = s)
-                .Description("The name of the file.")
+                    .Description("The name of the file.")
                 .Option("delete", (c, b) => c.DeleteAfter = b)
-                .Alias("D")
-                .Description("Delete the file after processing.")
+                    .Alias("D")
+                    .Description("Delete the file after processing.")
                 .Option<string>("archive", (c, s) => c.ArchiveLocation = s)
-                .Alias("A")
-                .Description("Archive after processing");
+                    .Alias("A")
+                    .Description("Archive after processing");
 
-            config.Command("c2", s => new C2Data {CommandName = s})
+            config.Command<C2Data>("c2")
                 .Description("Command 2 an archive")
-                .Positional<string>("name", (c, s) => c.ArchiveName = s)
-                .Description("The name of the archive.")
-                .Positional<int>("keep", (c, i) => c.DaysToKeep = i)
-                .Description("The number of days to keep the archive")
-                .Option<int>("maxSize", (c, i) => c.MaxSize = i)
-                .Alias("M")
-                .Description("The maximum size of the archive.");
+                .Positional("name", c => c.ArchiveName)
+                    .Description("The name of the archive.")
+                .Positional("keep", c => c.DaysToKeep)
+                    .Description("The number of days to keep the archive")
+                .Option("maxSize", c => c.MaxSize)
+                    .Alias("M")
+                    .Description("The maximum size of the archive.");
         }
 
         [Test]
@@ -86,6 +90,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 @"c1 -A",
                 @"c1 -Ab,56",
                 @"c1 -- -Ab,56",
+                @"c2 name --maxSize=5",
             };
 
             Approvals.Verify(CommandExecutorUtil.Do(_posix, commands, 50));
@@ -103,6 +108,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 @"c1 /D /A:loc",
                 @"c1 /A",
                 @"c1 /A:b,56",
+                @"c2 name 5 /M:5",
             };
 
             Approvals.Verify(CommandExecutorUtil.Do(_msDos, commands, 50));
@@ -128,6 +134,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 @"c1 -A:b,56",
                 @"c1 -A b,56",
                 @"c1 -- -A",
+                @"c2 name 4 -maxSize:5",
             };
 
             Approvals.Verify(CommandExecutorUtil.Do(_msStd, commands, 50));

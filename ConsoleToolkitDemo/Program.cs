@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using ConsoleToolkit.CommandLineInterpretation;
@@ -58,7 +56,7 @@ namespace ConsoleToolkitDemo
         private static CommandLineInterpreterConfiguration ConfigureCommandLine()
         {
             var config = new CommandLineInterpreterConfiguration(CommandLineParserConventions.MsDosConventions);
-            config.Command("help", s => new HelpCommand())
+            config.Command<HelpCommand>("help")
                 .Description("Display help text.");
             return config;
         }

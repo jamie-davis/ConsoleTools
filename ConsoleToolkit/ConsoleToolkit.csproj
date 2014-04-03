@@ -49,6 +49,8 @@
     <Compile Include="CommandLineInterpretation\CommandLineTokeniser.cs" />
     <Compile Include="CommandLineInterpretation\CustomParserNotFound.cs" />
     <Compile Include="CommandLineInterpretation\DuplicateOptionName.cs" />
+    <Compile Include="CommandLineInterpretation\MemberReferenceExpected.cs" />
+    <Compile Include="CommandLineInterpretation\SetterBuilder.cs" />
     <Compile Include="CommandLineInterpretation\ShortCircuitInvalid.cs" />
     <Compile Include="CommandLineInterpretation\ShortCircuitInvalidOnPositionalParameter.cs" />
     <Compile Include="CommandLineInterpretation\ICommandLineParser.cs" />

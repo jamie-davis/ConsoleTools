@@ -27,6 +27,9 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
 
         public class TestCommand
         {
+            public string StringProp { get; set; }
+            public bool BoolProp { get; set; }
+            public int IntProp { get; set; }
         }
 
         public class CustomParamCommand
@@ -87,6 +90,16 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
 a line break.")
                 .Option("lb", (command, b) => { })
                     .Description("Another\nbreak.");
+
+            _config
+                .Command("exp", s => new TestCommand())
+                .Description(@"Command with a positional and options configured using a Linq Expression, not a lambda.")
+                .Positional("pos", command => command.StringProp)
+                    .Description(@"A positional configured with an expression.")
+                .Option("B", command => command.BoolProp )
+                    .Description("A boolean option configured with an expression.")
+                .Option("I", command => command.IntProp )
+                    .Description("A boolean option configured with an expression.");
         }
 
         [Test, ExpectedException(typeof(InvalidParameterType))]
