@@ -78,7 +78,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
             var parameter = Expression.Parameter(typeof(T));
             var delegateType = typeof(Func<,>).MakeGenericType(new[] { typeof(T), prop.PropertyType });
             var accessor = Expression.Lambda(delegateType, Expression.MakeMemberAccess(parameter, prop), new[] { parameter });
-            return OptionFromExpression<T>(optionName, accessor, true);
+            return OptionFromExpression<T>(optionName, accessor, prop.PropertyType == typeof(bool));
         }
 
         /// <summary>

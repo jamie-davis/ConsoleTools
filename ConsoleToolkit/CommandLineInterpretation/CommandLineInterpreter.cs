@@ -21,17 +21,16 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
             var messages = new List<string>();
 
-            if (args == null || args.Length == 0)
-            {
-                errors = new string[]{};
-                return null;
-            }
-
             BaseCommandConfig command;
             string commandName = null;
             int firstArgumentIndex;
             if (_config.Commands.Any())
             {
+                if (args == null || args.Length == 0)
+                {
+                    errors = new[] { "No command specified." };
+                    return null;
+                }
 
                 commandName = args[0].ToLower();
                 command = _config.Commands.FirstOrDefault(c => c.Name == commandName);

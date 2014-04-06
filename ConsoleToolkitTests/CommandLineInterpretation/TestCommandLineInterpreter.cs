@@ -137,6 +137,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
                 .Option<string>("opt2", (c, s) => c.Option2 = s)
                 .Option<int>("optInt", (c, i) => c.OptionInt = i);
 
+            GenericCommand<bool>.AddCommand(_config);
             GenericCommand<byte>.AddCommand(_config);
             GenericCommand<char>.AddCommand(_config);
             GenericCommand<short>.AddCommand(_config);
@@ -255,6 +256,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
 
         public static Tuple<Type, string, string>[] ParameterTypeCases =
         {
+            new Tuple<Type, string, string>(typeof(bool),"true", "X"),
             new Tuple<Type, string, string>(typeof(byte),"10", "X"),
             new Tuple<Type, string, string>(typeof(char),"A", "fred"),
             new Tuple<Type, string, string>(typeof(short),"10", "X"),
@@ -480,6 +482,26 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var command = interpreter.Interpret(args, out errors);
 
             Approvals.Verify(Describe(args, command, errors));
+        }
+
+        [Test]
+        public void EmptyCommandStringGeneratesMissingParametersError()
+        {
+            var customParser = new MockParser();
+            var config = new CommandLineInterpreterConfiguration(customParser);
+            config.Parameters(() => new DefaultCommandType())
+                .Positional<string>("firstParam", (p, s) => p.Param1 = s)
+                .Positional<string>("secondParam", (p, s) => p.Param1 = s)
+                .Option("opt", (c, b) => c.Option = b)
+                .Option<string>("opt2", (c, s) => c.Option2 = s)
+                .Option<int>("optInt", (c, i) => c.OptionInt = i);
+
+            var interpreter = new CommandLineInterpreter(config);
+            string[] errors;
+            var args = new string[] { };
+            var result = interpreter.Interpret(args, out errors);
+
+            Approvals.Verify(Describe(args, result, errors));
         }
 
         private void FailValidation(string failureMessage)

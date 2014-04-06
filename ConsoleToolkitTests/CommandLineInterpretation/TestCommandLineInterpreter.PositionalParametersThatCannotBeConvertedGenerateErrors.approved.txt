@@ -1,4 +1,6 @@
-﻿PByte X : Command is null
+﻿PBoolean X : Command is null
+The parm parameter value "X" is invalid.
+PByte X : Command is null
 The parm parameter value "X" is invalid.
 PChar fred : Command is null
 The parm parameter value "fred" is invalid.

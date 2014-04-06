@@ -1,4 +1,6 @@
-﻿Byte -opt:X : Command is null
+﻿Boolean -opt:X : Command is null
+The parameter "X" of the opt option has an invalid value.
+Byte -opt:X : Command is null
 The parameter "X" of the opt option has an invalid value.
 Char -opt:fred : Command is null
 The parameter "fred" of the opt option has an invalid value.

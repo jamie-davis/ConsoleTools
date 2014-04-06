@@ -62,8 +62,8 @@ C1Data
 }
 
 
-Test: c2 name --maxSize=5
+Test: bogus
 
-Not enough parameters specified.
+Command not recognised.
 
 

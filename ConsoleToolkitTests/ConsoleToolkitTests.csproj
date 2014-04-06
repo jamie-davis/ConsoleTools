@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\CommandExecutorUtil.cs" />
     <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\Config1AcceptanceTests.cs" />
     <Compile Include="CommandLineInterpretation\MockParserResult.cs" />
     <Compile Include="CommandLineInterpretation\TestCommandLineInterpreter.cs" />

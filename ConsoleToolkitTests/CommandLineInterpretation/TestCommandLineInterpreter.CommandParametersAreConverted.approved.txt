@@ -1,4 +1,5 @@
-﻿PByte 10 : CMD[pbyte] Option[10] VALIDATED
+﻿PBoolean true : CMD[pboolean] Option[True] VALIDATED
+PByte 10 : CMD[pbyte] Option[10] VALIDATED
 PChar A : CMD[pchar] Option[A] VALIDATED
 PInt16 10 : CMD[pint16] Option[10] VALIDATED
 PUInt16 10 : CMD[puint16] Option[10] VALIDATED

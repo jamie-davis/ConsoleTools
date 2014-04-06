@@ -1,4 +1,5 @@
-﻿Byte -opt:10 : CMD[byte] Option[10]
+﻿Boolean -opt:true : CMD[boolean] Option[True]
+Byte -opt:10 : CMD[byte] Option[10]
 Char -opt:A : CMD[char] Option[A]
 Int16 -opt:10 : CMD[int16] Option[10]
 UInt16 -opt:10 : CMD[uint16] Option[10]

@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using System.Text;
+﻿using System;
+using System.Security.Cryptography;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.CommandLineInterpretation;
@@ -111,7 +111,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 @"c1 -A",
                 @"c1 -Ab,56",
                 @"c1 -- -Ab,56",
-                @"c2 name --maxSize=5",
+                @"bogus",
             };
 
             Approvals.Verify(CommandExecutorUtil.Do(_posix, commands, 50));
@@ -130,6 +130,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 @"c1 /A",
                 @"c1 /A:b,56",
                 @"c2 name 5 /M:5",
+                @"c2 name 5 /M:5,",
             };
 
             Approvals.Verify(CommandExecutorUtil.Do(_msDos, commands, 50));
@@ -165,44 +166,116 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             Approvals.Verify(CommandExecutorUtil.Do(_msStd, commands, 50));
         }
     }
-
-    public static class CommandExecutorUtil
+    [TestFixture]
+    [UseReporter(typeof (CustomReporter))]
+    public class Config2AcceptanceTests
     {
-        public static string Do(CommandLineInterpreterConfiguration config, string[] commands, int width)
+        private CommandLineInterpreterConfiguration _posix;
+        private CommandLineInterpreterConfiguration _msDos;
+        private CommandLineInterpreterConfiguration _msStd;
+
+        class Data
         {
-            var sb = new StringBuilder();
-            var interpreter = new CommandLineInterpreter(config);
-            foreach (var command in commands)
+            public string FileName { get; set; }
+            public bool Delete { get; set; }
+            public string Archive { get; set; }
+        }
+
+        [SetUp]
+        public void SetUp()
+        {
+            _posix = new CommandLineInterpreterConfiguration(CommandLineParserConventions.PosixConventions);
+            _msDos = new CommandLineInterpreterConfiguration(CommandLineParserConventions.MsDosConventions);
+            _msStd = new CommandLineInterpreterConfiguration(CommandLineParserConventions.MicrosoftStandard);
+            Configure(_posix);
+            Configure(_msDos);
+            Configure(_msStd);
+        }
+
+        private void Configure(CommandLineInterpreterConfiguration config)
+        {
+            config.Parameters<Data>("testApp")
+                .Description("Do something to a file.")
+                .Positional("filename")
+                    .Description("The name of the file.")
+                .Option("delete")
+                    .Alias("D")
+                    .Description("Delete the file after processing.")
+                .Option("archive")
+                    .Alias("A")
+                    .Description("Archive after processing");
+        }
+
+        [Test]
+        public void ConfigurationShouldBeDescribed()
+        {
+            var description = _posix.Describe(50);
+            Console.WriteLine(description);
+            Approvals.Verify(description);
+        }
+
+        [Test]
+        public void PosixStyleCommand1()
+        {
+            var commands = new[]
             {
-                sb.AppendLine(string.Format("Test: {0}", command));
-                sb.AppendLine();
+                @"file",
+                @"file --delete -Alocation",
+                @"file -D --archive=location",
+                @"",
+                @"-D -Aloc",
+                @"-A",
+                @"-Ab,56",
+                @"-- -Ab,56",
+                @"file 4",
+            };
 
-                var args = CommandLineTokeniser.Tokenise(command);
-                string[] errors;
-                var result = interpreter.Interpret(args, out errors);
-                if (errors.Any())
-                {
-                    foreach (var e in errors)
-                    {
-                        sb.AppendLine(e);
-                    }
-                }
-                else
-                {
-                    sb.AppendLine(result.GetType().Name);
-                    sb.AppendLine("{");
-                    foreach (var propertyInfo in result.GetType().GetProperties())
-                    {
-                        sb.AppendLine(string.Format("    {0} = {1}", propertyInfo.Name, propertyInfo.GetValue(result)));
-                    }
-                    sb.AppendLine("}");
-                }
+            Approvals.Verify(CommandExecutorUtil.Do(_posix, commands, 50));
+        }
 
-                sb.AppendLine();
-                sb.AppendLine();
-            }
+        [Test]
+        public void MsDosStyleCommand1()
+        {
+            var commands = new[]
+            {
+                @"file",
+                @"file /delete /A:location",
+                @"file /D /archive:location",
+                @"",
+                @"/D /A:loc",
+                @"/A",
+                @"/A:b,56",
+                @"name /M:5",
+                @"name /A:5,",
+            };
 
-            return sb.ToString();
+            Approvals.Verify(CommandExecutorUtil.Do(_msDos, commands, 50));
+        }
+
+        [Test]
+        public void MsStdStyleCommand1()
+        {
+            var commands = new[]
+            {
+                @"file",
+                @"file -delete -A:location",
+                @"file -delete -A location",
+                @"file -D -archive:location",
+                @"file -D -archive location",
+                @"file -D:false -A:loc",
+                @"file -D:true -A:loc",
+                @"file -delete:false -A:loc",
+                @"file -delete:true -A:loc",
+                @"",
+                @"-D -A:loc",
+                @"-A",
+                @"-A:b,56",
+                @"-A b,56",
+                @"-- -A",
+                @"name 4 -maxSize:5",
+            };
+
+            Approvals.Verify(CommandExecutorUtil.Do(_msStd, commands, 50));
         }
     }
 }
