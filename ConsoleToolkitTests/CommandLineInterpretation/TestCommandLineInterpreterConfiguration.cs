@@ -32,6 +32,12 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             public int IntProp { get; set; }
         }
 
+        public class MultiCaseCommand
+        {
+            public int Aone { get; set; }
+            public string AOne { get; set; }
+        }
+
         public class CustomParamCommand
         {
             CustomParamType Custom { get; set; }
@@ -299,6 +305,39 @@ a line break.")
         {
             var config = new CommandLineInterpreterConfiguration(_customParser);
             Assert.That(config.ParserConvention, Is.EqualTo(CommandLineParserConventions.CustomConventions));
+        }
+
+        [Test]
+        public void PositionalDefinedOnlyByNameMatchesPropertyAutomatically()
+        {
+            var config = new CommandLineInterpreterConfiguration();
+            config.Parameters(() => new TestCommand())
+                .Positional("IntProp");
+            var thePositional = config.DefaultCommand.Positionals[0];
+            var thePositionalParameterType = thePositional.GetType().GenericTypeArguments[1];
+            Assert.That(thePositionalParameterType, Is.EqualTo(typeof(int)));
+        }
+
+        [Test]
+        public void PositionalDefinedOnlyByNameMatchesIncorrectCasePropertyAutomatically()
+        {
+            var config = new CommandLineInterpreterConfiguration();
+            config.Parameters(() => new TestCommand())
+                .Positional("intprop");
+            var thePositional = config.DefaultCommand.Positionals[0];
+            var thePositionalParameterType = thePositional.GetType().GenericTypeArguments[1];
+            Assert.That(thePositionalParameterType, Is.EqualTo(typeof(int)));
+        }
+
+        [Test]
+        public void PositionalDefinedByNamePrefersCorrectCaseProperty()
+        {
+            var config = new CommandLineInterpreterConfiguration();
+            config.Parameters(() => new MultiCaseCommand())
+                .Positional("AOne");
+            var thePositional = config.DefaultCommand.Positionals[0];
+            var thePositionalParameterType = thePositional.GetType().GenericTypeArguments[1];
+            Assert.That(thePositionalParameterType, Is.EqualTo(typeof(string)));
         }
     }
 }

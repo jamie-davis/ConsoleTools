@@ -26,3 +26,19 @@ c2  Command 2 an archive
     
     /maxSize  The maximum size of the archive.
 
+c3  Generate loads of spam
+    
+    c3 <iterations> <Message> <OverrunLength>
+    [options]
+    
+    Parameters:
+    
+    iterations     Number of times to repeat
+    Message        The message to spam.
+    OverrunLength  Amount packet should be longer
+                   than it claims
+    
+    Options:
+    
+    /kidding  Run in just kidding mode.
+

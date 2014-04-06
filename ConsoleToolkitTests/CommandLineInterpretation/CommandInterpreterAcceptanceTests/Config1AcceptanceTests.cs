@@ -36,6 +36,15 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             public int MaxSize { get; set; }
         }
 
+        class C3Data
+        {
+            public string CommandName { get; set; }
+            public int Iterations { get; set; }
+            public string Message { get; set; }
+            public int OverrunLength { get; set; }
+            public bool Kidding { get; set; }
+        }
+
         [SetUp]
         public void SetUp()
         {
@@ -69,6 +78,18 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 .Option("maxSize", c => c.MaxSize)
                     .Alias("M")
                     .Description("The maximum size of the archive.");
+
+            config.Command<C3Data>("c3")
+                .Description("Generate loads of spam")
+                .Positional("iterations")
+                    .Description("Number of times to repeat")
+                .Positional("Message")
+                    .Description("The message to spam.")
+                .Positional("OverrunLength")
+                    .Description("Amount packet should be longer than it claims")
+                .Option("kidding")
+                    .Alias("K")
+                    .Description("Run in just kidding mode.");
         }
 
         [Test]
@@ -135,6 +156,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 @"c1 -A b,56",
                 @"c1 -- -A",
                 @"c2 name 4 -maxSize:5",
+                @"c3",
+                @"c3 forty text 100",
+                @"c3 40 text 100",
+                @"c3 40 text 100 -kidding",
             };
 
             Approvals.Verify(CommandExecutorUtil.Do(_msStd, commands, 50));

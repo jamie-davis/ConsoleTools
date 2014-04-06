@@ -75,11 +75,6 @@ namespace ConsoleToolkit.CommandLineInterpretation
             ParserConvention = CommandLineParserConventions.CustomConventions;
         }
 
-        public interface IContext
-        {
-            string Description { get; set; }
-        }
-
         public static void AddCustomConverter<T>(Func<string, T> converter)
         {
             Converters[typeof (T)] = s => converter(s);

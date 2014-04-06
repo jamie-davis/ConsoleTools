@@ -52,10 +52,13 @@
     <Compile Include="CommandLineInterpretation\CommandLineParserConventions.cs" />
     <Compile Include="CommandLineInterpretation\CommandLineTokeniser.cs" />
     <Compile Include="CommandLineInterpretation\CommandOption.cs" />
+    <Compile Include="CommandLineInterpretation\CommandPositional.cs" />
     <Compile Include="CommandLineInterpretation\CustomParserNotFound.cs" />
     <Compile Include="CommandLineInterpretation\DuplicateOptionName.cs" />
-    <Compile Include="CommandLineInterpretation\ExpressionCommandOption.cs" />
+    <Compile Include="CommandLineInterpretation\IContext.cs" />
     <Compile Include="CommandLineInterpretation\MemberReferenceExpected.cs" />
+    <Compile Include="CommandLineInterpretation\NoMatchingPropertyFoundException.cs" />
+    <Compile Include="CommandLineInterpretation\ConfigGenerator.cs" />
     <Compile Include="CommandLineInterpretation\SetterBuilder.cs" />
     <Compile Include="CommandLineInterpretation\ShortCircuitInvalid.cs" />
     <Compile Include="CommandLineInterpretation\ShortCircuitInvalidOnPositionalParameter.cs" />

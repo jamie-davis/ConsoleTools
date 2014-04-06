@@ -144,3 +144,37 @@ C2Data
 }
 
 
+Test: c3
+
+Not enough parameters specified.
+
+
+Test: c3 forty text 100
+
+The iterations parameter value "forty" is invalid.
+
+
+Test: c3 40 text 100
+
+C3Data
+{
+    CommandName = 
+    Iterations = 40
+    Message = text
+    OverrunLength = 100
+    Kidding = False
+}
+
+
+Test: c3 40 text 100 -kidding
+
+C3Data
+{
+    CommandName = 
+    Iterations = 40
+    Message = text
+    OverrunLength = 100
+    Kidding = True
+}
+
+
