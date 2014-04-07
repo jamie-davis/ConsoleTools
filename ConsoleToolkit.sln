@@ -9,6 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleToolkitDemo", "Conso
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleToolkitTests", "ConsoleToolkitTests\ConsoleToolkitTests.csproj", "{56C9C1DD-A7C6-46F6-A763-DC775FD1F58B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{64E43720-EABB-4490-B7CA-A59C9F736F09}"
+	ProjectSection(SolutionItems) = preProject
+		Builds\BuildRelease.cmd = Builds\BuildRelease.cmd
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
