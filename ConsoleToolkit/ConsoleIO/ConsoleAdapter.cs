@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.Utilities;
 
 namespace ConsoleToolkit.ConsoleIO
@@ -144,6 +145,10 @@ namespace ConsoleToolkit.ConsoleIO
         private string Format(string data, object[] args)
         {
             return TextFormatter.FormatBlock(_consoleWidth, string.Format(data, args));
+        }
+
+        public void Report<T>(IEnumerable<T> data, OutputTarget target = OutputTarget.StdOut, int rowsToCacheForSizing = int.MaxValue)
+        {
         }
     }
 }

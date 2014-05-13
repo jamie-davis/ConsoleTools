@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using ConsoleToolkit.CommandLineInterpretation;
+using ConsoleToolkit.ConsoleIO;
 
 namespace ConsoleToolkitDemo
 {
@@ -13,10 +14,12 @@ namespace ConsoleToolkitDemo
     class Program
     {
         private static CommandLineInterpreterConfiguration _config;
+        private static ConsoleAdapter _adapter;
 
 
         static void Main(string[] args)
         {
+            _adapter = new ConsoleAdapter(Console.Out, Console.Error, Console.BufferWidth);
             _config = ConfigureCommandLine();
             var interpreter = new CommandLineInterpreter(_config);
             string[] errors;
@@ -25,7 +28,7 @@ namespace ConsoleToolkitDemo
             {
                 foreach (var error in errors)
                 {
-                    Console.WriteLine(error);
+                    _adapter.ErrorLine(error);
                 }
                 return;
             }
@@ -45,12 +48,20 @@ namespace ConsoleToolkitDemo
                 method.Invoke(null, new[] {command});
                 return;
             }
-            Console.WriteLine("Internal error: No handler for command.");
+
+            _adapter.ErrorLine("Internal error: No handler for command.");
         }
 
         private static void Handle(HelpCommand command)
         {
-            Console.WriteLine(_config.Describe(50));
+            _adapter.PrintLine(_config.Describe(_adapter.Width));
+        }
+
+        private static void Handle(TableDataCommand command)
+        {
+            var data = Enumerable.Range(0, 20)
+                .Select(i => new {Text = string.Format("item {0}", i), Index = i});
+            _adapter.Report(data);
         }
 
         private static CommandLineInterpreterConfiguration ConfigureCommandLine()
@@ -58,7 +69,13 @@ namespace ConsoleToolkitDemo
             var config = new CommandLineInterpreterConfiguration(CommandLineParserConventions.MsDosConventions);
             config.Command<HelpCommand>("help")
                 .Description("Display help text.");
+            config.Command<TableDataCommand>("tables")
+                .Description("Displays tabulated test data.");
             return config;
         }
+    }
+
+    class TableDataCommand
+    {
     }
 }

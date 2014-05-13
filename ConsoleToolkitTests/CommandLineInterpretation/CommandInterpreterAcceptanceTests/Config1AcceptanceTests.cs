@@ -166,6 +166,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             Approvals.Verify(CommandExecutorUtil.Do(_msStd, commands, 50));
         }
     }
+    
     [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class Config2AcceptanceTests
