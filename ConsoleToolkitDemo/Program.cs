@@ -14,12 +14,12 @@ namespace ConsoleToolkitDemo
     class Program
     {
         private static CommandLineInterpreterConfiguration _config;
-        private static ConsoleAdapter _adapter;
+        private static OldConsoleAdapter _console;
 
 
         static void Main(string[] args)
         {
-            _adapter = new ConsoleAdapter(Console.Out, Console.Error, Console.BufferWidth);
+            _console = new OldConsoleAdapter(Console.Out, Console.Error, Console.BufferWidth);
             _config = ConfigureCommandLine();
             var interpreter = new CommandLineInterpreter(_config);
             string[] errors;
@@ -28,7 +28,7 @@ namespace ConsoleToolkitDemo
             {
                 foreach (var error in errors)
                 {
-                    _adapter.ErrorLine(error);
+                    _console.ErrorLine(error);
                 }
                 return;
             }
@@ -49,19 +49,19 @@ namespace ConsoleToolkitDemo
                 return;
             }
 
-            _adapter.ErrorLine("Internal error: No handler for command.");
+            _console.ErrorLine("Internal error: No handler for command.");
         }
 
         private static void Handle(HelpCommand command)
         {
-            _adapter.PrintLine(_config.Describe(_adapter.Width));
+            _console.PrintLine(_config.Describe(_console.Width));
         }
 
         private static void Handle(TableDataCommand command)
         {
             var data = Enumerable.Range(0, 20)
                 .Select(i => new {Text = string.Format("item {0}", i), Index = i});
-            _adapter.Report(data);
+            _console.Report(data);
         }
 
         private static CommandLineInterpreterConfiguration ConfigureCommandLine()

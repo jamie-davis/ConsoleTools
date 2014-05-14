@@ -1,4 +1,4 @@
-namespace ConsoleToolkit.ConsoleIO.Internal
+namespace ConsoleToolkit.ConsoleIO
 {
     /// <summary>
     /// Describes whether the output is to be displayed on StdOut or on StdErr.

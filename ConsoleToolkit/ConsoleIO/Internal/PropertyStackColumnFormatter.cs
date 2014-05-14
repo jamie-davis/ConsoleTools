@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace ConsoleToolkit.ConsoleIO.Internal
 {
-    public static class PropertyStackColumnFormatter
+    internal static class PropertyStackColumnFormatter
     {
         public static IEnumerable<string> Format(IEnumerable<PropertyColumnFormat> stackedColumns, object item, int width, int tabLength = 4)
         {

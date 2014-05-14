@@ -10,7 +10,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
     /// This is the place for any logic that helps to make a sensible decision about how wide a column needs to be. For example, this could be 
     /// determined more accurately by examining the <see cref="ColumnFormat.FormatTemplate"/>.
     /// </summary>
-    public static class DefaultWidthCalculator
+    internal static class DefaultWidthCalculator
     {
         /// <summary>
         /// Value to be used as the minimum width if all else fails.

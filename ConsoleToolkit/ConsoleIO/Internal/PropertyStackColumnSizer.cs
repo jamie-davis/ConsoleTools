@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ConsoleToolkit.ConsoleIO.Internal
 {
-    public class PropertyStackColumnSizer
+    internal class PropertyStackColumnSizer
     {
         class StackPropertyInfo
         {

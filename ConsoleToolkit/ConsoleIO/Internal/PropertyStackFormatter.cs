@@ -19,7 +19,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
     /// </code>
     /// The values for A, B, and C are displayed normally, but D, E and F have been "stacked".
     /// </summary>
-    public static class PropertyStackFormatter
+    internal static class PropertyStackFormatter
     {
         /// <summary>
         /// Use the format information to return a wrapped and formatted value for a property stack.

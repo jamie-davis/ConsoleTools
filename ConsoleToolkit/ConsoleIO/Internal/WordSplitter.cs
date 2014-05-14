@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace ConsoleToolkit.ConsoleIO.Internal
 {
-    public static class WordSplitter
+    internal static class WordSplitter
     {
         private static readonly string WordTermChars = ",.";
         private static readonly string SpaceChars = " \t\r\n";

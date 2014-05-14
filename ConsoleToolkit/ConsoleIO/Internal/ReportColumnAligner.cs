@@ -9,7 +9,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
     /// Aligns columns of data into a single string. The columns are padded such that all of the data occupies a consistent number of lines. 
     /// Alignment can either be such that every column starts at the top of the row, or ends at the bottom of the row. 
     /// </summary>
-    public static class ReportColumnAligner
+    internal static class ReportColumnAligner
     {
         /// <summary>
         /// Format a row given an array of column widths, and an array of values.

@@ -8,7 +8,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
     /// <summary>
     /// A static class responsible for wrapping values into a column.
     /// </summary>
-    public static class ColumnWrapper
+    internal static class ColumnWrapper
     {
         /// <summary>
         /// Given a value for a column, wrap the value into as many lines as required.

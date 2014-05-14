@@ -7,7 +7,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
     /// <summary>
     /// Stretch columns in a column sizer list to fill the available width.
     /// </summary>
-    public static class ColumnExpander
+    internal static class ColumnExpander
     {
         /// <summary>
         /// Perform the stretch operation. This method takes any stacked columns into account.

@@ -80,6 +80,7 @@
     <Compile Include="ConsoleIO\Internal\WidthCalculators\TestTimeSpanWidthCalculator.cs" />
     <Compile Include="ConsoleIO\TestColumnFormat.cs" />
     <Compile Include="ConsoleIO\TestConsoleAdapter.cs" />
+    <Compile Include="ConsoleIO\TestOldConsoleAdapter.cs" />
     <Compile Include="ConsoleIO\TestTabularReport.cs" />
     <Compile Include="ConsoleIO\UnitTestUtilities\RulerFormatter.cs" />
     <Compile Include="ConsoleIO\UnitTestUtilities\TabularReportRenderTool.cs" />

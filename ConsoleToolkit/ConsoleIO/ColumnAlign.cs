@@ -1,4 +1,4 @@
-namespace ConsoleToolkit.ConsoleIO.Internal
+namespace ConsoleToolkit.ConsoleIO
 {
     public enum ColumnAlign
     {

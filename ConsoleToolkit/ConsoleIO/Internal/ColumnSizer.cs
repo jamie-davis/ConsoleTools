@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace ConsoleToolkit.ConsoleIO.Internal
 {
-    public class ColumnSizer
+    internal class ColumnSizer
     {
         private readonly Type _columnType;
         private readonly int _tabLength;

@@ -8,7 +8,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
     /// 
     /// This class is not thread safe.
     /// </summary>
-    public class TextStats : ITextStats
+    internal class TextStats
     {
         private bool _minWidthSet;
         private double _totalWidth;

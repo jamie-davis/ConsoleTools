@@ -1,6 +1,6 @@
 namespace ConsoleToolkit.ConsoleIO
 {
-    public class ConsoleAdapter : IConsoleAdapter
+    public interface IConsoleAdapter
     {
         
     }

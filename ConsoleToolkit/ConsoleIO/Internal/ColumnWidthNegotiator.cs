@@ -6,7 +6,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
     /// <summary>
     /// Caclulate a width for each column in a tablular report.
     /// </summary>
-    public class ColumnWidthNegotiator
+    internal class ColumnWidthNegotiator
     {
         public class ColumnSizerInfo
         {

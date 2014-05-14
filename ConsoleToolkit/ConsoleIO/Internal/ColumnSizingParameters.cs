@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace ConsoleToolkit.ConsoleIO.Internal
 {
-    public class ColumnSizingParameters
+    internal class ColumnSizingParameters
     {
         public int TabLength { get; set; }
         public List<ColumnWidthNegotiator.ColumnSizerInfo> Sizers { get; set; }

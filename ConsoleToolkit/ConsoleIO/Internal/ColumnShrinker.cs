@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace ConsoleToolkit.ConsoleIO.Internal
 {
-    public static class ColumnShrinker
+    internal static class ColumnShrinker
     {
         public static void ShrinkColumns(int width, int seperatorOverhead, ColumnSizingParameters parameters)
         {

@@ -1,6 +1,6 @@
 namespace ConsoleToolkit.ConsoleIO.Internal
 {
-    public class SplitWord
+    internal class SplitWord
     {
         public int Length { get; private set; }
         public int TrailingSpaces { get; private set; }

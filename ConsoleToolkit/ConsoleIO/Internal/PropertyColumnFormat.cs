@@ -2,7 +2,7 @@ using System.Reflection;
 
 namespace ConsoleToolkit.ConsoleIO.Internal
 {
-    public class PropertyColumnFormat
+    internal class PropertyColumnFormat
     {
         public PropertyInfo Property { get; set; }
         public ColumnFormat Format { get; set; }

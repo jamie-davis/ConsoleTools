@@ -2,7 +2,7 @@ using System;
 
 namespace ConsoleToolkit.ConsoleIO.Internal
 {
-    public static class ValueFormatter
+    internal static class ValueFormatter
     {
         public static string Format(ColumnFormat format, object value)
         {

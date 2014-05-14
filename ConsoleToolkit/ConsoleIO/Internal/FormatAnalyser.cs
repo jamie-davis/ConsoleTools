@@ -8,7 +8,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
     /// <summary>
     /// Matches a set of column foramt definitions with the public properties of a type.
     /// </summary>
-    public static class FormatAnalyser
+    internal static class FormatAnalyser
     {
         /// <summary>
         /// Return a list of property formats for a type using the supplied column formats.

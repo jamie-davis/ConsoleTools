@@ -1,6 +1,6 @@
 namespace ConsoleToolkit.ConsoleIO.Internal
 {
-    public enum ColVerticalAligment
+    internal enum ColVerticalAligment
     {
         Top,
         Bottom
