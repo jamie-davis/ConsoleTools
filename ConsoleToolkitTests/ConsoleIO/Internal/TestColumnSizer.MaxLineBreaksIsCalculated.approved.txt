@@ -1,0 +1,155 @@
+﻿Test values:
+XXXX XXXX XXXX XX XXX
+YYYYYY YYYYY YY YYY YY YYYY YY Y
+Max Linebreaks:
+
+Width = 15, line breaks = 2
+----+----|----+
+YYYYYY YYYYY YY
+YYY YY YYYY YY
+Y
+
+Width = 14, line breaks = 2
+----+----|----
+YYYYYY YYYYY
+YY YYY YY YYYY
+YY Y
+
+Width = 13, line breaks = 2
+----+----|---
+YYYYYY YYYYY
+YY YYY YY
+YYYY YY Y
+
+Width = 12, line breaks = 2
+----+----|--
+YYYYYY YYYYY
+YY YYY YY
+YYYY YY Y
+
+Width = 11, line breaks = 3
+----+----|-
+YYYYYY
+YYYYY YY
+YYY YY YYYY
+YY Y
+
+Width = 10, line breaks = 3
+----+----|
+YYYYYY
+YYYYY YY
+YYY YY
+YYYY YY Y
+
+Width = 9, line breaks = 3
+----+----
+YYYYYY
+YYYYY YY
+YYY YY
+YYYY YY Y
+
+Width = 8, line breaks = 4
+----+---
+YYYYYY
+YYYYY YY
+YYY YY
+YYYY YY
+Y
+
+Width = 7, line breaks = 4
+----+--
+YYYYYY
+YYYYY
+YY YYY
+YY YYYY
+YY Y
+
+Width = 6, line breaks = 5
+----+-
+YYYYYY
+YYYYY
+YY YYY
+YY
+YYYY
+YY Y
+
+Width = 5, line breaks = 7
+----+
+YYYYY
+Y
+YYYYY
+YY
+YYY
+YY
+YYYY
+YY Y
+
+Width = 4, line breaks = 7
+----
+YYYY
+YY
+YYYY
+Y YY
+YYY
+YY
+YYYY
+YY Y
+
+Width = 3, line breaks = 10
+---
+YYY
+YYY
+YYY
+YY
+YY
+YYY
+YY
+YYY
+Y
+YY
+Y
+
+Width = 2, line breaks = 13
+--
+YY
+YY
+YY
+YY
+YY
+Y
+YY
+YY
+Y
+YY
+YY
+YY
+YY
+Y
+
+Width = 1, line breaks = 24
+-
+Y
+Y
+Y
+Y
+Y
+Y
+Y
+Y
+Y
+Y
+Y
+Y
+Y
+Y
+Y
+Y
+Y
+Y
+Y
+Y
+Y
+Y
+Y
+Y
+Y

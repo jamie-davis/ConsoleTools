@@ -1,0 +1,6 @@
+﻿----+----|----+----|
+Heading: A nice long
+ value that can only
+ be accomodated with
+      word wrapping.
+End

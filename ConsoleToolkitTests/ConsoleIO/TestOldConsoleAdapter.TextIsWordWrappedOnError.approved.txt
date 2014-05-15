@@ -1,0 +1,3 @@
+﻿12345678901234567890123456789012345678901234567890
+More than 50 character text which should be word
+wrapped at 50.

@@ -1,0 +1,19 @@
+﻿0.0000:
+    Decimal                100.123456 = 100.1235
+    Single                    10000.2 = 10000.2000
+    Decimal                     -45.1 = -45.1000
+    Double          0.333333333333333 = 0.3333
+    Int32                          99 = 99.0000
+
+yyyy-MM-dd HH:mm:ss:ffff:
+    DateTime      18/04/2014 07:54:25 = 2014-04-18 07:54:25:5987
+
+ddd:
+    TimeSpan              14.12:02:15 = 014
+
+0.000:
+    String            non formattable = non formattable
+    Int32                          99 = 99.000
+    MyType            My type's value = My type's value
+    Formattable       My type's value = Custom formatter called with 0.000
+

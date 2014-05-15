@@ -1,0 +1,11 @@
+﻿WordsLongerThanOneLineAreBroken
+
+Original:
+One two three four fivesixseveneightnineteneleven.
+
+Wrapped:
+12345678901234567890
+---------+---------+
+One two three four
+fivesixseveneightnin
+eteneleven.

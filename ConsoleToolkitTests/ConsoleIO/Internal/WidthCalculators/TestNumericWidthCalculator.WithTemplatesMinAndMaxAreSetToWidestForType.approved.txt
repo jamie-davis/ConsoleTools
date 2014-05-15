@@ -1,0 +1,11 @@
+﻿SByte    = 8 - 8
+Byte     = 7 - 7
+Int16    = 10 - 10
+UInt16   = 9 - 9
+Int32    = 15 - 15
+UInt32   = 14 - 14
+Int64    = 24 - 24
+UInt64   = 24 - 24
+Decimal  = 34 - 34
+Single   = 15 - 15
+Double   = 17 - 17

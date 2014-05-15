@@ -77,7 +77,11 @@
     <Compile Include="ConsoleIO\ColumnAlign.cs" />
     <Compile Include="ConsoleIO\ColumnFormat.cs" />
     <Compile Include="ConsoleIO\ConsoleAdapter.cs" />
+    <Compile Include="ConsoleIO\ConsoleInterfaceForTesting.cs" />
+    <Compile Include="ConsoleIO\DefaultConsole.cs" />
+    <Compile Include="ConsoleIO\IAdapterConfiguration.cs" />
     <Compile Include="ConsoleIO\IConsoleAdapter.cs" />
+    <Compile Include="ConsoleIO\IConsoleInterface.cs" />
     <Compile Include="ConsoleIO\OldConsoleAdapter.cs" />
     <Compile Include="ConsoleIO\Internal\ColumnExpander.cs" />
     <Compile Include="ConsoleIO\Internal\ColumnShrinker.cs" />

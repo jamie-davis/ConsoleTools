@@ -1,0 +1,65 @@
+﻿Test: file
+
+Data
+{
+    FileName = file
+    Delete = False
+    Archive = 
+}
+
+
+Test: file --delete -Alocation
+
+Data
+{
+    FileName = file
+    Delete = True
+    Archive = location
+}
+
+
+Test: file -D --archive=location
+
+Data
+{
+    FileName = file
+    Delete = True
+    Archive = location
+}
+
+
+Test: 
+
+Not enough parameters specified.
+
+
+Test: -D -Aloc
+
+Not enough parameters specified.
+
+
+Test: -A
+
+Not enough parameters for the archive option.
+
+
+Test: -Ab,56
+
+The archive option has too many parameters.
+
+
+Test: -- -Ab,56
+
+Data
+{
+    FileName = -Ab,56
+    Delete = False
+    Archive = 
+}
+
+
+Test: file 4
+
+Unexpected argument "4"
+
+

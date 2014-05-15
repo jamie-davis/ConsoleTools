@@ -1,0 +1,12 @@
+﻿Do something to a file.
+
+Usage: testApp <filename> [options]
+
+Parameters:
+
+filename  The name of the file.
+
+Options:
+
+/delete   Delete the file after processing.
+/archive  Archive after processing

@@ -1,0 +1,60 @@
+﻿Test: file
+
+Data
+{
+    FileName = file
+    Delete = False
+    Archive = 
+}
+
+
+Test: file /delete /A:location
+
+Data
+{
+    FileName = file
+    Delete = True
+    Archive = location
+}
+
+
+Test: file /D /archive:location
+
+Data
+{
+    FileName = file
+    Delete = True
+    Archive = location
+}
+
+
+Test: 
+
+Not enough parameters specified.
+
+
+Test: /D /A:loc
+
+Not enough parameters specified.
+
+
+Test: /A
+
+Not enough parameters for the archive option.
+
+
+Test: /A:b,56
+
+The archive option has too many parameters.
+
+
+Test: name /M:5
+
+"M" is not a valid option.
+
+
+Test: name /A:5,
+
+The archive option has too many parameters.
+
+

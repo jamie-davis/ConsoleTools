@@ -1,0 +1,9 @@
+﻿----+----|----+----
+S S2 S3  S4   S5   
+- -- --- ---- -----
+X X  XXX XXX  XXX  
+X X  XXX XXX  XXX  
+X X  XXX XXX  XXX  
+Y YY YYY XXX  YYYYY
+         XXX       
+         YYYY      

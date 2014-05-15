@@ -1,0 +1,9 @@
+﻿----+----|----+----|
+Value:          1.50
+Long Text: Long text
+that could be       
+wrapped quite easily
+if required.        
+Short:    Short text
+Date:     07/05/2014
+19:59:20            

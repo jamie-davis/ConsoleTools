@@ -1,0 +1,17 @@
+﻿SByte    = 4
+Byte     = 3
+Int16    = 6
+UInt16   = 5
+Int32    = 11
+UInt32   = 10
+Int64    = 20
+UInt64   = 20
+Decimal  = 33
+Single   = 14
+Double   = 16
+String   = 0
+Char     = 1
+DateTime = 19
+TimeSpan = 26
+Boolean  = 5
+Object   = 6

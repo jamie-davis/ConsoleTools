@@ -1,0 +1,4 @@
+﻿----+----|----+
+String1:    pre
+formatted
+string

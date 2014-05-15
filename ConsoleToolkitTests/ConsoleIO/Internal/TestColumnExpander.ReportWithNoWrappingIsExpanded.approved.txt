@@ -1,0 +1,33 @@
+﻿Initial report:
+----+----|----+----|----+-
+      In                  
+Short te          Second  
+Strin ge Long     Long    
+g      r String   String  
+----- -- -------- --------
+AAAA0 30 AAAAAAA  AAAAAAA 
+         AAAAAAAA AAAAAAAA
+         AAAAAAAA AAAAAAAA
+AAAA1 30 AAAAAAA  AAAAAAA 
+         AAAAAAAA AAAAAAAA
+         AAAAAAAA AAAAAAAA
+AAAA2 30 AAAAAAA  AAAAAAA 
+         AAAAAAAA AAAAAAAA
+         AAAAAAAA AAAAAAAA
+AAAA3 30 AAAAAAA  AAAAAAA 
+         AAAAAAAA AAAAAAAA
+         AAAAAAAA AAAAAAAA
+AAAA4 30 AAAAAAA  AAAAAAA 
+         AAAAAAAA AAAAAAAA
+         AAAAAAAA AAAAAAAA
+
+
+Expanded report:
+----+----|----+----|----+----|----+----|----+----|----+----|----+----|----+----|
+Short String      Integer Long String                 Second Long String        
+------------- ----------- --------------------------- --------------------------
+AAAA0                  30 AAAAAAA AAAAAAAA AAAAAAAA   AAAAAAA AAAAAAAA AAAAAAAA 
+AAAA1                  30 AAAAAAA AAAAAAAA AAAAAAAA   AAAAAAA AAAAAAAA AAAAAAAA 
+AAAA2                  30 AAAAAAA AAAAAAAA AAAAAAAA   AAAAAAA AAAAAAAA AAAAAAAA 
+AAAA3                  30 AAAAAAA AAAAAAAA AAAAAAAA   AAAAAAA AAAAAAAA AAAAAAAA 
+AAAA4                  30 AAAAAAA AAAAAAAA AAAAAAAA   AAAAAAA AAAAAAAA AAAAAAAA 

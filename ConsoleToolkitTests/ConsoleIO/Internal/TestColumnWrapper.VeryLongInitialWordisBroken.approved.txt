@@ -1,0 +1,11 @@
+﻿VeryLongInitialWordisBroken
+
+Original:
+Onetwothreefourfivesixseveneightnineten eleven.
+
+Wrapped:
+12345678901234567890
+---------+---------+
+Onetwothreefourfives
+ixseveneightnineten
+eleven.

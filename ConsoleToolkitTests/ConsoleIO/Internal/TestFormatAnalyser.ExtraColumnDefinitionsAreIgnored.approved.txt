@@ -1,0 +1,7 @@
+﻿IntCol      = ColumnFormat("Expected", System.Int32, Right, 2DP, Actual 0, , Requested )
+StringCol   = ColumnFormat("Expected", System.String, Left, 2DP, Actual 0, , Requested )
+DateTimeCol = ColumnFormat("Expected", System.DateTime, Left, 2DP, Actual 0, , Requested )
+DoubleCol   = ColumnFormat("Expected", System.Double, Right, 2DP, Actual 0, , Requested )
+FloatCol    = ColumnFormat("Expected", System.Single, Right, 2DP, Actual 0, , Requested )
+DecimalCol  = ColumnFormat("Expected", System.Decimal, Right, 2DP, Actual 0, , Requested )
+ABC         = ColumnFormat("Expected", System.Int32, Right, 2DP, Actual 0, , Requested )

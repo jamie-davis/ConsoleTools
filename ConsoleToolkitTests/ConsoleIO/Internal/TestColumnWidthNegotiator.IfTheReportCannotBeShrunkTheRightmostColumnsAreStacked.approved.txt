@@ -1,0 +1,20 @@
+﻿Short String:  AAAA0
+Integer:          30
+Long String: AAAAAAA
+AAAAAAAA AAAAAAAA   
+Short String:  AAAA1
+Integer:          30
+Long String: AAAAAAA
+AAAAAAAA AAAAAAAA   
+Short String:  AAAA2
+Integer:          30
+Long String: AAAAAAA
+AAAAAAAA AAAAAAAA   
+Short String:  AAAA3
+Integer:          30
+Long String: AAAAAAA
+AAAAAAAA AAAAAAAA   
+Short String:  AAAA4
+Integer:          30
+Long String: AAAAAAA
+AAAAAAAA AAAAAAAA   

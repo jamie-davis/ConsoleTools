@@ -1,0 +1,2 @@
+﻿----+----|----+----|----+----|
+String1: A simple string value

@@ -1,0 +1,20 @@
+﻿Numeric data types:
+    Alignment = Right
+    Alignment = Right
+    Alignment = Right
+    Alignment = Right
+    Alignment = Right
+    Alignment = Right
+    Alignment = Right
+    Alignment = Right
+    Alignment = Right
+    Alignment = Right
+    Alignment = Right
+
+Non-numeric data types:
+    Alignment = Left
+    Alignment = Left
+    Alignment = Left
+    Alignment = Left
+    Alignment = Left
+    Alignment = Left

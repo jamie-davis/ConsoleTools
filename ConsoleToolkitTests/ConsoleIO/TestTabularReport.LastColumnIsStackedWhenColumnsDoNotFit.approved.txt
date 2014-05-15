@@ -1,0 +1,10 @@
+﻿----+----|----+--
+S  S2 S3 
+-- -- ---
+X  X  XXX S4: XXX
+X  X  XXX XXX XXX
+X  X  XXX XXX XXX
+Y  YY YYY YYYY   
+          S5: XXX
+          XXX XXX
+          YYYYY  

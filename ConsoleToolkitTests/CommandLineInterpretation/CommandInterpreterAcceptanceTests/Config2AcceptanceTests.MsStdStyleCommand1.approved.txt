@@ -1,0 +1,130 @@
+﻿Test: file
+
+Data
+{
+    FileName = file
+    Delete = False
+    Archive = 
+}
+
+
+Test: file -delete -A:location
+
+Data
+{
+    FileName = file
+    Delete = True
+    Archive = location
+}
+
+
+Test: file -delete -A location
+
+Data
+{
+    FileName = file
+    Delete = True
+    Archive = location
+}
+
+
+Test: file -D -archive:location
+
+Data
+{
+    FileName = file
+    Delete = True
+    Archive = location
+}
+
+
+Test: file -D -archive location
+
+Data
+{
+    FileName = file
+    Delete = True
+    Archive = location
+}
+
+
+Test: file -D:false -A:loc
+
+Data
+{
+    FileName = file
+    Delete = False
+    Archive = loc
+}
+
+
+Test: file -D:true -A:loc
+
+Data
+{
+    FileName = file
+    Delete = True
+    Archive = loc
+}
+
+
+Test: file -delete:false -A:loc
+
+Data
+{
+    FileName = file
+    Delete = False
+    Archive = loc
+}
+
+
+Test: file -delete:true -A:loc
+
+Data
+{
+    FileName = file
+    Delete = True
+    Archive = loc
+}
+
+
+Test: 
+
+Not enough parameters specified.
+
+
+Test: -D -A:loc
+
+Not enough parameters specified.
+
+
+Test: -A
+
+Not enough parameters for the archive option.
+
+
+Test: -A:b,56
+
+The archive option has too many parameters.
+
+
+Test: -A b,56
+
+The archive option has too many parameters.
+
+
+Test: -- -A
+
+Data
+{
+    FileName = -A
+    Delete = False
+    Archive = 
+}
+
+
+Test: name 4 -maxSize:5
+
+Unexpected argument "4"
+
+

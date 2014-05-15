@@ -172,3 +172,10 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+
+#Approval test detritus
+*.approved.txt.bak
+*.received.txt
+
+#Exclude Sync config
+sync.ffs_db

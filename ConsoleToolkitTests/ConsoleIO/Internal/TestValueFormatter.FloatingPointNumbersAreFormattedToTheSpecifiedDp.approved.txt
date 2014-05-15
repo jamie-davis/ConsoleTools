@@ -1,0 +1,84 @@
+﻿0 Dp:
+    System.Decimal  : -1
+    System.Single   : -1
+    System.Double   : -1
+    System.Int32    : -1
+    System.Int64    : -2
+    System.Int16    : -3
+    System.SByte    : -4
+    System.Byte     : 5
+    System.DateTime : 01/01/0001 00:00:00
+    System.String   : string
+    System.TimeSpan : 00:00:00.0000001
+1 Dp:
+    System.Decimal  : -1.2
+    System.Single   : -1.2
+    System.Double   : -1.2
+    System.Int32    : -1
+    System.Int64    : -2
+    System.Int16    : -3
+    System.SByte    : -4
+    System.Byte     : 5
+    System.DateTime : 01/01/0001 00:00:00
+    System.String   : string
+    System.TimeSpan : 00:00:00.0000001
+2 Dp:
+    System.Decimal  : -1.23
+    System.Single   : -1.23
+    System.Double   : -1.23
+    System.Int32    : -1
+    System.Int64    : -2
+    System.Int16    : -3
+    System.SByte    : -4
+    System.Byte     : 5
+    System.DateTime : 01/01/0001 00:00:00
+    System.String   : string
+    System.TimeSpan : 00:00:00.0000001
+3 Dp:
+    System.Decimal  : -1.235
+    System.Single   : -1.235
+    System.Double   : -1.235
+    System.Int32    : -1
+    System.Int64    : -2
+    System.Int16    : -3
+    System.SByte    : -4
+    System.Byte     : 5
+    System.DateTime : 01/01/0001 00:00:00
+    System.String   : string
+    System.TimeSpan : 00:00:00.0000001
+4 Dp:
+    System.Decimal  : -1.2346
+    System.Single   : -1.2346
+    System.Double   : -1.2346
+    System.Int32    : -1
+    System.Int64    : -2
+    System.Int16    : -3
+    System.SByte    : -4
+    System.Byte     : 5
+    System.DateTime : 01/01/0001 00:00:00
+    System.String   : string
+    System.TimeSpan : 00:00:00.0000001
+5 Dp:
+    System.Decimal  : -1.23456
+    System.Single   : -1.23456
+    System.Double   : -1.23456
+    System.Int32    : -1
+    System.Int64    : -2
+    System.Int16    : -3
+    System.SByte    : -4
+    System.Byte     : 5
+    System.DateTime : 01/01/0001 00:00:00
+    System.String   : string
+    System.TimeSpan : 00:00:00.0000001
+7 Dp:
+    System.Decimal  : -1.2345600
+    System.Single   : -1.2345600
+    System.Double   : -1.2345600
+    System.Int32    : -1
+    System.Int64    : -2
+    System.Int16    : -3
+    System.SByte    : -4
+    System.Byte     : 5
+    System.DateTime : 01/01/0001 00:00:00
+    System.String   : string
+    System.TimeSpan : 00:00:00.0000001
