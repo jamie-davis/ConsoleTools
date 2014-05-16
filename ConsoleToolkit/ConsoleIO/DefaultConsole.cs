@@ -9,8 +9,6 @@ namespace ConsoleToolkit.ConsoleIO
     /// </summary>
     public class DefaultConsole : IConsoleInterface
     {
-        public IAdapterConfiguration AdapterConfiguration { get; set; }
-
         public bool IsOutputRedirected()
         {
             try

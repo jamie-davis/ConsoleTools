@@ -74,12 +74,12 @@
     <Compile Include="CommandLineInterpretation\ParseStatus.cs" />
     <Compile Include="CommandLineInterpretation\PosixCommandLineParser.cs" />
     <Compile Include="CommandLineInterpretation\ProgramParametersAlreadySpecified.cs" />
+    <Compile Include="ConsoleIO\AdapterConfiguration.cs" />
     <Compile Include="ConsoleIO\ColumnAlign.cs" />
     <Compile Include="ConsoleIO\ColumnFormat.cs" />
     <Compile Include="ConsoleIO\ConsoleAdapter.cs" />
     <Compile Include="ConsoleIO\ConsoleInterfaceForTesting.cs" />
     <Compile Include="ConsoleIO\DefaultConsole.cs" />
-    <Compile Include="ConsoleIO\IAdapterConfiguration.cs" />
     <Compile Include="ConsoleIO\IConsoleAdapter.cs" />
     <Compile Include="ConsoleIO\IConsoleInterface.cs" />
     <Compile Include="ConsoleIO\OldConsoleAdapter.cs" />

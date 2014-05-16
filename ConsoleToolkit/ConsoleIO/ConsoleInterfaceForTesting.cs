@@ -6,8 +6,6 @@ namespace ConsoleToolkit.ConsoleIO
     /// </summary>
     public class ConsoleInterfaceForTesting : IConsoleInterface
     {
-        public IAdapterConfiguration AdapterConfiguration { get; set; }
-
         /// <summary>
         /// In a unit test, the full capabilities of the console are simulated.
         /// </summary>

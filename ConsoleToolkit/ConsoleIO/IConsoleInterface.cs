@@ -24,10 +24,5 @@ namespace ConsoleToolkit.ConsoleIO
         /// <param name="format">A composite format string.</param>
         /// <param name="arg">An array of objects to write using <see cref="format"/>.</param>
         void WriteLine(string format, params object[] arg);
-
-        /// <summary>
-        /// Attach an adapter configuration. This is assigned automatically and unconditionally by the console adapter.
-        /// </summary>
-        IAdapterConfiguration AdapterConfiguration { get; set; }
     }
 }
