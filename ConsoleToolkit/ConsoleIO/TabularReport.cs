@@ -96,6 +96,7 @@ namespace ConsoleToolkit.ConsoleIO
             var wrappedValues = columns
                 .Select((c, i) => ColumnWrapper.WrapValue(rowValues[i], c.Format, c.Format.ActualWidth, tabLength))
                 .Concat(StackedColumnValues(rowValues, sizer, tabLength))
+                .Select(ColourSeal.Seal)
                 .ToArray();
             output.Add(ReportColumnAligner.AlignColumns(widths, wrappedValues, ColVerticalAligment.Top, columnSeperator));
         }

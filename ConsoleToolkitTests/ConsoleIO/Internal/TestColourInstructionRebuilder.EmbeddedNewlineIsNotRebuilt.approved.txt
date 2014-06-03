@@ -1,0 +1,14 @@
+﻿Original:
+>Psrred
+still<p
+
+Split:
+[3,0,T:no>(Push Black,SetBackground Red)]
+[0,0,T:yes<(NewLine Black)]
+[5,0,T:no<(Pop Black)]
+
+Reconstituted:
+>Psrredstill<p
+
+Re-split:
+[8,0,T:no>(Push Black,SetBackground Red)<(Pop Black)]

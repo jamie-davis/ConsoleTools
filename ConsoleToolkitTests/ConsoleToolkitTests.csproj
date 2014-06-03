@@ -60,6 +60,13 @@
     <Compile Include="CommandLineInterpretation\TestMsDosCommandLineParser.cs" />
     <Compile Include="CommandLineInterpretation\TestParserResult.cs" />
     <Compile Include="CommandLineInterpretation\TestPosixCommandLineParser.cs" />
+    <Compile Include="ConsoleIO\Internal\TestColourControlSplitter.cs" />
+    <Compile Include="ConsoleIO\Internal\TestColourInstructionRebuilder.cs" />
+    <Compile Include="ConsoleIO\Internal\TestColourSeal.cs" />
+    <Compile Include="ConsoleIO\Internal\TestColourString.cs" />
+    <Compile Include="ConsoleIO\Internal\TestColourWriter.cs" />
+    <Compile Include="ConsoleIO\TestConsoleInterfaceForTesting.cs" />
+    <Compile Include="ConsoleIO\TestConsoleIOExtensions.cs" />
     <Compile Include="ConsoleIO\Internal\TestColumnExpander.cs" />
     <Compile Include="ConsoleIO\Internal\TestColumnSizer.cs" />
     <Compile Include="ConsoleIO\Internal\TestColumnWidthNegotiator.cs" />

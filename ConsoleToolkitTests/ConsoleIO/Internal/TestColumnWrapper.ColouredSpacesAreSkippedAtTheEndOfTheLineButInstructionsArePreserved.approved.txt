@@ -1,0 +1,10 @@
+﻿ColouredSpacesAreSkippedAtTheEndOfTheLineButInstructionsArePreserved
+
+Original:
+four five six seven>PSr <p>PSw <p>PSb <peight
+
+Wrapped:
+12345678901234567890
+---------+---------+
+four five six seven>PSr <p>PSw<p>PSb<p
+eight

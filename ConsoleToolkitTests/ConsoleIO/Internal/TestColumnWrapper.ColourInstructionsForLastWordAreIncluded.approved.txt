@@ -1,0 +1,10 @@
+﻿ColourInstructionsForLastWordAreIncluded
+
+Original:
+four five six seven >PSreight<p
+
+Wrapped:
+12345678901234567890
+---------+---------+
+four five six seven
+>PSreight<p

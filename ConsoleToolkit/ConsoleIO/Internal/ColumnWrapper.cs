@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -78,39 +79,68 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             var position = 0;
             var line = string.Empty;
             SplitWord lastWord = null;
+            int spacesAdded;
             foreach (var splitWord in words.SelectMany(w => BreakWord(w, columnWidth)))
             {
-                if (position + splitWord.Length + (lastWord == null ? 0 : lastWord.TrailingSpaces) > columnWidth)
+                if (position + splitWord.Length + (lastWord == null ? 0 : Math.Min(lastWord.Length, lastWord.TrailingSpaces)) > columnWidth)
                 {
+                    if (lastWord != null)
+                        line += lastWord.GetTrailingSpaces(0, out spacesAdded);
+
                     lines.Add(line);
                     wrappedLines++;
-                    line = splitWord.WordValue;
+                    line = splitWord.GetWordValue();
                     lastWord = splitWord;
                     position = splitWord.Length;
                 }
                 else
                 {
-                    position += splitWord.Length;
-                    if (lastWord != null)
+                    if (splitWord.TerminatesLine())
                     {
-                        line += new string(' ', lastWord.TrailingSpaces);
-                        position += splitWord.TrailingSpaces;
+                        var wordValue = splitWord.GetWordValue();
+                        var newLinePos = wordValue.IndexOf(Environment.NewLine, StringComparison.Ordinal);
+                        string newLineStart;
+                        if (newLinePos >= 0)
+                        {
+                            var start = wordValue.Substring(0, newLinePos);
+                            newLineStart = wordValue.Substring(newLinePos + Environment.NewLine.Length);
+                            line += start;
+                        }
+                        else
+                        {
+                            if (lastWord != null)
+                                line += lastWord.GetTrailingSpaces(0, out spacesAdded);
+                            line += wordValue;
+                            newLineStart = string.Empty;
+                        }
+
+                        lines.Add(line);
+                        line = newLineStart;
+                        position = 0;
+                        lastWord = null;
                     }
+                    else
+                    {
+                        position += splitWord.Length;
+                        if (lastWord != null)
+                        {
+                            line += lastWord.GetTrailingSpaces(columnWidth - position, out spacesAdded);
+                            position += spacesAdded;
+                        }
 
-                    line += splitWord.WordValue;
-                    lastWord = splitWord;
-                }
-
-                if (lastWord.TerminatesLine)
-                {
-                    lines.Add(line);
-                    line = string.Empty;
-                    position = 0;
+                        line += splitWord.GetWordValue();
+                        lastWord = splitWord;
+                    }
+                    
                 }
             }
 
             if (position > 0)
+            {
+                if (lastWord != null)
+                    line += lastWord.GetTrailingSpaces(0, out spacesAdded);
                 lines.Add(line);
+            }
 
             if (!lines.Any())
                 lines.Add(string.Empty);
@@ -120,20 +150,22 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         }
 
         /// <summary>
-        /// Break long words into chunks of one column line in length.
+        /// Break long words into chunks of one row width in length.
         /// 
         /// <see cref="BreakWord"/> guarantees that there will never be a word that 
         /// won't fit on a line, which simplifies <see cref="WrapValue"/>. 
         /// </summary>
         /// <param name="splitWord">The word to be split.</param>
         /// <param name="columnWidth">The width of the column.</param>
-        /// <returns>An enumerable set of lines.</returns>
+        /// <returns>An enumerable set of word chunks, one <see cref="columnWidth"/> or less wide.</returns>
         private static IEnumerable<SplitWord> BreakWord(SplitWord splitWord, int columnWidth)
         {
+            //OMG
+            /**/
             while (splitWord.Length > columnWidth)
             {
-                yield return new SplitWord(columnWidth, 0, false, splitWord.WordValue.Substring(0, columnWidth));
-                splitWord = new SplitWord(splitWord.Length - columnWidth, splitWord.TrailingSpaces, splitWord.TerminatesLine, splitWord.WordValue.Substring(columnWidth));
+                yield return new SplitWord(columnWidth, 0, splitWord.WordValue.Substring(0, columnWidth));
+                splitWord = new SplitWord(splitWord.Length - columnWidth, splitWord.TrailingSpaces, splitWord.WordValue.Substring(columnWidth));
             }
 
             yield return splitWord;

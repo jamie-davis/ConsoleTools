@@ -63,18 +63,6 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             return lines.Select(l => string.Format("{0," + columnWidth + "}", l)).ToArray();
         }
 
-        private static string[] WrapFullValue(string firstLine, SplitWord[] words, ColumnFormat format, int columnWidth, int tabLength)
-        {
-            var firstLineWords = WordSplitter.Split(firstLine, tabLength);
-            int wrappedLines;
-            var lines = ColumnWrapper.WrapAndMeasureWords(firstLineWords.Concat(words), format, columnWidth, out wrappedLines);
-
-            if (format.Alignment == ColumnAlign.Right)
-                return RightAlign(columnWidth, lines);
-
-            return lines;
-        }
-
         private static string ConcatenateWords(IEnumerable<SplitWord> words)
         {
             var output = string.Empty;
@@ -83,7 +71,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             while (valid)
             {
                 var current = wordEnumerator.Current;
-                output += current.WordValue;
+                output += current.GetWordValue();
                 valid = wordEnumerator.MoveNext();
                 if (valid)
                     output += new string(' ', current.TrailingSpaces);

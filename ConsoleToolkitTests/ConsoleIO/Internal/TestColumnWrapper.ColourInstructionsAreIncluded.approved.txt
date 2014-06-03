@@ -1,0 +1,22 @@
+﻿ColourInstructionsAreIncluded
+
+Original:
+>PSrOne<p >PSbtwo<p three
+four five six seven eight
+
+
+nine
+ten
+eleven.
+
+Wrapped:
+12345678901234567890
+---------+---------+
+>PSrOne<p >PSbtwo<p three
+four five six seven
+eight
+
+
+nine
+ten
+eleven.

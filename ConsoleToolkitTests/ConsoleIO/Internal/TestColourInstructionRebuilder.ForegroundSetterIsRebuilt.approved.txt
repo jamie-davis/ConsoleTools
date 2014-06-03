@@ -1,0 +1,11 @@
+﻿Original:
+>PSrred<p
+
+Split:
+[3,0,T:no>(Push Black,SetForeground Red)<(Pop Black)]
+
+Reconstituted:
+>PSrred<p
+
+Re-split:
+[3,0,T:no>(Push Black,SetForeground Red)<(Pop Black)]

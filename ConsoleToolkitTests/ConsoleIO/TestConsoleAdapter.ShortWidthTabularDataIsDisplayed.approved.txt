@@ -1,0 +1,18 @@
+﻿----+----|----+----|----+----|----+----|----+----|----+----|
+Number String                                               
+------ ---------------------------------                    
+     1 blah                                                 
+     2 blah blah                                            
+     3 blah blah blah                                       
+     4 blah blah blah blah                                  
+     5 blah blah blah blah blah                             
+     6 blah blah blah blah blah blah                        
+     7 blah blah blah blah blah blah                        
+       blah                                                 
+     8 blah blah blah blah blah blah                        
+       blah blah                                            
+     9 blah blah blah blah blah blah                        
+       blah blah blah                                       
+    10 blah blah blah blah blah blah                        
+       blah blah blah blah                                  
+                                                            

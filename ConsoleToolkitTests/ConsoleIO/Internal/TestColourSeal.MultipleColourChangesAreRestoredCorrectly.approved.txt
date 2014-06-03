@@ -1,0 +1,3 @@
+﻿{P}{>PsRPSc}Red{p}{p}{p}
+{P}{P}{sR}{P}{Sc}{sR}Lines{<p}{p}{p}
+{P}{P}{sR}lines{<p}Clear{p}

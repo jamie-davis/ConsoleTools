@@ -1,0 +1,2 @@
+﻿{P}{>PSr}line 1{p}{p}
+{P}{P}{Sr}line 2{<p}{p}

@@ -1,0 +1,13 @@
+﻿ControlInstruction: Text:"" Instructions:[Push,SetForeground Red]>
+ControlInstruction: Text:"More complicated" Instructions:[]
+ControlInstruction: Text:"" Instructions:[Pop]<
+ControlInstruction: Text:"" Instructions:[Push,SetBackground Cyan]>
+ControlInstruction: Text:"" Instructions:[Push,SetForeground Green]>
+ControlInstruction: Text:" test" Instructions:[]
+ControlInstruction: Text:"" Instructions:[Pop]<
+ControlInstruction: Text:"" Instructions:[Pop]<
+ControlInstruction: Text:"" Instructions:[Push,SetBackground Red]>
+ControlInstruction: Text:"" Instructions:[Push,SetForeground Yellow]>
+ControlInstruction: Text:" string" Instructions:[]
+ControlInstruction: Text:"" Instructions:[Pop]<
+ControlInstruction: Text:"" Instructions:[Pop]<

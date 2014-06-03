@@ -11,6 +11,28 @@ namespace ConsoleToolkit.ConsoleIO
     public interface IConsoleInterface
     {
         /// <summary>
+        /// The current foreground colour for console output.
+        /// </summary>
+        ConsoleColor Foreground { get; set; }
+
+        /// <summary>
+        /// The current background colour for console output.
+        /// </summary>
+        ConsoleColor Background { get; set; }
+
+        /// <summary>
+        /// The width of the console window - i.e. the visible part of the buffer.
+        /// <seealso cref="BufferWidth"/>
+        /// </summary>
+        int WindowWidth { get; }
+
+        /// <summary>
+        /// The width of the console buffer. This may be greater than the window width.
+        /// <seealso cref="WindowWidth"/>
+        /// </summary>
+        int BufferWidth { get; }
+
+        /// <summary>
         /// Test to see if console output is redirected.
         /// 
         /// The test only determines whether StdOut is redirected. StdErr redirection cannot be detected without unsafe code.
@@ -19,10 +41,25 @@ namespace ConsoleToolkit.ConsoleIO
         bool IsOutputRedirected();
 
         /// <summary>
-        /// Output a composite formatted string to the console, and move the cursor to a new line.
+        /// Output a string to the console in the current cursor position.
         /// </summary>
-        /// <param name="format">A composite format string.</param>
-        /// <param name="arg">An array of objects to write using <see cref="format"/>.</param>
-        void WriteLine(string format, params object[] arg);
+        /// <param name="data">The text to output.</param>
+        void Write(string data);
+
+        /// <summary>
+        /// Output a new line to the console at the current cursor position. The cursor will move the beginning of the next line.
+        /// </summary>
+        void NewLine();
+
+        /// <summary>
+        /// The current cursor position.
+        /// </summary>
+        int CursorLeft { get; set; }
+
+        /// <summary>
+        /// The current cursor position.
+        /// </summary>
+        int CursorTop { get; set; }
+
     }
 }

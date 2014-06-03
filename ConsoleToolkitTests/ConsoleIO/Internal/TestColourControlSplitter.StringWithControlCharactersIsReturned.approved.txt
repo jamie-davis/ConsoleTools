@@ -1,0 +1,3 @@
+﻿ControlInstruction: Text:"" Instructions:[Push,SetForeground Blue]>
+ControlInstruction: Text:"simple test string" Instructions:[]
+ControlInstruction: Text:"" Instructions:[Pop]<

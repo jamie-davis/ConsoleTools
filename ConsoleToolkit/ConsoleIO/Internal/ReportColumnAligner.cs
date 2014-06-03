@@ -57,9 +57,13 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         private static string[] FormatColumn(int width, IEnumerable<string> columnLines)
         {
             return columnLines
-                .Select(l => l.Length >= width
-                    ? l.Substring(0, width)
-                    : l + new string(' ', width - l.Length))
+                .Select(l =>
+                {
+                    var length = ColourString.Length(l);
+                    return length >= width
+                                     ? ColourString.Substring(l, 0, width)
+                                     : l + new string(' ', width - length);
+                })
                 .ToArray();
         }
     }

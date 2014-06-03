@@ -14,12 +14,12 @@ namespace ConsoleToolkitDemo
     class Program
     {
         private static CommandLineInterpreterConfiguration _config;
-        private static OldConsoleAdapter _console;
+        private static ConsoleAdapter _console;
 
 
         static void Main(string[] args)
         {
-            _console = new OldConsoleAdapter(Console.Out, Console.Error, Console.BufferWidth);
+            _console = new ConsoleAdapter();
             _config = ConfigureCommandLine();
             var interpreter = new CommandLineInterpreter(_config);
             string[] errors;
@@ -28,7 +28,7 @@ namespace ConsoleToolkitDemo
             {
                 foreach (var error in errors)
                 {
-                    _console.ErrorLine(error);
+                    _console.WriteLine(error.Red());
                 }
                 return;
             }
@@ -49,19 +49,50 @@ namespace ConsoleToolkitDemo
                 return;
             }
 
-            _console.ErrorLine("Internal error: No handler for command.");
+            _console.WriteLine("Internal error: No handler for command.");
         }
 
         private static void Handle(HelpCommand command)
         {
-            _console.PrintLine(_config.Describe(_console.Width));
+            //_console.WriteLine(_config.Describe(_console.Width));
         }
 
         private static void Handle(TableDataCommand command)
         {
             var data = Enumerable.Range(0, 20)
                 .Select(i => new {Text = string.Format("item {0}", i), Index = i});
-            _console.Report(data);
+            _console.FormatTable(data);
+        }
+
+        private static void Handle(ColouredTextCommand command)
+        {
+            _console.WriteLine("Coloured".Red() + " text is " + "easy".Yellow() + " to configure.");
+            _console.WriteLine();
+            _console.WriteLine("For example:");
+            _console.WriteLine();
+            _console.WriteLine(@"    ""red on green"".Red().BGDarkGreen()");
+            _console.WriteLine();
+            _console.WriteLine("Displays like this:");
+            _console.WriteLine();
+            _console.WriteLine("red on green".Red().BGGreen());
+            _console.WriteLine();
+            _console.WriteLine("It's".Cyan() 
+                + "easy".BGYellow().Black() 
+                + "to".BGDarkCyan().Cyan() 
+                + "overuse".BGDarkBlue().White() 
+                + "it!".Magenta().BGGray());
+            _console.WriteLine();
+            _console.WriteLine();
+            var data = Enumerable.Range(1, 10)
+                .Select(i => new 
+                {
+                    Number = i, 
+                    String = string.Join(" ", Enumerable.Repeat("blah", i)).Cyan(), 
+                    Red = (("Red" + Environment.NewLine +"Lines").Cyan() + Environment.NewLine + "lines").BGDarkRed()+ "Clear",
+                    Wrapped = @"Complex data string.
+Includes a hard newline.".Yellow()
+                });
+            _console.FormatTable(data);
         }
 
         private static CommandLineInterpreterConfiguration ConfigureCommandLine()
@@ -71,11 +102,18 @@ namespace ConsoleToolkitDemo
                 .Description("Display help text.");
             config.Command<TableDataCommand>("tables")
                 .Description("Displays tabulated test data.");
+            config.Command<ColouredTextCommand>("text")
+                .Description("Demonstrates the display of coloured text.");
             return config;
         }
     }
 
     class TableDataCommand
     {
+    }
+
+    class ColouredTextCommand
+    {
+        
     }
 }

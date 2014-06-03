@@ -1,11 +1,12 @@
 using System;
 using System.Linq;
 using System.Text;
-using ApprovalTests;
+using ApprovalTests.Core;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using NUnit.Framework;
+using Approvals = ApprovalTests.Approvals;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
@@ -69,6 +70,39 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         }
 
         [Test]
+        public void ColourInstructionsAreIncluded()
+        {
+            var c = new ColumnFormat("h", typeof (string));
+            var value = "One".Red() +" " + "two".Blue() + " three\r\nfour five six seven eight\r\n\r\n\r\nnine\r\nten\r\neleven.";
+            var wrapped = ColumnWrapper.WrapValue(value, c, 20);
+            var result = FormatResult(value, wrapped, 20);
+            Console.WriteLine(result);
+            Approvals.Verify(result);
+        }
+
+        [Test]
+        public void ColouredSpacesAreSkippedAtTheEndOfTheLineButInstructionsArePreserved()
+        {
+            var c = new ColumnFormat("h", typeof (string));
+            var value = "four five six seven" + " ".Red() + " ".White() + " ".Blue() + "eight";
+            var wrapped = ColumnWrapper.WrapValue(value, c, 20);
+            var result = FormatResult(value, wrapped, 20);
+            Console.WriteLine(result);
+            Approvals.Verify(result);
+        }
+
+        [Test]
+        public void ColourInstructionsForLastWordAreIncluded()
+        {
+            var c = new ColumnFormat("h", typeof (string));
+            var value = "four five six seven " + "eight".Red();
+            var wrapped = ColumnWrapper.WrapValue(value, c, 20);
+            var result = FormatResult(value, wrapped, 20);
+            Console.WriteLine(result);
+            Approvals.Verify(result);
+        }
+
+        [Test]
         public void WordBreaksAreCounted()
         {
             var c = new ColumnFormat("h", typeof (string));
@@ -84,8 +118,9 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             var c = new ColumnFormat("h", typeof (string));
             const string value = "One two three four\t\t\t\t\t\t\t\t          five\tsix seven eight nine ten eleven.";
             var addedBreaks = ColumnWrapper.CountWordwrapLineBreaks(value, c, 20);
+            Console.WriteLine("----+----|----+----|");
             Console.WriteLine(string.Join("\r\n", ColumnWrapper.WrapValue(value, c, 20)));
-            Assert.That(addedBreaks, Is.EqualTo(2));
+            Assert.That(addedBreaks, Is.EqualTo(3));
         }
 
         [Test]
@@ -126,6 +161,17 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             var addedBreaks = ColumnWrapper.CountWordwrapLineBreaks(value, c, 20);
             Console.WriteLine(string.Join("\r\n", ColumnWrapper.WrapValue(value, c, 20)));
             Assert.That(addedBreaks, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void NestedColourChangesArePreserved()
+        {
+            var c = new ColumnFormat("h", typeof (string));
+            var value = (("Red" + Environment.NewLine + "Lines").Cyan() + Environment.NewLine + "lines").BGDarkRed() + "Clear";
+            var wrapped = ColumnWrapper.WrapValue(value, c, 20);
+            var result = FormatResult(value, wrapped, 20);
+            Console.WriteLine(result);
+            Approvals.Verify(result);
         }
 
         private string FormatResult(string value, string[] wrapped, int guideWidth)
