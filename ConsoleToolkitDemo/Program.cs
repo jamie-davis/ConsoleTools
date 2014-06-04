@@ -76,10 +76,10 @@ namespace ConsoleToolkitDemo
             _console.WriteLine();
             _console.WriteLine("red on green".Red().BGGreen());
             _console.WriteLine();
-            _console.WriteLine("It's".Cyan() 
-                + "easy".BGYellow().Black() 
-                + "to".BGDarkCyan().Cyan() 
-                + "overuse".BGDarkBlue().White() 
+            _console.WriteLine("It's".Cyan()
+                + "easy".BGYellow().Black()
+                + "to".BGDarkCyan().Cyan()
+                + "overuse".BGDarkBlue().White()
                 + "it!".Magenta().BGGray());
             _console.WriteLine();
             _console.WriteLine();

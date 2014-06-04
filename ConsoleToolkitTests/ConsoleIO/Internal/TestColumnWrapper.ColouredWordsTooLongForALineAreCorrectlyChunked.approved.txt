@@ -1,0 +1,11 @@
+﻿ColouredWordsTooLongForALineAreCorrectlyChunked
+
+Original:
+>PSrtoomuchdataforeventwolines<p
+
+Wrapped:
+1234567890
+---------+
+>PSrtoomuchda
+taforeven
+twolines<p

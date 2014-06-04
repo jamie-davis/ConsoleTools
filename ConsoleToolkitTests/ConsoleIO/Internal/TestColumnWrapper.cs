@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ApprovalTests.Core;
@@ -74,6 +75,17 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         {
             var c = new ColumnFormat("h", typeof (string));
             var value = "One".Red() +" " + "two".Blue() + " three\r\nfour five six seven eight\r\n\r\n\r\nnine\r\nten\r\neleven.";
+            var wrapped = ColumnWrapper.WrapValue(value, c, 20);
+            var result = FormatResult(value, wrapped, 20);
+            Console.WriteLine(result);
+            Approvals.Verify(result);
+        }
+
+        [Test]
+        public void LineBreaksWithinColouredTextAreFormatted()
+        {
+            var c = new ColumnFormat("h", typeof (string));
+            var value = "One\r\ntwo\r\nthree".Red().BGBlue();
             var wrapped = ColumnWrapper.WrapValue(value, c, 20);
             var result = FormatResult(value, wrapped, 20);
             Console.WriteLine(result);
@@ -174,8 +186,68 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(result);
         }
 
-        private string FormatResult(string value, string[] wrapped, int guideWidth)
+        [Test]
+        public void LinesWithColourAreExpandedToCorrectLength()
         {
+            var c = new ColumnFormat("h", typeof (string));
+            c.SetActualWidth(20);
+            var value = (("Red" + Environment.NewLine + "Lines").Cyan() + Environment.NewLine + "lines").BGDarkRed() + "Clear";
+            var wrapped = ColumnWrapper.WrapValue(value, c, 20).Select(l => "-->" + l + "<--");
+            var result = FormatResult(value, wrapped, 20, 3);
+            Console.WriteLine(result);
+            Approvals.Verify(result);
+        }
+
+        [Test]
+        public void LinesAreExpandedToCorrectLength()
+        {
+            var c = new ColumnFormat("h", typeof (string));
+            c.SetActualWidth(20);
+            var value = "Line" + Environment.NewLine + "Data" + Environment.NewLine + "More";
+            var wrapped = ColumnWrapper.WrapValue(value, c, 20).Select(l => "-->" + l + "<--");
+            var result = FormatResult(value, wrapped, 20, 3);
+            Console.WriteLine(result);
+            Approvals.Verify(result);
+        }
+
+        [Test]
+        public void RightAlignedLinesAreExpandedToCorrectLength()
+        {
+            var c = new ColumnFormat("h", typeof (string), ColumnAlign.Right);
+            c.SetActualWidth(20);
+            var value = "Line" + Environment.NewLine + "Data" + Environment.NewLine + "More";
+            var wrapped = ColumnWrapper.WrapValue(value, c, 20).Select(l => "-->" + l + "<--");
+            var result = FormatResult(value, wrapped, 20, 3);
+            Console.WriteLine(result);
+            Approvals.Verify(result);
+        }
+
+        [Test]
+        public void RightAlignedLinesWithColourAreExpandedToCorrectLength()
+        {
+            var c = new ColumnFormat("h", typeof (string), ColumnAlign.Right);
+            c.SetActualWidth(20);
+            var value = (("Red" + Environment.NewLine + "Lines").Cyan() + Environment.NewLine + "lines").BGDarkRed() + "Clear";
+            var wrapped = ColumnWrapper.WrapValue(value, c, 20).Select(l => "-->" + l + "<--");
+            var result = FormatResult(value, wrapped, 20, 3);
+            Console.WriteLine(result);
+            Approvals.Verify(result);
+        }
+
+        [Test]
+        public void ColouredWordsTooLongForALineAreCorrectlyChunked()
+        {
+            var c = new ColumnFormat("h", typeof (string));
+            var value = "toomuchdataforeventwolines".Red();
+            var wrapped = ColumnWrapper.WrapValue(value, c, 9);
+            var result = FormatResult(value, wrapped, 10);
+            Console.WriteLine(result);
+            Approvals.Verify(result);
+        }
+
+        private string FormatResult(string value, IEnumerable<string> wrapped, int guideWidth, int indent = 0)
+        {
+            var indentString = new string(' ', indent);
             var sb = new StringBuilder();
             sb.AppendLine(TestContext.CurrentContext.Test.Name);
             sb.AppendLine();
@@ -191,8 +263,8 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             var divide = Enumerable.Range(0, guideWidth)
                 .Select(i => ((i + 1) % 10) == 0 ? "+" : "-")
                 .Aggregate((t, i) => t + i);
-            sb.AppendLine(guide);
-            sb.AppendLine(divide);
+            sb.AppendLine(indentString + guide);
+            sb.AppendLine(indentString + divide);
 
             foreach (var line in wrapped)
             {

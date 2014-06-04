@@ -1,0 +1,13 @@
+﻿LineBreaksWithinColouredTextAreFormatted
+
+Original:
+>Psb>PSrOne
+two
+three<p<p
+
+Wrapped:
+12345678901234567890
+---------+---------+
+>PsbPSrOne
+two
+three<pp

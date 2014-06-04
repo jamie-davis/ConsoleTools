@@ -1,0 +1,13 @@
+﻿RightAlignedLinesWithColourAreExpandedToCorrectLength
+
+Original:
+>PsR>PScRed
+Lines<p
+lines<pClear
+
+Wrapped:
+   12345678901234567890
+   ---------+---------+
+-->                 >PsRPScRed<--
+-->               Lines<p<--
+-->          lines<pClear<--

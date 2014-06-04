@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Reflection.Emit;
 
 namespace ConsoleToolkit.ConsoleIO.Internal
 {
@@ -144,9 +145,19 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
             if (!lines.Any())
                 lines.Add(string.Empty);
-            var lineWidth = format.Alignment == ColumnAlign.Left ? -format.ActualWidth : format.ActualWidth;
+
+            if (format.ActualWidth == 0) return lines.ToArray();
+
+            return lines.Select(l => new {Line = l, Width = format.ActualWidth + (l.Length - ColourString.Length(l))})
+                .Select(l => ExpandLine(format, l.Line, l.Width))
+                .ToArray();
+        }
+
+        private static string ExpandLine(ColumnFormat format, string line, int width)
+        {
+            var lineWidth = format.Alignment == ColumnAlign.Left ? -width : width;
             var formatSpec = "{0," + lineWidth.ToString(CultureInfo.InvariantCulture) + "}";
-            return lines.Select(l => string.Format(formatSpec, l)).ToArray();
+            return string.Format(formatSpec, line);
         }
 
         /// <summary>
@@ -160,12 +171,16 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         /// <returns>An enumerable set of word chunks, one <see cref="columnWidth"/> or less wide.</returns>
         private static IEnumerable<SplitWord> BreakWord(SplitWord splitWord, int columnWidth)
         {
-            //OMG
-            /**/
             while (splitWord.Length > columnWidth)
             {
-                yield return new SplitWord(columnWidth, 0, splitWord.WordValue.Substring(0, columnWidth));
-                splitWord = new SplitWord(splitWord.Length - columnWidth, splitWord.TrailingSpaces, splitWord.WordValue.Substring(columnWidth));
+                var newWord = new SplitWord(columnWidth, 0, ColourString.Substring(splitWord.WordValue, 0, columnWidth));
+                newWord.AddPrefixInstructions(splitWord.PrefixInstructions);
+                yield return newWord;
+
+                var endWord = new SplitWord(splitWord.Length - columnWidth, splitWord.TrailingSpaces, ColourString.Substring(splitWord.WordValue, columnWidth));
+                endWord.AddSuffixInstructions(splitWord.SuffixInstructions);
+
+                splitWord = endWord;
             }
 
             yield return splitWord;

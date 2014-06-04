@@ -1,0 +1,13 @@
+﻿RightAlignedLinesAreExpandedToCorrectLength
+
+Original:
+Line
+Data
+More
+
+Wrapped:
+   12345678901234567890
+   ---------+---------+
+-->                Line<--
+-->                Data<--
+-->                More<--
