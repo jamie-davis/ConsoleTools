@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Text;
 using ApprovalTests;
 using ApprovalTests.Reporters;
@@ -114,6 +115,20 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         }
 
         [Test]
+        public void RenderableColumnValuesAreNotConvertedToText()
+        {
+            var sizer = new ColumnSizer(typeof(string));
+            sizer.ColumnValue("XXXX XXXX");
+
+            //add a renderable value
+            var renderable = new RecordingConsoleAdapter();
+            renderable.FormatTable(Enumerable.Range(0, 3).Select(i => new {String = "blah blah blah blah", Number = i}));
+            sizer.ColumnValue(renderable);
+
+            Assert.That(sizer.GetSizeValue(1).RenderableValue, Is.Not.Null);
+        }
+
+        [Test]
         public void MaxLineBreaksIsCalculated()
         {
             var columnFormat = new ColumnFormat("", typeof(string));
@@ -123,8 +138,8 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
 
             var sb = new StringBuilder();
             sb.AppendLine("Test values:");
-            sb.AppendLine(sizer.GetSizeValue(0));
-            sb.AppendLine(sizer.GetSizeValue(1));
+            sb.AppendLine(sizer.GetSizeValue(0).TextValue);
+            sb.AppendLine(sizer.GetSizeValue(1).TextValue);
 
             sb.AppendLine("Max Linebreaks:");
             for (var width = 15; width > 0; --width)

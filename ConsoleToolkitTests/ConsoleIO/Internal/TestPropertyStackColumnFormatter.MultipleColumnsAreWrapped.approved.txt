@@ -2,10 +2,10 @@
 String1:      A
 simple string
 value
-String2:
+String2: 
 LongValueWord
 short
 Double:    3.14
-Date Time:
+Date Time: 
 05/05/2014
 19:23:52

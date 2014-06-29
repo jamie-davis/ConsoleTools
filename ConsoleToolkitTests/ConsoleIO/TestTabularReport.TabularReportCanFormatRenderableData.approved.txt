@@ -1,0 +1,101 @@
+﻿----+----|----+----|----+----|----+----|----+----|----+----|----+----|----+----|
+String            Second String                   Int Double Date Time          
+----------------- ------------------------------- --- ------ -------------------
+Some wrapped text Second long string value 3.       3   0.75 17/04/2014 00:00:00
+containing the    variation  variation  variation                               
+index number :3                                                                 
+and some more                                                                   
+stuff.                                                                          
+Text                                                                            
+-----------------                                                               
+Nested row 0                                                                    
+Nested row 1                                                                    
+Nested row 2                                                                    
+                                                                                
+Some wrapped text Second long string value 4.       4   0.60 17/05/2014 00:00:00
+containing the    variation  variation  variation                               
+index number :4   variation                                                     
+and some more                                                                   
+stuff.                                                                          
+Text                                                                            
+-----------------                                                               
+Nested row 0                                                                    
+Nested row 1                                                                    
+Nested row 2                                                                    
+Nested row 3                                                                    
+                                                                                
+Some wrapped text Second long string value 5.       5   0.50 17/06/2014 00:00:00
+containing the    variation  variation  variation                               
+index number :5   variation  variation                                          
+and some more                                                                   
+stuff.                                                                          
+Text                                                                            
+-----------------                                                               
+Nested row 0                                                                    
+Nested row 1                                                                    
+Nested row 2                                                                    
+Nested row 3                                                                    
+Nested row 4                                                                    
+                                                                                
+Some wrapped text Second long string value 6.       6   0.43 17/07/2014 00:00:00
+containing the    variation  variation  variation                               
+index number :6   variation  variation  variation                               
+and some more                                                                   
+stuff.                                                                          
+Text                                                                            
+-----------------                                                               
+Nested row 0                                                                    
+Nested row 1                                                                    
+Nested row 2                                                                    
+Nested row 3                                                                    
+Nested row 4                                                                    
+Nested row 5                                                                    
+                                                                                
+Some wrapped text Second long string value 7.       7   0.38 17/08/2014 00:00:00
+containing the    variation  variation  variation                               
+index number :7   variation  variation  variation                               
+and some more     variation                                                     
+stuff.                                                                          
+Text                                                                            
+-----------------                                                               
+Nested row 0                                                                    
+Nested row 1                                                                    
+Nested row 2                                                                    
+Nested row 3                                                                    
+Nested row 4                                                                    
+Nested row 5                                                                    
+Nested row 6                                                                    
+                                                                                
+Some wrapped text Second long string value 8.       8   0.33 17/09/2014 00:00:00
+containing the    variation  variation  variation                               
+index number :8   variation  variation  variation                               
+and some more     variation  variation                                          
+stuff.                                                                          
+Text                                                                            
+-----------------                                                               
+Nested row 0                                                                    
+Nested row 1                                                                    
+Nested row 2                                                                    
+Nested row 3                                                                    
+Nested row 4                                                                    
+Nested row 5                                                                    
+Nested row 6                                                                    
+Nested row 7                                                                    
+                                                                                
+Some wrapped text Second long string value 9.       9   0.30 17/10/2014 00:00:00
+containing the    variation  variation  variation                               
+index number :9   variation  variation  variation                               
+and some more     variation  variation  variation                               
+stuff.                                                                          
+Text                                                                            
+-----------------                                                               
+Nested row 0                                                                    
+Nested row 1                                                                    
+Nested row 2                                                                    
+Nested row 3                                                                    
+Nested row 4                                                                    
+Nested row 5                                                                    
+Nested row 6                                                                    
+Nested row 7                                                                    
+Nested row 8                                                                    
+                                                                                

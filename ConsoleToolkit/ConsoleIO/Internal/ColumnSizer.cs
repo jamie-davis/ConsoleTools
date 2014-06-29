@@ -9,7 +9,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
     {
         private readonly Type _columnType;
         private readonly int _tabLength;
-        private List<string> _values = new List<string>();
+        private List<FormattingIntermediate> _values = new List<FormattingIntermediate>();
         private ColumnFormat _format;
         private int _idealMinWidth;
         private bool _idealMinWidthValid;
@@ -22,11 +22,14 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             _format = format ?? new ColumnFormat(columnType.Name, columnType);
         }
 
-        public IEnumerable<string> Values { get { return _values; } }
+        public IEnumerable<FormattingIntermediate> Values { get { return _values; } }
 
         public void ColumnValue(object value)
         {
-            _values.Add(FormatValue(value));
+            if (value is IConsoleRenderer)
+                _values.Add(new FormattingIntermediate(value as IConsoleRenderer));
+            else 
+                _values.Add(FormatValue(value));
             _idealMinWidthValid = false;
         }
 
@@ -41,7 +44,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             {
                 return _values.Max(v => FitToLines(v, maxLineBreaks));
             }
-            return _values.Max(v => v.Length);
+            return _values.Max(v => v.Width);
         }
 
         /// <summary>
@@ -59,12 +62,12 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         {
             if (_columnType == typeof(string))
             {
-                _idealMinWidth = _values.Max(v => WordSplitter.Split(v, _tabLength).Max(w => w.Length));
+                _idealMinWidth = _values.Max(v => v.GetLongestWordLength(_tabLength));
                 _idealMinWidthValid = true;
                 return _idealMinWidth;
             }
 
-            _idealMinWidth = _values.Max(v => v.Length);
+            _idealMinWidth = _values.Max(v => v.Width);
             _idealMinWidthValid = true;
             return _idealMinWidth;
            
@@ -75,18 +78,20 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             return ValueFormatter.Format(_format, v);
         }
 
-        private int FitToLines(string v, int maxLineBreaks)
+        private int FitToLines(FormattingIntermediate v, int maxLineBreaks)
         {
-            for (var i = 1; i <= v.Length; i++)
+            for (var i = 1; i <= v.Width; i++)
             {
-                var breaks = ColumnWrapper.CountWordwrapLineBreaks(v, _format, i);
+                var breaks = v.RenderableValue != null 
+                    ? v.RenderableValue.CountWordWrapLineBreaks(_format, i)
+                    : ColumnWrapper.CountWordwrapLineBreaks(v, _format, i);
                 if (breaks <= maxLineBreaks) return i;
             }
 
-            return v.Length;
+            return v.Width;
         }
 
-        public string GetSizeValue(int row)
+        public FormattingIntermediate GetSizeValue(int row)
         {
             Debug.Assert(_values.Count > row);
             return _values[row];

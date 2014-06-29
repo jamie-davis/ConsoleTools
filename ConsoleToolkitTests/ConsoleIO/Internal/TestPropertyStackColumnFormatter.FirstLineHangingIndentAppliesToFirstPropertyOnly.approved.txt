@@ -1,0 +1,11 @@
+﻿----+----|----+
+String1: 
+pre formatted
+string
+String2: 
+pre-formatted
+words
+Double:  3.14pf
+Date Time: 
+06/05/2014
+20:46:25

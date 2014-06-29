@@ -75,6 +75,7 @@
     <Compile Include="CommandLineInterpretation\PosixCommandLineParser.cs" />
     <Compile Include="CommandLineInterpretation\ProgramParametersAlreadySpecified.cs" />
     <Compile Include="ConsoleIO\AdapterConfiguration.cs" />
+    <Compile Include="ConsoleIO\CachedRows.cs" />
     <Compile Include="ConsoleIO\ColourConverter.cs" />
     <Compile Include="ConsoleIO\ColourSeal.cs" />
     <Compile Include="ConsoleIO\ColourWriter.cs" />
@@ -91,6 +92,18 @@
     <Compile Include="ConsoleIO\Internal\ColourControlSplitter.cs" />
     <Compile Include="ConsoleIO\Internal\ColourInstructionRebuilder.cs" />
     <Compile Include="ConsoleIO\Internal\ColourString.cs" />
+    <Compile Include="ConsoleIO\Internal\FormattingIntermediate.cs" />
+    <Compile Include="ConsoleIO\Internal\MinReportWidthCalculator.cs" />
+    <Compile Include="ConsoleIO\Internal\RecordedCommands\FormatTableCommand.cs" />
+    <Compile Include="ConsoleIO\Internal\RecordedCommands\FormatTableCommandFactory.cs" />
+    <Compile Include="ConsoleIO\Internal\RecordedCommands\IRecordedCommand.cs" />
+    <Compile Include="ConsoleIO\Internal\RecordedCommands\NewLineCommand.cs" />
+    <Compile Include="ConsoleIO\Internal\RecordedCommands\RenderCommand.cs" />
+    <Compile Include="ConsoleIO\Internal\RecordedCommands\ReplayBuffer.cs" />
+    <Compile Include="ConsoleIO\Internal\RecordedCommands\SimpleTextCommandBase.cs" />
+    <Compile Include="ConsoleIO\Internal\RecordedCommands\WrapCommand.cs" />
+    <Compile Include="ConsoleIO\Internal\RecordedCommands\WriteCommand.cs" />
+    <Compile Include="ConsoleIO\Internal\RecordingConsoleAdapter.cs" />
     <Compile Include="ConsoleIO\OldConsoleAdapter.cs" />
     <Compile Include="ConsoleIO\Internal\ColumnExpander.cs" />
     <Compile Include="ConsoleIO\Internal\ColumnShrinker.cs" />

@@ -38,12 +38,19 @@ namespace ConsoleToolkit.ConsoleIO.Internal
                 }
 
                 if (matchedFormat == null)
-                    matchedFormat = new PropertyColumnFormat(prop, new ColumnFormat(ConvertPropNameToHeading(prop), prop.PropertyType));
+                    matchedFormat = new PropertyColumnFormat(prop, new ColumnFormat(ConvertPropNameToHeading(prop), ConvertPropertyType(prop.PropertyType)));
 
                 output.Add(matchedFormat);
             }
 
             return output;
+        }
+
+        private static Type ConvertPropertyType(Type propertyType)
+        {
+            if (typeof (IConsoleRenderer).IsAssignableFrom(propertyType))
+                return typeof (IConsoleRenderer);
+            return propertyType;
         }
 
         private static string ConvertPropNameToHeading(PropertyInfo prop)

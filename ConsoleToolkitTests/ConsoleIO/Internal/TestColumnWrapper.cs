@@ -2,17 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ApprovalTests.Core;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
+using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
 using Approvals = ApprovalTests.Approvals;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
     [TestFixture]
-    [UseReporter(typeof (DiffReporter))]
+    [UseReporter(typeof (CustomReporter))]
     public class TestColumnWrapper
     {
         [Test]
@@ -241,6 +241,39 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             var value = "toomuchdataforeventwolines".Red();
             var wrapped = ColumnWrapper.WrapValue(value, c, 9);
             var result = FormatResult(value, wrapped, 10);
+            Console.WriteLine(result);
+            Approvals.Verify(result);
+        }
+
+        [Test]
+        public void FirstLineIndentShortensFirstLine()
+        {
+            var c = new ColumnFormat("h", typeof(string));
+            const string value = "One two three four five six seven eight nine ten eleven.";
+            var wrapped = ColumnWrapper.WrapValue(value, c, 20, firstLineHangingIndent: 10);
+            var result = FormatResult(value, wrapped, 20);
+            Console.WriteLine(result);
+            Approvals.Verify(result);
+        }
+
+        [Test]
+        public void LeadingSpacesArePreserved()
+        {
+            var c = new ColumnFormat("h", typeof(string));
+            const string value = " One two three.";
+            var wrapped = ColumnWrapper.WrapValue(value, c, 20);
+            var result = FormatResult(value, wrapped, 20);
+            Console.WriteLine(result);
+            Approvals.Verify(result);
+        }
+
+        [Test]
+        public void TrailingSpacesArePreserved()
+        {
+            var c = new ColumnFormat("h", typeof(string));
+            const string value = "One two three. ";
+            var wrapped = ColumnWrapper.WrapValue(value, c, 20);
+            var result = FormatResult(value, wrapped, 20);
             Console.WriteLine(result);
             Approvals.Verify(result);
         }

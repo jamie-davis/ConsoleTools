@@ -1,0 +1,4 @@
+﻿----+----|----+----|
+text that exceeds th
+e width of the buffe
+r.

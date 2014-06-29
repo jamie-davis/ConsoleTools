@@ -76,10 +76,10 @@ Test width 35:
 ----+----|----+----|----+----|----+
 Value Long Text   
 ----- ------------
- 1.50 Long text    Short:Short text
-      that could   Date: 07/05/2014
-      be wrapped   19:59:20        
-      quite easily                 
+ 1.50 Long text    Short:     Short
+      that could   text            
+      be wrapped   Date: 07/05/2014
+      quite easily 19:59:20        
       if required.                 
 
 Test width 30:
@@ -91,7 +91,8 @@ Test width 30:
               be wrapped quite
               easily if       
               required.       
-              Short:Short text
+              Short:     Short
+              text            
               Date: 07/05/2014
               19:59:20        
 
@@ -104,7 +105,8 @@ Test width 25:
          be wrapped quite
          easily if       
          required.       
-         Short:Short text
+         Short:     Short
+         text            
          Date: 07/05/2014
          19:59:20        
 
@@ -129,12 +131,14 @@ quite easily if
 required.      
 Short:    Short
 text           
-Date:07/05/2014
+Date:          
+07/05/2014     
 19:59:20       
 
 Test width 10:
 ----+----|
-Value:1.50
+Value:  1.
+        50
 Long Text:
 Long text 
 that could
@@ -151,7 +155,8 @@ Date:
 Test width 5:
 ----+
 Value
-:1.50
+:  1.
+   50
 Long 
 Text:
 Long 

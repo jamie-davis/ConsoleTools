@@ -1,0 +1,5 @@
+﻿----+----|----+----|
+XXXX XXX >PSrRed<p>PSg and
+green<p text that
+wraps around at
+least one line.

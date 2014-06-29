@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Reflection.Emit;
 
 namespace ConsoleToolkit.ConsoleIO.Internal
 {
@@ -19,12 +18,14 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         /// <param name="format">The column's format specification.</param>
         /// <param name="columnWidth">The width allowed for the column.</param>
         /// <param name="tabLength">The number of spaces tabs should represent. Please note that actual tabstops are not supported.</param>
+        /// <param name="firstLineHangingIndent">Number of characters at the start of the first line that cannot be used for 
+        /// wrapping. This is required when the wrapped text begins part way along an existing line.</param>
         /// <returns>An array of one or more lines.</returns>
-        public static string[] WrapValue(object value, ColumnFormat format, int columnWidth, int tabLength = 4)
+        public static string[] WrapValue(object value, ColumnFormat format, int columnWidth, int tabLength = 4, int firstLineHangingIndent = 0)
         {
             Debug.Assert(columnWidth > 0);
             int wrappedLines;
-            return WrapAndMeasureValue(value, format, columnWidth, tabLength, out wrappedLines);
+            return WrapAndMeasureValue(value, format, columnWidth, tabLength, firstLineHangingIndent, out wrappedLines);
         }
 
         /// <summary>
@@ -40,11 +41,13 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         /// <param name="format">The column's format specification.</param>
         /// <param name="columnWidth">The width allowed for the column.</param>
         /// <param name="tabLength">The number of spaces tabs should represent. Please note that actual tabstops are not supported.</param>
+        /// <param name="firstLineHangingIndent">Number of characters at the start of the first line that cannot be used for 
+        /// wrapping. This is required when the wrapped text begins part way along an existing line.</param>
         /// <returns>The number of added line breaks.</returns>
-        public static int CountWordwrapLineBreaks(object value, ColumnFormat format, int columnWidth, int tabLength = 4)
+        public static int CountWordwrapLineBreaks(object value, ColumnFormat format, int columnWidth, int tabLength = 4, int firstLineHangingIndent = 0)
         {
             int wrappedLines;
-            WrapAndMeasureValue(value, format, columnWidth, tabLength, out wrappedLines);
+            WrapAndMeasureValue(value, format, columnWidth, tabLength, firstLineHangingIndent, out wrappedLines);
             return wrappedLines;
         }
 
@@ -56,12 +59,25 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         /// <param name="format">The column's format specification.</param>
         /// <param name="columnWidth">The width allowed for the column.</param>
         /// <param name="tabLength">The number of spaces tabs should represent. Please note that actual tabstops are not supported.</param>
+        /// <param name="firstLineHangingIndent">Number of characters at the start of the first line that cannot be used for 
+        /// wrapping. This is required when the wrapped text begins part way along an existing line.</param>
         /// <param name="wrappedLines">The number of added line breaks.</param>
         /// <returns>An array of one or more lines.</returns>
-        public static string[] WrapAndMeasureValue(object value, ColumnFormat format, int columnWidth, int tabLength, out int wrappedLines)
+        public static string[] WrapAndMeasureValue(object value, ColumnFormat format, int columnWidth, int tabLength, int firstLineHangingIndent, out int wrappedLines)
         {
-            var words = WordSplitter.Split(value.ToString(), tabLength);
-            return WrapAndMeasureWords(words, format, columnWidth, out wrappedLines);
+            var words = WordSplitter.Split(GetValueString(value), tabLength);
+            return WrapAndMeasureWords(words, format, columnWidth, firstLineHangingIndent, out wrappedLines);
+        }
+
+        private static string GetValueString(object value)
+        {
+            if (value is FormattingIntermediate)
+            {
+                var intermediate = value as FormattingIntermediate;
+                if (intermediate.RenderableValue == null)
+                    return intermediate.TextValue;
+            }
+            return value.ToString();
         }
 
         /// <summary>
@@ -71,13 +87,15 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         /// <param name="words">The words to be displayed in the column.</param>
         /// <param name="format">The column's format specification.</param>
         /// <param name="columnWidth">The width allowed for the column.</param>
+        /// <param name="firstLineHangingIndent">Number of characters at the start of the first line that cannot be used for 
+        /// wrapping. This is required when the wrapped text begins part way along an existing line.</param>
         /// <param name="wrappedLines">The number of added line breaks.</param>
         /// <returns>An array of one or more lines.</returns>
-        public static string[] WrapAndMeasureWords(IEnumerable<SplitWord> words, ColumnFormat format, int columnWidth, out int wrappedLines)
+        public static string[] WrapAndMeasureWords(IEnumerable<SplitWord> words, ColumnFormat format, int columnWidth, int firstLineHangingIndent, out int wrappedLines)
         {
             wrappedLines = 0;
             var lines = new List<string>();
-            var position = 0;
+            var position = firstLineHangingIndent;
             var line = string.Empty;
             SplitWord lastWord = null;
             int spacesAdded;
@@ -139,7 +157,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             if (position > 0)
             {
                 if (lastWord != null)
-                    line += lastWord.GetTrailingSpaces(0, out spacesAdded);
+                    line += lastWord.GetTrailingSpaces(columnWidth - position, out spacesAdded);
                 lines.Add(line);
             }
 

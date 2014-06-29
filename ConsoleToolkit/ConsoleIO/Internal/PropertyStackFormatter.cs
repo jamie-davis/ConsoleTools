@@ -25,18 +25,45 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         /// Use the format information to return a wrapped and formatted value for a property stack.
         /// </summary>
         /// <param name="format">The format information that will be used to perform the formatting.</param>
-        /// <param name="value">The value that will be combined with the heading specified in the <see cref="format"/>.</param>
+        /// <param name="valueObject">The value that will be combined with the heading specified in the <see cref="format"/>.</param>
         /// <param name="columnWidth">The width to which the column should be formatted.</param>
+        /// <param name="tabLength">The number of spaces represented by tab characters.</param>
+        /// <param name="firstLineHangingIndent">Number of characters at the start of the first line that cannot be used for 
+        /// wrapping. This is required when the wrapped text begins part way along an existing line.</param>
         /// <returns>An array of lines containing the formatted output.</returns>
-        public static string[] Format(ColumnFormat format, string value, int columnWidth, int tabLength = 4)
+        public static string[] Format(ColumnFormat format, object valueObject, int columnWidth, int tabLength = 4, int firstLineHangingIndent = 0)
+        {
+            if (valueObject is IConsoleRenderer)
+                return FormatRenderer(format, valueObject as IConsoleRenderer, columnWidth, tabLength, firstLineHangingIndent);
+
+            return FormatStringValue(format, valueObject as string, columnWidth, tabLength, firstLineHangingIndent);
+        }
+
+        private static string[] FormatRenderer(ColumnFormat format, IConsoleRenderer value, int columnWidth, int tabLength, int firstLineHangingIndent)
+        {
+            var headingText = MakeHeading(format, columnWidth, tabLength, firstLineHangingIndent);
+            int wrappedLines;
+            var renderedData = value.Render(columnWidth, out wrappedLines);
+            return headingText.Concat(renderedData).ToArray();
+        }
+
+        private static string[] MakeHeading(ColumnFormat format, int columnWidth, int tabLength, int firstLineHangingIndent)
+        {
+            var firstLine = string.Format("{0}: ", format.Heading);
+            return ColumnWrapper.WrapValue(firstLine, new ColumnFormat(null, typeof(string)), columnWidth, tabLength,
+                firstLineHangingIndent);
+        }
+
+        private static string[] FormatStringValue(ColumnFormat format, string value, int columnWidth, int tabLength,
+            int firstLineHangingIndent)
         {
             var words = WordSplitter.Split(value, tabLength);
-            var firstLine = string.Format("{0}: ", format.Heading);
 
-            var headingText = ColumnWrapper.WrapValue(firstLine, new ColumnFormat(null, typeof (string)), columnWidth);
+            var headingText = MakeHeading(format, columnWidth, tabLength, firstLineHangingIndent);
             var lastHeadingLineLength = headingText.Last().Length;
 
-            var numWordsForFirstLine = CountWordsThatFitFirstLine(lastHeadingLineLength, columnWidth, words);
+            var firstLineEffectiveWidth = columnWidth - (headingText.Count() > 1 ? 0 : firstLineHangingIndent);
+            var numWordsForFirstLine = CountWordsThatFitFirstLine(lastHeadingLineLength, firstLineEffectiveWidth, words);
 
             if (numWordsForFirstLine > 0)
             {
@@ -49,9 +76,10 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
             if (words.Length == numWordsForFirstLine)
                 return headingText;
-            
+
             int wrappedLines;
-            var rest = ColumnWrapper.WrapAndMeasureWords(words.Skip(numWordsForFirstLine), format, columnWidth, out wrappedLines);
+            var rest = ColumnWrapper.WrapAndMeasureWords(words.Skip(numWordsForFirstLine), format, columnWidth, 0,
+                out wrappedLines);
             if (format.Alignment == ColumnAlign.Right)
                 rest = RightAlign(columnWidth, rest);
 
@@ -60,7 +88,11 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
         private static string[] RightAlign(int columnWidth, IEnumerable<string> lines)
         {
-            return lines.Select(l => string.Format("{0," + columnWidth + "}", l)).ToArray();
+            return lines.Select(l =>
+            {
+                var format = "{0," + columnWidth + "}";
+                return string.Format(format, l);
+            }).ToArray();
         }
 
         private static string ConcatenateWords(IEnumerable<SplitWord> words)

@@ -28,6 +28,13 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             public int ABC { get; set; }
         }
 
+        class TestTypeWithRenderable
+        {
+            public int IntCol { get; set; }
+            public string StringCol { get; set; }
+            public RecordingConsoleAdapter RenderCol { get; set; }
+        }
+
         [Test]
         public void NoColumnDefinitionReturnsAFullSetOfColumnFormats()
         {
@@ -60,6 +67,15 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             var cols = typeof (TestType).GetProperties()
                 .Select(p => p.Name == "StringCol" ? new ColumnFormat("My String", p.PropertyType) : null);
             var propFormats = FormatAnalyser.Analyse(typeof(TestType), cols);
+            Approvals.Verify(ReportFormats(propFormats));
+        }
+
+        [Test]
+        public void DefaultRenderColumnIsGenerated()
+        {
+            var cols = typeof (TestType).GetProperties()
+                .Select(p => p.Name == "StringCol" ? new ColumnFormat("My String", p.PropertyType) : null);
+            var propFormats = FormatAnalyser.Analyse(typeof(TestTypeWithRenderable), cols);
             Approvals.Verify(ReportFormats(propFormats));
         }
 

@@ -1,0 +1,27 @@
+﻿FXXXXXXXXXXXXXrrrrrrXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+Bkkkkkkkkkkkkkyyyyyykkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
++Long console output that should require                     
+FXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+Bkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
++word wrapping to fit the display width,                     
+FXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+Bkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
++but remain short of the line end to                         
+FXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+Bkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
++illustrate WrapLine.                                        
+FgggggggggggggggggggggggggggggggXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+Bkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
++More output, and hopefully more                             
+FgggggggggggggggggggggggggggggggggggXXXXXXXXXXXXXXXXXXXXXXXXX
+Bkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
++wrapping. Must ensure that there is                         
+FgggggggggggggggggggggggggggggXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+Bkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
++enough text. Also WrapLine'd.                               
+FXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+Bkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
++No wrapping needed.                                         
+FXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+Bkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
++                                                            

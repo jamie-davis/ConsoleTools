@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace ConsoleToolkit.ConsoleIO.Internal
@@ -10,16 +9,15 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         {
             private readonly int _tabLength;
             public readonly List<SplitWord> Words = new List<SplitWord>();
-            private List<ColourControlItem> _items;
             private readonly List<ColourControlItem.ControlInstruction> _cachedPrefixInstructions = new List<ColourControlItem.ControlInstruction>();
             private SplitWord _current;
 
             public SplitImpl(string data, int tabLength)
             {
                 _tabLength = tabLength;
-                _items = ColourControlSplitter.Split(data);
+                var items = ColourControlSplitter.Split(data);
                 _current = null;
-                foreach (var colourControlItem in _items)
+                foreach (var colourControlItem in items)
                 {
                     ProcessColourControlItem(colourControlItem);
                 }
@@ -122,14 +120,12 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
                 var wordLen = nextEnd - dataPos;
                 var spaces = 0;
-                var terminatesLine = false;
                 while (nextEnd < data.Length && SpaceChars.Contains(data[nextEnd]))
                 {
                     var nextChar = data[nextEnd];
                     if (nextChar == '\r' || nextChar == '\n')
                     {
                         ++nextEnd;
-                        terminatesLine = true;
                         if (nextChar == '\r' && nextEnd < data.Length && data[nextEnd] == '\n')
                         {
                             ++nextEnd;

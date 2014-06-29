@@ -1,0 +1,9 @@
+﻿FXXXXXXXXXXXXXrrrrrrXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+Bkkkkkkkkkkkkkyyyyyykkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
++Long console output that should require                     
+FXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+Bkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
++word wrapping to fit the display width.                     
+FXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+Bkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
++This was split into many small writes                       

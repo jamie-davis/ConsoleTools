@@ -1,0 +1,23 @@
+﻿This is the output from a single render 
+operation. It contains a fixed line (thi
+s one) split across two Write operations
+ (this is from the second one). Next it 
+will contain a WriteLine (this one) whic
+h will be followed by a table.
+
+Number String                           
+------ ---------------------------------
+     1 blah                             
+     2 blah blah                        
+     3 blah blah blah                   
+     4 blah blah blah blah              
+     5 blah blah blah blah blah         
+     6 blah blah blah blah blah blah    
+     7 blah blah blah blah blah blah    
+       blah                             
+     8 blah blah blah blah blah blah    
+       blah blah                        
+     9 blah blah blah blah blah blah    
+       blah blah blah                   
+    10 blah blah blah blah blah blah    
+       blah blah blah blah              

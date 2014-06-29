@@ -1,0 +1,9 @@
+﻿LeadingSpacesArePreserved
+
+Original:
+ One two three.
+
+Wrapped:
+12345678901234567890
+---------+---------+
+ One two three.

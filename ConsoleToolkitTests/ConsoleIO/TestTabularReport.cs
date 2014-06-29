@@ -5,6 +5,7 @@ using System.Text;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.ConsoleIO;
+using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkitTests.ConsoleIO.UnitTestUtilities;
 using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
@@ -64,6 +65,46 @@ namespace ConsoleToolkitTests.ConsoleIO
                 .ToList();
 
             var report = Report(data);
+            Approvals.Verify(report);
+        }
+
+        [Test]
+        public void TabularReportCanFormatFromCachedData()
+        {
+            var data = Enumerable.Range(0, 10)
+                .Select(i => new
+                {
+                    String = string.Format("First long string value {0}. {1}", i, string.Join(" ", Enumerable.Repeat("variation ", i))),
+                    SecondString = string.Format("Second long string value {0}. {1}", i, string.Join(" ", Enumerable.Repeat("variation ", i))),
+                    Int = i,
+                    Double = 3.0/(i + 1.0),
+                    DateTime = DateTime.Parse(string.Format("2014-{0}-17", i+1))
+                })
+                .ToList();
+
+            var dataCache = CachedRowsFactory.Make(data);
+
+            var report = CachedReport(dataCache);
+            Approvals.Verify(report);
+        }
+
+        [Test]
+        public void TabularReportCanFormatRenderableData()
+        {
+            var data = Enumerable.Range(3, 7)
+                .Select(i => new
+                {
+                    String = MakeRenderable(i),
+                    SecondString = string.Format("Second long string value {0}. {1}", i, string.Join(" ", Enumerable.Repeat("variation ", i))),
+                    Int = i,
+                    Double = 3.0/(i + 1.0),
+                    DateTime = DateTime.Parse(string.Format("2014-{0}-17", i+1))
+                })
+                .ToList();
+
+            var dataCache = CachedRowsFactory.Make(data);
+
+            var report = CachedReport(dataCache);
             Approvals.Verify(report);
         }
 
@@ -176,11 +217,31 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(sb.ToString());
         }
 
+        private RecordingConsoleAdapter MakeRenderable(int number)
+        {
+            var output = new RecordingConsoleAdapter();
+            output.WrapLine("Some wrapped text containing the index number :{0} and some more stuff.", number);
+            var table = Enumerable.Range(0, number)
+                .Select(i => new { Text = string.Format("Nested row {0}", i)});
+            output.FormatTable(table);
+
+            return output;
+        }
+
         private static string Report<T>(IEnumerable<T> data, int width = 80, int numRowsToUseForSizing = 0)
         {
             var report = RulerFormatter.MakeRuler(width)
                          + Environment.NewLine
                          + string.Join(string.Empty, TabularReport.Format(data, null, width, numRowsToUseForSizing));
+            Console.WriteLine(report);
+            return report;
+        }
+
+        private static string CachedReport<T>(CachedRows<T> data, int width = 80)
+        {
+            var report = RulerFormatter.MakeRuler(width)
+                         + Environment.NewLine
+                         + string.Join(string.Empty, TabularReport.Format(data, null, width));
             Console.WriteLine(report);
             return report;
         }

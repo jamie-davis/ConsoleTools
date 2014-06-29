@@ -43,13 +43,27 @@ namespace ConsoleToolkit.ConsoleIO.Internal
                 .ToList();
         }
 
-
         public void AddRow(object row)
         {
             foreach (var sizer in _parameters.Sizers)
             {
                 var value = sizer.PropertyColumnFormat.Property.GetValue(row, null);
                 sizer.Sizer.ColumnValue(value);
+            }
+
+            ++_sizeRows;
+        }
+
+        public void AddRow<T>(CachedRow<T> row)
+        {
+            var dataDictionary = row.Columns.ToDictionary(c => c.Property, c => c.Value);
+            foreach (var sizer in _parameters.Sizers)
+            {
+                object value;
+                if (dataDictionary.TryGetValue(sizer.PropertyColumnFormat.Property, out value))
+                    sizer.Sizer.ColumnValue(value);
+                else
+                    sizer.Sizer.ColumnValue(null);
             }
 
             ++_sizeRows;
@@ -103,7 +117,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             _headingsRowIndex = _sizeRows++;
         }
 
-        public IEnumerable<IEnumerable<string>> GetSizingValues()
+        public IEnumerable<IEnumerable<FormattingIntermediate>> GetSizingValues()
         {
             for (var row = 0; row < _sizeRows; ++row)
             {

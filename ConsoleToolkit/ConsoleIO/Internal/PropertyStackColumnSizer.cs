@@ -9,13 +9,13 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         class StackPropertyInfo
         {
             public PropertyColumnFormat Column;
-            public List<string> Values;
+            public List<FormattingIntermediate> Values;
 
             public int GetLongestWordLength(int tabLength)
             {
                 if (!Values.Any()) return 0;
 
-                return Values.Max(v => WordSplitter.Split(v, tabLength).Max(w => w.Length));
+                return Values.Max(v => v.GetLongestWordLength(tabLength));
             }
 
             public int GetFirstLineLength(int tabLength)
@@ -23,11 +23,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
                 var headingOverhead = Column.Format.Heading.Length + 2;
                 if (!Values.Any()) return headingOverhead;
 
-                return Values.Max(v =>
-                {
-                    var word = WordSplitter.Split(v, tabLength).FirstOrDefault();
-                    return headingOverhead + (word == null ? 0 : word.Length);
-                });
+                return Values.Max(v => v.GetFirstWordLength(tabLength, headingOverhead));
             }
         }
 
@@ -35,9 +31,9 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         
         public IEnumerable<PropertyColumnFormat> Columns { get { return _columns.Select(c => c.Column); } }
 
-        public void AddColumn(PropertyColumnFormat format, IEnumerable<string> values)
+        public void AddColumn(PropertyColumnFormat format, IEnumerable<FormattingIntermediate> values)
         {
-            var newItem = new StackPropertyInfo()
+            var newItem = new StackPropertyInfo
             {
                 Column = format,
                 Values = values.ToList()
@@ -55,7 +51,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             return Math.Max(longestFirstLine, longestWord);
         }
 
-        public IEnumerable<string> GetSizeValues(int row)
+        public IEnumerable<FormattingIntermediate> GetSizeValues(int row)
         {
             return _columns.Select(c => c.Values[row]);
         }

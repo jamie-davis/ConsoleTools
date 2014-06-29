@@ -1,0 +1,10 @@
+﻿Number = 10,StringData = string 10,Date = 11/06/2014 20:36:00
+Number = 20,StringData = string 20,Date = 11/06/2014 20:36:00
+Number = 30,StringData = string 30,Date = 11/06/2014 20:36:00
+Number = 40,StringData = string 40,Date = 11/06/2014 20:36:00
+Number = 50,StringData = string 50,Date = 11/06/2014 20:36:00
+Number = 60,StringData = string 60,Date = 11/06/2014 20:36:00
+Number = 70,StringData = string 70,Date = 11/06/2014 20:36:00
+Number = 80,StringData = string 80,Date = 11/06/2014 20:36:00
+Number = 90,StringData = string 90,Date = 11/06/2014 20:36:00
+Number = 100,StringData = string 100,Date = 11/06/2014 20:36:00

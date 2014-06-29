@@ -1,4 +1,4 @@
 ﻿----+----|----+----|
-Format heading:
+Format heading: 
      Firstwordislong
 End

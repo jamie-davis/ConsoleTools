@@ -117,6 +117,21 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output);
         }
 
+        [Test]
+        public void FirstLineHangingIndentAppliesToFirstPropertyOnly()
+        {
+            var preFormattedValues = new[]
+            {
+                "pre formatted string",
+                "pre-formatted words",
+                "3.14pf",
+                "06/05/2014 20:46:25"
+            };
+            var report = PropertyStackColumnFormatter.Format(_cols, preFormattedValues, 15, firstLineHangingIndent: 5);
+            var output = BuildOutput(report, 15);
+            Approvals.Verify(output);
+        }
+
         private static string BuildOutput(IEnumerable<string> report, int length)
         {
             var output = string.Join(Environment.NewLine, new[] {Ruler.Substring(0, length)}.Concat(report));

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,7 +31,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         private static IEnumerable<Segment> GetSegments(string data)
         {
             var segments = new List<Segment>();
-            var pos = 0;
+            int pos;
             var prevPos = 0;
             while ((pos = data.IndexOf(AdapterConfiguration.ControlSequenceIntroducer, prevPos)) >= 0)
             {
