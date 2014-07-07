@@ -50,14 +50,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandLineInterpretation\CommandsForTesting.cs" />
     <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\CommandExecutorUtil.cs" />
     <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\Config1AcceptanceTests.cs" />
     <Compile Include="CommandLineInterpretation\MockParserResult.cs" />
+    <Compile Include="CommandLineInterpretation\TestAttributeBasedConfiguration.cs" />
+    <Compile Include="CommandLineInterpretation\TestCommandAttributeLoader.cs" />
     <Compile Include="CommandLineInterpretation\TestCommandLineInterpreter.cs" />
     <Compile Include="CommandLineInterpretation\TestCommandLineInterpreterConfiguration.cs" />
     <Compile Include="CommandLineInterpretation\TestCommandLineTokeniser.cs" />
     <Compile Include="CommandLineInterpretation\TestMicrosoftStandardCommandLineParser.cs" />
     <Compile Include="CommandLineInterpretation\TestMsDosCommandLineParser.cs" />
+    <Compile Include="CommandLineInterpretation\TestParameterAssignmentGenerator.cs" />
     <Compile Include="CommandLineInterpretation\TestParserResult.cs" />
     <Compile Include="CommandLineInterpretation\TestPosixCommandLineParser.cs" />
     <Compile Include="ConsoleIO\Internal\RecordedCommands\TestFormatTableCommand.cs" />

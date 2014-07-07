@@ -45,6 +45,7 @@
     <Compile Include="CommandLineInterpretation\BasePositional.cs" />
     <Compile Include="CommandLineInterpretation\BuiltInCommandLineParsers.cs" />
     <Compile Include="CommandLineInterpretation\CommandAlreadySpecified.cs" />
+    <Compile Include="CommandLineInterpretation\CommandAttributeLoader.cs" />
     <Compile Include="CommandLineInterpretation\CommandConfig.cs" />
     <Compile Include="CommandLineInterpretation\CommandConfigurationInvalid.cs" />
     <Compile Include="CommandLineInterpretation\CommandLineInterpreter.cs" />
@@ -53,12 +54,15 @@
     <Compile Include="CommandLineInterpretation\CommandLineTokeniser.cs" />
     <Compile Include="CommandLineInterpretation\CommandOption.cs" />
     <Compile Include="CommandLineInterpretation\CommandPositional.cs" />
+    <Compile Include="CommandLineInterpretation\ConfigurationAttributes\PositionalAttribute.cs" />
     <Compile Include="CommandLineInterpretation\CustomParserNotFound.cs" />
     <Compile Include="CommandLineInterpretation\DuplicateOptionName.cs" />
     <Compile Include="CommandLineInterpretation\IContext.cs" />
     <Compile Include="CommandLineInterpretation\MemberReferenceExpected.cs" />
+    <Compile Include="CommandLineInterpretation\NestedOptionTypeInvalid.cs" />
     <Compile Include="CommandLineInterpretation\NoMatchingPropertyFoundException.cs" />
     <Compile Include="CommandLineInterpretation\ConfigGenerator.cs" />
+    <Compile Include="CommandLineInterpretation\ParameterAssignmentGenerator.cs" />
     <Compile Include="CommandLineInterpretation\SetterBuilder.cs" />
     <Compile Include="CommandLineInterpretation\ShortCircuitInvalid.cs" />
     <Compile Include="CommandLineInterpretation\ShortCircuitInvalidOnPositionalParameter.cs" />

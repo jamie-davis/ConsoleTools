@@ -1,0 +1,218 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Runtime.InteropServices.ComTypes;
+using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
+
+namespace ConsoleToolkit.CommandLineInterpretation
+{
+    /// <summary>
+    /// This class loads command configuration from a type.
+    /// </summary>
+    static class CommandAttributeLoader
+    {
+        /// <summary>
+        /// Internal class used to hold properties and fields from a type that have a specific attribute.
+        /// </summary>
+        /// <typeparam name="T">The attribute type sought.</typeparam>
+        class AttributedMember<T> where T : Attribute
+        {
+            public MemberInfo MemberInfo { get; private set; }
+            public Type Type { get; private set; }
+            public T Attribute { get; private set; }
+
+            public AttributedMember(MemberInfo memberInfo, Type type, T attribute)
+            {
+                MemberInfo = memberInfo;
+                Type = type;
+                Attribute = attribute;
+            }
+        }
+
+        // ReSharper disable once UnusedMember.Local
+        private static CommandConfig<T> Create<T>() where T : class, new()
+        {
+            var commandConfig = new CommandConfig<T>(() => new T());
+
+            commandConfig.Name = typeof(T).Name;
+
+            AttachPropAndFieldElements(commandConfig);
+            var desc = GetDescription(typeof (T));
+            if (desc != null)
+                (commandConfig as BaseCommandConfig).Description = desc;
+
+            return commandConfig;
+        }
+
+        private static void AttachPropAndFieldElements<T>(CommandConfig<T> commandConfig) where T : class
+        {
+            var type = typeof (T);
+            var positionals = GetMembersWithAttribute<PositionalAttribute>(type)
+                .OrderBy(m => m.Attribute.Index)
+                .ToList();
+
+            var options = GetMembersWithAttribute<OptionAttribute>(type)
+                .ToList();
+
+            foreach (var member in positionals)
+                AttachPositional(member, commandConfig);
+            foreach (var member in options)
+                AttachOption(member, commandConfig);
+        }
+
+        private static void AttachOption<T>(AttributedMember<OptionAttribute> optionMember, CommandConfig<T> commandConfig) where T : class
+        {
+            var option = MakeOption(optionMember.Attribute, commandConfig, optionMember.MemberInfo, optionMember.Type);
+            var desc = GetDescription(optionMember.MemberInfo);
+            if (desc != null)
+                option.Description = desc;
+        }
+
+        private static void AttachPositional<T>(AttributedMember<PositionalAttribute> posMember, CommandConfig<T> commandConfig) where T : class
+        {
+            var positional = MakePositional(commandConfig, posMember.MemberInfo, posMember.Type);
+            var desc = GetDescription(posMember.MemberInfo);
+            if (desc != null)
+                positional.Description = desc;
+        }
+
+        private static IEnumerable<AttributedMember<T>> GetMembersWithAttribute<T>(Type type) where T : Attribute
+        {
+            return type.GetProperties()
+                .Select(p => new AttributedMember<T>(p, p.PropertyType, p.GetCustomAttribute<T>()))
+                .Concat(type.GetFields().Select(f => new AttributedMember<T>(f, f.FieldType, f.GetCustomAttribute<T>())))
+                .Where(m => m.Attribute != null);
+        }
+
+        private static string GetDescription(MemberInfo member)
+        {
+            var attrib = member.GetCustomAttribute<DescriptionAttribute>();
+            if (attrib != null)
+                return attrib.Text;
+            return null;
+        }
+
+        private static string GetDescription(Type type)
+        {
+            var attrib = type.GetCustomAttribute<DescriptionAttribute>();
+            if (attrib != null)
+                return attrib.Text;
+            return null;
+        }
+
+        // ReSharper disable once UnusedMember.Local
+        private static BasePositional CallPositional<T, TMember>(string parameterName, Expression<Func<T, TMember>> expression,
+            CommandConfig<T> command) where T : class
+        {
+            command.Positional(parameterName, expression);
+            return command.Positionals.FirstOrDefault(p => p.ParameterName == parameterName);
+        }
+
+        // ReSharper disable once UnusedMember.Local
+        private static BaseOption CallOption<T, TMember>(string optionName, Expression<Func<T, TMember>> expression,
+            CommandConfig<T> command) where T : class
+        {
+            command.Option(optionName, expression);
+            return command.Options.FirstOrDefault(o => o.Name == optionName);
+        }
+
+        /**/
+        // ReSharper disable once UnusedMember.Local
+        //private static BaseOption CallOptionWithAction<T, TMember>(string optionName, Expression expression,
+        //    CommandConfig<T> command) where T : class
+        //{
+        //    command.Option(optionName, expression);
+        //    return command.Options.FirstOrDefault(o => o.Name == optionName);
+        //}
+        /**/
+
+        private static BasePositional MakePositional<T>(CommandConfig<T> commandConfig, MemberInfo member, Type memberType) where T : class
+        {
+            var genericCallPositional = typeof (CommandAttributeLoader).GetMethod("CallPositional", BindingFlags.Static | BindingFlags.NonPublic);
+            var callPositional = genericCallPositional.MakeGenericMethod(new[] {typeof (T), memberType});
+
+            var parameterExpression = Expression.Variable(typeof(T));
+            return callPositional.Invoke(commandConfig, new object[]
+            {
+                member.Name, 
+                Expression.Lambda(Expression.MakeMemberAccess(parameterExpression, member), parameterExpression),
+                commandConfig
+            }) as BasePositional;
+        }
+
+        private static BaseOption MakeOption<T>(OptionAttribute optionAttribute, CommandConfig<T> commandConfig, MemberInfo member, Type memberType) where T : class
+        {
+            Type[] parameterTypes;
+            var optionInitialiser = ParameterAssignmentGenerator<T>.Generate(member, memberType, out parameterTypes);
+            
+            //need to make a call to CommandConfig<T> Option<T1, T2, T3>(string optionName, Action<T, T1, T2, T3> optionInitialiser)
+            var optionName = GetOptionName(optionAttribute, member);
+            var option = CallOptionCreateMethod(commandConfig, optionName, memberType, optionInitialiser, parameterTypes);
+
+            var alias = GetOptionAlias(optionAttribute);
+            if (option != null && alias != null)
+            {
+                var existingNames = commandConfig.Options.SelectMany(o => new[] { o.Name }.Concat(o.Aliases));
+                option.Alias(alias, existingNames);
+            }
+
+            return option;
+        }
+
+        private static BaseOption CallOptionCreateMethod<T>(CommandConfig<T> commandConfig, string optionName, Type parameterType, object optionInitialiser, Type[] parameterTypes) where T : class
+        {
+            var genericOptionMethod = commandConfig
+                .GetType()
+                .GetMethods()
+                .FirstOrDefault(m => m.Name == "Option"
+                                     && m.GetGenericArguments().Length == parameterTypes.Length
+                                     && m.GetParameters().Length == 2
+                                     && m.GetParameters()[1].ParameterType.Name.Contains("Action"));
+            var optionMethod = genericOptionMethod.MakeGenericMethod(parameterTypes);
+
+            optionMethod.Invoke(commandConfig, new[] {optionName, optionInitialiser});
+            return commandConfig.Options.FirstOrDefault(o => o.Name == optionName);
+        }
+
+        private static string GetOptionName(OptionAttribute optionAttribute, MemberInfo member)
+        {
+            if (optionAttribute.LongName != null)
+                return optionAttribute.LongName;
+
+            if (optionAttribute.ShortName != null)
+                return optionAttribute.ShortName;
+
+            return member.Name;
+        }
+
+        private static string GetOptionAlias(OptionAttribute optionAttribute)
+        {
+            if (optionAttribute.LongName != null && optionAttribute.ShortName != null)
+                return optionAttribute.ShortName;
+            return null;
+        }
+
+        public static object Load(Type commandClass)
+        {
+            try
+            {
+                if (commandClass.GetCustomAttribute<CommandAttribute>() == null)
+                    throw new ArgumentException("Type does not have the Command attribute.", "commandClass");
+
+                var genericCreateMethod = typeof (CommandAttributeLoader).GetMethod("Create",
+                    BindingFlags.Static | BindingFlags.NonPublic);
+                var createMethod = genericCreateMethod.MakeGenericMethod(new[] {commandClass});
+                return createMethod.Invoke(null, null);
+            }
+            catch (TargetInvocationException e)
+            {
+                if (e.InnerException != null)
+                    throw e.InnerException;
+                throw;
+            }
+        }
+    }
+}
