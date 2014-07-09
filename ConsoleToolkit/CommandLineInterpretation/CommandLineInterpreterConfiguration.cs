@@ -305,5 +305,10 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
             return sb.ToString();
         }
+
+        public void Load(Type type)
+        {
+            _commands.Add(CommandAttributeLoader.Load(type));
+        }
     }
 }

@@ -3,7 +3,6 @@ using ApprovalTests.Reporters;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkitTests.TestingUtilities;
-using Microsoft.SqlServer.Server;
 using NUnit.Framework;
 
 namespace ConsoleToolkitTests.CommandLineInterpretation
@@ -21,6 +20,8 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         // ReSharper disable UnusedAutoPropertyAccessor.Local
         // ReSharper disable ClassNeverInstantiated.Local
         // ReSharper disable MemberCanBePrivate.Local
+        // ReSharper disable UnusedMember.Local
+        // ReSharper disable UnusedParameter.Local
 
         private class TestType
         {
@@ -86,6 +87,8 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             }
         }
 
+        // ReSharper restore UnusedParameter.Local
+        // ReSharper restore UnusedMember.Local
         // ReSharper restore MemberCanBePrivate.Local
         // ReSharper restore ClassNeverInstantiated.Local
         // ReSharper restore UnusedAutoPropertyAccessor.Local

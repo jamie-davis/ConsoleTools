@@ -1,0 +1,65 @@
+﻿Test: c1 file
+
+C1Data
+{
+    FileName = file
+    DeleteAfter = False
+    ArchiveLocation = 
+}
+
+
+Test: c1 file --delete -Alocation
+
+C1Data
+{
+    FileName = file
+    DeleteAfter = True
+    ArchiveLocation = location
+}
+
+
+Test: c1 file -D --archive=location
+
+C1Data
+{
+    FileName = file
+    DeleteAfter = True
+    ArchiveLocation = location
+}
+
+
+Test: c1
+
+Not enough parameters specified.
+
+
+Test: c1 -D -Aloc
+
+Not enough parameters specified.
+
+
+Test: c1 -A
+
+Not enough parameters for the archive option.
+
+
+Test: c1 -Ab,56
+
+The archive option has too many parameters.
+
+
+Test: c1 -- -Ab,56
+
+C1Data
+{
+    FileName = -Ab,56
+    DeleteAfter = False
+    ArchiveLocation = 
+}
+
+
+Test: bogus
+
+Command not recognised.
+
+

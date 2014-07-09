@@ -1,0 +1,167 @@
+﻿Test: c1 file
+
+C1Data
+{
+    FileName = file
+    DeleteAfter = False
+    ArchiveLocation = 
+}
+
+
+Test: c1 file -delete -A:location
+
+C1Data
+{
+    FileName = file
+    DeleteAfter = True
+    ArchiveLocation = location
+}
+
+
+Test: c1 file -delete -A location
+
+C1Data
+{
+    FileName = file
+    DeleteAfter = True
+    ArchiveLocation = location
+}
+
+
+Test: c1 file -D -archive:location
+
+C1Data
+{
+    FileName = file
+    DeleteAfter = True
+    ArchiveLocation = location
+}
+
+
+Test: c1 file -D -archive location
+
+C1Data
+{
+    FileName = file
+    DeleteAfter = True
+    ArchiveLocation = location
+}
+
+
+Test: c1 file -D:false -A:loc
+
+C1Data
+{
+    FileName = file
+    DeleteAfter = False
+    ArchiveLocation = loc
+}
+
+
+Test: c1 file -D:true -A:loc
+
+C1Data
+{
+    FileName = file
+    DeleteAfter = True
+    ArchiveLocation = loc
+}
+
+
+Test: c1 file -delete:false -A:loc
+
+C1Data
+{
+    FileName = file
+    DeleteAfter = False
+    ArchiveLocation = loc
+}
+
+
+Test: c1 file -delete:true -A:loc
+
+C1Data
+{
+    FileName = file
+    DeleteAfter = True
+    ArchiveLocation = loc
+}
+
+
+Test: c1
+
+Not enough parameters specified.
+
+
+Test: c1 -D -A:loc
+
+Not enough parameters specified.
+
+
+Test: c1 -A
+
+Not enough parameters for the archive option.
+
+
+Test: c1 -A:b,56
+
+The archive option has too many parameters.
+
+
+Test: c1 -A b,56
+
+The archive option has too many parameters.
+
+
+Test: c1 -- -A
+
+C1Data
+{
+    FileName = -A
+    DeleteAfter = False
+    ArchiveLocation = 
+}
+
+
+Test: c2 name 4 -maxSize:5
+
+C2Data
+{
+    DaysToKeep = 4
+    ArchiveName = name
+    MaxSize = 5
+}
+
+
+Test: c3
+
+Not enough parameters specified.
+
+
+Test: c3 forty text 100
+
+The iterations parameter value "forty" is invalid.
+
+
+Test: c3 40 text 100
+
+C3Data
+{
+    Iterations = 40
+    Message = text
+    OverrunLength = 100
+    Kidding = False
+}
+
+
+Test: c3 40 text 100 -kidding
+
+C3Data
+{
+    Iterations = 40
+    Message = text
+    OverrunLength = 100
+    Kidding = True
+}
+
+

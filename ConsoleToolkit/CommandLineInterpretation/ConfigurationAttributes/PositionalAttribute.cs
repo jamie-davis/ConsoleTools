@@ -13,10 +13,17 @@ namespace ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes
             Index = 0;
         }
 
-        public PositionalAttribute(int index)
+        public PositionalAttribute(int index) : this(null, index)
+        {
+        }
+
+        public PositionalAttribute(string name, int index = 0)
         {
             Index = index;
+            Name = name;
         }
+
+        public string Name { get; set; }
 
         public int Index { get; set; }
     }

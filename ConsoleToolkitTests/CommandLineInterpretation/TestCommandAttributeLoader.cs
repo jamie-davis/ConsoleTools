@@ -26,7 +26,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         [Description("Command description")]
         class DefaultName
         {
-            [Positional(1)]
+            [Positional("prop", 1)]
             [Description("Positional property description")]
             public string PosProp { get; set; }
 
@@ -57,6 +57,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             [Description("Option with multiple parameters")]
             public MultiOpt MultiOptParams { get; set; }
 
+            [Option("switch")]
+            [Description("Boolean option")]
+            public bool BoolOption { get; set; }
+
             public class MultiOpt
             {
                 [Positional(0)]
@@ -69,6 +73,14 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
                 public DateTime DateParam { get; set; }
             }
 
+        }
+
+        [Command("over")]
+        class CommandWithNameOverride
+        {
+            [Positional(0)]
+            [Description("Positional field description")]
+            public string PosField;
         }
 
         [Command]
@@ -102,6 +114,13 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         }
 
         [Test]
+        public void CommandNameCanBeSpecified()
+        {
+            var over = CommandAttributeLoader.Load(typeof (CommandWithNameOverride)) as CommandConfig<CommandWithNameOverride>;
+            Assert.That(over.Name, Is.EqualTo("over"));
+        }
+
+        [Test]
         public void CommandDescriptionIsExrtacted()
         {
             Assert.That((_defaultNameCommand as BaseCommandConfig).Description, Is.EqualTo("Command description"));
@@ -110,7 +129,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         [Test]
         public void PositionalPropertyParametersAreExtracted()
         {
-            Assert.That(_defaultNameCommand.Positionals.Any(p => p.ParameterName == "PosProp"));
+            Assert.That(_defaultNameCommand.Positionals.Any(p => p.ParameterName == "prop"));
         }
 
         [Test]
@@ -165,6 +184,13 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         {
             var option = _defaultNameCommand.Options.First(o => o.Name == "LongName");
             Assert.That(option.Aliases.Any(a => a == "S"));
+        }
+
+        [Test]
+        public void BooleanOptionHasIsBooleanSet()
+        {
+            var option = _defaultNameCommand.Options.First(o => o.Name == "switch");
+            Assert.That(option.IsBoolean, Is.True);
         }
 
         [Test, ExpectedException(typeof (DuplicateOptionName))]

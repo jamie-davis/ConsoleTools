@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -33,11 +34,11 @@ namespace ConsoleToolkit.CommandLineInterpretation
         }
 
         // ReSharper disable once UnusedMember.Local
-        private static CommandConfig<T> Create<T>() where T : class, new()
+        private static CommandConfig<T> Create<T>(string name) where T : class, new()
         {
             var commandConfig = new CommandConfig<T>(() => new T());
 
-            commandConfig.Name = typeof(T).Name;
+            commandConfig.Name = name ?? typeof(T).Name;
 
             AttachPropAndFieldElements(commandConfig);
             var desc = GetDescription(typeof (T));
@@ -73,7 +74,8 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
         private static void AttachPositional<T>(AttributedMember<PositionalAttribute> posMember, CommandConfig<T> commandConfig) where T : class
         {
-            var positional = MakePositional(commandConfig, posMember.MemberInfo, posMember.Type);
+            var name = posMember.Attribute.Name ?? posMember.MemberInfo.Name;
+            var positional = MakePositional(commandConfig, name, posMember.MemberInfo, posMember.Type);
             var desc = GetDescription(posMember.MemberInfo);
             if (desc != null)
                 positional.Description = desc;
@@ -119,17 +121,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
             return command.Options.FirstOrDefault(o => o.Name == optionName);
         }
 
-        /**/
-        // ReSharper disable once UnusedMember.Local
-        //private static BaseOption CallOptionWithAction<T, TMember>(string optionName, Expression expression,
-        //    CommandConfig<T> command) where T : class
-        //{
-        //    command.Option(optionName, expression);
-        //    return command.Options.FirstOrDefault(o => o.Name == optionName);
-        //}
-        /**/
-
-        private static BasePositional MakePositional<T>(CommandConfig<T> commandConfig, MemberInfo member, Type memberType) where T : class
+        private static BasePositional MakePositional<T>(CommandConfig<T> commandConfig, string name, MemberInfo member, Type memberType) where T : class
         {
             var genericCallPositional = typeof (CommandAttributeLoader).GetMethod("CallPositional", BindingFlags.Static | BindingFlags.NonPublic);
             var callPositional = genericCallPositional.MakeGenericMethod(new[] {typeof (T), memberType});
@@ -137,7 +129,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
             var parameterExpression = Expression.Variable(typeof(T));
             return callPositional.Invoke(commandConfig, new object[]
             {
-                member.Name, 
+                name, 
                 Expression.Lambda(Expression.MakeMemberAccess(parameterExpression, member), parameterExpression),
                 commandConfig
             }) as BasePositional;
@@ -162,16 +154,32 @@ namespace ConsoleToolkit.CommandLineInterpretation
             return option;
         }
 
-        private static BaseOption CallOptionCreateMethod<T>(CommandConfig<T> commandConfig, string optionName, Type parameterType, object optionInitialiser, Type[] parameterTypes) where T : class
+        private static BaseOption CallOptionCreateMethod<T>(CommandConfig<T> commandConfig, string optionName, Type memberType, object optionInitialiser, Type[] parameterTypes) where T : class
         {
-            var genericOptionMethod = commandConfig
-                .GetType()
-                .GetMethods()
-                .FirstOrDefault(m => m.Name == "Option"
-                                     && m.GetGenericArguments().Length == parameterTypes.Length
-                                     && m.GetParameters().Length == 2
-                                     && m.GetParameters()[1].ParameterType.Name.Contains("Action"));
-            var optionMethod = genericOptionMethod.MakeGenericMethod(parameterTypes);
+            MethodInfo optionMethod;
+            if (memberType == typeof (bool))
+            {
+                optionMethod = commandConfig
+                    .GetType()
+                    .GetMethods()
+                    .FirstOrDefault(m => m.Name == "Option"
+                                         && m.GetGenericArguments().Length == 0
+                                         && m.GetParameters().Length == 2
+                                         && m.GetParameters()[1].ParameterType.Name.Contains("Action"));
+            }
+            else
+            {
+                var genericOptionMethod = commandConfig
+                    .GetType()
+                    .GetMethods()
+                    .FirstOrDefault(m => m.Name == "Option"
+                                         && m.GetGenericArguments().Length == parameterTypes.Length
+                                         && m.GetParameters().Length == 2
+                                         && m.GetParameters()[1].ParameterType.Name.Contains("Action"));
+                optionMethod = genericOptionMethod.MakeGenericMethod(parameterTypes);
+                
+            }
+            Debug.Assert(optionMethod != null);
 
             optionMethod.Invoke(commandConfig, new[] {optionName, optionInitialiser});
             return commandConfig.Options.FirstOrDefault(o => o.Name == optionName);
@@ -195,17 +203,18 @@ namespace ConsoleToolkit.CommandLineInterpretation
             return null;
         }
 
-        public static object Load(Type commandClass)
+        public static BaseCommandConfig Load(Type commandClass)
         {
             try
             {
-                if (commandClass.GetCustomAttribute<CommandAttribute>() == null)
+                var commandAttribute = commandClass.GetCustomAttribute<CommandAttribute>();
+                if (commandAttribute == null)
                     throw new ArgumentException("Type does not have the Command attribute.", "commandClass");
 
                 var genericCreateMethod = typeof (CommandAttributeLoader).GetMethod("Create",
                     BindingFlags.Static | BindingFlags.NonPublic);
                 var createMethod = genericCreateMethod.MakeGenericMethod(new[] {commandClass});
-                return createMethod.Invoke(null, null);
+                return createMethod.Invoke(null, new []{ commandAttribute.Name }) as BaseCommandConfig;
             }
             catch (TargetInvocationException e)
             {
