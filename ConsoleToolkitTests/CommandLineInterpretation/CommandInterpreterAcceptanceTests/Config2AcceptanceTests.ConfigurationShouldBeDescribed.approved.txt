@@ -1,12 +1,16 @@
-﻿Do something to a file.
-
-Usage: testApp <filename> [options]
-
-Parameters:
-
-filename  The name of the file.
-
-Options:
-
-/delete   Delete the file after processing.
-/archive  Archive after processing
+﻿----+----|----+----|----+----|----+----|                    
+Do something to a file.                                     
+                                                            
+Usage: AcceptanceTest <filename>                            
+[options]                                                   
+                                                            
+Parameters:                                                 
+                                                            
+filename         The name of the file.                      
+                                                            
+Options:                                                    
+                                                            
+--delete, -D  Delete the file after                         
+              processing.                                   
+--archive, -A Archive after processing                      
+                                                            

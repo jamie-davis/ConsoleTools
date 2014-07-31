@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using ConsoleToolkit.ConsoleIO.Internal;
+using ConsoleToolkit.Utilities;
 
 namespace ConsoleToolkit.ConsoleIO
 {

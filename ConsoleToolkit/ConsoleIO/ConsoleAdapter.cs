@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
+using System.Text;
 using ConsoleToolkit.ConsoleIO.Internal;
 using Microsoft.SqlServer.Server;
 
@@ -21,8 +22,16 @@ namespace ConsoleToolkit.ConsoleIO
 
         public ConsoleAdapter(IConsoleInterface consoleInterface = null)
         {
-            _consoleInterface = consoleInterface ?? new DefaultConsole();
+            _consoleInterface = consoleInterface ?? MakeDefaultConsole();
             _writer = new ColourWriter(_consoleInterface);
+        }
+
+        private static IConsoleInterface MakeDefaultConsole()
+        {
+            var redirectTester = new ConsoleRedirectTester();
+            if (redirectTester.IsOutputRedirected())
+                return new RedirectedConsole();
+            return new DefaultConsole();
         }
 
         public int BufferWidth { get { return _consoleInterface.BufferWidth; } }
@@ -116,9 +125,9 @@ namespace ConsoleToolkit.ConsoleIO
                 Write(lastLine);
         }
 
-        public void FormatTable<T>(IEnumerable<T> items)
+        public void FormatTable<T>(IEnumerable<T> items, ReportFormattingOptions options = ReportFormattingOptions.None)
         {
-            var tabular = TabularReport.Format(items, null, _consoleInterface.WindowWidth);
+            var tabular = TabularReport.Format(items, null, _consoleInterface.WindowWidth, options: options);
             foreach (var line in tabular)
                 Write(line);
         }
@@ -129,6 +138,11 @@ namespace ConsoleToolkit.ConsoleIO
         public void WriteLine()
         {
             _writer.NewLine();
+        }
+
+        public Encoding GetEncoding()
+        {
+            return _writer.Encoding;
         }
     }
 }

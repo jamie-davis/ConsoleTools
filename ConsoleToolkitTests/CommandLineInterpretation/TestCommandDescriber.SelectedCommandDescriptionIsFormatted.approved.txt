@@ -1,0 +1,19 @@
+﻿----+----|----+----|----+----|----+----|                    
+Command with a positional and options                       
+configured using a Linq Expression, not                     
+a lambda.                                                   
+                                                            
+exp <pos> [options]                                         
+                                                            
+Parameters:                                                 
+                                                            
+pos A positional configured with an                         
+    expression.                                             
+                                                            
+Options:                                                    
+                                                            
+**B A boolean option configured with an                     
+    expression.                                             
+**I A boolean option configured with an                     
+    expression.                                             
+                                                            

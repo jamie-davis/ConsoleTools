@@ -11,11 +11,17 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal.WidthCalculators
     [UseReporter(typeof (CustomReporter))]
     public class TestDateTimeWidthCalculator
     {
+        [SetUp]
+        public void SetUp()
+        {
+            SetUpTests.OverrideCulture();
+        }
+
         [Test]
         public void DefaultFormatReturnsExpectedWidth()
         {
             var format = new ColumnFormat("A", typeof (DateTime));
-            Assert.That(DateTimeWidthCalculator.Calculate(format), Is.EqualTo(DateTime.Now.ToString().Length));
+            Assert.That(DateTimeWidthCalculator.Calculate(format), Is.EqualTo(DateTime.Now.ToString().TrimEnd().Length));
         }
 
         [Test]

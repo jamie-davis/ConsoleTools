@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace ConsoleToolkit.CommandLineInterpretation
@@ -7,6 +8,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
     /// </summary>
     public abstract class BaseCommandConfig : IContext
     {
+        public Type CommandType { get; set; }
         public string Name { get; set; }
         public List<BasePositional> Positionals = new List<BasePositional>();
         public List<BaseOption> Options = new List<BaseOption>();

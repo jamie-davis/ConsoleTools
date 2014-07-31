@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace ConsoleToolkit.CommandLineInterpretation
 {
-    public class PosixCommandLineParser : ICommandLineParser
+    public class PosixCommandLineParser : ICommandLineParser, IOptionNameHelpAdorner
     {
         public void Parse(string[] args, IEnumerable<IOption> options, IEnumerable<IPositionalArgument> positionalArguments, IParserResult result)
         {
@@ -51,7 +52,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
                 {
                     foreach (var optionChar in arg)
                     {
-                        if (result.OptionExtracted(optionChar.ToString(), new string[] {}) == ParseOutcome.Halt)
+                        if (result.OptionExtracted(optionChar.ToString(CultureInfo.InvariantCulture), new string[] {}) == ParseOutcome.Halt)
                             return ParseOutcome.Halt;
                     }
                     return ParseOutcome.Continue;
@@ -115,9 +116,16 @@ namespace ConsoleToolkit.CommandLineInterpretation
             return argQueue.Count > 0 && !argQueue.Peek().StartsWith("-");
         }
 
-        private static string GetOptionName(List<string> optionNames, string optionName)
+        /// <summary>
+        /// Add either "-" or "--" to an option name.
+        /// </summary>
+        /// <param name="name">The option name.</param>
+        /// <returns>The adjusted name.</returns>
+        string IOptionNameHelpAdorner.Adorn(string name)
         {
-            return optionNames.FirstOrDefault(n => string.Compare(optionName, n, true) == 0) ?? optionName;
+            if (name.Length == 1)
+                return "-" + name;
+            return "--" + name;
         }
     }
 }

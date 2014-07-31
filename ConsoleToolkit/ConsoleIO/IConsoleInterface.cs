@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using Microsoft.SqlServer.Server;
 
 namespace ConsoleToolkit.ConsoleIO
@@ -33,14 +34,6 @@ namespace ConsoleToolkit.ConsoleIO
         int BufferWidth { get; }
 
         /// <summary>
-        /// Test to see if console output is redirected.
-        /// 
-        /// The test only determines whether StdOut is redirected. StdErr redirection cannot be detected without unsafe code.
-        /// </summary>
-        /// <returns>True if console output is redirected, otherwise false.</returns>
-        bool IsOutputRedirected();
-
-        /// <summary>
         /// Output a string to the console in the current cursor position.
         /// </summary>
         /// <param name="data">The text to output.</param>
@@ -61,5 +54,9 @@ namespace ConsoleToolkit.ConsoleIO
         /// </summary>
         int CursorTop { get; set; }
 
+        /// <summary>
+        /// The encoding being used by the console.
+        /// </summary>
+        Encoding Encoding { get; }
     }
 }

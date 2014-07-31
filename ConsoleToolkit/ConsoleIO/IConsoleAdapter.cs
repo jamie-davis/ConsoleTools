@@ -54,7 +54,7 @@ namespace ConsoleToolkit.ConsoleIO
         /// </summary>
         /// <typeparam name="T">The item type.</typeparam>
         /// <param name="items">The items to be formatted.</param>
-        void FormatTable<T>(IEnumerable<T> items);
+        void FormatTable<T>(IEnumerable<T> items, ReportFormattingOptions options = ReportFormattingOptions.None);
 
         /// <summary>
         /// Output a new line.

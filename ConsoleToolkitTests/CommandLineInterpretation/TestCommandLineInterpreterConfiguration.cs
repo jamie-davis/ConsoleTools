@@ -5,8 +5,12 @@ using System.Xml.Linq;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.CommandLineInterpretation;
+using ConsoleToolkit.ConsoleIO;
+using ConsoleToolkitTests.ConsoleIO.UnitTestUtilities;
 using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
+
+// ReSharper disable once UnusedVariable
 
 namespace ConsoleToolkitTests.CommandLineInterpretation
 {
@@ -16,6 +20,9 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
     {
         private CommandLineInterpreterConfiguration _config;
         private CustomParser _customParser;
+        private ConsoleInterfaceForTesting _consoleInterface;
+        private ConsoleAdapter _console;
+        private static string _applicationName = "TestApp";
 
         public class CustomParser : ICommandLineParser
         {
@@ -56,8 +63,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         public void SetUp()
         {
             _config = new CommandLineInterpreterConfiguration();
-            _config
-                .Command("first", s => new TestCommand())
+            _config.Command("first", s => new TestCommand())
                 .Description("Description of the first commmand.");
             _config
                 .Command("second", s => new TestCommand())
@@ -69,9 +75,9 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             _config
                 .Command("third", s => new TestCommand())
                 .Description("The third command has a number of options but no parameters.")
-                .Option("on", (command, b) => {})
+                .Option("on", (command, b) => { })
                     .Description("A simple option with no argument.")
-                .Option<string, int>("fiddly", (command, s, n) => {})
+                .Option<string, int>("fiddly", (command, s, n) => { })
                     .Alias("f")
                     .Description("An option with two arguments. The arguments need to be described in the text.");
             _config
@@ -81,9 +87,9 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
                     .Description("The date the complicated nonsense should be forgotten.")
                 .Positional<string>("crpyticnum", (command, s) => { })
                     .Description("The amount of nonsense the user needs to forget.")
-                .Option("ignore", (command, b) => {})
+                .Option("ignore", (command, b) => { })
                     .Description("Use this option to consign this command to history, where it belongs.")
-                .Option<string, int>("more", (command, s, n) => {})
+                .Option<string, int>("more", (command, s, n) => { })
                     .Description("Even more.");
 
             _config
@@ -102,10 +108,17 @@ a line break.")
                 .Description(@"Command with a positional and options configured using a Linq Expression, not a lambda.")
                 .Positional("pos", command => command.StringProp)
                     .Description(@"A positional configured with an expression.")
-                .Option("B", command => command.BoolProp )
+                .Option("B", command => command.BoolProp)
                     .Description("A boolean option configured with an expression.")
-                .Option("I", command => command.IntProp )
+                .Option("I", command => command.IntProp)
                     .Description("A boolean option configured with an expression.");
+
+            _customParser = new CustomParser();
+
+            _consoleInterface = new ConsoleInterfaceForTesting();
+            _console = new ConsoleAdapter(_consoleInterface);
+
+            _console.WriteLine(RulerFormatter.MakeRuler(40));
         }
 
         [Test, ExpectedException(typeof(InvalidParameterType))]
@@ -219,8 +232,10 @@ a line break.")
         [Test]
         public void DescriptionOfCommandsIsFormatted()
         {
-            var fortyWide = "1234567890123456789012345678901234567890" + Environment.NewLine;
-            Approvals.Verify(fortyWide + _config.Describe(40));
+            CommandDescriber.Describe(_config, _console, _applicationName);
+            var description = _consoleInterface.GetBuffer();
+            Console.WriteLine(description);
+            Approvals.Verify(description);
         }
 
         [Test]
@@ -233,8 +248,10 @@ a line break.")
                 .Positional<string>("pos", (command, s) => { })
                     .Description("A positional parameter.");
 
-            var fortyWide = "1234567890123456789012345678901234567890" + Environment.NewLine;
-            Approvals.Verify(fortyWide + config.Describe(40));
+            CommandDescriber.Describe(config, _console, _applicationName);
+            var description = _consoleInterface.GetBuffer();
+            Console.WriteLine(description);
+            Approvals.Verify(description);
         }
 
         [Test]
@@ -248,8 +265,10 @@ a line break.")
                 .Positional<CustomParamType>("pos", (command, s) => { })
                     .Description("A positional parameter.");
 
-            var fortyWide = "1234567890123456789012345678901234567890" + Environment.NewLine;
-            Approvals.Verify(fortyWide + config.Describe(40));
+            CommandDescriber.Describe(config, _console, _applicationName);
+            var description = _consoleInterface.GetBuffer();
+            Console.WriteLine(description);
+            Approvals.Verify(description);
         }
 
         [Test]
@@ -264,8 +283,10 @@ a line break.")
                     .Description("A positional parameter.")
                 .Validator((t, m) => true);
 
-            var fortyWide = "1234567890123456789012345678901234567890" + Environment.NewLine;
-            Approvals.Verify(fortyWide + config.Describe(40));
+            CommandDescriber.Describe(config, _console, _applicationName);
+            var description = _consoleInterface.GetBuffer();
+            Console.WriteLine(description);
+            Approvals.Verify(description);
         }
 
         [Test]
@@ -314,7 +335,7 @@ a line break.")
             config.Parameters(() => new TestCommand())
                 .Positional("IntProp");
             var thePositional = config.DefaultCommand.Positionals[0];
-            var thePositionalParameterType = thePositional.GetType().GenericTypeArguments[1];
+            var thePositionalParameterType = thePositional.GetType().GetGenericArguments()[1];
             Assert.That(thePositionalParameterType, Is.EqualTo(typeof(int)));
         }
 
@@ -325,7 +346,7 @@ a line break.")
             config.Parameters(() => new TestCommand())
                 .Positional("intprop");
             var thePositional = config.DefaultCommand.Positionals[0];
-            var thePositionalParameterType = thePositional.GetType().GenericTypeArguments[1];
+            var thePositionalParameterType = thePositional.GetType().GetGenericArguments()[1];
             Assert.That(thePositionalParameterType, Is.EqualTo(typeof(int)));
         }
 
@@ -336,8 +357,34 @@ a line break.")
             config.Parameters(() => new MultiCaseCommand())
                 .Positional("AOne");
             var thePositional = config.DefaultCommand.Positionals[0];
-            var thePositionalParameterType = thePositional.GetType().GenericTypeArguments[1];
+            var thePositionalParameterType = thePositional.GetType().GetGenericArguments()[1];
             Assert.That(thePositionalParameterType, Is.EqualTo(typeof(string)));
+        }
+
+        [Test, ExpectedException(typeof (DefaultValueMayOnlyBeSpecifiedForPositionalParameters))]
+        public void DefaultValueIsInvalidOnAnOption()
+        {
+            var config = new CommandLineInterpreterConfiguration();
+            config.Parameters(() => new MultiCaseCommand())
+                .Option("AOne").DefaultValue("true");
+        }
+
+        [Test]
+        public void PositionalWithDefaultValueIsOptional()
+        {
+            var config = new CommandLineInterpreterConfiguration();
+            config.Parameters(() => new MultiCaseCommand())
+                .Positional("AOne").DefaultValue("X");
+            Assert.That(config.DefaultCommand.Positionals[0].IsOptional, Is.True);
+        }
+
+        [Test]
+        public void DefaultValueIsStoredOnOptionalParameter()
+        {
+            var config = new CommandLineInterpreterConfiguration();
+            config.Parameters(() => new MultiCaseCommand())
+                .Positional("AOne").DefaultValue("X");
+            Assert.That(config.DefaultCommand.Positionals[0].DefaultValue, Is.EqualTo("X"));
         }
     }
 }

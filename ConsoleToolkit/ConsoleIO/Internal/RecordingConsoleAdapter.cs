@@ -43,9 +43,9 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             WriteLine();
         }
 
-        public void FormatTable<T>(IEnumerable<T> items)
+        public void FormatTable<T>(IEnumerable<T> items, ReportFormattingOptions options = ReportFormattingOptions.None)
         {
-            _steps.Add(new FormatTableCommand<T>(items));
+            _steps.Add(new FormatTableCommand<T>(items, options));
         }
 
         public void WriteLine()

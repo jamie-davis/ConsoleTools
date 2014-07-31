@@ -67,3 +67,27 @@ Test: c2 name 5 /M:5,
 The maxSize option has too many parameters.
 
 
+Test: c3 40 text 50
+
+C3Data
+{
+    CommandName = 
+    Iterations = 40
+    Message = text
+    OverrunLength = 50
+    Kidding = False
+}
+
+
+Test: c3 40 text
+
+C3Data
+{
+    CommandName = 
+    Iterations = 40
+    Message = text
+    OverrunLength = 5
+    Kidding = False
+}
+
+

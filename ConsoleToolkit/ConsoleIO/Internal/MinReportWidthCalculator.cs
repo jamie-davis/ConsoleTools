@@ -32,7 +32,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
                     foreach (var sizer in sizers)
                     {
                         var value = row.Columns.FirstOrDefault(c => c.Property == sizer.PropertyColumnFormat.Property);
-                        if (value != null)
+                        if (value != null && value.Value != null)
                             sizer.Sizer.ColumnValue(value.Value);
                     }
                 }

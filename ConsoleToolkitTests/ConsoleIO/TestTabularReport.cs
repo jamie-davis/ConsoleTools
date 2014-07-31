@@ -16,9 +16,16 @@ namespace ConsoleToolkitTests.ConsoleIO
     [UseReporter(typeof (CustomReporter))]
     public class TestTabularReport
     {
+        [SetUp]
+        public void SetUp()
+        {
+            SetUpTests.OverrideCulture();
+        }
+
         [Test]
         public void TabularReportWithoutWrappingIsFormatted()
         {
+            SetUpTests.OverrideCulture();
             var data = Enumerable.Range(0, 10)
                 .Select(i => new
                 {
@@ -47,6 +54,23 @@ namespace ConsoleToolkitTests.ConsoleIO
                 .ToList();
 
             var report = Report(data);
+            Approvals.Verify(report);
+        }
+
+        [Test]
+        public void ColumnHeadingsCanBeOmitted()
+        {
+            var data = Enumerable.Range(0, 10)
+                .Select(i => new
+                {
+                    String = string.Format("Long string value {0}. This value should be nice and long so that it doesn't fit a line. Then the algorithm has to calculate how many lines it will take to display the value within the allowable space. Better add a bit of variation to each row too: {1}", i, string.Join(" ", Enumerable.Repeat("variation ", i))),
+                    Int = i,
+                    Double = 3.0/(i + 1.0),
+                    DateTime = DateTime.Parse(string.Format("2014-{0}-17", i+1))
+                })
+                .ToList();
+
+            var report = Report(data, options: ReportFormattingOptions.OmitHeadings);
             Approvals.Verify(report);
         }
 
@@ -85,6 +109,26 @@ namespace ConsoleToolkitTests.ConsoleIO
             var dataCache = CachedRowsFactory.Make(data);
 
             var report = CachedReport(dataCache);
+            Approvals.Verify(report);
+        }
+
+        [Test]
+        public void HeadingsCanBeOmittedFromCachedData()
+        {
+            var data = Enumerable.Range(0, 10)
+                .Select(i => new
+                {
+                    String = string.Format("First long string value {0}. {1}", i, string.Join(" ", Enumerable.Repeat("variation ", i))),
+                    SecondString = string.Format("Second long string value {0}. {1}", i, string.Join(" ", Enumerable.Repeat("variation ", i))),
+                    Int = i,
+                    Double = 3.0/(i + 1.0),
+                    DateTime = DateTime.Parse(string.Format("2014-{0}-17", i+1))
+                })
+                .ToList();
+
+            var dataCache = CachedRowsFactory.Make(data);
+
+            var report = CachedReport(dataCache, options: ReportFormattingOptions.OmitHeadings);
             Approvals.Verify(report);
         }
 
@@ -228,20 +272,20 @@ namespace ConsoleToolkitTests.ConsoleIO
             return output;
         }
 
-        private static string Report<T>(IEnumerable<T> data, int width = 80, int numRowsToUseForSizing = 0)
+        private static string Report<T>(IEnumerable<T> data, int width = 80, int numRowsToUseForSizing = 0, ReportFormattingOptions options = ReportFormattingOptions.None)
         {
             var report = RulerFormatter.MakeRuler(width)
                          + Environment.NewLine
-                         + string.Join(string.Empty, TabularReport.Format(data, null, width, numRowsToUseForSizing));
+                         + string.Join(string.Empty, TabularReport.Format(data, null, width, numRowsToUseForSizing, options));
             Console.WriteLine(report);
             return report;
         }
 
-        private static string CachedReport<T>(CachedRows<T> data, int width = 80)
+        private static string CachedReport<T>(CachedRows<T> data, int width = 80, ReportFormattingOptions options = ReportFormattingOptions.None)
         {
             var report = RulerFormatter.MakeRuler(width)
                          + Environment.NewLine
-                         + string.Join(string.Empty, TabularReport.Format(data, null, width));
+                         + string.Join(string.Empty, TabularReport.Format(data, null, width, options));
             Console.WriteLine(report);
             return report;
         }

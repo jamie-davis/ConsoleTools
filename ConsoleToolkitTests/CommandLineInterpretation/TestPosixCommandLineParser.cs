@@ -188,6 +188,26 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(_result.Log);
         }
 
+        [Test]
+        public void ParserIsAlsoAnOptionAdorner()
+        {
+            Assert.That(_parser, Is.InstanceOf(typeof(IOptionNameHelpAdorner)));
+        }
+
+        [Test]
+        public void ShortOptionNameIsAdorned()
+        {
+            var adorner = _parser as IOptionNameHelpAdorner;
+            Assert.That(adorner.Adorn("X"), Is.EqualTo("-X"));
+        }
+
+        [Test]
+        public void LongOptionNameIsAdorned()
+        {
+            var adorner = _parser as IOptionNameHelpAdorner;
+            Assert.That(adorner.Adorn("long"), Is.EqualTo("--long"));
+        }
+
         private PositionalArg Positional(string name)
         {
             return new PositionalArg {ParameterName = name};

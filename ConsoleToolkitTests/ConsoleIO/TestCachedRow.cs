@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace ConsoleToolkitTests.ConsoleIO
 {
     [TestFixture]
-    [UseReporter(typeof (CustomReporter))]
+    [UseReporter(typeof(CustomReporter))]
     public class TestCachedRow
     {
         private static readonly DateTime TestDate = DateTime.Parse("2014-06-11 20:36");
@@ -41,6 +41,12 @@ namespace ConsoleToolkitTests.ConsoleIO
         // ReSharper restore MemberCanBePrivate.Local
         #endregion
 
+        [SetUp]
+        public void SetUp()
+        {
+            SetUpTests.OverrideCulture();
+        }
+
         [Test]
         public void RowContainsAllColumns()
         {
@@ -57,7 +63,7 @@ namespace ConsoleToolkitTests.ConsoleIO
 
         private string Format<T>(CachedRow<T> row)
         {
-            return row.Columns.Select(c => string.Format("{0} = {1}", c.Property.Name, c.Value)).JoinWith(",");
+            return row.Columns.Select(c => string.Format("{0} = {1}", c.Property.Name, c.Value).TrimEnd()).JoinWith(",");
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.InteropServices.ComTypes;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
+using ConsoleToolkit.Utilities;
 
 namespace ConsoleToolkit.CommandLineInterpretation
 {
@@ -38,7 +39,8 @@ namespace ConsoleToolkit.CommandLineInterpretation
         {
             var commandConfig = new CommandConfig<T>(() => new T());
 
-            commandConfig.Name = name ?? typeof(T).Name;
+            commandConfig.Name = (name ?? typeof (T).Name).ToLower();
+            commandConfig.CommandType = typeof (T);
 
             AttachPropAndFieldElements(commandConfig);
             var desc = GetDescription(typeof (T));
@@ -79,6 +81,11 @@ namespace ConsoleToolkit.CommandLineInterpretation
             var desc = GetDescription(posMember.MemberInfo);
             if (desc != null)
                 positional.Description = desc;
+            if (posMember.Attribute.DefaultSpecified)
+            {
+                positional.IsOptional = true;
+                positional.DefaultValue = posMember.Attribute.DefaultValue;
+            }
         }
 
         private static IEnumerable<AttributedMember<T>> GetMembersWithAttribute<T>(Type type) where T : Attribute
@@ -143,6 +150,8 @@ namespace ConsoleToolkit.CommandLineInterpretation
             //need to make a call to CommandConfig<T> Option<T1, T2, T3>(string optionName, Action<T, T1, T2, T3> optionInitialiser)
             var optionName = GetOptionName(optionAttribute, member);
             var option = CallOptionCreateMethod(commandConfig, optionName, memberType, optionInitialiser, parameterTypes);
+            if (option != null && optionAttribute.ShortCircuit)
+                option.IsShortCircuit = true;
 
             var alias = GetOptionAlias(optionAttribute);
             if (option != null && alias != null)

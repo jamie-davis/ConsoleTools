@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.Xml.Schema;
 
 namespace ConsoleToolkit.ConsoleIO
@@ -52,33 +53,6 @@ namespace ConsoleToolkit.ConsoleIO
         public int WindowWidth { get { return Console.WindowWidth; } }
         public int BufferWidth { get { return Console.BufferWidth; } }
 
-
-        /// <summary>
-        /// Determine whether the console's output is redirected.
-        /// </summary>
-        /// <returns></returns>
-        public bool IsOutputRedirected()
-        {
-            if (!_consoleRedirectionTested)
-            {
-                try
-                {
-                    //This will throw if the console output is redirected.
-                    Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop);
-
-                    _consoleRedirected = false;
-                }
-                catch
-                {
-                    _consoleRedirected = true;
-                }
-
-                _consoleRedirectionTested = true;
-            }
-
-            return _consoleRedirected;
-        }
-
         public void Write(string data)
         {
             Console.Write(data);
@@ -99,6 +73,11 @@ namespace ConsoleToolkit.ConsoleIO
         {
             get { return Console.CursorTop; }
             set { Console.CursorTop = value; }
+        }
+
+        public Encoding Encoding
+        {
+            get { return Console.OutputEncoding; }
         }
 
         ~DefaultConsole()

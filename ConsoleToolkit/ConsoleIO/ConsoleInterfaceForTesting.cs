@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace ConsoleToolkit.ConsoleIO
 {
@@ -33,6 +34,11 @@ namespace ConsoleToolkit.ConsoleIO
         /// The current background colour.
         /// </summary>
         private ConsoleColor _background;
+
+        /// <summary>
+        /// The console encoding.
+        /// </summary>
+        private Encoding _encoding;
 
         /// <summary>
         /// The colour code for the current foreground colour.
@@ -110,11 +116,14 @@ namespace ConsoleToolkit.ConsoleIO
             set { _cursorTop = value; }
         }
 
+        public Encoding Encoding { get { return _encoding; } }
+
         /// <summary>
-        /// The default constructor sets default values for various console properties.
+        /// The constructor sets default values for various console properties and allows an encoding to be specified.
         /// </summary>
-        public ConsoleInterfaceForTesting()
+        public ConsoleInterfaceForTesting(Encoding encoding = null)
         {
+            _encoding = encoding ?? Encoding.Default;
             Foreground = ConsoleColor.DarkGray;
             Background = ConsoleColor.Black;
             _initialBg = _bgCode;
@@ -123,14 +132,6 @@ namespace ConsoleToolkit.ConsoleIO
             BufferWidth = 60;
 
             CreateBufferTo(0); //ensure that the buffer contains the first line.
-        }
-
-        /// <summary>
-        /// Returns whether console output is redirected to a file.
-        /// </summary>
-        public bool IsOutputRedirected()
-        {
-            return false;
         }
 
         /// <summary>

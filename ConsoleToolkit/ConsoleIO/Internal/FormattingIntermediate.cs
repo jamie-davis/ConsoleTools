@@ -48,7 +48,10 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         public int GetLongestWordLength(int tabLength)
         {
             if (TextValue != null)
+            {
+                if (TextValue == string.Empty) return 0;
                 return WordSplitter.Split(TextValue, tabLength).Max(w => w.Length);
+            }
 
             return RenderableValue.GetLongestWordLength(tabLength);
         }

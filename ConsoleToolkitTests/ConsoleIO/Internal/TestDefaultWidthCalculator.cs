@@ -20,6 +20,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         [SetUp]
         public void SetUp()
         {
+            SetUpTests.OverrideCulture();
             _formats = new List<ColumnFormat>
             {
                 MakeFormat<sbyte>(),

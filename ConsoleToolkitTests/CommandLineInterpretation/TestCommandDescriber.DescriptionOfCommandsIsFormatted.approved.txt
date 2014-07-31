@@ -1,0 +1,100 @@
+﻿----+----|----+----|----+----|----+----|                    
+Available commands                                          
+                                                            
+first  Description of the first                             
+       commmand.                                            
+                                                            
+second The second command is a command                      
+       with a number of parameters.                         
+                                                            
+       second <dateofthing>                                 
+       <numberofthing>                                      
+                                                            
+       Parameters:                                          
+                                                            
+       dateofthing   The date the thing                     
+                     should have.                           
+       numberofthing The number of                          
+                     things that should                     
+                     be.                                    
+                                                            
+third  The third command has a number of                    
+       options but no parameters.                           
+                                                            
+       third [options]                                      
+                                                            
+       Options:                                             
+                                                            
+       **on      A simple option with no                    
+                 argument.                                  
+       **fiddly, An option with two                         
+       **f       arguments. The                             
+                 arguments need to be                       
+                 described in the text.                     
+                                                            
+fourth The fourth command is really                         
+       complicated with a number of                         
+       parameters and also options. This                    
+       is the sort of command that needs                    
+       lots of text.                                        
+                                                            
+       fourth <date> <crpyticnum>                           
+       [options]                                            
+                                                            
+       Parameters:                                          
+                                                            
+       date       The date the                              
+                  complicated nonsense                      
+                  should be forgotten.                      
+       crpyticnum The amount of nonsense                    
+                  the user needs to                         
+                  forget.                                   
+                                                            
+       Options:                                             
+                                                            
+       **ignore Use this option to                          
+                consign this command to                     
+                history, where it                           
+                belongs.                                    
+       **more   Even more.                                  
+                                                            
+desc   Descriptions can contain embedded                    
+       line breaks -->                                      
+       <-- like that one. These should                      
+       be respected in the formatting.                      
+       (This is meant to look a bit odd.                    
+       Also, you should be aware that                       
+       the deliberate line break is the                     
+       only one in this text.)                              
+                                                            
+       desc <pos> [options]                                 
+                                                            
+       Parameters:                                          
+                                                            
+       pos             A parameter with                     
+                       a line break.                        
+                                                            
+       Options:                                             
+                                                            
+       **lb             Another                             
+                        break.                              
+                                                            
+exp    Command with a positional and                        
+       options configured using a Linq                      
+       Expression, not a lambda.                            
+                                                            
+       exp <pos> [options]                                  
+                                                            
+       Parameters:                                          
+                                                            
+       pos A positional configured with                     
+           an expression.                                   
+                                                            
+       Options:                                             
+                                                            
+       **B A boolean option configured                      
+           with an expression.                              
+       **I A boolean option configured                      
+           with an expression.                              
+                                                            
+                                                            

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using ConsoleToolkit.ConsoleIO.Internal;
 
 namespace ConsoleToolkit.ConsoleIO
@@ -32,6 +33,10 @@ namespace ConsoleToolkit.ConsoleIO
         public ColourWriter(IConsoleInterface consoleInterface)
         {
             _consoleInterface = consoleInterface;
+        }
+
+        public Encoding Encoding {
+            get { return _consoleInterface.Encoding; }
         }
 
         public void Write(List<ColourControlItem> components)

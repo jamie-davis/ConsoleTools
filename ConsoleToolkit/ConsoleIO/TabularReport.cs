@@ -3,11 +3,16 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using ConsoleToolkit.ConsoleIO.Internal;
+using ConsoleToolkit.Utilities;
 
 namespace ConsoleToolkit.ConsoleIO
 {
+    /// <summary>
+    /// A formatter for tabular data.
+    /// </summary>
     public static class TabularReport
     {
         /// <summary>
@@ -18,26 +23,32 @@ namespace ConsoleToolkit.ConsoleIO
         /// <param name="columns">Column formatting information. If this is not provided, default column formats will be used.</param>
         /// <param name="width">The width that the report is allowed to occupy.</param>
         /// <param name="numRowsToUseForSizing">The number of rows that should be used for automatically sizing columns.</param>
+        /// <param name="options">Options that control the formatting of the report.</param>
         /// <returns>The formatted report lines.</returns>
-        public static IEnumerable<string> Format<T>(IEnumerable<T> data, IEnumerable<ColumnFormat> columns, int width, int numRowsToUseForSizing = 0)
+        public static IEnumerable<string> Format<T>(IEnumerable<T> data, IEnumerable<ColumnFormat> columns, 
+            int width, int numRowsToUseForSizing = 0, ReportFormattingOptions options = ReportFormattingOptions.None)
         {
             var output = new BlockingCollection<string>();
+            var culture = Thread.CurrentThread.CurrentCulture;
 
             Task.Factory.StartNew(() =>
             {
-                try
+                using (new TempCulture(culture))
                 {
-                    int localWordWrapLineBreaks;
-                    DoFormat(output, data, columns, width, numRowsToUseForSizing, 4, out localWordWrapLineBreaks);
-                }
-                catch (Exception e)
-                {
-                    output.Add("Exception while processing:");
-                    output.Add(e.ToString());
-                }
-                finally
-                {
-                    output.CompleteAdding();
+                    try
+                    {
+                        int localWordWrapLineBreaks;
+                        DoFormat(output, data, columns, width, numRowsToUseForSizing, 4, options, out localWordWrapLineBreaks);
+                    }
+                    catch (Exception e)
+                    {
+                        output.Add("Exception while processing:");
+                        output.Add(e.ToString());
+                    }
+                    finally
+                    {
+                        output.CompleteAdding();
+                    }
                 }
             });
 
@@ -52,25 +63,30 @@ namespace ConsoleToolkit.ConsoleIO
         /// <param name="columns">Column formatting information. If this is not provided, default column formats will be used.</param>
         /// <param name="width">The width that the report is allowed to occupy.</param>
         /// <returns>The formatted report lines.</returns>
-        public static IEnumerable<string> Format<T>(CachedRows<T> data, IEnumerable<ColumnFormat> columns, int width)
+        public static IEnumerable<string> Format<T>(CachedRows<T> data, IEnumerable<ColumnFormat> columns, int width, ReportFormattingOptions options = ReportFormattingOptions.None)
         {
             var output = new BlockingCollection<string>();
+            var culture = Thread.CurrentThread.CurrentCulture;
 
             Task.Factory.StartNew(() =>
             {
-                try
+                using (new TempCulture(culture))
                 {
-                    int wordWrapLineBreaks;
-                    DoFormatFromCachedRows(output, data, columns, width, 0, 4, out wordWrapLineBreaks);
-                }
-                catch (Exception e)
-                {
-                    output.Add("Exception while processing:");
-                    output.Add(e.ToString());
-                }
-                finally
-                {
-                    output.CompleteAdding();
+                    try
+                    {
+                        int wordWrapLineBreaks;
+                        DoFormatFromCachedRows(output, data, columns, width, 0, 4, options, out wordWrapLineBreaks);
+                    }
+                    catch (Exception e)
+                    {
+                        output.Add("Exception while processing:");
+                        output.Add(e.ToString());
+                    }
+                    finally
+                    {
+                        output.CompleteAdding();
+                    }
+                    
                 }
             });
 
@@ -86,7 +102,7 @@ namespace ConsoleToolkit.ConsoleIO
         /// <param name="width">The width that the report is allowed to occupy.</param>
         /// <param name="wrappingLineBreaks">The number of linebreaks added due to wrapping.</param>
         /// <returns>The formatted report lines.</returns>
-        public static IEnumerable<string> Format<T>(CachedRows<T> data, IEnumerable<ColumnFormat> columns, int width, out int wrappingLineBreaks)
+        public static IEnumerable<string> Format<T>(CachedRows<T> data, IEnumerable<ColumnFormat> columns, int width, out int wrappingLineBreaks, ReportFormattingOptions options = ReportFormattingOptions.None)
         {
             var output = new BlockingCollection<string>();
             var addedLineBreaks = 0;
@@ -94,9 +110,8 @@ namespace ConsoleToolkit.ConsoleIO
             try
             {
                 int wordWrapLineBreaks;
-                DoFormatFromCachedRows(output, data, columns, width, 0, 4, out wordWrapLineBreaks);
+                DoFormatFromCachedRows(output, data, columns, width, 0, 4, options, out wordWrapLineBreaks);
                 addedLineBreaks = wordWrapLineBreaks;
-                Console.WriteLine("Added line breaks = {0}", addedLineBreaks);
             }
             catch (Exception e)
             {
@@ -105,7 +120,6 @@ namespace ConsoleToolkit.ConsoleIO
             }
             finally
             {
-                Console.WriteLine("Completed adding");
                 output.CompleteAdding();
             }
 
@@ -114,27 +128,30 @@ namespace ConsoleToolkit.ConsoleIO
             return lines;
         }
 
-        private static void DoFormatFromCachedRows<T>(BlockingCollection<string> output, CachedRows<T> data, IEnumerable<ColumnFormat> specifiedColumns, int width, int numRowsToUseForSizing, int tabLength, out int wordWrapLineBreaks)
+        private static void DoFormatFromCachedRows<T>(BlockingCollection<string> output, CachedRows<T> data, IEnumerable<ColumnFormat> specifiedColumns, int width, int numRowsToUseForSizing, int tabLength, ReportFormattingOptions options, out int wordWrapLineBreaks)
         {
             var columns = FormatAnalyser.Analyse(typeof(T), specifiedColumns);
-            FormatFromDataFeed<CachedRow<T>>(output, data.GetRows(), width, numRowsToUseForSizing, tabLength, columns, (sz, item) => sz.AddRow(item), out wordWrapLineBreaks);
+            FormatFromDataFeed<CachedRow<T>>(output, data.GetRows(), width, numRowsToUseForSizing, tabLength, columns, (sz, item) => sz.AddRow(item), options, out wordWrapLineBreaks);
         }
 
-        private static void DoFormat<T>(BlockingCollection<string> output, IEnumerable<T> data, IEnumerable<ColumnFormat> specifiedColumns, int width, int numRowsToUseForSizing, int tabLength, out int wordWrapLineBreaks)
+        private static void DoFormat<T>(BlockingCollection<string> output, IEnumerable<T> data, IEnumerable<ColumnFormat> specifiedColumns, int width, int numRowsToUseForSizing, int tabLength, ReportFormattingOptions options, out int wordWrapLineBreaks)
         {
             var columns = FormatAnalyser.Analyse(typeof(T), specifiedColumns);
-            FormatFromDataFeed<T>(output, data, width, numRowsToUseForSizing, tabLength, columns, (sz, item) => sz.AddRow(item), out wordWrapLineBreaks);
+            FormatFromDataFeed<T>(output, data, width, numRowsToUseForSizing, tabLength, columns, (sz, item) => sz.AddRow(item), options, out wordWrapLineBreaks);
         }
 
         private static void FormatFromDataFeed<T>(BlockingCollection<string> output,
             IEnumerable data,
             int width, int numRowsToUseForSizing, int tabLength,
             List<PropertyColumnFormat> columns, Action<ColumnWidthNegotiator, T> addRowAction,
+            ReportFormattingOptions options,
             out int wordWrapLineBreaks)
         {
             var sizer = new ColumnWidthNegotiator(columns, 1);
 
-            sizer.AddHeadings();
+            var headingsRequired = (options & ReportFormattingOptions.OmitHeadings) == 0;
+            if (headingsRequired)
+                sizer.AddHeadings();
 
             var sizeRows = 0;
             var dataEnumerator = data.GetEnumerator();
@@ -154,7 +171,9 @@ namespace ConsoleToolkit.ConsoleIO
                 .Concat(StackedColumnWidths(sizer))
                 .ToArray();
 
-            ReportHeadings(sizer.Columns, output, tabLength, columnSeperator);
+            if (headingsRequired)
+                ReportHeadings(sizer.Columns, output, tabLength, columnSeperator);
+
             int sizeRowsWordWrapLineBreaks;
             ReportRowsUsedForSizing(columns, sizer, output, tabLength, columnSeperator, widths,
                 out sizeRowsWordWrapLineBreaks);
@@ -201,7 +220,7 @@ namespace ConsoleToolkit.ConsoleIO
             }
         }
 
-        private static void ReportRowValues(List<PropertyColumnFormat> columns, ColumnWidthNegotiator sizer, BlockingCollection<string> output, int tabLength, string columnSeperator, IReadOnlyList<FormattingIntermediate> rowValues, int[] widths, out int reportWordWrapLineBreaks)
+        private static void ReportRowValues(List<PropertyColumnFormat> columns, ColumnWidthNegotiator sizer, BlockingCollection<string> output, int tabLength, string columnSeperator, IList<FormattingIntermediate> rowValues, int[] widths, out int reportWordWrapLineBreaks)
         {
             reportWordWrapLineBreaks = 0;
             var maxLineBreaks = 0;

@@ -4,6 +4,8 @@ using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
+using ConsoleToolkit.ConsoleIO;
+using ConsoleToolkitTests.ConsoleIO.UnitTestUtilities;
 using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
 using Description = ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.DescriptionAttribute;
@@ -17,6 +19,8 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
         private CommandLineInterpreterConfiguration _posix;
         private CommandLineInterpreterConfiguration _msDos;
         private CommandLineInterpreterConfiguration _msStd;
+        private ConsoleInterfaceForTesting _consoleInterface;
+        private ConsoleAdapter _console;
 
         class C1Data
         {
@@ -56,6 +60,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             Configure(_posix);
             Configure(_msDos);
             Configure(_msStd);
+
+            _consoleInterface = new ConsoleInterfaceForTesting();
+            _console = new ConsoleAdapter(_consoleInterface);
+
         }
 
         private void Configure(CommandLineInterpreterConfiguration config)
@@ -88,7 +96,8 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 .Positional("Message")
                     .Description("The message to spam.")
                 .Positional("OverrunLength")
-                    .Description("Amount packet should be longer than it claims")
+                    .Description("Amount packet should be longer than it claims.")
+                    .DefaultValue("5")
                 .Option("kidding")
                     .Alias("K")
                     .Description("Run in just kidding mode.");
@@ -97,7 +106,9 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
         [Test]
         public void ConfigurationShouldBeDescribed()
         {
-            Approvals.Verify(_posix.Describe(50));
+            CommandDescriber.Describe(_posix, _console,  "POSIX");
+            var description = _consoleInterface.GetBuffer();
+            Approvals.Verify(description);
         }
 
         [Test]
@@ -113,6 +124,8 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 @"c1 -A",
                 @"c1 -Ab,56",
                 @"c1 -- -Ab,56",
+                @"c3 40 text 50",
+                @"c3 40 text",
                 @"bogus",
             };
 
@@ -133,6 +146,8 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 @"c1 /A:b,56",
                 @"c2 name 5 /M:5",
                 @"c2 name 5 /M:5,",
+                @"c3 40 text 50",
+                @"c3 40 text",
             };
 
             Approvals.Verify(CommandExecutorUtil.Do(_msDos, commands, 50));
@@ -161,6 +176,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 @"c2 name 4 -maxSize:5",
                 @"c3",
                 @"c3 forty text 100",
+                @"c3 40 text",
                 @"c3 40 text 100",
                 @"c3 40 text 100 -kidding",
             };
@@ -176,6 +192,8 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
         private CommandLineInterpreterConfiguration _posix;
         private CommandLineInterpreterConfiguration _msDos;
         private CommandLineInterpreterConfiguration _msStd;
+        private ConsoleInterfaceForTesting _consoleInterface;
+        private ConsoleAdapter _console;
 
         [Command("c1")]
         [Description("Command 1 a file.")]
@@ -223,7 +241,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             [Description("The message to spam.")]
             public string Message { get; set; }
             
-            [Positional(2)]
+            [Positional(2, DefaultValue = "5")]
             [Description("Amount packet should be longer than it claims")]
             public int OverrunLength { get; set; }
 
@@ -241,6 +259,9 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             Configure(_posix);
             Configure(_msDos);
             Configure(_msStd);
+
+            _consoleInterface = new ConsoleInterfaceForTesting();
+            _console = new ConsoleAdapter(_consoleInterface);
         }
 
         private void Configure(CommandLineInterpreterConfiguration config)
@@ -253,7 +274,9 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
         [Test]
         public void ConfigurationShouldBeDescribed()
         {
-            Approvals.Verify(_posix.Describe(50));
+            CommandDescriber.Describe(_posix, _console, "POSIX");
+            var description = _consoleInterface.GetBuffer();
+            Approvals.Verify(description);
         }
 
         [Test]
@@ -332,6 +355,9 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
         private CommandLineInterpreterConfiguration _posix;
         private CommandLineInterpreterConfiguration _msDos;
         private CommandLineInterpreterConfiguration _msStd;
+        private ConsoleInterfaceForTesting _consoleInterface;
+        private ConsoleAdapter _console;
+        private static readonly string _applicationName = "AcceptanceTest";
 
         class Data
         {
@@ -349,6 +375,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             Configure(_posix);
             Configure(_msDos);
             Configure(_msStd);
+
+            _consoleInterface = new ConsoleInterfaceForTesting();
+            _console = new ConsoleAdapter(_consoleInterface);
+            _console.WriteLine(RulerFormatter.MakeRuler(40));
         }
 
         private void Configure(CommandLineInterpreterConfiguration config)
@@ -368,7 +398,9 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
         [Test]
         public void ConfigurationShouldBeDescribed()
         {
-            var description = _posix.Describe(50);
+            var interpreter = new CommandLineInterpreter(_posix);
+            CommandDescriber.Describe(_posix, _console, _applicationName, interpreter.GetOptionNameAdorner());
+            var description = _consoleInterface.GetBuffer();
             Console.WriteLine(description);
             Approvals.Verify(description);
         }

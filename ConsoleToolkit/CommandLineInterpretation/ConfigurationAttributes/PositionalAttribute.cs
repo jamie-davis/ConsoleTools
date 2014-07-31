@@ -8,6 +8,9 @@ namespace ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
     public class PositionalAttribute : Attribute
     {
+        private string _defaultValue;
+        private bool _defaultSpecified = false;
+
         public PositionalAttribute()
         {
             Index = 0;
@@ -26,9 +29,21 @@ namespace ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes
         public string Name { get; set; }
 
         public int Index { get; set; }
+
+        public string DefaultValue
+        {
+            get { return _defaultValue; }
+            set
+            {
+                _defaultValue = value;
+                _defaultSpecified = true;
+            }
+        }
+
+        public bool DefaultSpecified { get { return _defaultSpecified; } }
     }
     /// <summary>
-    /// This attribute decorates a property as a positional parameter.
+    /// This attribute decorates a class aand indicates that it is a command.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public class CommandAttribute : Attribute
@@ -53,6 +68,7 @@ namespace ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes
     {
         public string ShortName { get; set; }
         public string LongName { get; set; }
+        public bool ShortCircuit { get; set; }
 
         public OptionAttribute()
         {
@@ -127,5 +143,23 @@ namespace ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes
             ParameterName = parameterName;
         }
     }
-    
+
+    /// <summary>
+    /// This attribute decorates a class and indicates that it is a command handler.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Class|AttributeTargets.Method, AllowMultiple = false)]
+    public class CommandHandlerAttribute : Attribute
+    {
+        public Type CommandType { get; private set; }
+
+        public CommandHandlerAttribute()
+        {
+            
+        }
+
+        public CommandHandlerAttribute(Type commandType)
+        {
+            CommandType = commandType;
+        }
+    }
 }

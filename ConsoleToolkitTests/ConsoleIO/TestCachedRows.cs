@@ -48,6 +48,7 @@ namespace ConsoleToolkitTests.ConsoleIO
         [SetUp]
         public void SetUp()
         {
+            SetUpTests.OverrideCulture();
             _dataSet = new List<Simple>
             {
                 10, 20, 30, 40, 50, 60, 70, 80, 90, 100
@@ -68,7 +69,7 @@ namespace ConsoleToolkitTests.ConsoleIO
 
         private string FormatRow<T>(CachedRow<T> row)
         {
-            return row.Columns.Select(c => string.Format("{0} = {1}", c.Property.Name, c.Value)).JoinWith(",");
+            return row.Columns.Select(c => string.Format("{0} = {1}", c.Property.Name, c.Value).TrimEnd()).JoinWith(",");
         }
 
     }

@@ -49,7 +49,8 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
 
             public override string ToString()
             {
-                return string.Format("CMD[{0}] Option[{1}]{2}", Name, Option, Validated ? " VALIDATED" : string.Empty);
+                var formatString = typeof(T) == typeof(DateTime) ? "{1:dd/MM/yyyy HH:mm:ss}" : "{1}";
+                return string.Format("CMD[{0}] Option[" + formatString + "]{2}", Name, Option, Validated ? " VALIDATED" : string.Empty);
             }
 
             public static GenericCommand<T> Make(string name)

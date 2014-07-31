@@ -1,0 +1,4 @@
+﻿Self handled command.                                       
+Positional parameter: positional                            
+Option TestOpt      : opt                                   
+                                                            

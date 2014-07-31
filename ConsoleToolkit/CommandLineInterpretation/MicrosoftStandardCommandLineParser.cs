@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace ConsoleToolkit.CommandLineInterpretation
 {
-    public class MicrosoftStandardCommandLineParser : ICommandLineParser
+    public class MicrosoftStandardCommandLineParser : ICommandLineParser, IOptionNameHelpAdorner
     {
         public void Parse(string[] args, IEnumerable<IOption> optionsEnumerable, IEnumerable<IPositionalArgument> positionalArgumentsEnumerable, IParserResult result)
         {
@@ -85,5 +85,16 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
             return input.Substring(colonPos + 1).Split(',');
         }
+
+        /// <summary>
+        /// Add "-" to an option name.
+        /// </summary>
+        /// <param name="name">The option name.</param>
+        /// <returns>The adjusted name.</returns>
+        string IOptionNameHelpAdorner.Adorn(string name)
+        {
+            return "-" + name;
+        }
+
     }
 }
