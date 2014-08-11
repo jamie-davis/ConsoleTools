@@ -7,7 +7,6 @@ exp <pos> [options]
                                                             
 Parameters:                                                 
                                                             
-<<<<<<< HEAD
 pos  A positional configured with an                        
      expression.                                            
                                                             
@@ -17,15 +16,4 @@ Options:
      expression.                                            
 **I  A boolean option configured with an                    
      expression.                                            
-=======
-pos A positional configured with an                         
-    expression.                                             
-                                                            
-Options:                                                    
-                                                            
-**B A boolean option configured with an                     
-    expression.                                             
-**I A boolean option configured with an                     
-    expression.                                             
->>>>>>> origin/master
                                                             

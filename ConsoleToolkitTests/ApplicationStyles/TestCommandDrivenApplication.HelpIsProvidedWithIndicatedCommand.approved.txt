@@ -1,6 +1,5 @@
 ﻿Available commands                                          
                                                             
-<<<<<<< HEAD
 command  A test command that does                           
          nothing. This text is here just                    
          to add help information.                           
@@ -15,20 +14,5 @@ helpme   Get help on the commands
          Subject  Optional command on                       
                   which help is                             
                   required.                                 
-=======
-command A test command that does                            
-        nothing. This text is here just                     
-        to add help information.                            
-                                                            
-helpme  Get help on the commands                            
-        supported by this application.                      
-                                                            
-        helpme [<Subject>]                                  
-                                                            
-        Parameters:                                         
-                                                            
-        Subject Optional command on                         
-                which help is required.                     
->>>>>>> origin/master
                                                             
                                                             

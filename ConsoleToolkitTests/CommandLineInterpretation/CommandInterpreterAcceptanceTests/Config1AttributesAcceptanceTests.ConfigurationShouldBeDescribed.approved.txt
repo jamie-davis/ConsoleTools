@@ -1,6 +1,5 @@
 ﻿Available commands                                          
                                                             
-<<<<<<< HEAD
 c1  Command 1 a file.                                       
                                                             
     c1 <filename> [options]                                 
@@ -49,53 +48,5 @@ c3  Generate loads of spam
                                                             
     kidding, K  Run in just kidding                         
                 mode.                                       
-=======
-c1 Command 1 a file.                                        
-                                                            
-   c1 <filename> [options]                                  
-                                                            
-   Parameters:                                              
-                                                            
-   filename       The name of the file.                     
-                                                            
-   Options:                                                 
-                                                            
-   delete, D  Delete the file after                         
-              processing.                                   
-   archive, A Archive after processing                      
-                                                            
-c2 Command 2 an archive                                     
-                                                            
-   c2 <name> <keep> [options]                               
-                                                            
-   Parameters:                                              
-                                                            
-   name The name of the archive.                            
-   keep The number of days to keep the                      
-        archive                                             
-                                                            
-   Options:                                                 
-                                                            
-   maxSize, M The maximum size of the                       
-              archive.                                      
-                                                            
-c3 Generate loads of spam                                   
-                                                            
-   c3 <iterations> <Message>                                
-   [<OverrunLength>] [options]                              
-                                                            
-   Parameters:                                              
-                                                            
-   iterations    Number of times to                         
-                 repeat                                     
-   Message       The message to spam.                       
-   OverrunLength Amount packet should be                    
-                 longer than it claims                      
-                 Default value: 5                           
-                                                            
-   Options:                                                 
-                                                            
-   kidding, K  Run in just kidding mode.                    
->>>>>>> origin/master
                                                             
                                                             
