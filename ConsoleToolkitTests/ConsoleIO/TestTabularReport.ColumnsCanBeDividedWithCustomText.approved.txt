@@ -1,0 +1,9 @@
+﻿----+----|----+----|----+----|----+----|----+----|
+ValueXXXLong Text   XXXShortXXXDate               
+-----XXX------------XXX-----XXX-------------------
+ 1.50XXXLong text   XXXShortXXX07/05/2014 19:59:20
+     XXXthat could  XXXtext XXX                   
+     XXXbe wrapped  XXX     XXX                   
+     XXXquite easilyXXX     XXX                   
+     XXXif required.XXX     XXX                   
+

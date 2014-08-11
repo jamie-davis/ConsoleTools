@@ -1,0 +1,9 @@
+﻿Int: invalid                                                
+Input string was not in a correct                           
+format.                                                     
+Int: still bad                                              
+Input string was not in a correct                           
+format.                                                     
+Int: 45                                                     
+String: string                                              
+                                                            

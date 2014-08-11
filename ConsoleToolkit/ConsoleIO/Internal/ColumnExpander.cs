@@ -14,14 +14,16 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         /// </summary>
         /// <param name="width">The available width.</param>
         /// <param name="seperatorOverhead">The amount of space occupied by column seperators.</param>
-        public static void FillAvailableSpace(int width, int seperatorOverhead, ColumnSizingParameters parameters)
+        /// <param name="parameters">The column sizing parameters for this operation.</param>
+        /// <param name="maximiseWidth">True to systematically use all of the available width when sizing the columns.</param>
+        public static void FillAvailableSpace(int width, int seperatorOverhead, ColumnSizingParameters parameters, bool maximiseWidth)
         {
             var columnPriorityList = parameters.Sizers.ToList();
             while (CurrentWidth(seperatorOverhead, parameters.Sizers, parameters.StackedColumnWidth) < width)
             {
-                if (!WidenBasedOnLineBreaks(columnPriorityList) &&
-                    !WidenBasedOnMaximumWidth(columnPriorityList) &&
-                    !WidenUnrestrictedColumns(columnPriorityList))
+                if (!WidenBasedOnLineBreaks(columnPriorityList) 
+                    && !WidenBasedOnMaximumWidth(columnPriorityList, maximiseWidth) 
+                    && (!maximiseWidth || !WidenUnrestrictedColumns(columnPriorityList)))
                     break;
             }
         }
@@ -37,7 +39,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             return true;
         }
 
-        private static bool WidenBasedOnMaximumWidth(List<ColumnWidthNegotiator.ColumnSizerInfo> columnPriorityList)
+        private static bool WidenBasedOnMaximumWidth(List<ColumnWidthNegotiator.ColumnSizerInfo> columnPriorityList, bool maximiseWidth)
         {
             var proportionOfMaxWidth = columnPriorityList
                 .Select(
@@ -45,28 +47,29 @@ namespace ConsoleToolkit.ConsoleIO.Internal
                         new
                         {
                             Sizer = s,
-                            Max = GetMaxColumnWidth(s),
+                            Max = GetMaxColumnWidth(s, maximiseWidth),
                             Actual = s.PropertyColumnFormat.Format.ActualWidth
                         })
                 .Where(c => c.Max > c.Actual)
-                .Select(c => new {c.Sizer, Proportion = c.Actual/c.Max})
+                .Select(c => new {c.Sizer, Proportion = (double)c.Actual/c.Max})
                 .OrderByDescending(c => c.Proportion)
                 .ToList();
 
             if (!proportionOfMaxWidth.Any()) return false;
 
             var targetProp = proportionOfMaxWidth.First().Proportion;
+// ReSharper disable once CompareOfFloatsByEqualityOperator
             var matches = proportionOfMaxWidth.Where(c => c.Proportion == targetProp).ToList();
             var column = columnPriorityList.FirstOrDefault(c => matches.Any(m => ReferenceEquals(m.Sizer.Sizer, c.Sizer)));
             WidenColumn(columnPriorityList, column);
             return true;
         }
 
-        private static int GetMaxColumnWidth(ColumnWidthNegotiator.ColumnSizerInfo s)
+        private static int GetMaxColumnWidth(ColumnWidthNegotiator.ColumnSizerInfo s, bool includeHeadingWidth)
         {
             var columnFormat = s.PropertyColumnFormat.Format;
-            return Math.Max(columnFormat.Heading.Length,
-                 DefaultWidthCalculator.Max(columnFormat));
+            var headingLength = includeHeadingWidth ? columnFormat.Heading.Length : 0;
+            return Math.Max(headingLength, DefaultWidthCalculator.Max(columnFormat));
         }
 
         private static bool WidenBasedOnLineBreaks(List<ColumnWidthNegotiator.ColumnSizerInfo> columnPriorityList)

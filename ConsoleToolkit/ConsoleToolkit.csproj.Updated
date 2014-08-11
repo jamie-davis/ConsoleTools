@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A2662BFA-2746-4782-BAF9-B058D1695C18}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ConsoleToolkit</RootNamespace>
+    <AssemblyName>ConsoleToolkit</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TARGET_FRAMEWORK_4</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">TARGET_FRAMEWORK_4</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">TARGET_FRAMEWORK_4</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ApplicationStyles\AmbiguousCommandHandler.cs" />
+    <Compile Include="ApplicationStyles\CallOrderViolationException.cs" />
+    <Compile Include="ApplicationStyles\CommandDrivenApplication.cs" />
+    <Compile Include="ApplicationStyles\ConsoleApplication.cs" />
+    <Compile Include="ApplicationStyles\ConsoleApplicationRequiresDefaultCommand.cs" />
+    <Compile Include="ApplicationStyles\Internals\CommandAssemblyScanner.cs" />
+    <Compile Include="ApplicationStyles\Internals\CommandHandler.cs" />
+    <Compile Include="ApplicationStyles\Internals\CommandHandlerDoesNotHaveAttribute.cs" />
+    <Compile Include="ApplicationStyles\Internals\CommandHandlerLoader.cs" />
+    <Compile Include="ApplicationStyles\Internals\CommandHandlerMethod.cs" />
+    <Compile Include="ApplicationStyles\Internals\CommandHandlerMethodHasUnsupportedParameter.cs" />
+    <Compile Include="ApplicationStyles\Internals\CommandHandlerMustHaveDefaultConstructor.cs" />
+    <Compile Include="ApplicationStyles\Internals\CommandsMayOnlyDeclareOneHandlerMethod.cs" />
+    <Compile Include="ApplicationStyles\Internals\ConsoleApplicationBase.cs" />
+    <Compile Include="ApplicationStyles\Internals\HelpCommandMustBePartOfConfiguration.cs" />
+    <Compile Include="ApplicationStyles\Internals\ICommandHandler.cs" />
+    <Compile Include="ApplicationStyles\Internals\MethodParameterInjector.cs" />
+    <Compile Include="ApplicationStyles\Internals\MultipleHandlersForCommand.cs" />
+    <Compile Include="ApplicationStyles\Internals\ParameterTypeCannotBeResolved.cs" />
+    <Compile Include="ApplicationStyles\NoApplicationClassFound.cs" />
+    <Compile Include="ApplicationStyles\NoCommandHandlerMethodFound.cs" />
+    <Compile Include="CommandLineInterpretation\AliasNotSupported.cs" />
+    <Compile Include="CommandLineInterpretation\BaseCommandConfig.cs" />
+    <Compile Include="CommandLineInterpretation\BaseOption.cs" />
+    <Compile Include="CommandLineInterpretation\BasePositional.cs" />
+    <Compile Include="CommandLineInterpretation\BuiltInCommandLineParsers.cs" />
+    <Compile Include="CommandLineInterpretation\CommandAlreadySpecified.cs" />
+    <Compile Include="CommandLineInterpretation\CommandAttributeLoader.cs" />
+    <Compile Include="CommandLineInterpretation\CommandConfig.cs" />
+    <Compile Include="CommandLineInterpretation\CommandConfigurationInvalid.cs" />
+    <Compile Include="CommandLineInterpretation\CommandDescriber.cs" />
+    <Compile Include="CommandLineInterpretation\CommandLineInterpreter.cs" />
+    <Compile Include="CommandLineInterpretation\CommandLineInterpreterConfiguration.cs" />
+    <Compile Include="CommandLineInterpretation\CommandLineParserConventions.cs" />
+    <Compile Include="CommandLineInterpretation\CommandLineTokeniser.cs" />
+    <Compile Include="CommandLineInterpretation\CommandOption.cs" />
+    <Compile Include="CommandLineInterpretation\CommandPositional.cs" />
+    <Compile Include="CommandLineInterpretation\ConfigurationAttributes\PositionalAttribute.cs" />
+    <Compile Include="CommandLineInterpretation\CustomParserNotFound.cs" />
+    <Compile Include="CommandLineInterpretation\DefaultApplicationNameExtractor.cs" />
+    <Compile Include="CommandLineInterpretation\DefaultValueIsNotValidTypeForParameter.cs" />
+    <Compile Include="CommandLineInterpretation\DefaultValueMayOnlyBeSpecifiedForPositionalParameters.cs" />
+    <Compile Include="CommandLineInterpretation\DuplicateOptionName.cs" />
+    <Compile Include="CommandLineInterpretation\IContext.cs" />
+    <Compile Include="CommandLineInterpretation\IOptionNameHelpAdorner.cs" />
+    <Compile Include="CommandLineInterpretation\MemberReferenceExpected.cs" />
+    <Compile Include="CommandLineInterpretation\NestedOptionTypeInvalid.cs" />
+    <Compile Include="CommandLineInterpretation\NoMatchingPropertyFoundException.cs" />
+    <Compile Include="CommandLineInterpretation\ConfigGenerator.cs" />
+    <Compile Include="CommandLineInterpretation\ParameterAssignmentGenerator.cs" />
+    <Compile Include="CommandLineInterpretation\SetterBuilder.cs" />
+    <Compile Include="CommandLineInterpretation\ShortCircuitInvalid.cs" />
+    <Compile Include="CommandLineInterpretation\ShortCircuitInvalidOnPositionalParameter.cs" />
+    <Compile Include="CommandLineInterpretation\ICommandLineParser.cs" />
+    <Compile Include="CommandLineInterpretation\InvalidParameterType.cs" />
+    <Compile Include="CommandLineInterpretation\IOption.cs" />
+    <Compile Include="CommandLineInterpretation\IParserResult.cs" />
+    <Compile Include="CommandLineInterpretation\IPositionalArgument.cs" />
+    <Compile Include="CommandLineInterpretation\MicrosoftStandardCommandLineParser.cs" />
+    <Compile Include="CommandLineInterpretation\MsDosCommandLineParser.cs" />
+    <Compile Include="CommandLineInterpretation\NamedCommandConflict.cs" />
+    <Compile Include="CommandLineInterpretation\ParserResult.cs" />
+    <Compile Include="CommandLineInterpretation\ParseStatus.cs" />
+    <Compile Include="CommandLineInterpretation\PosixCommandLineParser.cs" />
+    <Compile Include="CommandLineInterpretation\ProgramParametersAlreadySpecified.cs" />
+    <Compile Include="ConsoleIO\AdapterConfiguration.cs" />
+    <Compile Include="ConsoleIO\CachedRows.cs" />
+    <Compile Include="ConsoleIO\ColourConverter.cs" />
+    <Compile Include="ConsoleIO\ColourSeal.cs" />
+    <Compile Include="ConsoleIO\ColourWriter.cs" />
+    <Compile Include="ConsoleIO\ColumnAlign.cs" />
+    <Compile Include="ConsoleIO\ColumnFormat.cs" />
+    <Compile Include="ConsoleIO\ConsoleAdapter.cs" />
+    <Compile Include="ConsoleIO\ConsoleBufferFormat.cs" />
+    <Compile Include="ConsoleIO\ConsoleInterfaceForTesting.cs" />
+    <Compile Include="ConsoleIO\ConsoleIOExtensions.cs" />
+    <Compile Include="ConsoleIO\ConsoleRedirectTester.cs" />
+    <Compile Include="ConsoleIO\DefaultConsole.cs" />
+    <Compile Include="ConsoleIO\IConsoleAdapter.cs" />
+    <Compile Include="ConsoleIO\IConsoleInterface.cs" />
+    <Compile Include="ConsoleIO\Internal\ColourControlItem.cs" />
+    <Compile Include="ConsoleIO\Internal\ColourControlSplitter.cs" />
+    <Compile Include="ConsoleIO\Internal\ColourInstructionRebuilder.cs" />
+    <Compile Include="ConsoleIO\Internal\ColourString.cs" />
+    <Compile Include="ConsoleIO\Internal\ConsoleAdapterStream.cs" />
+    <Compile Include="ConsoleIO\Internal\FormattingIntermediate.cs" />
+    <Compile Include="ConsoleIO\Internal\MinReportWidthCalculator.cs" />
+    <Compile Include="ConsoleIO\Internal\RecordedCommands\FormatTableCommand.cs" />
+    <Compile Include="ConsoleIO\Internal\RecordedCommands\FormatTableCommandFactory.cs" />
+    <Compile Include="ConsoleIO\Internal\RecordedCommands\IRecordedCommand.cs" />
+    <Compile Include="ConsoleIO\Internal\RecordedCommands\NewLineCommand.cs" />
+    <Compile Include="ConsoleIO\Internal\RecordedCommands\RenderCommand.cs" />
+    <Compile Include="ConsoleIO\Internal\RecordedCommands\ReplayBuffer.cs" />
+    <Compile Include="ConsoleIO\Internal\RecordedCommands\SimpleTextCommandBase.cs" />
+    <Compile Include="ConsoleIO\Internal\RecordedCommands\WrapCommand.cs" />
+    <Compile Include="ConsoleIO\Internal\RecordedCommands\WriteCommand.cs" />
+    <Compile Include="ConsoleIO\Internal\RecordingConsoleAdapter.cs" />
+    <Compile Include="ConsoleIO\InvalidOperationForRedirectedConsole.cs" />
+    <Compile Include="ConsoleIO\OldConsoleAdapter.cs" />
+    <Compile Include="ConsoleIO\Internal\ColumnExpander.cs" />
+    <Compile Include="ConsoleIO\Internal\ColumnShrinker.cs" />
+    <Compile Include="ConsoleIO\Internal\ColumnSizer.cs" />
+    <Compile Include="ConsoleIO\Internal\ColumnSizingParameters.cs" />
+    <Compile Include="ConsoleIO\Internal\ColumnWidthNegotiator.cs" />
+    <Compile Include="ConsoleIO\Internal\ColumnWrapper.cs" />
+    <Compile Include="ConsoleIO\Internal\ColVerticalAligment.cs" />
+    <Compile Include="ConsoleIO\Internal\DefaultWidthCalculator.cs" />
+    <Compile Include="ConsoleIO\Internal\FormatAnalyser.cs" />
+    <Compile Include="ConsoleIO\Internal\IConsole.cs" />
+    <Compile Include="ConsoleIO\Internal\PropertyColumnFormat.cs" />
+    <Compile Include="ConsoleIO\Internal\PropertyStackColumnFormatter.cs" />
+    <Compile Include="ConsoleIO\Internal\PropertyStackColumnSizer.cs" />
+    <Compile Include="ConsoleIO\Internal\PropertyStackFormatter.cs" />
+    <Compile Include="ConsoleIO\Internal\ReportColumnAligner.cs" />
+    <Compile Include="ConsoleIO\Internal\SplitWord.cs" />
+    <Compile Include="ConsoleIO\Internal\TextStats.cs" />
+    <Compile Include="ConsoleIO\Internal\ValueFormatter.cs" />
+    <Compile Include="ConsoleIO\Internal\WidthCalculators\BooleanWidthCalculator.cs" />
+    <Compile Include="ConsoleIO\Internal\WidthCalculators\DateTimeWidthCalculator.cs" />
+    <Compile Include="ConsoleIO\Internal\WidthCalculators\NumericWidthCalculator.cs" />
+    <Compile Include="ConsoleIO\Internal\WidthCalculators\StringWidthCalculator.cs" />
+    <Compile Include="ConsoleIO\Internal\WidthCalculators\TimeSpanWidthCalculator.cs" />
+    <Compile Include="ConsoleIO\Internal\WordSplitter.cs" />
+    <Compile Include="ConsoleIO\OutputTarget.cs" />
+    <Compile Include="ConsoleIO\RedirectedConsole.cs" />
+    <Compile Include="ConsoleIO\ReportFormattingOptions.cs" />
+    <Compile Include="ConsoleIO\TabularReport.cs" />
+    <Compile Include="ConsoleIO\TempCulture.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Toolkit.cs" />
+    <Compile Include="Utilities\ReflectionExtensionMethods.cs" />
+    <Compile Include="Utilities\StackWalker.cs" />
+    <Compile Include="Utilities\TextFormatter.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -3,6 +3,7 @@ using System.Linq;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using ApprovalUtilities.Utilities;
+using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal.RecordedCommands;
 using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
@@ -29,6 +30,22 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal.RecordedCommands
                      .Select(i => new { Number = i, String = string.Join(" ", Enumerable.Repeat("blah", i)) });
 
             var command = FormatTableCommandFactory.Make(data);
+            
+            _buffer.Write("XXX");
+            _buffer.NewLine();
+            command.Replay(_buffer);
+            _buffer.Write("YYY");
+
+            Approvals.Verify(_buffer.ToLines().JoinWith(Environment.NewLine));
+        }
+
+        [Test]
+        public void WriteCommandReplaysWriteOperationWithOptions()
+        {
+            var data = Enumerable.Range(1, 10)
+                     .Select(i => new { Number = i, String = string.Join(" ", Enumerable.Repeat("blah", i)) });
+
+            var command = FormatTableCommandFactory.Make(data, options: ReportFormattingOptions.Default | ReportFormattingOptions.OmitHeadings);
             
             _buffer.Write("XXX");
             _buffer.NewLine();

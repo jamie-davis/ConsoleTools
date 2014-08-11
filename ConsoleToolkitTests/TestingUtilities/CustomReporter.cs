@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using ApprovalTests.Core;
 using ApprovalTests.Reporters;
-using NUnit.Framework;
 
 namespace ConsoleToolkitTests.TestingUtilities
 {
@@ -14,7 +13,7 @@ namespace ConsoleToolkitTests.TestingUtilities
     {
         private static readonly IEnvironmentAwareReporter DefaultReporter = QuietReporter.INSTANCE ;
         private static readonly Dictionary<string, IEnvironmentAwareReporter> Reporters = new Dictionary
-            <string, IEnvironmentAwareReporter>()
+            <string, IEnvironmentAwareReporter>
         {
             {"WinMerge", WinMergeReporter.INSTANCE},
             {"BeyondCompare", BeyondCompareReporter.INSTANCE},

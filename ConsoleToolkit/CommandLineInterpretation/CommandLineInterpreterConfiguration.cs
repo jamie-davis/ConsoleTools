@@ -114,7 +114,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
             if (_commands.Any(c => string.Compare(c.Name, command, true, CultureInfo.CurrentCulture) == 0))
                 throw new CommandAlreadySpecified(command);
-            var commandConfig = new CommandConfig<T>(w => new T()) { Name = command.ToLower() };
+            var commandConfig = new CommandConfig<T>(w => new T()) { Name = command.ToLower(), CommandType = typeof(T)};
             _commands.Add(commandConfig);
             return commandConfig;
         }
@@ -179,133 +179,9 @@ namespace ConsoleToolkit.CommandLineInterpretation
         public BaseCommandConfig DefaultCommand { get; set; }
 
         /// <summary>
-        /// Generate the usage text for the configuration. This will be formatted to fit into the specified width. Some elements have minimum widths, so very narrow settings of <see cref="consoleWidth"/> will not be respected.
+        /// Load the configuration of a command from a type.
         /// </summary>
-        /// <param name="consoleWidth">The desired width of the descriptive text. This will be respected as far as possible, but some output elements have minimum widths so it may not always be possible to obey the setting consistently.</param>
-        /// <returns>A string containing the formatted usage text.</returns>
-        public string Describe(int consoleWidth)
-        {
-            var sb = new StringBuilder();
-
-            if (DefaultCommand != null)
-                AddDefaultCommandText(consoleWidth, sb, DefaultCommand);
-
-            AddCommandListText(consoleWidth, sb);
-            return sb.ToString();
-        }
-
-        private void AddDefaultCommandText(int consoleWidth, StringBuilder sb, BaseCommandConfig defaultCommand)
-        {
-            sb.Append(FormatCommandDescription(consoleWidth, defaultCommand, String.Format("Usage: {0}", ApplicationName ?? DefaultApplicationName())));
-        }
-
-        private void AddCommandListText(int consoleWidth, StringBuilder sb)
-        {
-            var commands = Commands.Where(c => c.Name != null).ToList();
-            if (commands.Any())
-            {
-                var maxWidth = commands.Max(c => c.Name.Length) + 2;
-                var textWidth = Math.Max(consoleWidth - maxWidth, 10);
-                var actualWidth = maxWidth + textWidth;
-
-                TextFormatter.AppendWidth(sb, actualWidth, "Available commands");
-                sb.AppendLine();
-
-                foreach (var command in commands)
-                {
-                    var commandText = FormatCommandDescription(textWidth, command);
-
-                    var commandName = TextFormatter.FormatBlock(maxWidth, command.Name);
-                    sb.Append(TextFormatter.MergeBlocks(commandName, maxWidth, commandText));
-                    sb.AppendLine();
-                }
-            }
-        }
-
-        private string DefaultApplicationName()
-        {
-            var trace = new StackTrace();
-            var index = 0;
-            string bestName = null;
-            while (index < trace.FrameCount)
-            {
-                var frame = trace.GetFrame(index++);
-                var method = frame.GetMethod();
-                if (method.DeclaringType != null)
-                {
-                    var assembly = method.DeclaringType.Assembly;
-                    if (method.Name == "Main")
-                    {
-                        if (method.DeclaringType != null) 
-                            return assembly.GetName().Name;
-                    }
-                    else
-                    {
-                        if (bestName == null && assembly != GetType().Assembly)
-                            bestName = assembly.GetName().Name;
-                    }
-                }
-            }
-            return bestName;
-        }
-
-        private string FormatCommandDescription(int textWidth, BaseCommandConfig command, string prefixText = null)
-        {
-            var sb = new StringBuilder();
-            TextFormatter.AppendWidth(sb, textWidth, command.Description ?? String.Empty);
-
-            var positionalsPresent = command.Positionals.Any();
-            var optionsPresent = command.Options.Any();
-            if (positionalsPresent || optionsPresent)
-            {
-                sb.AppendLine();
-
-                var paramList = !positionalsPresent ? String.Empty :
-                    " " + command.Positionals.Select(p => String.Format("<{0}>", p.ParameterName))
-                        .Aggregate((t, i) => t + " " + i);
-                var options = !optionsPresent ? String.Empty : " [options]";
-                sb.Append(TextFormatter.FormatBlock(textWidth, String.Format("{0}{1}{2}{3}", prefixText ?? String.Empty, command.Name, paramList, options)));
-            }
-
-            if (positionalsPresent)
-            {
-                sb.AppendLine();
-                sb.Append(TextFormatter.FormatBlock(textWidth, "Parameters:"));
-                sb.AppendLine();
-
-                var maxParameterWidth = command.Positionals.Max(p => p.ParameterName.Length) + 2;
-                var paramDescWidth = Math.Max(10, textWidth - maxParameterWidth);
-
-                foreach (var positional in command.Positionals)
-                {
-                    var paramName = TextFormatter.FormatBlock(maxParameterWidth, positional.ParameterName);
-                    var paramDesc = TextFormatter.FormatBlock(paramDescWidth, positional.Description ?? String.Empty);
-
-                    sb.Append(TextFormatter.MergeBlocks(paramName, maxParameterWidth, paramDesc));
-                }                
-            }
-
-            if (optionsPresent)
-            {
-                sb.AppendLine();
-                sb.Append(TextFormatter.FormatBlock(textWidth, "Options:"));
-                sb.AppendLine();
-
-                var maxOptionWidth = command.Options.Max(p => p.Name.Length) + 3;
-                var optionDescWidth = Math.Max(10, textWidth - maxOptionWidth);
-
-                foreach (var option in command.Options)
-                {
-                    var optionName = TextFormatter.FormatBlock(maxOptionWidth, "/" + option.Name);
-                    var optionDesc = TextFormatter.FormatBlock(optionDescWidth, option.Description);
-
-                    sb.Append(TextFormatter.MergeBlocks(optionName, maxOptionWidth, optionDesc));
-                }                
-            }
-
-            return sb.ToString();
-        }
-
+        /// <param name="type">The type to load.</param>
         public void Load(Type type)
         {
             _commands.Add(CommandAttributeLoader.Load(type));

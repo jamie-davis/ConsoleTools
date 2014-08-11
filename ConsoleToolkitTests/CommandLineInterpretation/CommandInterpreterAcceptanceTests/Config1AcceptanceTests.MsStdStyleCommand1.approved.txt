@@ -154,6 +154,18 @@ Test: c3 forty text 100
 The iterations parameter value "forty" is invalid.
 
 
+Test: c3 40 text
+
+C3Data
+{
+    CommandName = 
+    Iterations = 40
+    Message = text
+    OverrunLength = 5
+    Kidding = False
+}
+
+
 Test: c3 40 text 100
 
 C3Data

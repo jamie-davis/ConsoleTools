@@ -69,10 +69,12 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             ++_sizeRows;
         }
 
-        public void CalculateWidths(int width)
+        public void CalculateWidths(int width, ReportFormattingOptions options = ReportFormattingOptions.Default)
         {
             SizeColumns(width);
-            StretchColumnsToFillWidth(width);
+
+            var maximiseWidth = (options & ReportFormattingOptions.StretchColumns) > 0;
+            StretchColumnsToFillWidth(width, maximiseWidth);
         }
 
         private void SizeColumns(int width)
@@ -81,11 +83,11 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             ColumnShrinker.ShrinkColumns(width, seperatorOverhead, _parameters);
         }
 
-        private void StretchColumnsToFillWidth(int width)
+        private void StretchColumnsToFillWidth(int width, bool maximiseWidth)
         {
             var seperatorOverhead = SeperatorOverhead();
             var stackedColumnWidth = _parameters.StackedColumnWidth;
-            ColumnExpander.FillAvailableSpace(width, seperatorOverhead, _parameters);
+            ColumnExpander.FillAvailableSpace(width, seperatorOverhead, _parameters, maximiseWidth);
             _parameters.StackedColumnWidth = stackedColumnWidth;
         }
 

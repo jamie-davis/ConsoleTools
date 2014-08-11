@@ -1,18 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using ConsoleToolkit.ConsoleIO.Internal;
 
 namespace ConsoleToolkit.ConsoleIO
 {
     /// <summary>
-    /// This class performs write operations on a <see cref="IConsoleInterface"/>. It implements all of the colour 
+    /// This class performs write operations on a <see cref="IConsoleOutInterface"/>. It implements all of the colour 
     /// instructions that control the display of output on the console.
     /// <seealso cref="ColourControlItem"/>
     /// <seealso cref="ColourControlItem.ControlCode"/>
     /// </summary>
     internal class ColourWriter
     {
-        private readonly IConsoleInterface _consoleInterface;
+        private readonly IConsoleOutInterface _consoleOutInterface;
 
         private class ColourState
         {
@@ -29,9 +30,13 @@ namespace ConsoleToolkit.ConsoleIO
         private readonly Stack<ColourState> _colourStack = new Stack<ColourState>();
         private bool _lastWriteWasPassiveNewLine;
 
-        public ColourWriter(IConsoleInterface consoleInterface)
+        public ColourWriter(IConsoleOutInterface consoleOutInterface)
         {
-            _consoleInterface = consoleInterface;
+            _consoleOutInterface = consoleOutInterface;
+        }
+
+        public Encoding Encoding {
+            get { return _consoleOutInterface.Encoding; }
         }
 
         public void Write(List<ColourControlItem> components)
@@ -44,7 +49,7 @@ namespace ConsoleToolkit.ConsoleIO
 
         public void NewLine()
         {
-            _consoleInterface.NewLine();
+            _consoleOutInterface.NewLine();
         }
 
         private void ProcessItem(ColourControlItem colourControlItem)
@@ -58,28 +63,28 @@ namespace ConsoleToolkit.ConsoleIO
                     switch (instruction.Code)
                     {
                         case ColourControlItem.ControlCode.SetBackground:
-                            _consoleInterface.Background = instruction.Arg;
+                            _consoleOutInterface.Background = instruction.Arg;
                             break;
 
                         case ColourControlItem.ControlCode.SetForeground:
-                            _consoleInterface.Foreground = instruction.Arg;
+                            _consoleOutInterface.Foreground = instruction.Arg;
                             break;
 
                         case ColourControlItem.ControlCode.NewLine:
                             if (!_lastWriteWasPassiveNewLine)
-                                _consoleInterface.NewLine();
+                                _consoleOutInterface.NewLine();
                             else
                                 _lastWriteWasPassiveNewLine = false;
                             break;
 
                         case ColourControlItem.ControlCode.Push:
-                            _colourStack.Push(new ColourState(_consoleInterface.Foreground, _consoleInterface.Background));
+                            _colourStack.Push(new ColourState(_consoleOutInterface.Foreground, _consoleOutInterface.Background));
                             break;
 
                         case ColourControlItem.ControlCode.Pop:
                             var popped = _colourStack.Pop();
-                            _consoleInterface.Foreground = popped.ForegroundColour;
-                            _consoleInterface.Background = popped.BackgroundColour;
+                            _consoleOutInterface.Foreground = popped.ForegroundColour;
+                            _consoleOutInterface.Background = popped.BackgroundColour;
                             break;
                     }
                 }
@@ -88,10 +93,10 @@ namespace ConsoleToolkit.ConsoleIO
 
         private void WriteText(ColourControlItem colourControlItem)
         {
-            var currentLine = _consoleInterface.CursorTop;
-            _consoleInterface.Write(colourControlItem.Text);
-            _lastWriteWasPassiveNewLine = (_consoleInterface.CursorTop == currentLine + 1 &&
-                                           _consoleInterface.CursorLeft == 0);
+            var currentLine = _consoleOutInterface.CursorTop;
+            _consoleOutInterface.Write(colourControlItem.Text);
+            _lastWriteWasPassiveNewLine = (_consoleOutInterface.CursorTop == currentLine + 1 &&
+                                           _consoleOutInterface.CursorLeft == 0);
         }
     }
 }

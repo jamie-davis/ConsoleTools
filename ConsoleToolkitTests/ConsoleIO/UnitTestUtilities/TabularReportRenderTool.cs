@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
-using NUnit.Framework;
+using ConsoleToolkit.Utilities;
 
 namespace ConsoleToolkitTests.ConsoleIO.UnitTestUtilities
 {

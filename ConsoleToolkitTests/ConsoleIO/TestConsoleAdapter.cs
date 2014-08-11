@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using System.Linq;
 using ApprovalTests;
 using ApprovalTests.Reporters;
@@ -15,6 +17,27 @@ namespace ConsoleToolkitTests.ConsoleIO
     {
         private ConsoleInterfaceForTesting _consoleInterface;
         private ConsoleAdapter _adapter;
+
+        #region Types for test
+
+        private class StringIntType
+        {
+            public StringIntType(string strValue, int intValue)
+            {
+                Str = strValue;
+                Int = intValue;
+            }
+
+            public string Str { get; set; }
+            public int Int { get; set; }
+
+            public override string ToString()
+            {
+                return string.Format("[{0}, {1}]", Str, Int);
+            }
+        }
+
+        #endregion
 
         [SetUp]
         public void SetUp()
@@ -128,6 +151,76 @@ namespace ConsoleToolkitTests.ConsoleIO
             _adapter.WriteLine(recorder);
             _adapter.WriteLine("XXX");
             Approvals.Verify(_consoleInterface.GetBuffer());
+        }
+
+        [Test]
+        public void AnAnonymousTypeIsFilledFromStdIn()
+        {
+            const string data = @"String line
+150";
+            var template = new {Str = "String line", Int = 150};
+            using (var s = new StringReader(data))
+            {
+                _consoleInterface.SetInputStream(s);
+                var item = _adapter.ReadInput(template);
+                Assert.That(item, Is.EqualTo(template));
+            }
+        }
+
+        [Test]
+        public void ATupleIsFilledFromStdInByTemplate()
+        {
+            const string data = @"String line
+250";
+            var template = new Tuple<string, int>("String line", 250);
+            using (var s = new StringReader(data))
+            {
+                _consoleInterface.SetInputStream(s);
+                var item = _adapter.ReadInput(template);
+                Assert.That(item, Is.EqualTo(template));
+            }
+        }
+
+        [Test]
+        public void ACustomTypeIsFilledFromStdInByTemplate()
+        {
+            const string data = @"String line
+350";
+            var template = new StringIntType("String line", 350);
+            using (var s = new StringReader(data))
+            {
+                _consoleInterface.SetInputStream(s);
+                var item = _adapter.ReadInput(template);
+                Assert.That(item.ToString(), Is.EqualTo(template.ToString()));
+            }
+        }
+
+        [Test]
+        public void ATupleIsFilledFromStdIn()
+        {
+            const string data = @"String line
+250";
+            var template = new Tuple<string, int>("String line", 250);
+            using (var s = new StringReader(data))
+            {
+                _consoleInterface.SetInputStream(s);
+                var item = _adapter.ReadInput<Tuple<string, int>>();
+                Assert.That(item, Is.EqualTo(template));
+            }
+        }
+
+        [Test]
+        public void ACustomTypeIsFilledFromStdIn()
+        {
+            const string data = @"String line
+350";
+            var template = new StringIntType("String line", 350);
+            using (var s = new StringReader(data))
+            {
+                _consoleInterface.SetInputStream(s);
+                var item = _adapter.ReadInput<StringIntType>();
+                Assert.That(item.ToString(), Is.EqualTo(template.ToString()));
+            }
         }
 
         private static RecordingConsoleAdapter MakeRecording()

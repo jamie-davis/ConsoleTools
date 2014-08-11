@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace ConsoleToolkit.CommandLineInterpretation
 {
-    public class MicrosoftStandardCommandLineParser : ICommandLineParser
+    public class MicrosoftStandardCommandLineParser : ICommandLineParser, IOptionNameHelpAdorner
     {
         public void Parse(string[] args, IEnumerable<IOption> optionsEnumerable, IEnumerable<IPositionalArgument> positionalArgumentsEnumerable, IParserResult result)
         {
@@ -36,10 +36,10 @@ namespace ConsoleToolkit.CommandLineInterpretation
             }
         }
 
-        private ParseOutcome GetOption(IParserResult result, Queue<string> argQueue, string arg, List<IOption> options, List<IPositionalArgument> positionals)
+        private ParseOutcome GetOption(IParserResult result, Queue<string> argQueue, string arg, IEnumerable<IOption> options, IEnumerable<IPositionalArgument> positionals)
         {
             var embeddedOptionName = GetOptionName(arg);
-            var option = options.FirstOrDefault(o => string.Compare(o.Name, embeddedOptionName, true) == 0);
+            var option = options.FirstOrDefault(o => System.String.Compare(o.Name, embeddedOptionName, System.StringComparison.OrdinalIgnoreCase) == 0);
             string optionName;
             string[] optionArgs;
             if (option != null)
@@ -49,7 +49,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
             }
             else
             {
-                var pos = positionals.FirstOrDefault(p => string.Compare(p.ParameterName, embeddedOptionName, true) == 0);
+                var pos = positionals.FirstOrDefault(p => System.String.Compare(p.ParameterName, embeddedOptionName, System.StringComparison.OrdinalIgnoreCase) == 0);
                 if (pos != null)
                     optionName = pos.ParameterName;
                 else
@@ -85,5 +85,16 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
             return input.Substring(colonPos + 1).Split(',');
         }
+
+        /// <summary>
+        /// Add "-" to an option name.
+        /// </summary>
+        /// <param name="name">The option name.</param>
+        /// <returns>The adjusted name.</returns>
+        string IOptionNameHelpAdorner.Adorn(string name)
+        {
+            return "-" + name;
+        }
+
     }
 }

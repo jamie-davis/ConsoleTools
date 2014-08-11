@@ -1,88 +1,46 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using ConsoleToolkit.CommandLineInterpretation;
+using ConsoleToolkit;
+using ConsoleToolkit.ApplicationStyles;
+using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.ConsoleIO;
 
 namespace ConsoleToolkitDemo
 {
-    class HelpCommand
+    class Program : CommandDrivenApplication
     {
-        
-    }
-
-    class Program
-    {
-        private static CommandLineInterpreterConfiguration _config;
-        private static ConsoleAdapter _console;
-
-
         static void Main(string[] args)
         {
-            _console = new ConsoleAdapter();
-            _config = ConfigureCommandLine();
-            var interpreter = new CommandLineInterpreter(_config);
-            string[] errors;
-            var command = interpreter.Interpret(args, out errors);
-            if (command == null)
-            {
-                foreach (var error in errors)
-                {
-                    _console.WriteLine(error.Red());
-                }
-                return;
-            }
-
-            ProcessCommand(command);
+            Toolkit.Execute(args);
         }
 
-        private static void ProcessCommand(object command)
-        {
-            var method = typeof (Program)
-                .GetMethods(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)
-                .FirstOrDefault(m => m.Name == "Handle"
-                                     && m.GetParameters()
-                                         .Any(p => p.ParameterType == command.GetType()));
-            if (method != null)
-            {
-                method.Invoke(null, new[] {command});
-                return;
-            }
-
-            _console.WriteLine("Internal error: No handler for command.");
-        }
-
-        private static void Handle(HelpCommand command)
-        {
-            //_console.WriteLine(_config.Describe(_console.Width));
-        }
-
-        private static void Handle(TableDataCommand command)
+        public void Handle(TableDataCommand command, IConsoleOperations console)
         {
             var data = Enumerable.Range(0, 20)
                 .Select(i => new {Text = string.Format("item {0}", i), Index = i});
-            _console.FormatTable(data);
+            console.FormatTable(data);
         }
 
-        private static void Handle(ColouredTextCommand command)
+        public void Handle(ColouredTextCommand command, IConsoleOperations console)
         {
-            _console.WriteLine("Coloured".Red() + " text is " + "easy".Yellow() + " to configure.");
-            _console.WriteLine();
-            _console.WriteLine("For example:");
-            _console.WriteLine();
-            _console.WriteLine(@"    ""red on green"".Red().BGDarkGreen()");
-            _console.WriteLine();
-            _console.WriteLine("Displays like this:");
-            _console.WriteLine();
-            _console.WriteLine("red on green".Red().BGGreen());
-            _console.WriteLine();
-            _console.WriteLine("It's".Cyan()
+            console.WriteLine("Coloured".Red() + " text is " + "easy".Yellow() + " to configure.");
+            console.WriteLine();
+            console.WriteLine("For example:");
+            console.WriteLine();
+            console.WriteLine(@"    ""red on green"".Red().BGDarkGreen()");
+            console.WriteLine();
+            console.WriteLine("Displays like this:");
+            console.WriteLine();
+            console.WriteLine("red on green".Red().BGGreen());
+            console.WriteLine();
+            console.WriteLine("It's".Cyan()
                 + "easy".BGYellow().Black()
                 + "to".BGDarkCyan().Cyan()
                 + "overuse".BGDarkBlue().White()
                 + "it!".Magenta().BGGray());
-            _console.WriteLine();
-            _console.WriteLine();
+            console.WriteLine();
+            console.WriteLine();
             var data = Enumerable.Range(1, 10)
                 .Select(i => new 
                 {
@@ -92,28 +50,61 @@ namespace ConsoleToolkitDemo
                     Wrapped = @"Complex data string.
 Includes a hard newline.".Yellow()
                 });
-            _console.FormatTable(data);
+            console.FormatTable(data);
         }
-
-        private static CommandLineInterpreterConfiguration ConfigureCommandLine()
+protected override void Initialise()
         {
-            var config = new CommandLineInterpreterConfiguration(CommandLineParserConventions.MsDosConventions);
-            config.Command<HelpCommand>("help")
-                .Description("Display help text.");
-            config.Command<TableDataCommand>("tables")
-                .Description("Displays tabulated test data.");
-            config.Command<ColouredTextCommand>("text")
-                .Description("Demonstrates the display of coloured text.");
-            return config;
+            HelpCommand<HelpCommand>(h => h.Topic);
         }
     }
 
+    // ReSharper disable UnusedAutoPropertyAccessor.Global
+    [Command("help")]
+    [Description("Display help text.")]
+    class HelpCommand
+    {
+        [Positional(0, DefaultValue = null)]
+        public string Topic { get; set; }
+    }
+
+    [Command("tables")]
+    [Description("Displays tabulated test data.")]
     class TableDataCommand
     {
     }
 
+    [Command("text")]
+    [Description("Demonstrates the display of coloured text.")]
     class ColouredTextCommand
-    {
-        
+    {        
     }
+
+    [Command("input")]
+    class GetInputCommand
+    {
+        /// <summary>
+        /// This is the self handler for the input command.
+        /// </summary>
+        /// <param name="console"></param>
+        [CommandHandler]
+        public void Handle(IConsoleAdapter console)
+        {
+            console.WrapLine("Get user input".BGWhite().Black());
+            console.WriteLine();
+
+            var item = console.ReadInput(new {String = Read.String().Prompt("Enter some text: ".Yellow())});
+
+            var characters = item.String.Value
+                .Select(c => string.Format(@"""{0}"" = {1}".Red(), 
+                    c.ToString().Yellow(),
+                    string.Format("{0:X}", (byte) c).PadLeft(2, '0').Green()));
+
+            console.WriteLine();
+            console.WrapLine(string.Join("  ", characters));
+            console.WriteLine();
+            
+            console.ReadLine();
+        }
+    }
+    // ReSharper restore UnusedAutoPropertyAccessor.Global
 }

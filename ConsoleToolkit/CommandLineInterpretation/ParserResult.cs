@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ConsoleToolkit.CommandLineInterpretation
@@ -115,8 +116,22 @@ namespace ConsoleToolkit.CommandLineInterpretation
         public void ParseCompleted()
         {
             if (Error != null)
+            {
                 Status = ParseStatus.Failed;
-            else if (_positionals.Any() && !_usedOptions.Any(o => o.IsShortCircuit))
+                return;
+            }
+
+            foreach (var source in _positionals.Where(p => p.IsOptional).ToList())
+            {
+                var value = source.DefaultValue == null ? String.Empty : source.DefaultValue.ToString();
+                if (!AcceptPositional(value, source))
+                {
+                    Status = ParseStatus.Failed;
+                    return;
+                }
+            }
+
+            if (_positionals.Any() && !_usedOptions.Any(o => o.IsShortCircuit))
             {
                 Error = "Not enough parameters specified.";
                 Status = ParseStatus.Failed;

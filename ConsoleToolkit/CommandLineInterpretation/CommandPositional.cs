@@ -15,6 +15,8 @@ namespace ConsoleToolkit.CommandLineInterpretation
         private readonly Action<T, TParameter> _positionalInitialiser;
         private Func<string, object> _converter;
 
+        public override Type ParameterType { get { return typeof (TParameter); } }
+
         public CommandPositional(string parameterName, Action<T, TParameter> positionalInitialiser)
             : base(parameterName)
         {

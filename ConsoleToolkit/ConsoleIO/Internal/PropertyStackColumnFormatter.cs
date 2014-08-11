@@ -1,6 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using ConsoleToolkit.Utilities;
 
 namespace ConsoleToolkit.ConsoleIO.Internal
 {

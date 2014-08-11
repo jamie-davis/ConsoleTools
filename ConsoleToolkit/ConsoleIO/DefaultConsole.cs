@@ -1,5 +1,6 @@
 using System;
-using System.Xml.Schema;
+using System.Text;
+using ConsoleToolkit.ConsoleIO.Internal;
 
 namespace ConsoleToolkit.ConsoleIO
 {
@@ -21,9 +22,6 @@ namespace ConsoleToolkit.ConsoleIO
         /// this class is finalized.
         /// </summary>
         private readonly ConsoleColor _constructionBackground;
-
-        private bool _consoleRedirected;
-        private bool _consoleRedirectionTested;
 
         public DefaultConsole()
         {
@@ -52,33 +50,6 @@ namespace ConsoleToolkit.ConsoleIO
         public int WindowWidth { get { return Console.WindowWidth; } }
         public int BufferWidth { get { return Console.BufferWidth; } }
 
-
-        /// <summary>
-        /// Determine whether the console's output is redirected.
-        /// </summary>
-        /// <returns></returns>
-        public bool IsOutputRedirected()
-        {
-            if (!_consoleRedirectionTested)
-            {
-                try
-                {
-                    //This will throw if the console output is redirected.
-                    Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop);
-
-                    _consoleRedirected = false;
-                }
-                catch
-                {
-                    _consoleRedirected = true;
-                }
-
-                _consoleRedirectionTested = true;
-            }
-
-            return _consoleRedirected;
-        }
-
         public void Write(string data)
         {
             Console.Write(data);
@@ -101,11 +72,33 @@ namespace ConsoleToolkit.ConsoleIO
             set { Console.CursorTop = value; }
         }
 
+        public Encoding Encoding
+        {
+            get { return Console.OutputEncoding; }
+        }
+
         ~DefaultConsole()
         {
             //restore the console's original colour scheme
             Console.ForegroundColor = _constructionForeground;
             Console.BackgroundColor = _constructionBackground;
+        }
+
+        public bool InputIsRedirected 
+        {
+            get
+            {
+#if TARGET_FRAMEWORK_4
+                return ConsoleRedirectionStateDetector.IsInputRedirected;
+#else
+                return Console.IsInputRedirected;
+#endif
+            } 
+        }
+
+        public string ReadLine()
+        {
+            return Console.ReadLine();
         }
     }
 }

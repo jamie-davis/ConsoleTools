@@ -43,14 +43,19 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             WriteLine();
         }
 
-        public void FormatTable<T>(IEnumerable<T> items)
+        public void FormatTable<T>(IEnumerable<T> items, ReportFormattingOptions options = ReportFormattingOptions.Default, string columnSeperator = null)
         {
-            _steps.Add(new FormatTableCommand<T>(items));
+            _steps.Add(new FormatTableCommand<T>(items, options, columnSeperator));
         }
 
         public void WriteLine()
         {
             _steps.Add(new NewLineCommand());
+        }
+
+        public string ReadLine()
+        {
+            throw new System.NotImplementedException();
         }
 
         public IEnumerable<string> Render(int width, out int wrappedLines)

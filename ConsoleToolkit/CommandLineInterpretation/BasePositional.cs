@@ -1,3 +1,5 @@
+using System;
+
 namespace ConsoleToolkit.CommandLineInterpretation
 {
     /// <summary>
@@ -6,6 +8,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
     public abstract class BasePositional : IContext, IPositionalArgument
     {
         public string ParameterName { get; set; }
+        public abstract Type ParameterType { get; }
 
         protected BasePositional(string parameterName)
         {
@@ -14,5 +17,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
         public abstract string Accept(object command, string value);
         public string Description { get; set; }
+        public string DefaultValue { get; set; }
+        public bool IsOptional { get; set; }
     }
 }

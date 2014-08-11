@@ -1,0 +1,11 @@
+﻿A test application that only exists to                      
+check that this text is displayed                           
+automatically as part of the help                           
+information.                                                
+                                                            
+Usage: ConsoleToolkitcommand [options]                      
+                                                            
+Options:                                                    
+                                                            
+/h  Display this help text.                                 
+                                                            

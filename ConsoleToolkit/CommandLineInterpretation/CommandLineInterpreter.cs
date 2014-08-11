@@ -4,7 +4,7 @@ using System.Linq;
 namespace ConsoleToolkit.CommandLineInterpretation
 {
     /// <summary>
-    /// This class interprets a set of command line arguments for a uadmin command.
+    /// This class interprets a set of command line arguments.
     /// </summary>
     public sealed class CommandLineInterpreter
     {
@@ -115,9 +115,13 @@ namespace ConsoleToolkit.CommandLineInterpretation
             return BuiltInCommandLineParsers.Get(_config.ParserConvention);
         }
 
-        private static bool IsOption(string nextArg)
+        public IOptionNameHelpAdorner GetOptionNameAdorner()
         {
-            return nextArg.StartsWith("-") || nextArg.StartsWith("/");
+            var interpreter = GetInterpreter();
+            if (interpreter is IOptionNameHelpAdorner)
+                return (IOptionNameHelpAdorner) interpreter;
+
+            return null;
         }
     }
 }

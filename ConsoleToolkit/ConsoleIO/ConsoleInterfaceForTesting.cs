@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace ConsoleToolkit.ConsoleIO
 {
     /// <summary>
-    /// This class implements the <see cref="IConsoleInterface"/> and captures the console output in a format that facilitates
+    /// This class implements the <see cref="IConsoleOutInterface"/> and captures the console output in a format that facilitates
     /// examination of console output in a unit test.
     /// </summary>
     public class ConsoleInterfaceForTesting : IConsoleInterface
@@ -35,6 +37,11 @@ namespace ConsoleToolkit.ConsoleIO
         private ConsoleColor _background;
 
         /// <summary>
+        /// The console encoding.
+        /// </summary>
+        private Encoding _encoding;
+
+        /// <summary>
         /// The colour code for the current foreground colour.
         /// </summary>
         private char _fgCode;
@@ -53,6 +60,12 @@ namespace ConsoleToolkit.ConsoleIO
         /// The original foreground colour to which all lines should be initialised.
         /// </summary>
         private char _initialFg;
+
+
+        /// <summary>
+        /// The input stream supplying input for the console.
+        /// </summary>
+        private TextReader _inputStream;
 
         /// <summary>
         /// The current foreground colour. This property keeps <see cref="_fgCode"/> aligned with the actual console colour.
@@ -110,11 +123,14 @@ namespace ConsoleToolkit.ConsoleIO
             set { _cursorTop = value; }
         }
 
+        public Encoding Encoding { get { return _encoding; } }
+
         /// <summary>
-        /// The default constructor sets default values for various console properties.
+        /// The constructor sets default values for various console properties and allows an encoding to be specified.
         /// </summary>
-        public ConsoleInterfaceForTesting()
+        public ConsoleInterfaceForTesting(Encoding encoding = null)
         {
+            _encoding = encoding ?? Encoding.Default;
             Foreground = ConsoleColor.DarkGray;
             Background = ConsoleColor.Black;
             _initialBg = _bgCode;
@@ -123,14 +139,6 @@ namespace ConsoleToolkit.ConsoleIO
             BufferWidth = 60;
 
             CreateBufferTo(0); //ensure that the buffer contains the first line.
-        }
-
-        /// <summary>
-        /// Returns whether console output is redirected to a file.
-        /// </summary>
-        public bool IsOutputRedirected()
-        {
-            return false;
         }
 
         /// <summary>
@@ -211,6 +219,7 @@ namespace ConsoleToolkit.ConsoleIO
         /// <param name="ix">The zero based index of the line that must exist.</param>
         private void CreateBufferTo(int ix)
         {
+// ReSharper disable once LoopVariableIsNeverChangedInsideLoop
             while (ix >= _buffer.Count)
             {
                 _buffer.Add(new string(' ', BufferWidth));
@@ -247,6 +256,47 @@ namespace ConsoleToolkit.ConsoleIO
                 .Select(l => l.Text);
 
             return string.Join(Environment.NewLine, allLines);
+        }
+
+        /// <summary>
+        /// Indicate whether console input is redirected or not. This will effect the handling of invalid
+        /// input on the stream.
+        /// </summary>
+        public bool InputIsRedirected { get; set; }
+
+        /// <summary>
+        /// Read a line of text from the console. The data for this operation is provided using the <see cref="SetInputStream"/> method.
+        /// </summary>
+        /// <returns>The next line of text.</returns>
+        public string ReadLine()
+        {
+            CheckInputStream();
+            var readLine = _inputStream.ReadLine();
+            if (readLine != null)
+            {
+                Write(readLine);
+                NewLine();
+            }
+            return readLine;
+        }
+
+        private void CheckInputStream()
+        {
+            if (_inputStream == null)
+                throw new NoInputStreamSet();
+        }
+
+        /// <summary>
+        /// Provide a text stream to provide the data for the console input stream.
+        /// </summary>
+        /// <param name="stream">The stream to use.</param>
+        public void SetInputStream(TextReader stream)
+        {
+            _inputStream = stream;
+        }
+
+        private class NoInputStreamSet : Exception
+        {
         }
     }
 }

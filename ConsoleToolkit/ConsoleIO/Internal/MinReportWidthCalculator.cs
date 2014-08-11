@@ -7,9 +7,9 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 {
     internal static class MinReportWidthCalculator
     {
-        public static int Calculate<T>(IEnumerable<T> rep, int tabLength = 4)
+        public static int Calculate<T>(IEnumerable<T> rep, int seperatorLength, int tabLength = 4)
         {
-            return PerformCalculation<T>(tabLength, sizers =>
+            return PerformCalculation<T>(tabLength, seperatorLength, sizers =>
             {
                 foreach (var row in rep)
                 {
@@ -23,23 +23,23 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             });
         }
 
-        public static int Calculate<T>(CachedRows<T> rep, int tabLength = 4)
+        public static int Calculate<T>(CachedRows<T> rep, int seperatorLength, int tabLength = 4)
         {
-            return PerformCalculation<T>(tabLength, sizers =>
+            return PerformCalculation<T>(tabLength, seperatorLength, sizers =>
             {
                 foreach (var row in rep.GetRows())
                 {
                     foreach (var sizer in sizers)
                     {
                         var value = row.Columns.FirstOrDefault(c => c.Property == sizer.PropertyColumnFormat.Property);
-                        if (value != null)
+                        if (value != null && value.Value != null)
                             sizer.Sizer.ColumnValue(value.Value);
                     }
                 }
             });
         }
 
-        private static int PerformCalculation<T>(int tabLength, Action<List<ColumnWidthNegotiator.ColumnSizerInfo>> applyRows)
+        private static int PerformCalculation<T>(int tabLength, int seperatorLength, Action<List<ColumnWidthNegotiator.ColumnSizerInfo>> applyRows)
         {
             var columns = FormatAnalyser.Analyse(typeof (T), null);
             var sizers = columns
@@ -54,7 +54,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             }
 
             return sizers.Sum(s => s.Sizer.GetIdealMinimumWidth())
-                   + (sizers.Count - 1);
+                   + ((sizers.Count - 1) * seperatorLength);
         }
     }
 }

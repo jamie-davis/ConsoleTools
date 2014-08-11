@@ -1,0 +1,6 @@
+﻿String: text                                                
+Int: 45                                                     
+                                                            
+Input received.                                             
+String was "text", integer was 45                           
+                                                            

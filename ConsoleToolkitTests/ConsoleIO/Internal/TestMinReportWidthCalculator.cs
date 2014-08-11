@@ -22,7 +22,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             var rep = Enumerable.Range(0, 3)
                 .Select(i => new {Number = i, String = _numbers[i]});
 
-            Assert.That(MinReportWidthCalculator.Calculate(rep), Is.EqualTo(13));
+            Assert.That(MinReportWidthCalculator.Calculate(rep, 1), Is.EqualTo(13));
         }
     }
 }

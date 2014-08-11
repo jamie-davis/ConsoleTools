@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 using ApprovalTests;
 using ApprovalTests.Reporters;
@@ -17,9 +16,11 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
     {
         private CommandLineInterpreter _interpreter;
         private CommandLineInterpreterConfiguration _config;
-        protected static string _failureMessage;
+        private static string _failureMessage;
 
         #region Types for test
+        // ReSharper disable UnusedAutoPropertyAccessor.Global
+        // ReSharper disable NotAccessedField.Local
 
         public class PositionalTest
         {
@@ -49,12 +50,13 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
 
             public override string ToString()
             {
-                return string.Format("CMD[{0}] Option[{1}]{2}", Name, Option, Validated ? " VALIDATED" : string.Empty);
+                var formatString = typeof(T) == typeof(DateTime) ? "{1:dd/MM/yyyy HH:mm:ss}" : "{1}";
+                return string.Format("CMD[{0}] Option[" + formatString + "]{2}", Name, Option, Validated ? " VALIDATED" : string.Empty);
             }
 
             public static GenericCommand<T> Make(string name)
             {
-                return new GenericCommand<T>() {Name = name};
+                return new GenericCommand<T> {Name = name};
             }
 
             public static void AddCommand(CommandLineInterpreterConfiguration config)
@@ -117,6 +119,8 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
                 Positionals = positionalArguments.ToList();
             }
         }
+        // ReSharper restore NotAccessedField.Local
+        // ReSharper restore UnusedAutoPropertyAccessor.Global
 
         #endregion
 
@@ -268,7 +272,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             new Tuple<Type, string, string>(typeof(double),"10.567", "X"),
             new Tuple<Type, string, string>(typeof(float),"10.567", "X"),
             new Tuple<Type, string, string>(typeof(decimal),"10.567", "X"),
-            new Tuple<Type, string, string>(typeof(DateTime),"2014-02-05", "X"),
+            new Tuple<Type, string, string>(typeof(DateTime),"2014-02-05", "X")
         };
 
         [Test]
@@ -381,7 +385,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var commandLine = "PCustomParamType A";
             var args = CommandLineTokeniser.Tokenise(commandLine);
             string[] errors;
-            var command = _interpreter.Interpret(args, out errors);
+            _interpreter.Interpret(args, out errors);
             Approvals.Verify(string.Format("{0} : {1}", commandLine, errors.Aggregate((t, i) => t + ", " + i)));
         }
 

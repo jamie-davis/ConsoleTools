@@ -1,0 +1,37 @@
+﻿----+----|----+----|----+----|----+----|----+----|----+----|----+----|----+----|
+First long string value 0. Second long string value   0 3.00 17/01/2014 00:00:00
+                           0.                                                   
+First long string value 1. Second long string value   1 1.50 17/02/2014 00:00:00
+variation                  1. variation                                         
+First long string value 2. Second long string value   2 1.00 17/03/2014 00:00:00
+variation  variation       2. variation  variation                              
+First long string value 3. Second long string value   3 0.75 17/04/2014 00:00:00
+variation  variation       3. variation  variation                              
+variation                  variation                                            
+First long string value 4. Second long string value   4 0.60 17/05/2014 00:00:00
+variation  variation       4. variation  variation                              
+variation  variation       variation  variation                                 
+First long string value 5. Second long string value   5 0.50 17/06/2014 00:00:00
+variation  variation       5. variation  variation                              
+variation  variation       variation  variation                                 
+variation                  variation                                            
+First long string value 6. Second long string value   6 0.43 17/07/2014 00:00:00
+variation  variation       6. variation  variation                              
+variation  variation       variation  variation                                 
+variation  variation       variation  variation                                 
+First long string value 7. Second long string value   7 0.38 17/08/2014 00:00:00
+variation  variation       7. variation  variation                              
+variation  variation       variation  variation                                 
+variation  variation       variation  variation                                 
+variation                  variation                                            
+First long string value 8. Second long string value   8 0.33 17/09/2014 00:00:00
+variation  variation       8. variation  variation                              
+variation  variation       variation  variation                                 
+variation  variation       variation  variation                                 
+variation  variation       variation  variation                                 
+First long string value 9. Second long string value   9 0.30 17/10/2014 00:00:00
+variation  variation       9. variation  variation                              
+variation  variation       variation  variation                                 
+variation  variation       variation  variation                                 
+variation  variation       variation  variation                                 
+variation                  variation                                            

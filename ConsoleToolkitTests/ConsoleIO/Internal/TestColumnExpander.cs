@@ -20,6 +20,8 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         private int _seperatorOverhead;
         private string _initialReport;
 
+        // ReSharper disable MemberCanBePrivate.Local
+        // ReSharper disable UnusedAutoPropertyAccessor.Local
         class TestType
         {
             public string ShortString { get; set; }
@@ -35,6 +37,8 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
                 Integer = shortString.Length + longString.Length;
             }
         }
+        // ReSharper restore UnusedAutoPropertyAccessor.Local
+        // ReSharper restore MemberCanBePrivate.Local
 
         [SetUp]
         public void SetUp()
@@ -86,7 +90,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         public void ReportWithNoWrappingIsExpanded()
         {
             const int width = 80;
-            ColumnExpander.FillAvailableSpace(width, _seperatorOverhead, _parameters);
+            ColumnExpander.FillAvailableSpace(width, _seperatorOverhead, _parameters, true);
 
             var ruler = RulerFormatter.MakeRuler(width) + Environment.NewLine;
             var report = TabularReportRenderTool.Report(_parameters, _data);
@@ -97,7 +101,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         public void ReportWithWrappingIsExpanded()
         {
             const int width = 43;
-            ColumnExpander.FillAvailableSpace(width, _seperatorOverhead, _parameters);
+            ColumnExpander.FillAvailableSpace(width, _seperatorOverhead, _parameters, true);
 
             var ruler = RulerFormatter.MakeRuler(width) + Environment.NewLine;
             var report = TabularReportRenderTool.Report(_parameters, _data);

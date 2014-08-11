@@ -12,7 +12,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
     [UseReporter(typeof (DiffReporter))]
     public class TestColourWriter
     {
-        private ConsoleInterfaceForTesting _console;
+        private ConsoleInterfaceForTesting _consoleOut;
         private ColourWriter _writer;
         private static readonly Dictionary<string, ColourControlItem.ControlCode> Codes
             = new Dictionary<string, ColourControlItem.ControlCode>
@@ -27,8 +27,8 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         [SetUp]
         public void SetUp()
         {
-            _console = new ConsoleInterfaceForTesting();
-            _writer = new ColourWriter(_console);
+            _consoleOut = new ConsoleInterfaceForTesting();
+            _writer = new ColourWriter(_consoleOut);
         }
 
         [Test]
@@ -40,7 +40,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             };
             _writer.Write(components);    
         
-            Assert.That(_console.GetBuffer().TrimEnd(), Is.EqualTo("text"));
+            Assert.That(_consoleOut.GetBuffer().TrimEnd(), Is.EqualTo("text"));
         }
 
         [Test]
@@ -53,7 +53,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             };
             _writer.Write(components);    
         
-            Approvals.Verify(_console.GetBuffer(ConsoleBufferFormat.Interleaved));
+            Approvals.Verify(_consoleOut.GetBuffer(ConsoleBufferFormat.Interleaved));
         }
 
         [Test]
@@ -69,7 +69,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             };
             _writer.Write(components);    
         
-            Approvals.Verify(_console.GetBuffer(ConsoleBufferFormat.Interleaved));
+            Approvals.Verify(_consoleOut.GetBuffer(ConsoleBufferFormat.Interleaved));
         }
 
         [Test]
@@ -86,7 +86,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             _writer.Write(components);    
             _writer.NewLine();
         
-            Approvals.Verify(_console.GetBuffer(ConsoleBufferFormat.Interleaved));
+            Approvals.Verify(_consoleOut.GetBuffer(ConsoleBufferFormat.Interleaved));
         }
 
         [Test]
@@ -100,14 +100,14 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             };
             _writer.Write(components);    
         
-            Approvals.Verify(_console.GetBuffer(ConsoleBufferFormat.Interleaved));
+            Approvals.Verify(_consoleOut.GetBuffer(ConsoleBufferFormat.Interleaved));
         }
 
         [Test]
         public void NewLineIsSuppressedIfThePrecedingLineEndedAtRightEdge()
         {
             //move cursor to 4 from edge.
-            _writer.Write(new List<ColourControlItem> { new ColourControlItem(new string('z', _console.BufferWidth - 4)) });
+            _writer.Write(new List<ColourControlItem> { new ColourControlItem(new string('z', _consoleOut.BufferWidth - 4)) });
 
             var components = new List<ColourControlItem>
             {
@@ -117,14 +117,14 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             };
             _writer.Write(components);    
         
-            Approvals.Verify(_console.GetBuffer(ConsoleBufferFormat.Interleaved));
+            Approvals.Verify(_consoleOut.GetBuffer(ConsoleBufferFormat.Interleaved));
         }
 
         [Test]
         public void OnlyOneNewLineIsSuppressedIfThePrecedingLineEndedAtRightEdge()
         {
             //move cursor to 4 from edge.
-            _writer.Write(new List<ColourControlItem> { new ColourControlItem(new string('z', _console.BufferWidth - 4)) });
+            _writer.Write(new List<ColourControlItem> { new ColourControlItem(new string('z', _consoleOut.BufferWidth - 4)) });
 
             var components = new List<ColourControlItem>
             {
@@ -134,14 +134,14 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             };
             _writer.Write(components);    
         
-            Approvals.Verify(_console.GetBuffer(ConsoleBufferFormat.Interleaved));
+            Approvals.Verify(_consoleOut.GetBuffer(ConsoleBufferFormat.Interleaved));
         }
 
         [Test]
         public void NewLineIsOnlySuppressedIfThePrecedingLineEndedAtRightEdge()
         {
             //move cursor to 4 from edge.
-            _writer.Write(new List<ColourControlItem> { new ColourControlItem(new string('z', _console.BufferWidth - 4)) });
+            _writer.Write(new List<ColourControlItem> { new ColourControlItem(new string('z', _consoleOut.BufferWidth - 4)) });
 
             var components = new List<ColourControlItem>
             {
@@ -151,7 +151,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             };
             _writer.Write(components);    
         
-            Approvals.Verify(_console.GetBuffer(ConsoleBufferFormat.Interleaved));
+            Approvals.Verify(_consoleOut.GetBuffer(ConsoleBufferFormat.Interleaved));
         }
 
 

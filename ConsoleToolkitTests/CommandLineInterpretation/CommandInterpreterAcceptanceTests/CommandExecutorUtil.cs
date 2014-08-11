@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Text;
 using ConsoleToolkit.CommandLineInterpretation;
+using ConsoleToolkit.Utilities;
 
 namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAcceptanceTests
 {

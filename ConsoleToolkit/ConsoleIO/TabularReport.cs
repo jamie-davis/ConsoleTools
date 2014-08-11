@@ -3,13 +3,20 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using ConsoleToolkit.ConsoleIO.Internal;
+using ConsoleToolkit.Utilities;
 
 namespace ConsoleToolkit.ConsoleIO
 {
+    /// <summary>
+    /// A formatter for tabular data.
+    /// </summary>
     public static class TabularReport
     {
+        internal const string DefaultColumnDivider = " ";
+
         /// <summary>
         /// Format a collection of rows as a tabular report.
         /// </summary>
@@ -18,26 +25,33 @@ namespace ConsoleToolkit.ConsoleIO
         /// <param name="columns">Column formatting information. If this is not provided, default column formats will be used.</param>
         /// <param name="width">The width that the report is allowed to occupy.</param>
         /// <param name="numRowsToUseForSizing">The number of rows that should be used for automatically sizing columns.</param>
+        /// <param name="options">Options that control the formatting of the report.</param>
+        /// <param name="columnDivider">A string that will be used to divide columns.</param>
         /// <returns>The formatted report lines.</returns>
-        public static IEnumerable<string> Format<T>(IEnumerable<T> data, IEnumerable<ColumnFormat> columns, int width, int numRowsToUseForSizing = 0)
+        public static IEnumerable<string> Format<T>(IEnumerable<T> data, IEnumerable<ColumnFormat> columns, 
+            int width, int numRowsToUseForSizing = 0, ReportFormattingOptions options = ReportFormattingOptions.Default, string columnDivider = null)
         {
             var output = new BlockingCollection<string>();
+            var culture = Thread.CurrentThread.CurrentCulture;
 
             Task.Factory.StartNew(() =>
             {
-                try
+                using (new TempCulture(culture))
                 {
-                    int localWordWrapLineBreaks;
-                    DoFormat(output, data, columns, width, numRowsToUseForSizing, 4, out localWordWrapLineBreaks);
-                }
-                catch (Exception e)
-                {
-                    output.Add("Exception while processing:");
-                    output.Add(e.ToString());
-                }
-                finally
-                {
-                    output.CompleteAdding();
+                    try
+                    {
+                        int localWordWrapLineBreaks;
+                        DoFormat(output, data, columns, width, numRowsToUseForSizing, 4, options, columnDivider, out localWordWrapLineBreaks);
+                    }
+                    catch (Exception e)
+                    {
+                        output.Add("Exception while processing:");
+                        output.Add(e.ToString());
+                    }
+                    finally
+                    {
+                        output.CompleteAdding();
+                    }
                 }
             });
 
@@ -45,32 +59,40 @@ namespace ConsoleToolkit.ConsoleIO
         }
 
         /// <summary>
-        /// Format a collection of cached rows as a tabular report.
+        /// Format a collection of cached rows as a tabular report. The culture in force at the start of the enumeration will be used for all
+        /// rows of the report. It is not possible to change the culture while the report is being enumerated.
         /// </summary>
         /// <typeparam name="T">The item type.</typeparam>
         /// <param name="data">The cached row items.</param>
         /// <param name="columns">Column formatting information. If this is not provided, default column formats will be used.</param>
         /// <param name="width">The width that the report is allowed to occupy.</param>
+        /// <param name="options">Options that effect formatting.</param>
+        /// <param name="columnDivider">A string that will be used to divide the report columns.</param>
         /// <returns>The formatted report lines.</returns>
-        public static IEnumerable<string> Format<T>(CachedRows<T> data, IEnumerable<ColumnFormat> columns, int width)
+        public static IEnumerable<string> Format<T>(CachedRows<T> data, IEnumerable<ColumnFormat> columns, int width, ReportFormattingOptions options = ReportFormattingOptions.Default, string columnDivider = null)
         {
             var output = new BlockingCollection<string>();
+            var culture = Thread.CurrentThread.CurrentCulture;
 
             Task.Factory.StartNew(() =>
             {
-                try
+                using (new TempCulture(culture))
                 {
-                    int wordWrapLineBreaks;
-                    DoFormatFromCachedRows(output, data, columns, width, 0, 4, out wordWrapLineBreaks);
-                }
-                catch (Exception e)
-                {
-                    output.Add("Exception while processing:");
-                    output.Add(e.ToString());
-                }
-                finally
-                {
-                    output.CompleteAdding();
+                    try
+                    {
+                        int wordWrapLineBreaks;
+                        DoFormatFromCachedRows(output, data, columns, width, 0, 4, options, columnDivider, out wordWrapLineBreaks);
+                    }
+                    catch (Exception e)
+                    {
+                        output.Add("Exception while processing:");
+                        output.Add(e.ToString());
+                    }
+                    finally
+                    {
+                        output.CompleteAdding();
+                    }
+                    
                 }
             });
 
@@ -78,15 +100,18 @@ namespace ConsoleToolkit.ConsoleIO
         }
 
         /// <summary>
-        /// Format a collection of cached rows as a tabular report.
+        /// Format a collection of cached rows as a tabular report. The culture in force at the start of the enumeration will be used for all
+        /// rows of the report. It is not possible to change the culture while the report is being enumerated.
         /// </summary>
         /// <typeparam name="T">The item type.</typeparam>
         /// <param name="data">The cached row items.</param>
         /// <param name="columns">Column formatting information. If this is not provided, default column formats will be used.</param>
         /// <param name="width">The width that the report is allowed to occupy.</param>
         /// <param name="wrappingLineBreaks">The number of linebreaks added due to wrapping.</param>
+        /// <param name="options">Options that effect the formatting.</param>
+        /// <param name="columnDivider">The string to be used to divide columns.</param>
         /// <returns>The formatted report lines.</returns>
-        public static IEnumerable<string> Format<T>(CachedRows<T> data, IEnumerable<ColumnFormat> columns, int width, out int wrappingLineBreaks)
+        public static IEnumerable<string> Format<T>(CachedRows<T> data, IEnumerable<ColumnFormat> columns, int width, out int wrappingLineBreaks, ReportFormattingOptions options = ReportFormattingOptions.Default, string columnDivider = null)
         {
             var output = new BlockingCollection<string>();
             var addedLineBreaks = 0;
@@ -94,9 +119,8 @@ namespace ConsoleToolkit.ConsoleIO
             try
             {
                 int wordWrapLineBreaks;
-                DoFormatFromCachedRows(output, data, columns, width, 0, 4, out wordWrapLineBreaks);
+                DoFormatFromCachedRows(output, data, columns, width, 0, 4, options, columnDivider, out wordWrapLineBreaks);
                 addedLineBreaks = wordWrapLineBreaks;
-                Console.WriteLine("Added line breaks = {0}", addedLineBreaks);
             }
             catch (Exception e)
             {
@@ -105,7 +129,6 @@ namespace ConsoleToolkit.ConsoleIO
             }
             finally
             {
-                Console.WriteLine("Completed adding");
                 output.CompleteAdding();
             }
 
@@ -114,27 +137,33 @@ namespace ConsoleToolkit.ConsoleIO
             return lines;
         }
 
-        private static void DoFormatFromCachedRows<T>(BlockingCollection<string> output, CachedRows<T> data, IEnumerable<ColumnFormat> specifiedColumns, int width, int numRowsToUseForSizing, int tabLength, out int wordWrapLineBreaks)
+        private static void DoFormatFromCachedRows<T>(BlockingCollection<string> output, CachedRows<T> data, IEnumerable<ColumnFormat> specifiedColumns, int width, int numRowsToUseForSizing, int tabLength, ReportFormattingOptions options, string columnDivider, out int wordWrapLineBreaks)
         {
             var columns = FormatAnalyser.Analyse(typeof(T), specifiedColumns);
-            FormatFromDataFeed<CachedRow<T>>(output, data.GetRows(), width, numRowsToUseForSizing, tabLength, columns, (sz, item) => sz.AddRow(item), out wordWrapLineBreaks);
+            FormatFromDataFeed<CachedRow<T>>(output, data.GetRows(), width, numRowsToUseForSizing, tabLength, columns, (sz, item) => sz.AddRow(item), options, columnDivider, out wordWrapLineBreaks);
         }
 
-        private static void DoFormat<T>(BlockingCollection<string> output, IEnumerable<T> data, IEnumerable<ColumnFormat> specifiedColumns, int width, int numRowsToUseForSizing, int tabLength, out int wordWrapLineBreaks)
+        private static void DoFormat<T>(BlockingCollection<string> output, IEnumerable<T> data, IEnumerable<ColumnFormat> specifiedColumns, int width, int numRowsToUseForSizing, int tabLength, ReportFormattingOptions options, string columnDivider, out int wordWrapLineBreaks)
         {
             var columns = FormatAnalyser.Analyse(typeof(T), specifiedColumns);
-            FormatFromDataFeed<T>(output, data, width, numRowsToUseForSizing, tabLength, columns, (sz, item) => sz.AddRow(item), out wordWrapLineBreaks);
+            FormatFromDataFeed<T>(output, data, width, numRowsToUseForSizing, tabLength, columns, (sz, item) => sz.AddRow(item), options, columnDivider, out wordWrapLineBreaks);
         }
 
         private static void FormatFromDataFeed<T>(BlockingCollection<string> output,
             IEnumerable data,
             int width, int numRowsToUseForSizing, int tabLength,
             List<PropertyColumnFormat> columns, Action<ColumnWidthNegotiator, T> addRowAction,
+            ReportFormattingOptions options,
+            string columnDivider,
             out int wordWrapLineBreaks)
         {
-            var sizer = new ColumnWidthNegotiator(columns, 1);
+            if (columnDivider == null) columnDivider = DefaultColumnDivider;
 
-            sizer.AddHeadings();
+            var sizer = new ColumnWidthNegotiator(columns, columnDivider.Length);
+
+            var headingsRequired = (options & ReportFormattingOptions.OmitHeadings) == 0;
+            if (headingsRequired)
+                sizer.AddHeadings();
 
             var sizeRows = 0;
             var dataEnumerator = data.GetEnumerator();
@@ -147,16 +176,17 @@ namespace ConsoleToolkit.ConsoleIO
                 addRowAction(sizer, (T) item);
             }
 
-            sizer.CalculateWidths(width);
+            sizer.CalculateWidths(width, options);
 
-            const string columnSeperator = " ";
             var widths = columns.Select(c => c.Format.ActualWidth)
                 .Concat(StackedColumnWidths(sizer))
                 .ToArray();
 
-            ReportHeadings(sizer.Columns, output, tabLength, columnSeperator);
+            if (headingsRequired)
+                ReportHeadings(sizer.Columns, output, tabLength, columnDivider);
+
             int sizeRowsWordWrapLineBreaks;
-            ReportRowsUsedForSizing(columns, sizer, output, tabLength, columnSeperator, widths,
+            ReportRowsUsedForSizing(columns, sizer, output, tabLength, columnDivider, widths,
                 out sizeRowsWordWrapLineBreaks);
 
             wordWrapLineBreaks = sizeRowsWordWrapLineBreaks;
@@ -166,7 +196,7 @@ namespace ConsoleToolkit.ConsoleIO
                 do
                 {
                     int reportWordWrapLineBreaks;
-                    ReportRow(dataEnumerator.Current, columns, sizer, output, tabLength, columnSeperator, widths,
+                    ReportRow(dataEnumerator.Current, columns, sizer, output, tabLength, columnDivider, widths,
                         out reportWordWrapLineBreaks);
                     wordWrapLineBreaks += reportWordWrapLineBreaks;
                 } while (dataEnumerator.MoveNext());
@@ -201,9 +231,8 @@ namespace ConsoleToolkit.ConsoleIO
             }
         }
 
-        private static void ReportRowValues(List<PropertyColumnFormat> columns, ColumnWidthNegotiator sizer, BlockingCollection<string> output, int tabLength, string columnSeperator, IReadOnlyList<FormattingIntermediate> rowValues, int[] widths, out int reportWordWrapLineBreaks)
+        private static void ReportRowValues(List<PropertyColumnFormat> columns, ColumnWidthNegotiator sizer, BlockingCollection<string> output, int tabLength, string columnSeperator, IList<FormattingIntermediate> rowValues, int[] widths, out int reportWordWrapLineBreaks)
         {
-            reportWordWrapLineBreaks = 0;
             var maxLineBreaks = 0;
             var wrappedValues = columns
                 .Select((c, i) =>
@@ -235,21 +264,6 @@ namespace ConsoleToolkit.ConsoleIO
 
             var renderer = rowValue.RenderableValue;
             return renderer.Render(c.Format.ActualWidth, out wrappedLines).ToArray();
-        }
-
-        private static IEnumerable<string[]> StackedColumnValues(IEnumerable<object> rowValues, ColumnWidthNegotiator sizer, int tabLength, out int wrappedLines)
-        {
-            if (!sizer.StackedColumns.Any())
-            {
-                wrappedLines = 0;
-                return new string[][] { };
-            }
-
-            var formattedLines = PropertyStackColumnFormatter.Format(sizer.StackedColumns, rowValues.Skip(sizer.Columns.Count).ToList(),
-                sizer.StackedColumnWidth, tabLength)
-                .ToArray();
-            wrappedLines = formattedLines.Length;
-            return new[] {formattedLines};
         }
 
         private static IEnumerable<string[]> StackedColumnValues(IEnumerable<FormattingIntermediate> rowValues, ColumnWidthNegotiator sizer, int tabLength, out int wrappedLines)

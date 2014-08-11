@@ -1,0 +1,12 @@
+﻿String: text                                                
+Int: bad                                                    
+Input string was not in a correct                           
+format.                                                     
+Int: still bad                                              
+Input string was not in a correct                           
+format.                                                     
+Int: 45                                                     
+                                                            
+Input received.                                             
+String was "text", integer was 45                           
+                                                            

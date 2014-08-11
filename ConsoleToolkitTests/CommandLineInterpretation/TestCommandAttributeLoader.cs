@@ -83,6 +83,22 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             public string PosField;
         }
 
+        [Command("deftest")]
+        class CommandWithDefaultedPositional
+        {
+            [Positional(0)]
+            [Description("Positional field description")]
+            public string PosField;
+
+            [Positional(1, DefaultValue = "deffo")]
+            [Description("Positional field description")]
+            public string PosField2;
+
+            [Positional(1, DefaultValue = null)]
+            [Description("Positional field description")]
+            public string PosField3;
+        }
+
         [Command]
         class CommandWithDuplicateOptionName
         {
@@ -91,6 +107,19 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
 
             [Option("LongName2", "S")]
             public string Option2;
+        }
+
+        [Command]
+        class CommandWithShortCircuitOption
+        {
+            [Option]
+            public bool A { get; set; }
+            
+            [Option]
+            public bool B { get; set; }
+
+            [Option(ShortCircuit = true)]
+            public bool C { get; set; }
         }
         // ReSharper restore UnusedField.Compiler
         // ReSharper restore UnusedMember.Local
@@ -110,7 +139,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         [Test]
         public void DefaultCommandNameIsDerivedFromClass()
         {
-            Assert.That(_defaultNameCommand.Name, Is.EqualTo("DefaultName"));
+            Assert.That(_defaultNameCommand.Name, Is.EqualTo("DefaultName".ToLower()));
         }
 
         [Test]
@@ -121,7 +150,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         }
 
         [Test]
-        public void CommandDescriptionIsExrtacted()
+        public void CommandDescriptionIsExtracted()
         {
             Assert.That((_defaultNameCommand as BaseCommandConfig).Description, Is.EqualTo("Command description"));
         }
@@ -187,6 +216,22 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         }
 
         [Test]
+        public void OptionShortCircuitIsLoaded()
+        {
+            var cmd = CommandAttributeLoader.Load(typeof(CommandWithShortCircuitOption)) as CommandConfig<CommandWithShortCircuitOption>;
+            var option = cmd.Options.First(o => o.Name == "C");
+            Assert.That(option.IsShortCircuit, Is.True);
+        }
+
+        [Test]
+        public void OptionsDoNothaveShortCircuitByDefault()
+        {
+            var cmd = CommandAttributeLoader.Load(typeof(CommandWithShortCircuitOption)) as CommandConfig<CommandWithShortCircuitOption>;
+            var option = cmd.Options.First(o => o.Name == "B");
+            Assert.That(option.IsShortCircuit, Is.False);
+        }
+
+        [Test]
         public void BooleanOptionHasIsBooleanSet()
         {
             var option = _defaultNameCommand.Options.First(o => o.Name == "switch");
@@ -197,6 +242,52 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         public void CommandWithDuplicateOptionNameThrowsOnLoad()
         {
             CommandAttributeLoader.Load(typeof (CommandWithDuplicateOptionName));
+        }
+
+        [Test]
+        public void PositionalWithoutDefaultSetIsNotOptional()
+        {
+            var deffo = CommandAttributeLoader.Load(typeof(CommandWithDefaultedPositional)) as CommandConfig<CommandWithDefaultedPositional>;
+            var nonDefPositional = deffo.Positionals.First();
+            Assert.That(nonDefPositional.IsOptional, Is.False);
+        }
+
+        [Test]
+        public void PositionalWithDefaultSetIsOptional()
+        {
+            var deffo = CommandAttributeLoader.Load(typeof(CommandWithDefaultedPositional)) as CommandConfig<CommandWithDefaultedPositional>;
+            var nonDefPositional = deffo.Positionals[1];
+            Assert.That(nonDefPositional.IsOptional, Is.True);
+        }
+
+        [Test]
+        public void PositionalWithDefaultSetHasDefaultValue()
+        {
+            var deffo = CommandAttributeLoader.Load(typeof(CommandWithDefaultedPositional)) as CommandConfig<CommandWithDefaultedPositional>;
+            var nonDefPositional = deffo.Positionals[1];
+            Assert.That(nonDefPositional.DefaultValue, Is.EqualTo("deffo"));
+        }
+
+        [Test]
+        public void PositionalWithDefaultSetHasNoDefaultValue()
+        {
+            var deffo = CommandAttributeLoader.Load(typeof(CommandWithDefaultedPositional)) as CommandConfig<CommandWithDefaultedPositional>;
+            var nonDefPositional = deffo.Positionals[0];
+            Assert.That(nonDefPositional.DefaultValue, Is.Null);
+        }
+
+        [Test] public void PositionalWithNullDefaultIsOptional()
+        {
+            var deffo = CommandAttributeLoader.Load(typeof(CommandWithDefaultedPositional)) as CommandConfig<CommandWithDefaultedPositional>;
+            var nonDefPositional = deffo.Positionals[2];
+            Assert.That(nonDefPositional.IsOptional, Is.True);
+        }
+
+        [Test] public void PositionalWithNullDefaultHasCorrectDefaultValue()
+        {
+            var deffo = CommandAttributeLoader.Load(typeof(CommandWithDefaultedPositional)) as CommandConfig<CommandWithDefaultedPositional>;
+            var nonDefPositional = deffo.Positionals[2];
+            Assert.That(nonDefPositional.DefaultValue, Is.Null);
         }
     }
 }

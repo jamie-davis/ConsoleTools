@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace ConsoleToolkit.CommandLineInterpretation
 {
-    public class MsDosCommandLineParser : ICommandLineParser
+    public class MsDosCommandLineParser : ICommandLineParser, IOptionNameHelpAdorner
     {
         public void Parse(string[] args, IEnumerable<IOption> options, IEnumerable<IPositionalArgument> positionalArguments, IParserResult result)
         {
@@ -37,7 +37,17 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
         private static string GetOptionName(List<string> optionNames, string optionName)
         {
-            return optionNames.FirstOrDefault(n => string.Compare(optionName, n, true) == 0) ?? optionName;
+            return optionNames.FirstOrDefault(n => System.String.Compare(optionName, n, System.StringComparison.OrdinalIgnoreCase) == 0) ?? optionName;
+        }
+
+        /// <summary>
+        /// Add "/" to an option name.
+        /// </summary>
+        /// <param name="name">The option name.</param>
+        /// <returns>The adjusted name.</returns>
+        string IOptionNameHelpAdorner.Adorn(string name)
+        {
+            return "/" + name;
         }
     }
 }

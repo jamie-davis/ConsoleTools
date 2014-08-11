@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 
 namespace ConsoleToolkit.ConsoleIO.Internal
 {
@@ -6,6 +7,8 @@ namespace ConsoleToolkit.ConsoleIO.Internal
     {
         public static string Format(ColumnFormat format, object value)
         {
+            if (value == null) return string.Empty;
+
             var type = value.GetType();
             if (format.FormatTemplate != null && IsFormattable(type))
                 return ApplyFormatTemplate(format.FormatTemplate, value);
@@ -19,7 +22,10 @@ namespace ConsoleToolkit.ConsoleIO.Internal
                     return ((float)value).ToString(formatString);
                 return ((double)value).ToString(formatString);
             }
-
+#if TARGET_FRAMEWORK_4
+            if (value is DateTime && Thread.CurrentThread.CurrentCulture.IetfLanguageTag == "en-GB")
+                return ((DateTime)value).ToString().TrimEnd(); //patch up faulty date time string format
+#endif
             return value.ToString();
         }
 

@@ -35,6 +35,11 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             }
         }
 
+        [SetUp]
+        public void SetUp()
+        {
+            SetUpTests.OverrideCulture();
+        }
 
         [Test]
         public void DecimalValuesAreDisplayedToTwoDpByDefault()
@@ -55,6 +60,13 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         {
             var format = new ColumnFormat("double", type: typeof(float));
             Assert.That(ValueFormatter.Format(format, 1.456D), Is.EqualTo("1.46"));
+        }
+
+        [Test]
+        public void NullIsFormattedAsEmptyString()
+        {
+            var format = new ColumnFormat("double", type: typeof(float));
+            Assert.That(ValueFormatter.Format(format, null), Is.EqualTo(string.Empty));
         }
 
         [Test]
@@ -111,7 +123,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
                     sb.AppendLine();
                     foreach (var item in dataArray.Skip(1))
                     {
-                        sb.AppendFormat("    {0,-11} {1, 21} = {2}", item.GetType().Name, item, ValueFormatter.Format(format, item));
+                        sb.AppendFormat("    {0,-11} {1, 21} = {2}", item.GetType().Name, item.ToString().TrimEnd(), ValueFormatter.Format(format, item));
                         sb.AppendLine();
                     }
                 }

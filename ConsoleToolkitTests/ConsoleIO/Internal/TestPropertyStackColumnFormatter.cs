@@ -29,6 +29,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         [SetUp]
         public void SetUp()
         {
+            SetUpTests.OverrideCulture();
             _data = new TestType
             {
                 String1 = "A simple string value",

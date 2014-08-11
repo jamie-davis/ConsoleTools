@@ -1,10 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Mail;
+using System.Text;
 using ConsoleToolkit.ConsoleIO.Internal;
-using Microsoft.SqlServer.Server;
 
 namespace ConsoleToolkit.ConsoleIO
 {
@@ -16,17 +14,35 @@ namespace ConsoleToolkit.ConsoleIO
     {
         private static readonly ColumnFormat DefaultFormat = new ColumnFormat(null);
 
-        private readonly IConsoleInterface _consoleInterface;
+        private readonly IConsoleOutInterface _consoleOutInterface;
+        private IConsoleInInterface _consoleInInterface;
+        private Lazy<IConsoleInterface> _defaultConsole = new Lazy<IConsoleInterface>(MakeDefaultConsole);
         private readonly ColourWriter _writer;
 
-        public ConsoleAdapter(IConsoleInterface consoleInterface = null)
+        public ConsoleAdapter(IConsoleOutInterface consoleOutInterface = null, IConsoleInInterface consoleInInterface= null)
         {
-            _consoleInterface = consoleInterface ?? new DefaultConsole();
-            _writer = new ColourWriter(_consoleInterface);
+            _consoleInInterface = consoleInInterface ?? _defaultConsole.Value;
+            _consoleOutInterface = consoleOutInterface ?? _defaultConsole.Value;
+            _writer = new ColourWriter(_consoleOutInterface);
         }
 
-        public int BufferWidth { get { return _consoleInterface.BufferWidth; } }
-        public int WindowWidth { get { return _consoleInterface.WindowWidth; } }
+        public ConsoleAdapter(IConsoleInterface consoleInterface)
+        {
+            _consoleInInterface = consoleInterface ?? _defaultConsole.Value;
+            _consoleOutInterface = consoleInterface ?? _defaultConsole.Value;
+            _writer = new ColourWriter(_consoleOutInterface);
+        }
+
+        private static IConsoleInterface MakeDefaultConsole()
+        {
+            var redirectTester = new ConsoleRedirectTester();
+            if (redirectTester.IsOutputRedirected())
+                return new RedirectedConsole();
+            return new DefaultConsole();
+        }
+
+        public int BufferWidth { get { return _consoleOutInterface.BufferWidth; } }
+        public int WindowWidth { get { return _consoleOutInterface.WindowWidth; } }
 
         /// <summary>
         /// Output a formatted string at the current cursor position, and move to the beginning of the next line.
@@ -70,7 +86,7 @@ namespace ConsoleToolkit.ConsoleIO
 
         private void RenderData(IConsoleRenderer renderableData, bool endWithNewLine)
         {
-            if (_consoleInterface.CursorLeft > 0)
+            if (_consoleOutInterface.CursorLeft > 0)
                 WriteLine();
 
             int wrappedLines;
@@ -100,8 +116,8 @@ namespace ConsoleToolkit.ConsoleIO
         private void WriteWrapped(bool lastLineIsWriteLine, string format, object[] arg)
         {
             var formatted = string.Format(format, arg);
-            var lines = ColumnWrapper.WrapValue(formatted, DefaultFormat, _consoleInterface.WindowWidth,
-                firstLineHangingIndent: _consoleInterface.CursorLeft + 1);
+            var lines = ColumnWrapper.WrapValue(formatted, DefaultFormat, _consoleOutInterface.WindowWidth,
+                firstLineHangingIndent: _consoleOutInterface.CursorLeft + 1);
             if (lines.Length == 0) return;
 
             for (var n = 0; n < lines.Length - 1; ++n)
@@ -116,9 +132,9 @@ namespace ConsoleToolkit.ConsoleIO
                 Write(lastLine);
         }
 
-        public void FormatTable<T>(IEnumerable<T> items)
+        public void FormatTable<T>(IEnumerable<T> items, ReportFormattingOptions options = ReportFormattingOptions.Default, string columnSeperator = null)
         {
-            var tabular = TabularReport.Format(items, null, _consoleInterface.WindowWidth);
+            var tabular = TabularReport.Format(items, null, _consoleOutInterface.WindowWidth, options: options, columnDivider: columnSeperator);
             foreach (var line in tabular)
                 Write(line);
         }
@@ -129,6 +145,32 @@ namespace ConsoleToolkit.ConsoleIO
         public void WriteLine()
         {
             _writer.NewLine();
+        }
+
+        /// <summary>
+        /// Read a string from the console.
+        /// </summary>
+        /// <returns></returns>
+        public string ReadLine()
+        {
+            return _consoleInInterface.ReadLine();
+        }
+
+        public T ReadInput<T>(T template) where T : class
+        {
+            var impl = new ReadInputImpl<T>(_consoleInInterface, this, template);
+            return impl.Result;
+        }
+
+        public T ReadInput<T>() where T : class
+        {
+            var impl = new ReadInputImpl<T>(_consoleInInterface, this);
+            return impl.Result;
+        }
+
+        public Encoding GetEncoding()
+        {
+            return _writer.Encoding;
         }
     }
 }

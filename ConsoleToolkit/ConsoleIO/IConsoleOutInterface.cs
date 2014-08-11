@@ -1,14 +1,15 @@
 using System;
+using System.Text;
 using Microsoft.SqlServer.Server;
 
 namespace ConsoleToolkit.ConsoleIO
 {
     /// <summary>
-    /// This interface describes a class that interacts with the system console i.e. the <see cref="Console"/> in <c>Console.WriteLine(...</c> calls.
+    /// This interface describes a class that interacts with the system console from an output viewpoint i.e. the <see cref="Console"/> in <c>Console.WriteLine(...</c> calls.
     /// 
-    /// Implement this interface to intercept console calls in order to redirect the input and output, for example, in a unit test.
+    /// Implement this interface to intercept console calls in order to redirect output, for example, in a unit test.
     /// </summary>
-    public interface IConsoleInterface
+    public interface IConsoleOutInterface
     {
         /// <summary>
         /// The current foreground colour for console output.
@@ -33,14 +34,6 @@ namespace ConsoleToolkit.ConsoleIO
         int BufferWidth { get; }
 
         /// <summary>
-        /// Test to see if console output is redirected.
-        /// 
-        /// The test only determines whether StdOut is redirected. StdErr redirection cannot be detected without unsafe code.
-        /// </summary>
-        /// <returns>True if console output is redirected, otherwise false.</returns>
-        bool IsOutputRedirected();
-
-        /// <summary>
         /// Output a string to the console in the current cursor position.
         /// </summary>
         /// <param name="data">The text to output.</param>
@@ -61,5 +54,29 @@ namespace ConsoleToolkit.ConsoleIO
         /// </summary>
         int CursorTop { get; set; }
 
+        /// <summary>
+        /// The encoding being used by the console.
+        /// </summary>
+        Encoding Encoding { get; }
+    }
+
+    /// <summary>
+    /// This interface describes a class that interacts with the system console from an input viewpoint i.e. the <see cref="Console"/> in <c>Console.ReadLine()</c> calls.
+    /// 
+    /// Implement this interface to intercept console calls in order to redirect the input, for example, in a unit test.
+    /// </summary>
+    public interface IConsoleInInterface
+    {
+        bool InputIsRedirected { get; }
+        string ReadLine();
+
+    }
+
+    /// <summary>
+    /// A console interface implementing both input and output.
+    /// </summary>
+    public interface IConsoleInterface : IConsoleOutInterface, IConsoleInInterface
+    {
+        
     }
 }

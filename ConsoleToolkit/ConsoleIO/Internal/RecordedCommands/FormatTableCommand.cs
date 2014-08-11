@@ -20,17 +20,21 @@ namespace ConsoleToolkit.ConsoleIO.Internal.RecordedCommands
     /// <typeparam name="T">The table row data type.</typeparam>
     internal class FormatTableCommand<T> : IRecordedCommand
     {
+        private readonly ReportFormattingOptions options;
+        private readonly string _columnSeperator;
         private readonly CachedRows<T> _data;
 
-        public FormatTableCommand(IEnumerable<T> data)
+        public FormatTableCommand(IEnumerable<T> data, ReportFormattingOptions options, string columnSeperator)
         {
+            this.options = options;
+            _columnSeperator = columnSeperator ?? TabularReport.DefaultColumnDivider;
             _data = CachedRowsFactory.Make(data);
         }
 
         public void Replay(ReplayBuffer buffer)
         {
             int wrappedLineBreaks;
-            var report = TabularReport.Format(_data, null, buffer.Width, out wrappedLineBreaks);
+            var report = TabularReport.Format(_data, null, buffer.Width, out wrappedLineBreaks, options, _columnSeperator);
             foreach (var line in report)
             {
                 buffer.Write(line);
@@ -40,12 +44,12 @@ namespace ConsoleToolkit.ConsoleIO.Internal.RecordedCommands
 
         public int GetFirstWordLength(int tabLength)
         {
-            return MinReportWidthCalculator.Calculate(_data);
+            return MinReportWidthCalculator.Calculate(_data, _columnSeperator.Length);
         }
 
         public int GetLongestWordLength(int tabLength)
         {
-            return MinReportWidthCalculator.Calculate(_data);
+            return MinReportWidthCalculator.Calculate(_data, _columnSeperator.Length);
         }
     }
 }

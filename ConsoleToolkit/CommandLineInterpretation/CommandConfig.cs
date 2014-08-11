@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.InteropServices;
 
 namespace ConsoleToolkit.CommandLineInterpretation
 {
@@ -64,6 +65,22 @@ namespace ConsoleToolkit.CommandLineInterpretation
             Positionals.Add(commandPositional);
             _currentContext = commandPositional;
             return this;
+        }
+
+        public CommandConfig<T> DefaultValue(string value)
+        {
+            if (ContextIsPositional())
+            {
+                var positional = (_currentContext as BasePositional);
+                if (positional != null)
+                {
+                    positional.DefaultValue = value;
+                    positional.IsOptional = true;
+                    return this;
+                }
+            }
+
+            throw new DefaultValueMayOnlyBeSpecifiedForPositionalParameters(_currentContext);
         }
 
         /// <summary>

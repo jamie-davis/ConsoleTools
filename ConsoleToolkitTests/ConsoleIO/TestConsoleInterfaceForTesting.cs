@@ -1,5 +1,9 @@
-﻿using ApprovalTests;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using ApprovalTests;
 using ApprovalTests.Reporters;
+using ApprovalUtilities.Utilities;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
@@ -55,6 +59,31 @@ namespace ConsoleToolkitTests.ConsoleIO
             var longLine = new string('X', _console.BufferWidth);
             _console.Write(longLine);
             Assert.That(_console.CursorLeft, Is.EqualTo(0));
+        }
+
+        [Test, ExpectedException]
+        public void ReadLineThrowsWhenNoInputIsSet()
+        {
+            _console.ReadLine();
+        }
+
+        [Test]
+        public void ReadLineCanReadInputFromAStream()
+        {
+            var data = @"First line.
+Second line.
+Third line.";
+            using (var stream = new StringReader(data))
+            {
+                var lines = new List<string>();
+                _console.SetInputStream(stream);
+                string line;
+                while ((line = _console.ReadLine()) != null)
+                {
+                    lines.Add(line);
+                }
+                Assert.That(lines.JoinWith(Environment.NewLine), Is.EqualTo(data));
+            }
         }
     }
 }

@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 
 namespace ConsoleToolkit.ConsoleIO.Internal
 {
@@ -38,7 +36,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
                 }
 
                 if (matchedFormat == null)
-                    matchedFormat = new PropertyColumnFormat(prop, new ColumnFormat(ConvertPropNameToHeading(prop), ConvertPropertyType(prop.PropertyType)));
+                    matchedFormat = new PropertyColumnFormat(prop, new ColumnFormat(PropertyNameConverter.ToHeading(prop), ConvertPropertyType(prop.PropertyType)));
 
                 output.Add(matchedFormat);
             }
@@ -51,37 +49,6 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             if (typeof (IConsoleRenderer).IsAssignableFrom(propertyType))
                 return typeof (IConsoleRenderer);
             return propertyType;
-        }
-
-        private static string ConvertPropNameToHeading(PropertyInfo prop)
-        {
-            var name = prop.Name;
-            if (name.All(char.IsUpper))
-                return name;
-
-            var words = new List<string>();
-            string word = null;
-            foreach (var character in name)
-            {
-                if (char.IsUpper(character))
-                {
-                    if (word != null)
-                    {
-                        words.Add(word);
-                        word = null;
-                    }
-                }
-
-                if (word == null)
-                    word = character.ToString();
-                else
-                    word += character;
-            }
-
-            if (word != null)
-                words.Add(word);
-
-            return string.Join(" ", words);
         }
     }
 }
