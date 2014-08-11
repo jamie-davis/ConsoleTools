@@ -77,6 +77,5 @@ namespace ConsoleToolkit.ConsoleIO
     /// </summary>
     public interface IConsoleInterface : IConsoleOutInterface, IConsoleInInterface
     {
-        
     }
 }

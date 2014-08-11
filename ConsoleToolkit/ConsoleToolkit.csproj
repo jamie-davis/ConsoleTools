@@ -21,6 +21,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">TARGET_FRAMEWORK_4, DEBUG</DefineConstants>
+    <DefineConstants>DEBUG;TARGET_FRAMEWORK_4</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">TARGET_FRAMEWORK_4</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>

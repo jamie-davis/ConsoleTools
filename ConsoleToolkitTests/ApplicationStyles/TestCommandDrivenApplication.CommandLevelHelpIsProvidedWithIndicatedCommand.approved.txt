@@ -5,6 +5,11 @@ helpme [<Subject>]
                                                             
 Parameters:                                                 
                                                             
+<<<<<<< HEAD
 Subject  Optional command on which help                     
          is required.                                       
+=======
+Subject Optional command on which help                      
+        is required.                                        
+>>>>>>> origin/master
                                                             

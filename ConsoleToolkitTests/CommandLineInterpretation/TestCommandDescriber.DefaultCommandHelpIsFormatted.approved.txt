@@ -5,5 +5,9 @@ Usage: Test <pos>
                                                             
 Parameters:                                                 
                                                             
+<<<<<<< HEAD
 pos  A positional parameter.                                
+=======
+pos             A positional parameter.                     
+>>>>>>> origin/master
                                                             

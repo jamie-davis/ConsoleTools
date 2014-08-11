@@ -6,6 +6,7 @@ Usage: AcceptanceTest <filename>
                                                             
 Parameters:                                                 
                                                             
+<<<<<<< HEAD
 filename  The name of the file.                             
                                                             
 Options:                                                    
@@ -13,4 +14,13 @@ Options:
 --delete, -D   Delete the file after                        
                processing.                                  
 --archive, -A  Archive after processing                     
+=======
+filename         The name of the file.                      
+                                                            
+Options:                                                    
+                                                            
+--delete, -D  Delete the file after                         
+              processing.                                   
+--archive, -A Archive after processing                      
+>>>>>>> origin/master
                                                             

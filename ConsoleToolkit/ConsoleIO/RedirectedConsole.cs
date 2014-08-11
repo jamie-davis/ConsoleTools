@@ -72,6 +72,7 @@ namespace ConsoleToolkit.ConsoleIO
         }
 
         public Encoding Encoding { get; private set; }
+
         public bool InputIsRedirected { get{throw new NotImplementedException();} }
 
         public string ReadLine()

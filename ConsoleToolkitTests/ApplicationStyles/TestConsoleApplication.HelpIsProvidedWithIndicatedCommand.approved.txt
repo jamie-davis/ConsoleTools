@@ -7,5 +7,9 @@ Usage: ConsoleToolkitcommand [options]
                                                             
 Options:                                                    
                                                             
+<<<<<<< HEAD
 /h  Display this help text.                                 
+=======
+/h            Display this help text.                       
+>>>>>>> origin/master
                                                             
