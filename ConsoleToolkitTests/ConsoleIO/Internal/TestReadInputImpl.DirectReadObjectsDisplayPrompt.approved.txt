@@ -1,0 +1,8 @@
+﻿Enter a number: invalid                                     
+Input string was not in a correct                           
+format.                                                     
+Enter a number: still bad                                   
+Input string was not in a correct                           
+format.                                                     
+Enter a number: 45                                          
+                                                            

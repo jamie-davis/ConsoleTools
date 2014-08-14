@@ -87,8 +87,10 @@
     <Compile Include="ConsoleIO\Internal\TestColourString.cs" />
     <Compile Include="ConsoleIO\Internal\TestColourWriter.cs" />
     <Compile Include="ConsoleIO\Internal\TestFormattingIntermediate.cs" />
+    <Compile Include="ConsoleIO\Internal\TestInstanceConstructor.cs" />
     <Compile Include="ConsoleIO\Internal\TestMinReportWidthCalculator.cs" />
     <Compile Include="ConsoleIO\Internal\TestReadInputImpl.cs" />
+    <Compile Include="ConsoleIO\Internal\TestReadInputItem.cs" />
     <Compile Include="ConsoleIO\Internal\TestRecordingConsoleAdapter.cs" />
     <Compile Include="ConsoleIO\TestCachedColumn.cs" />
     <Compile Include="ConsoleIO\TestCachedRow.cs" />

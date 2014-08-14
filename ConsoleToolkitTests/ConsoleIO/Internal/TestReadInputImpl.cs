@@ -7,8 +7,10 @@ using System.Reflection;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using ApprovalUtilities.Utilities;
+using ConsoleToolkit.Annotations;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
+using ConsoleToolkit.Exceptions;
 using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
 
@@ -26,13 +28,13 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
 
         class IntString
         {
-            public int Int { get; set; }
-            public string String { get; set; }
+            public int Int { [UsedImplicitly] get; set; }
+            public string String { [UsedImplicitly] get; set; }
         }
 
         class Constructable
         {
-            public Read<string> String {get; set; }
+            public Read<string> String { [UsedImplicitly] get; set; }
 
             public Constructable()
             {
@@ -77,7 +79,11 @@ some text");
         {
             return new ReadInputImpl<T>(_interface, _adapter, template);
         }
-       
+
+        private ReadInputImpl<Read<T>> GetImplForRead<T>(Read<T> read)
+        {
+            return new ReadInputImpl<Read<T>>(_interface, _adapter, read);
+        }
 
 
         [Test]
@@ -230,7 +236,7 @@ some text");
         {
             var input = new[]
             {
-                "invalid",
+                "invalid"
             };
 
             _interface.SetInputStream(MakeStream(input));
@@ -297,6 +303,44 @@ some text");
             const string expected = "Int = 45, String = string";
 
             Assert.That(instance, Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void ReadObjectsCanBeInputDirectly()
+        {
+            var input = new[]
+            {
+                "invalid",
+                "still bad",
+                "45"
+            };
+
+            _interface.SetInputStream(MakeStream(input));
+            _interface.InputIsRedirected = false;
+
+            var readObject = Read.Int().Prompt("Enter a number: ");
+            var impl = GetImplForRead(readObject);
+
+            Assert.That(impl.Result.Value, Is.EqualTo(45));
+        }
+
+        [Test]
+        public void DirectReadObjectsDisplayPrompt()
+        {
+            var input = new[]
+            {
+                "invalid",
+                "still bad",
+                "45"
+            };
+
+            _interface.SetInputStream(MakeStream(input));
+            _interface.InputIsRedirected = false;
+
+            var readObject = Read.Int().Prompt("Enter a number: ");
+            var impl = GetImplForRead(readObject);
+
+            Approvals.Verify(_interface.GetBuffer());
         }
     }
 }

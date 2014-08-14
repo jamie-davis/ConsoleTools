@@ -98,5 +98,23 @@ namespace ConsoleToolkitTests.ConsoleIO
             Console.WriteLine(buffer);
             Approvals.Verify(buffer);
         }
+
+        [Test]
+        public void BadInputResultsInNullObjectWhenInpoutRedirected()
+        {
+            AttachInput(new []
+            {
+                "text",
+                "bad",
+                "still bad",
+                "45"
+            });
+            _console.InputIsRedirected = true;
+
+            UnitTestAppUtils.Run<Program1>(consoleInterface: _console);
+            var buffer = _console.GetBuffer();
+            Console.WriteLine(buffer);
+            Approvals.Verify(buffer);
+        }
     }
 }
