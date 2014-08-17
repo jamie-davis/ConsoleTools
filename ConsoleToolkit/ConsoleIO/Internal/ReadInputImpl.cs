@@ -234,16 +234,29 @@ internal static class ReadInputItem
         var redirected = consoleIn.InputIsRedirected;
         object value;
 
-        string prompt;
-        if (item.ReadInfo != null && item.ReadInfo.Prompt != null)
-            prompt = item.ReadInfo.Prompt;
-        else
+        string prompt = null;
+        string optionString = null;
+        if (item.ReadInfo != null)
+        {
+            if (item.ReadInfo.Prompt != null)
+                prompt = item.ReadInfo.Prompt;
+
+            if (item.ReadInfo.Options.Any())
+            {
+                var options = item.ReadInfo.Options.Select(o => string.Format("{0}-{1}", o.RequiredValue, o.Prompt));
+                optionString = string.Format("[{0}]", string.Join(", ", options));
+            }
+        }
+
+        if (prompt == null)
             prompt = PropertyNameConverter.ToPrompt(item.Property);
+
+        var displayPrompt = string.Format("{0}{1}: ", prompt, optionString == null ? string.Empty : " " + optionString);
 
         do
         {
-            consoleOut.Wrap(prompt);
-            if (ReadValue(item.Type, consoleIn, consoleOut, out value))
+            consoleOut.Wrap(displayPrompt);
+            if (ReadValue(item, consoleIn, consoleOut, out value))
             {
                 item.Value = value;
                 return true;
@@ -253,14 +266,26 @@ internal static class ReadInputItem
         return false;
     }
 
-    private static bool ReadValue(Type type, IConsoleInInterface consoleIn, IConsoleAdapter consoleOut, out object value)
+    private static bool ReadValue<T>(InputItem<T> item, IConsoleInInterface consoleIn, IConsoleAdapter consoleOut, out object value) where T : class
     {
         var input = consoleIn.ReadLine();
-        if (!ConvertString(input, type, consoleOut, out value))
+        if (item.ReadInfo != null && item.ReadInfo.Options.Any())
+            return SelectOption(input, item.ReadInfo.Options, consoleOut, out value);
+        
+        return ConvertString(input, item.Type, consoleOut, out value);
+    }
+
+    private static bool SelectOption(string input, IEnumerable<OptionDefinition> options, IConsoleAdapter consoleOut, out object result)
+    {
+        var hit = options.FirstOrDefault(o => o.RequiredValue == input);
+        if (hit == null)
         {
+            consoleOut.WrapLine(@"""{0}"" is not a valid selection.", input);
+            result = null;
             return false;
         }
 
+        result = hit.SelectedValue;
         return true;
     }
 

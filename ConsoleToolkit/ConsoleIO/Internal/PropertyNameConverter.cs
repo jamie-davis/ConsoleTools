@@ -39,7 +39,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
         public static string ToPrompt(PropertyInfo prop)
         {
-            return ToHeading(prop) + ": ";
+            return ToHeading(prop);
         }
     }
 }

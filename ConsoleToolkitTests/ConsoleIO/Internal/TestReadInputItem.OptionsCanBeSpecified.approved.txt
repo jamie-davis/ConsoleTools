@@ -1,0 +1,4 @@
+﻿prompt [1-First, 2-Second, 3-Third]: bad                    
+"bad" is not a valid selection.                             
+prompt [1-First, 2-Second, 3-Third]: 2                      
+                                                            

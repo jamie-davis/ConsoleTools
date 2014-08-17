@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Net.Mail;
+using System.Xml.Linq;
 using ConsoleToolkit.ConsoleIO.Internal;
 
 namespace ConsoleToolkit.ConsoleIO
@@ -11,7 +14,7 @@ namespace ConsoleToolkit.ConsoleIO
     public class Read<T> : IReadInfo
     {
         private string _prompt;
-
+        private List<OptionDefinition> _options = new List<OptionDefinition>(); 
         internal Read() { }
 
         public Read<T> Prompt(string prompt)
@@ -20,7 +23,19 @@ namespace ConsoleToolkit.ConsoleIO
             return this;
         }
 
+        public Read<T> Option(T selectedValue, string requiredValue, string prompt)
+        {
+            _options.Add(new OptionDefinition
+            {
+                Prompt = prompt,
+                SelectedValue = selectedValue,
+                RequiredValue = requiredValue
+            });
+            return this;
+        }
+
         string IReadInfo.Prompt { get { return _prompt; } }
+        public IEnumerable<OptionDefinition> Options { get {return _options; } }
         public Type ValueType { get { return typeof (T); } }
 
         object IReadInfo.MakeValueInstance(object value)

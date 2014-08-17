@@ -136,6 +136,7 @@
     <Compile Include="ConsoleIO\Internal\IPropertySource.cs" />
     <Compile Include="ConsoleIO\Internal\IReadInfo.cs" />
     <Compile Include="ConsoleIO\Internal\MinReportWidthCalculator.cs" />
+    <Compile Include="ConsoleIO\Internal\OptionDefinition.cs" />
     <Compile Include="ConsoleIO\Internal\PropertyNameConverter.cs" />
     <Compile Include="ConsoleIO\Internal\ReadInputImpl.cs" />
     <Compile Include="ConsoleIO\Internal\RecordedCommands\FormatTableCommand.cs" />

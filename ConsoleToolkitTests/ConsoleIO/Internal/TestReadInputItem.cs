@@ -21,8 +21,8 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
 
         private static readonly PropertyInfo StringProp = typeof (TestReadInputItem).GetProperty("StringVal");
         private static readonly PropertyInfo IntProp = typeof (TestReadInputItem).GetProperty("IntVal");
-        private static readonly PropertyInfo DoubleProp = typeof (TestReadInputItem).GetProperty("DoubleVal");
         private TextReader _goodStream;
+        private TextReader _selectStream;
         private TextReader _stringOnlyStream;
 
         public string StringVal { get; set; }
@@ -39,6 +39,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
 
             _goodStream = MakeStream(new [] {"text", "45"});
             _stringOnlyStream = MakeStream(new [] {"text"});
+            _selectStream = MakeStream(new [] {"bad", "2", "C"});
         }
 
         private TextReader MakeStream(IEnumerable<string> input)
@@ -114,7 +115,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
                 Name = "StringVal",
                 Property = StringProp,
                 Type = typeof(string),
-                ReadInfo = Read.String().Prompt("prompt:")
+                ReadInfo = Read.String().Prompt("prompt")
             };
 
             ReadInputItem.GetValue(item, _interface, _adapter);
@@ -131,7 +132,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
                 Name = "IntVal",
                 Property = IntProp,
                 Type = typeof(int),
-                ReadInfo = Read.Int().Prompt("prompt:")
+                ReadInfo = Read.Int().Prompt("prompt")
             };
 
             ReadInputItem.GetValue(item, _interface, _adapter);
@@ -147,11 +148,50 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
                 Name = "IntVal",
                 Property = IntProp,
                 Type = typeof(int),
-                ReadInfo = Read.Int().Prompt("prompt:")
+                ReadInfo = Read.Int().Prompt("prompt")
             };
 
             ReadInputItem.GetValue(item, _interface, _adapter);
             Approvals.Verify(_interface.GetBuffer());
+        }
+
+        [Test]
+        public void OptionsCanBeSpecified()
+        {
+            _interface.SetInputStream(_selectStream);
+            var item = new InputItem<Read<int>>
+            {
+                Name = "IntVal",
+                Property = IntProp,
+                Type = typeof(int),
+                ReadInfo = Read.Int().Prompt("prompt")
+                .Option(1, "1", "First")
+                .Option(2, "2", "Second")
+                .Option(3, "3", "Third")
+            };
+
+            ReadInputItem.GetValue(item, _interface, _adapter);
+            Approvals.Verify(_interface.GetBuffer());
+        }
+
+        [Test]
+        public void OptionIsSelected()
+        {
+            _interface.SetInputStream(_selectStream);
+            var item = new InputItem<Read<int>>
+            {
+                Name = "IntVal",
+                Property = IntProp,
+                Type = typeof(int),
+                ReadInfo = Read.Int().Prompt("prompt")
+                .Option(100, "B", "First")
+                .Option(200, "C", "Second")
+                .Option(300, "D", "Third")
+            };
+
+            ReadInputItem.GetValue(item, _interface, _adapter);
+            var value = ((Read<int>)item.Value).Value;
+            Assert.That(value, Is.EqualTo(200));
         }
     }
 }

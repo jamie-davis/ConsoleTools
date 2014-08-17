@@ -337,7 +337,7 @@ some text");
             _interface.SetInputStream(MakeStream(input));
             _interface.InputIsRedirected = false;
 
-            var readObject = Read.Int().Prompt("Enter a number: ");
+            var readObject = Read.Int().Prompt("Enter a number");
             var impl = GetImplForRead(readObject);
 
             Approvals.Verify(_interface.GetBuffer());
