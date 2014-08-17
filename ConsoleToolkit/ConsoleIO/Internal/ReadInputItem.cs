@@ -21,7 +21,8 @@ internal static class ReadInputItem
         {
             consoleOut.Wrap(displayPrompt);
             object value;
-            if (ReadValue(item, consoleIn, consoleOut, out value))
+            if (ReadValue(item, consoleIn, consoleOut, out value)
+                && ApplyValidations(item, value, consoleOut))
             {
                 item.Value = value;
                 return true;
@@ -29,6 +30,21 @@ internal static class ReadInputItem
         } while (!redirected);
 
         return false;
+    }
+
+    private static bool ApplyValidations(InputItem item, object value, IConsoleAdapter consoleOut)
+    {
+        if (item.ReadInfo != null)
+        {
+            var error = item.ReadInfo.GetValidationError(value);
+            if (error != null)
+            {
+                consoleOut.WrapLine(error);
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private static string ConstructPromptText(InputItem item)

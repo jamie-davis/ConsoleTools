@@ -14,5 +14,6 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         bool ShowAsMenu { get; }
         string MenuHeading { get; }
         object MakeValueInstance(object value);
+        string GetValidationError(object value);
     }
 }

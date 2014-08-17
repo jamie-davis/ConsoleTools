@@ -24,6 +24,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         private TextReader _goodStream;
         private TextReader _selectStream;
         private TextReader _stringOnlyStream;
+        private TextReader _validationStream;
 
         public string StringVal { get; set; }
         public int IntVal { get; set; }
@@ -40,6 +41,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             _goodStream = MakeStream(new [] {"text", "45"});
             _stringOnlyStream = MakeStream(new [] {"text"});
             _selectStream = MakeStream(new [] {"bad", "2", "C"});
+            _validationStream = MakeStream(new[] { "2", "10", "11" });
         }
 
         private TextReader MakeStream(IEnumerable<string> input)
@@ -212,6 +214,39 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             ReadInputItem.GetValue(item, _interface, _adapter);
             var value = ((Read<int>)item.Value).Value;
             Assert.That(value, Is.EqualTo(200));
+        }
+
+        [Test]
+        public void ValidationsAreApplied()
+        {
+            _interface.SetInputStream(_validationStream);
+            var item = new InputItem
+            {
+                Name = "IntVal",
+                Property = IntProp,
+                Type = typeof(int),
+                ReadInfo = Read.Int().Validate(i => i > 10, "Value must be greater than 10")
+            };
+
+            ReadInputItem.GetValue(item, _interface, _adapter);
+            var value = ((Read<int>)item.Value).Value;
+            Assert.That(value, Is.EqualTo(11));
+        }
+
+        [Test]
+        public void ValidationErrorMessageIsDisplayed()
+        {
+            _interface.SetInputStream(_validationStream);
+            var item = new InputItem
+            {
+                Name = "IntVal",
+                Property = IntProp,
+                Type = typeof(int),
+                ReadInfo = Read.Int().Validate(i => i > 10, "Value must be greater than 10")
+            };
+
+            ReadInputItem.GetValue(item, _interface, _adapter);
+            Approvals.Verify(_interface.GetBuffer());
         }
     }
 }
