@@ -132,6 +132,7 @@
     <Compile Include="ConsoleIO\Internal\ConsoleAdapterStream.cs" />
     <Compile Include="ConsoleIO\Internal\ConsoleRedirectionStateDetector.cs" />
     <Compile Include="ConsoleIO\Internal\FormattingIntermediate.cs" />
+    <Compile Include="ConsoleIO\Internal\InputItem.cs" />
     <Compile Include="ConsoleIO\Internal\InstanceConstructor.cs" />
     <Compile Include="ConsoleIO\Internal\IPropertySource.cs" />
     <Compile Include="ConsoleIO\Internal\IReadInfo.cs" />
@@ -139,6 +140,7 @@
     <Compile Include="ConsoleIO\Internal\OptionDefinition.cs" />
     <Compile Include="ConsoleIO\Internal\PropertyNameConverter.cs" />
     <Compile Include="ConsoleIO\Internal\ReadInputImpl.cs" />
+    <Compile Include="ConsoleIO\Internal\ReadInputItem.cs" />
     <Compile Include="ConsoleIO\Internal\RecordedCommands\FormatTableCommand.cs" />
     <Compile Include="ConsoleIO\Internal\RecordedCommands\FormatTableCommandFactory.cs" />
     <Compile Include="ConsoleIO\Internal\RecordedCommands\IRecordedCommand.cs" />

@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using ConsoleToolkit.ConsoleIO;
-using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.Exceptions;
 
 namespace ConsoleToolkit.ConsoleIO.Internal
@@ -31,16 +27,16 @@ namespace ConsoleToolkit.ConsoleIO.Internal
     {
         private interface ITargetTypeHandler
         {
-            IEnumerable<InputItem<T>> Properties { get; }
+            IEnumerable<InputItem> Properties { get; }
             T MakeResult();
         }
 
         private class DefaultHandler : ITargetTypeHandler
         {
-            private List<InputItem<T>> _properties;
+            private List<InputItem> _properties;
             private T _template;
 
-            public IEnumerable<InputItem<T>> Properties { get { return _properties; } }
+            public IEnumerable<InputItem> Properties { get { return _properties; } }
 
             public DefaultHandler(T template = null)
             {
@@ -53,7 +49,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
                 return InstanceConstructor<T>.MakeInstance(Properties);
             }
 
-            private InputItem<T> MakeProperty(PropertyInfo prop)
+            private InputItem MakeProperty(PropertyInfo prop)
             {
                 IReadInfo inputInfo = null;
                 var type = prop.PropertyType;
@@ -68,7 +64,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
                         throw new ReadPropertyMustBeInitialised(prop.Name);
                 }
 
-                return new InputItem<T>
+                return new InputItem
                 {
                     Name = prop.Name,
                     Type = type,
@@ -94,18 +90,18 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
         private class ReaderHandler : ITargetTypeHandler
         {
-            private InputItem<T> _property;
+            private InputItem _property;
 
             public ReaderHandler(T template)
             {
-                _property = new InputItem<T>
+                _property = new InputItem
                 {
                     ReadInfo = (IReadInfo)template,
                     Type = ((IReadInfo)template).ValueType
                 };
             }
 
-            public IEnumerable<InputItem<T>> Properties
+            public IEnumerable<InputItem> Properties
             {
                 get { return new[] {_property}; }
             }
@@ -128,7 +124,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             get { return _result; }
         }
 
-        public IEnumerable<InputItem<T>> Properties { get { return _handler.Properties; } }
+        public IEnumerable<InputItem> Properties { get { return _handler.Properties; } }
 
         public ReadInputImpl(IConsoleInInterface consoleInInterface, IConsoleAdapter consoleOutInterface)
         {
@@ -194,123 +190,4 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             }
         }
     }
-
-    internal class InputItem<T> : IPropertySource where T : class
-    {
-        private object _value;
-        public Type Type { get; internal set; }
-        public string Name { get; internal set; }
-        public PropertyInfo Property { get; internal set; }
-
-        public object Value
-        {
-            get
-            {
-                return ReadInfo != null ? ReadInfo.MakeValueInstance(_value) : _value;
-            }
-
-            internal set
-            {
-                _value = value;
-            }
-        }
-
-        public IReadInfo ReadInfo { get; set; }
-
-        public string TypeDescription()
-        {
-            return String.Format("{0} {1}", Type.Name, Name);
-        }
-    }
-}
-
-/// <summary>
-/// Read a value from console in to an <see cref="InputItem{T}"/>.
-/// </summary>
-internal static class ReadInputItem
-{
-    public static bool GetValue<T>(InputItem<T> item, IConsoleInInterface consoleIn, IConsoleAdapter consoleOut) where T : class
-    {
-        var redirected = consoleIn.InputIsRedirected;
-        object value;
-
-        string prompt = null;
-        string optionString = null;
-        if (item.ReadInfo != null)
-        {
-            if (item.ReadInfo.Prompt != null)
-                prompt = item.ReadInfo.Prompt;
-
-            if (item.ReadInfo.Options.Any())
-            {
-                var options = item.ReadInfo.Options.Select(o => string.Format("{0}-{1}", o.RequiredValue, o.Prompt));
-                optionString = string.Format("[{0}]", string.Join(", ", options));
-            }
-        }
-
-        if (prompt == null)
-            prompt = PropertyNameConverter.ToPrompt(item.Property);
-
-        var displayPrompt = string.Format("{0}{1}: ", prompt, optionString == null ? string.Empty : " " + optionString);
-
-        do
-        {
-            consoleOut.Wrap(displayPrompt);
-            if (ReadValue(item, consoleIn, consoleOut, out value))
-            {
-                item.Value = value;
-                return true;
-            }
-        } while (!redirected);
-
-        return false;
-    }
-
-    private static bool ReadValue<T>(InputItem<T> item, IConsoleInInterface consoleIn, IConsoleAdapter consoleOut, out object value) where T : class
-    {
-        var input = consoleIn.ReadLine();
-        if (item.ReadInfo != null && item.ReadInfo.Options.Any())
-            return SelectOption(input, item.ReadInfo.Options, consoleOut, out value);
-        
-        return ConvertString(input, item.Type, consoleOut, out value);
-    }
-
-    private static bool SelectOption(string input, IEnumerable<OptionDefinition> options, IConsoleAdapter consoleOut, out object result)
-    {
-        var hit = options.FirstOrDefault(o => o.RequiredValue == input);
-        if (hit == null)
-        {
-            consoleOut.WrapLine(@"""{0}"" is not a valid selection.", input);
-            result = null;
-            return false;
-        }
-
-        result = hit.SelectedValue;
-        return true;
-    }
-
-    private static bool ConvertString(string input, Type type, IConsoleAdapter consoleOut, out object result)
-    {
-        try
-        {
-            var conversion = typeof(Convert).GetMethods()
-                .FirstOrDefault(m => m.ReturnType == type
-                                     && m.GetParameters().Length == 1
-                                     && m.GetParameters()[0].ParameterType == typeof(string));
-            if (conversion != null)
-            {
-                result = conversion.Invoke(null, new object[] { input });
-                return true;
-            }
-
-            result = null;
-        }
-        catch (TargetInvocationException e)
-        {
-            result = null;
-            consoleOut.WrapLine(e.InnerException.Message);
-        }
-        return false;
-    }
-
 }

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Mail;
-using System.Xml.Linq;
 using ConsoleToolkit.ConsoleIO.Internal;
 
 namespace ConsoleToolkit.ConsoleIO
@@ -14,15 +12,27 @@ namespace ConsoleToolkit.ConsoleIO
     public class Read<T> : IReadInfo
     {
         private string _prompt;
-        private List<OptionDefinition> _options = new List<OptionDefinition>(); 
+        private readonly List<OptionDefinition> _options = new List<OptionDefinition>();
+        private bool _showAsMenu;
+        private string _menuHeading;
         internal Read() { }
 
+        /// <summary>
+        /// Specify the prompt to display to the user.
+        /// </summary>
+        /// <param name="prompt">The prompt text.</param>
         public Read<T> Prompt(string prompt)
         {
             _prompt = prompt;
             return this;
         }
 
+        /// <summary>
+        /// Specify an option 
+        /// </summary>
+        /// <param name="selectedValue"></param>
+        /// <param name="requiredValue"></param>
+        /// <param name="prompt"></param>
         public Read<T> Option(T selectedValue, string requiredValue, string prompt)
         {
             _options.Add(new OptionDefinition
@@ -34,22 +44,35 @@ namespace ConsoleToolkit.ConsoleIO
             return this;
         }
 
+        public Read<T> AsMenu(string heading)
+        {
+            _showAsMenu = true;
+            _menuHeading = heading;
+            return this;
+        }
+
+        public static implicit operator T(Read<T> item)
+        {
+            return item.Value;
+        }
+
+        public T Value { get; set; }
+
         string IReadInfo.Prompt { get { return _prompt; } }
-        public IEnumerable<OptionDefinition> Options { get {return _options; } }
-        public Type ValueType { get { return typeof (T); } }
+
+        IEnumerable<OptionDefinition> IReadInfo.Options { get {return _options; } }
+
+        Type IReadInfo.ValueType { get { return typeof (T); } }
+
+        bool IReadInfo.ShowAsMenu { get { return _showAsMenu; } }
+
+        string IReadInfo.MenuHeading { get { return _menuHeading; } }
 
         object IReadInfo.MakeValueInstance(object value)
         {
             var newItem = new Read<T>();
             newItem.Value = (T)value;
             return newItem;
-        }
-
-        public T Value { get; set; }
-
-        public static implicit operator T(Read<T> item)
-        {
-            return item.Value;
         }
     }
 

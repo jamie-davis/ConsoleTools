@@ -11,6 +11,8 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         string Prompt { get; }
         IEnumerable<OptionDefinition> Options { get; }
         Type ValueType { get; }
+        bool ShowAsMenu { get; }
+        string MenuHeading { get; }
         object MakeValueInstance(object value);
     }
 }

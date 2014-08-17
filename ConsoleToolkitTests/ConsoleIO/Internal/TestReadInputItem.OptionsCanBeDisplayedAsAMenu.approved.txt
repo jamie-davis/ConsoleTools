@@ -1,0 +1,16 @@
+﻿Select one                                                  
+                                                            
+1-First                                                     
+2-Second                                                    
+3-Third                                                     
+                                                            
+prompt:bad                                                  
+"bad" is not a valid selection.                             
+Select one                                                  
+                                                            
+1-First                                                     
+2-Second                                                    
+3-Third                                                     
+                                                            
+prompt:2                                                    
+                                                            

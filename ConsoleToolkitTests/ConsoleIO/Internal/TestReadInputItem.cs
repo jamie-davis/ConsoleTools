@@ -51,7 +51,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         public void StringCanBeRead()
         {
             _interface.SetInputStream(_goodStream);
-            var item = new InputItem<string>
+            var item = new InputItem
             {
                 Name = "StringVal",
                 Property = StringProp,
@@ -66,7 +66,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         public void ValidReadReturnsTrue()
         {
             _interface.SetInputStream(_stringOnlyStream);
-            var item = new InputItem<string>
+            var item = new InputItem
             {
                 Name = "StringVal",
                 Property = StringProp,
@@ -81,7 +81,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         {
             _interface.SetInputStream(_stringOnlyStream);
             _interface.InputIsRedirected = true;
-            var item = new InputItem<Read<string>>
+            var item = new InputItem
             {
                 Name = "IntVal",
                 Property = IntProp,
@@ -95,7 +95,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         public void TextIsConvertedToRequiredType()
         {
             _interface.SetInputStream(_goodStream);
-            var item = new InputItem<Read<int>>
+            var item = new InputItem
             {
                 Name = "IntVal",
                 Property = IntProp,
@@ -110,7 +110,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         public void PromptIsDisplayed()
         {
             _interface.SetInputStream(_goodStream);
-            var item = new InputItem<Read<string>>
+            var item = new InputItem
             {
                 Name = "StringVal",
                 Property = StringProp,
@@ -127,7 +127,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         {
             _interface.SetInputStream(_goodStream);
             _interface.InputIsRedirected = true;
-            var item = new InputItem<Read<int>>
+            var item = new InputItem
             {
                 Name = "IntVal",
                 Property = IntProp,
@@ -143,7 +143,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         public void InteractiveInputContinuesUntilGoodInputReceived()
         {
             _interface.SetInputStream(_goodStream);
-            var item = new InputItem<Read<int>>
+            var item = new InputItem
             {
                 Name = "IntVal",
                 Property = IntProp,
@@ -159,7 +159,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         public void OptionsCanBeSpecified()
         {
             _interface.SetInputStream(_selectStream);
-            var item = new InputItem<Read<int>>
+            var item = new InputItem
             {
                 Name = "IntVal",
                 Property = IntProp,
@@ -175,10 +175,30 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         }
 
         [Test]
+        public void OptionsCanBeDisplayedAsAMenu()
+        {
+            _interface.SetInputStream(_selectStream);
+            var item = new InputItem
+            {
+                Name = "IntVal",
+                Property = IntProp,
+                Type = typeof(int),
+                ReadInfo = Read.Int().Prompt("prompt")
+                .Option(1, "1", "First")
+                .Option(2, "2", "Second")
+                .Option(3, "3", "Third")
+                .AsMenu("Select one")
+            };
+
+            ReadInputItem.GetValue(item, _interface, _adapter);
+            Approvals.Verify(_interface.GetBuffer());
+        }
+
+        [Test]
         public void OptionIsSelected()
         {
             _interface.SetInputStream(_selectStream);
-            var item = new InputItem<Read<int>>
+            var item = new InputItem
             {
                 Name = "IntVal",
                 Property = IntProp,
