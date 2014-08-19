@@ -4,7 +4,7 @@
 2-Second                                                    
 3-Third                                                     
                                                             
-prompt:bad                                                  
+prompt: bad                                                 
 "bad" is not a valid selection.                             
 Select one                                                  
                                                             
@@ -12,5 +12,5 @@ Select one
 2-Second                                                    
 3-Third                                                     
                                                             
-prompt:2                                                    
+prompt: 2                                                   
                                                             
