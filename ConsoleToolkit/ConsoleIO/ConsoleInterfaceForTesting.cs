@@ -205,10 +205,13 @@ namespace ConsoleToolkit.ConsoleIO
             var newLine = overwritePosition > 0 ? line.Substring(0, overwritePosition) : string.Empty;
             newLine += data;
 
-            if (newLine.Length < BufferWidth - 1)
-                newLine += line.Substring(newLine.Length);
+            if (newLine.Length < line.Length)
+                newLine += line.Substring(newLine.Length); //copy the remainder of the line from the original data
 
-            newLine = newLine.Substring(0, BufferWidth);
+            if (newLine.Length > BufferWidth)
+                newLine = newLine.Substring(0, BufferWidth);
+            else if (newLine.Length < BufferWidth)
+                newLine += new string(' ', BufferWidth - newLine.Length);
 
             buffer[lineIndex] = newLine;
         }
