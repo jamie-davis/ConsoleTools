@@ -8,10 +8,19 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
     internal class MethodParameterInjector
     {
         private List<object> _injectableReferences;
+        private Dictionary<Type, object> _instancesForSpecifiedTypes;
 
-        public MethodParameterInjector(IEnumerable<object> injectableReferences)
+        public MethodParameterInjector(IEnumerable<object> injectableReferences, IEnumerable<KeyValuePair<Type, object>> instancesForSpecifiedTypes = null)
         {
-            _injectableReferences = injectableReferences.ToList();
+            if (injectableReferences == null)
+                _injectableReferences = new List<object>();
+            else
+                _injectableReferences = injectableReferences.ToList();
+
+            if (instancesForSpecifiedTypes != null)
+                _instancesForSpecifiedTypes = instancesForSpecifiedTypes.ToDictionary(i => i.Key, i => i.Value);
+            else
+                _instancesForSpecifiedTypes = new Dictionary<Type, object>();
         }
 
         public object[] GetParameters(MethodInfo method, IEnumerable<object> oneTimeInjectables)
@@ -21,12 +30,17 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
             var parameters = method.GetParameters();
             foreach (var parameterInfo in parameters)
             {
-                var value = localInjectables.FirstOrDefault(i => Matches(parameterInfo.ParameterType, i.GetType()))
-                            ?? _injectableReferences.FirstOrDefault(i => Matches(parameterInfo.ParameterType, i.GetType()));
+                var parameterType = parameterInfo.ParameterType;
+                object value;
+                if (!_instancesForSpecifiedTypes.TryGetValue(parameterType, out value))
+                {
+                    value = localInjectables.FirstOrDefault(i => Matches(parameterType, i.GetType()))
+                                ?? _injectableReferences.FirstOrDefault(i => Matches(parameterType, i.GetType()));
+                }
 
                 if (value == null)
                 {
-                    throw new ParameterTypeCannotBeResolved(parameterInfo.ParameterType);
+                    throw new ParameterTypeCannotBeResolved(parameterType);
                 }
 
                 injected.Add(value);
@@ -41,7 +55,13 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
 
         public bool CanSupply(Type parameterType)
         {
-            return _injectableReferences.Any(i => Matches(parameterType, i.GetType()));
+            return _instancesForSpecifiedTypes.ContainsKey(parameterType) ||
+                _injectableReferences.Any(i => Matches(parameterType, i.GetType()));
+        }
+
+        public void AddInstance<T>(T instance)
+        {
+            _instancesForSpecifiedTypes[typeof (T)] = instance;
         }
     }
 }

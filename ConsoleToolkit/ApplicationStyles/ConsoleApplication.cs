@@ -68,8 +68,7 @@ namespace ConsoleToolkit.ApplicationStyles
             var handler = app.Handlers.FirstOrDefault().Value;
             if (handler != null)
             {
-                var injector = new MethodParameterInjector(new Object[] {app, app.Console});
-                handler.Execute(app, command, app.Console, injector);
+                handler.Execute(app, command, app.Console, app.Injector.Value);
             }
             else
             {

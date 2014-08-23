@@ -53,7 +53,7 @@ namespace ConsoleToolkitTests
                 }
             }
 
-            public Type[] GetCommandTypes()
+            public Type[] GetCommandTypesFromConfig()
             {
                 return Config.Commands.Select(c => c.CommandType).ToArray();
             }
@@ -104,7 +104,7 @@ namespace ConsoleToolkitTests
             var args = new[] {"A"};
             TestApp.Main(args);
 
-            Assert.That(TestApp.LastTestApp.GetCommandTypes(), Is.EqualTo(new[] { typeof(TestApp.TestAppCommand) }));
+            Assert.That(TestApp.LastTestApp.GetCommandTypesFromConfig(), Is.EqualTo(new[] { typeof(TestApp.TestAppCommand) }));
         }
 
         [Test, ExpectedException(typeof(NoApplicationClassFound))]

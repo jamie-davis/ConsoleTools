@@ -23,7 +23,7 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
         private InitPhase _initPhase = InitPhase.PreInit;
         private Func<Type, bool> _typeFilter;
 
-        private MethodParameterInjector _injector;
+        internal Lazy<MethodParameterInjector> Injector { get; set; }
 
         /// <summary>
         /// The command configuration for the application.<para/>
@@ -46,7 +46,6 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
         /// </summary>
         protected virtual int CommandLineErrorExitCode { get { return 1; } }
 
-
         /// <summary>
         /// This is the error code returned by the console application framework when no command handler can be located.
         /// <para/>
@@ -54,11 +53,14 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
         /// </summary>
         protected virtual int MissingCommandHandlerExitCode { get { return 1000; } }
 
+        /// <summary>
+        /// This is the console adapter for the application.
+        /// </summary>
         protected IConsoleAdapter Console { get; set; }
 
         internal ConsoleApplicationBase()
         {
-            
+            Injector = new Lazy<MethodParameterInjector>(() => new MethodParameterInjector(new object[] { this, Console }));
         }
 
         /// <summary>
@@ -125,12 +127,22 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
         internal abstract void LoadConfigFromAssembly();
 
         /// <summary>
+        /// Register an instance of a type or interface that should be passed to command handlers that require
+        /// the specified type.<para/>
+        /// <remarks>Handler methods may specify the specified type in their parameter list and the instance will be
+        /// provided.</remarks>
+        /// </summary>
+        /// <param name="instance">The instance to provide.</param>
+        protected void RegisterInjectionInstance<T>(T instance)
+        {
+            Injector.Value.AddInstance(instance);
+        }
+
+        /// <summary>
         /// This method carries out funtionality that should follow <see cref="Initialise"/>.
         /// </summary>
         protected virtual void PostInitialise()
         {
-            _injector = new MethodParameterInjector(new object[] { this, Console });
-
             if (_initPhase != InitPhase.PreInit)
                 throw new CallOrderViolationException();
             _initPhase = InitPhase.PosInit;
@@ -151,9 +163,9 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
                 }
 
                 var commandTypesArray = commandTypes.ToArray();
-                LoadHandlersFromCommands(commandTypesArray, _injector);
-                LoadCommandHandlersFromAssembly(commandTypesArray, _injector);
-                LoadHandlersFromClass(commandTypesArray, _injector);
+                LoadHandlersFromCommands(commandTypesArray, Injector.Value);
+                LoadCommandHandlersFromAssembly(commandTypesArray, Injector.Value);
+                LoadHandlersFromClass(commandTypesArray, Injector.Value);
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using ConsoleToolkit.Annotations;
 using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
@@ -28,6 +28,7 @@ namespace ConsoleToolkit.ApplicationStyles
         private Type _helpCommandType;
         private HelpHandler _helpHandler;
 
+        [UsedImplicitly]
         protected static void Run(CommandDrivenApplication app, string[] args, IConsoleAdapter console)
         {
             app.Console = console;
@@ -58,8 +59,7 @@ namespace ConsoleToolkit.ApplicationStyles
             ICommandHandler handler;
             if (app.Handlers.TryGetValue(command.GetType(), out handler))
             {
-                var injector = new MethodParameterInjector(new Object[] {app, app.Console});
-                handler.Execute(app, command, app.Console, injector);
+                handler.Execute(app, command, app.Console, app.Injector.Value);
             }
             else
             {

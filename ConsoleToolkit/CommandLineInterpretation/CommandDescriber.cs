@@ -38,7 +38,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
         private static IConsoleRenderer FormatCommandDescription(BaseCommandConfig command, string prefixText = null, IOptionNameHelpAdorner adorner = null)
         {
             var formatter = new RecordingConsoleAdapter();
-            formatter.WrapLine(command.Description ?? string.Empty);
+            formatter.WrapLine(((IContext)command).Description ?? string.Empty);
 
             var positionalsPresent = command.Positionals.Any();
             var optionsPresent = command.Options.Any();

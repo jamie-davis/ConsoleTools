@@ -15,6 +15,6 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
         internal abstract object Create(string commandName);
         internal abstract bool Validate(object command, IList<string> messages);
-        public string Description { get; set; }
+        string IContext.Description { get; set; }
     }
 }

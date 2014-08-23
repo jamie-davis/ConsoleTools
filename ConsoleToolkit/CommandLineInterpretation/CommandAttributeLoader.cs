@@ -45,7 +45,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
             AttachPropAndFieldElements(commandConfig);
             var desc = GetDescription(typeof (T));
             if (desc != null)
-                (commandConfig as BaseCommandConfig).Description = desc;
+                (commandConfig as IContext).Description = desc;
 
             return commandConfig;
         }

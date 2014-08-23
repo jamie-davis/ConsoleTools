@@ -19,6 +19,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
         private ConsoleInterfaceForTesting _console;
 
         #region Types for test
+#pragma warning disable 649
 
         public class TestApp : CommandDrivenApplication
         {
@@ -199,6 +200,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
             }
         }
 
+#pragma warning restore 649
         #endregion
 
         [SetUp]

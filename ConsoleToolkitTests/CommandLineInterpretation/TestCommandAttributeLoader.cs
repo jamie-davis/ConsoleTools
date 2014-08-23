@@ -15,6 +15,9 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
     {
         private CommandConfig<DefaultName> _defaultNameCommand;
 
+        #region Types for test
+#pragma warning disable 649
+
         class InvalidBecauseNotACommand
         {
             
@@ -123,6 +126,8 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         }
         // ReSharper restore UnusedField.Compiler
         // ReSharper restore UnusedMember.Local
+#pragma warning restore 649
+        #endregion
 
         [SetUp]
         public void SetUp()
@@ -152,7 +157,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         [Test]
         public void CommandDescriptionIsExtracted()
         {
-            Assert.That((_defaultNameCommand as BaseCommandConfig).Description, Is.EqualTo("Command description"));
+            Assert.That((_defaultNameCommand as IContext).Description, Is.EqualTo("Command description"));
         }
 
         [Test]

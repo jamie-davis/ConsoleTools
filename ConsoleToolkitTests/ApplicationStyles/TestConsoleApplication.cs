@@ -1,6 +1,7 @@
 ﻿using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit;
+using ConsoleToolkit.Annotations;
 using ConsoleToolkit.ApplicationStyles;
 using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.CommandLineInterpretation;
@@ -30,7 +31,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
             public class Command
             {
                 [Option]
-                public bool TestOpt { get; set; }
+                public bool TestOpt { get; [UsedImplicitly] set; }
             }
 
             public TestApp()
@@ -127,7 +128,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
             {
                 [Option("h", ShortCircuit = true)]
                 [Description("Display this help text.")]
-                public bool Help { get; set; }
+                public bool Help { get; [UsedImplicitly] set; }
             }
 
             [CommandHandler(typeof(Command))]
@@ -160,7 +161,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
 
             public class Command
             {
-                public bool Help { get; set; }
+                public bool Help { get; [UsedImplicitly] set; }
             }
 
             public static void Main(string[] args)
@@ -221,6 +222,39 @@ namespace ConsoleToolkitTests.ApplicationStyles
 
             protected override void Initialise()
             {
+                SetConfigTypeFilter(t => t.DeclaringType == GetType());
+            }
+        }
+
+        public class CustomInjectionApp : ConsoleApplication
+        {
+            [Command]
+            public class Options
+            {
+            }
+
+            public class CustomObject
+            {
+                public string Message { get; set; }
+            }
+
+            [CommandHandler(typeof(Options))]
+            public class HandlerClass
+            {
+                public void Handle(IConsoleAdapter console, Options command, CustomObject custom)
+                {
+                    console.WriteLine("Custom string is \"{0}\"", custom.Message);
+                }
+            }
+
+            public static void Main(string[] args)
+            {
+                Toolkit.Execute(args);
+            }
+
+            protected override void Initialise()
+            {
+                RegisterInjectionInstance(new CustomObject { Message = "Custom message" });
                 SetConfigTypeFilter(t => t.DeclaringType == GetType());
             }
         }
@@ -299,6 +333,13 @@ namespace ConsoleToolkitTests.ApplicationStyles
         public void HandlerClassCommandIsExecuted()
         {
             UnitTestAppUtils.Run<HandlerClassApp>(new string[] {}, _consoleOut);
+            Approvals.Verify(_consoleOut.GetBuffer());
+        }
+
+        [Test]
+        public void CustomInstanceCanBeInjectedIntoHandler()
+        {
+            UnitTestAppUtils.Run<CustomInjectionApp>(new string[] {}, _consoleOut);
             Approvals.Verify(_consoleOut.GetBuffer());
         }
 

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using ConsoleToolkit.ApplicationStyles.Internals;
 using NUnit.Framework;
 
@@ -13,19 +11,34 @@ namespace ConsoleToolkitTests.ApplicationStyles.Internals
     {
         private MethodInfo _method1;
         private MethodInfo _method2;
-        
+        private MethodInfo _method3;
+
+        // ReSharper disable UnusedMember.Global
+        #region Types for test
+        public interface ITestInterface
+        {
+            
+        }
+
+        class TestImpl : ITestInterface
+        {
+            
+        }
+        #endregion
+
         #region Test methods
-// ReSharper disable UnusedMember.Global
         public void TestMethod1(TestMethodParameterInjector inj) {}
         public void TestMethod2(TestMethodParameterInjector inj, int n, string s) {}
-// ReSharper restore UnusedMember.Global
+        public void TestMethod3(TestMethodParameterInjector inj, ITestInterface t) {}
         #endregion
+        // ReSharper restore UnusedMember.Global
 
         [SetUp]
         public void SetUp()
         {
             _method1 = GetType().GetMethod("TestMethod1");
             _method2 = GetType().GetMethod("TestMethod2");
+            _method3 = GetType().GetMethod("TestMethod3");
         }
 
         [Test]
@@ -72,6 +85,36 @@ namespace ConsoleToolkitTests.ApplicationStyles.Internals
         {
             var injector = new MethodParameterInjector(new object[]{"string", 5});
             Assert.That(injector.CanSupply(GetType()), Is.False);
+        }
+
+        [Test]
+        public void CanSupplyReturnsTrueForTypesWithSpecifiedInstances()
+        {
+            var injector = new MethodParameterInjector(new object[]{"string", 5}, new [] {new KeyValuePair<Type, object>(typeof(ITestInterface), new TestImpl()) });
+            Assert.That(injector.CanSupply(typeof(ITestInterface)), Is.True);
+        }
+
+        [Test]
+        public void CanSupplyASpecificInstanceForPredefinedParameterTypes()
+        {
+            var testImpl = new TestImpl();
+            var injector = new MethodParameterInjector(new object[] { "string", 5 },
+                new[] { new KeyValuePair<Type, object>(typeof(ITestInterface), testImpl) });
+
+            injector.GetParameters(_method3, new object[] { this });
+            Assert.That(injector.GetParameters(_method3, new object[] { this })[1], Is.SameAs(testImpl));
+        }
+
+        [Test]
+        public void SpecificInstancesCanBeInjectedAfterConstruction()
+        {
+            var testImpl = new TestImpl();
+            var injector = new MethodParameterInjector(new object[] { "string", 5 });
+
+            injector.AddInstance<ITestInterface>(testImpl);
+
+            injector.GetParameters(_method3, new object[] { this });
+            Assert.That(injector.GetParameters(_method3, new object[] { this })[1], Is.SameAs(testImpl));
         }
     }
 }
