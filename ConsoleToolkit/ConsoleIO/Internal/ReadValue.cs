@@ -40,9 +40,11 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             return ConvertString(input, item.Type, consoleOut, out value);
         }
 
-        private static bool SelectOption(string input, IEnumerable<OptionDefinition> options, IConsoleAdapter consoleOut, out object result)
+        private static bool SelectOption(string input, IEnumerable<OptionDefinition> optionDefinitions, IConsoleAdapter consoleOut, out object result)
         {
-            var hit = options.FirstOrDefault(o => o.RequiredValue == input);
+            var options = optionDefinitions.ToList();
+            var hit = options.FirstOrDefault(o => o.RequiredValue == input)
+                ?? options.FirstOrDefault(o => string.Compare(o.RequiredValue, input, StringComparison.OrdinalIgnoreCase) == 0);
             if (hit == null)
             {
                 consoleOut.WrapLine(@"""{0}"" is not a valid selection.", input);

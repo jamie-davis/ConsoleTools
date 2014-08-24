@@ -168,6 +168,54 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         }
 
         [Test]
+        public void OptionInputIsNotCaseSensitive()
+        {
+            //Arrange
+            _interface.SetInputStream(MakeStream(new[] { "c" }));
+            var item = new InputItem
+            {
+                Name = "IntVal",
+                Property = IntProp,
+                Type = typeof(int),
+                ReadInfo = Read.Int().Prompt("prompt")
+                    .Option(100, "B", "First")
+                    .Option(200, "C", "Second")
+                    .Option(300, "D", "Third")
+            };
+
+            //Act
+            object value;
+            ReadValue.UsingReadLine(item, _interface, _adapter, out value);
+
+            //Assert
+            Assert.That(value, Is.EqualTo(200));
+        }
+
+        [Test]
+        public void OptionsCanBeDifferentiatedByCase()
+        {
+            //Arrange
+            _interface.SetInputStream(MakeStream(new[] { "a", "A" }));
+            var item = new InputItem
+            {
+                Name = "IntVal",
+                Property = IntProp,
+                Type = typeof(int),
+                ReadInfo = Read.Int().Prompt("prompt")
+                    .Option(100, "a", "First")
+                    .Option(200, "A", "Second")
+            };
+
+            //Act
+            object value1, value2;
+            ReadValue.UsingReadLine(item, _interface, _adapter, out value1);
+            ReadValue.UsingReadLine(item, _interface, _adapter, out value2);
+
+            //Assert
+            Assert.That(string.Format("Value1 = {0}, Value2 = {1}", value1, value2), Is.EqualTo("Value1 = 100, Value2 = 200"));
+        }
+
+        [Test]
         public void ValidationErrorMessageIsDisplayed()
         {
             //Arrange

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using ConsoleToolkit;
 using ConsoleToolkit.ApplicationStyles;
-using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.ConsoleIO;
 
 namespace ConsoleToolkitDemo
@@ -22,89 +20,10 @@ namespace ConsoleToolkitDemo
             console.FormatTable(data);
         }
 
-        public void Handle(ColouredTextCommand command, IConsoleOperations console)
-        {
-            console.WriteLine("Coloured".Red() + " text is " + "easy".Yellow() + " to configure.");
-            console.WriteLine();
-            console.WriteLine("For example:");
-            console.WriteLine();
-            console.WriteLine(@"    ""red on green"".Red().BGDarkGreen()");
-            console.WriteLine();
-            console.WriteLine("Displays like this:");
-            console.WriteLine();
-            console.WriteLine("red on green".Red().BGGreen());
-            console.WriteLine();
-            console.WriteLine("It's".Cyan()
-                + "easy".BGYellow().Black()
-                + "to".BGDarkCyan().Cyan()
-                + "overuse".BGDarkBlue().White()
-                + "it!".Magenta().BGGray());
-            console.WriteLine();
-            console.WriteLine();
-            var data = Enumerable.Range(1, 10)
-                .Select(i => new 
-                {
-                    Number = i, 
-                    String = string.Join(" ", Enumerable.Repeat("blah", i)).Cyan(), 
-                    Red = (("Red" + Environment.NewLine +"Lines").Cyan() + Environment.NewLine + "lines").BGDarkRed()+ "Clear",
-                    Wrapped = @"Complex data string.
-Includes a hard newline.".Yellow()
-                });
-            console.FormatTable(data);
-        }
 protected override void Initialise()
         {
             HelpCommand<HelpCommand>(h => h.Topic);
         }
     }
 
-    // ReSharper disable UnusedAutoPropertyAccessor.Global
-    [Command("help")]
-    [Description("Display help text.")]
-    class HelpCommand
-    {
-        [Positional(0, DefaultValue = null)]
-        public string Topic { get; set; }
-    }
-
-    [Command("tables")]
-    [Description("Displays tabulated test data.")]
-    class TableDataCommand
-    {
-    }
-
-    [Command("text")]
-    [Description("Demonstrates the display of coloured text.")]
-    class ColouredTextCommand
-    {        
-    }
-
-    [Command("input")]
-    class GetInputCommand
-    {
-        /// <summary>
-        /// This is the self handler for the input command.
-        /// </summary>
-        /// <param name="console"></param>
-        [CommandHandler]
-        public void Handle(IConsoleAdapter console)
-        {
-            console.WrapLine("Get user input".BGWhite().Black());
-            console.WriteLine();
-
-            var item = console.ReadInput(new {String = Read.String().Prompt("Enter some text: ".Yellow())});
-
-            var characters = item.String.Value
-                .Select(c => string.Format(@"""{0}"" = {1}".Red(), 
-                    c.ToString().Yellow(),
-                    string.Format("{0:X}", (byte) c).PadLeft(2, '0').Green()));
-
-            console.WriteLine();
-            console.WrapLine(string.Join("  ", characters));
-            console.WriteLine();
-            
-            console.ReadLine();
-        }
-    }
-    // ReSharper restore UnusedAutoPropertyAccessor.Global
 }

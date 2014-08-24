@@ -42,8 +42,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ColouredTextCommand.cs" />
+    <Compile Include="GetInputCommand.cs" />
+    <Compile Include="HelpCommand.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TableDataCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
