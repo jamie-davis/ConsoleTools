@@ -10,29 +10,63 @@ using ConsoleToolkit.Utilities;
 
 namespace ConsoleToolkit
 {
+    public class ToolkitOptions
+    {
+        internal class ConfirmationDetails
+        {
+            public string YesText { get; set; }
+            public string YesPrompt { get; set; }
+            public string NoText { get; set; }
+            public string NoPrompt { get; set; }
+        }
+
+        private const CommandLineParserConventions DefaultParserConventions = CommandLineParserConventions.MicrosoftStandard;
+
+        private CommandLineParserConventions _parsingConventions = DefaultParserConventions;
+
+        public CommandLineParserConventions ParsingConventions
+        {
+            get { return _parsingConventions; }
+            set { _parsingConventions = value; }
+        }
+
+        private ConfirmationDetails _confirmationInfo;
+        internal ConfirmationDetails ConfirmationInfo { get { return _confirmationInfo; } }
+
+        internal ToolkitOptions()
+        {
+            OverrideConfirmOptions("Y", "Yes", "N", "No");
+        }
+
+        public void OverrideConfirmOptions(string trueText, string truePrompt, string falseText, string falsePrompt)
+        {
+            _confirmationInfo = new ConfirmationDetails
+            {
+                YesText = trueText,
+                YesPrompt = truePrompt,
+                NoText = falseText,
+                NoPrompt = falsePrompt
+            };
+        }
+    }
     public static class Toolkit
     {
-        private const CommandLineParserConventions DefaultParserConventions = CommandLineParserConventions.MicrosoftStandard;
+        private static ToolkitOptions _options = new ToolkitOptions();
+        public static ToolkitOptions Options { get { return _options; } }
+
         private static List<Type> _toolkitBaseClassTypes = new List<Type>
         {
             typeof(ConsoleApplication),
             typeof(CommandDrivenApplication),
         };
 
-        private static CommandLineParserConventions _parsingConventions = DefaultParserConventions;
 
         /// <summary>
         /// Reset the toolkit to its default state. Only useful to unit tests.
         /// </summary>
         internal static void GlobalReset()
         {
-            ParsingConventions = DefaultParserConventions;
-        }
-
-        public static CommandLineParserConventions ParsingConventions
-        {
-            get { return _parsingConventions; }
-            set { _parsingConventions = value; }
+            _options = new ToolkitOptions();
         }
 
         public static void Execute(string[] args)

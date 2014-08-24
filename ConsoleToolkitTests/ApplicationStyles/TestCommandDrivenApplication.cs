@@ -246,7 +246,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
         [Test]
         public void StaticParsingConventionsAreUsed()
         {
-            Toolkit.ParsingConventions = CommandLineParserConventions.MsDosConventions;
+            Toolkit.Options.ParsingConventions = CommandLineParserConventions.MsDosConventions;
             UnitTestAppUtils.Run<TestApp>(new [] {"c","/TestOpt"});
             Assert.That(TestApp.LastTestApp.TestOptValue, Is.True);
         }
@@ -260,7 +260,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
         [Test]
         public void HelpIsProvidedWithIndicatedCommand()
         {
-            Toolkit.ParsingConventions = CommandLineParserConventions.MsDosConventions;
+            Toolkit.Options.ParsingConventions = CommandLineParserConventions.MsDosConventions;
             UnitTestAppUtils.Run<HelpCommandApp>(new[] { "helpme" }, _console);
             Approvals.Verify(_console.GetBuffer());
         }
@@ -268,7 +268,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
         [Test]
         public void CommandLevelHelpIsProvidedWithIndicatedCommand()
         {
-            Toolkit.ParsingConventions = CommandLineParserConventions.MsDosConventions;
+            Toolkit.Options.ParsingConventions = CommandLineParserConventions.MsDosConventions;
             UnitTestAppUtils.Run<HelpCommandApp>(new[] { "helpme", "helpme" }, _console);
             Approvals.Verify(_console.GetBuffer());
         }
@@ -276,7 +276,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
         [Test,ExpectedException(typeof(HelpCommandMustBePartOfConfiguration))]
         public void HelpCommandTypeMustBeAConfiguredCommand()
         {
-            Toolkit.ParsingConventions = CommandLineParserConventions.MsDosConventions;
+            Toolkit.Options.ParsingConventions = CommandLineParserConventions.MsDosConventions;
             UnitTestAppUtils.Run<InvalidHelpCommandApp>(new[] { "helpme" }, _console);
         }
     }

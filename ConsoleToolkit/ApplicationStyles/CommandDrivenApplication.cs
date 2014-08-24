@@ -72,7 +72,7 @@ namespace ConsoleToolkit.ApplicationStyles
         {
             var types = GetCommandTypes();
 
-            Config = new CommandLineInterpreterConfiguration(Toolkit.ParsingConventions);
+            Config = new CommandLineInterpreterConfiguration(Toolkit.Options.ParsingConventions);
             foreach (var type in types)
                 Config.Load(type);
         }

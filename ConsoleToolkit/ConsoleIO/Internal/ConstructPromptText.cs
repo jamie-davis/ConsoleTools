@@ -32,7 +32,10 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         {
             var options = item.ReadInfo.Options.Select(MakeOptionText);
             var optionString = string.Format("[{0}]", string.Join(", ", options));
-            var displayPrompt = string.Format("{0} {1}", prompt, optionString);
+            var displayPrompt = string.Format("{0}{1}{2}", 
+                prompt, 
+                string.IsNullOrWhiteSpace(prompt) ? string.Empty : " ", 
+                optionString);
             return AddPromptSuffix(displayPrompt);
         }
 

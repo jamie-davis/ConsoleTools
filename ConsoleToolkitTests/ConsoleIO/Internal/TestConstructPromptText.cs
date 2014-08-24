@@ -84,6 +84,43 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         }
 
         [Test]
+        public void NoPropertyInfoGivesNoPromptText()
+        {
+            //Arrange
+            var inputItem = new InputItem
+            {
+                Name = "IntVal",
+                Property = null,
+                Type = typeof(int)
+            };
+
+            //Act
+            var result = ConstructPromptText.FromItem(inputItem);
+
+            //Assert
+            Assert.That(result, Is.EqualTo(": "));
+        }
+
+        [Test]
+        public void NoPropertyInfoOnSelectionGivesSelectionText()
+        {
+            //Arrange
+            var inputItem = new InputItem
+            {
+                Name = "IntVal",
+                Property = null,
+                Type = typeof(int),
+                ReadInfo = Read.Int().Option(4, "A", "Four").Option(10, "B", "Ten")
+            };
+
+            //Act
+            var result = ConstructPromptText.FromItem(inputItem);
+
+            //Assert
+            Assert.That(result, Is.EqualTo("[A-Four, B-Ten]: "));
+        }
+
+        [Test]
         public void PromptCanDisplaySelectionAsMenu()
         {
             //Arrange
@@ -108,5 +145,31 @@ B-Ten
 Int Val: ";
             Assert.That(result, Is.EqualTo(expected));
         }
+
+        [Test]
+        public void NoPropertyInfoOnMenuGivesMenuText()
+        {
+            //Arrange
+            var inputItem = new InputItem
+            {
+                Name = "IntVal",
+                Property = null,
+                Type = typeof(int),
+                ReadInfo = Read.Int().Option(4, "A", "Four").Option(10, "B", "Ten").AsMenu("No Property")
+            };
+
+            //Act
+            var result = ConstructPromptText.FromItem(inputItem);
+
+            //Assert
+            var expected = @"No Property
+
+A-Four
+B-Ten
+
+: ";
+            Assert.That(result, Is.EqualTo(expected));
+        }
+
     }
 }

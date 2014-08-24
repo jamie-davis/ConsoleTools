@@ -10,7 +10,7 @@ namespace ConsoleApplicationDemo
     {
         static void Main(string[] args)
         {
-            Toolkit.ParsingConventions = CommandLineParserConventions.MsDosConventions;
+            Toolkit.Options.ParsingConventions = CommandLineParserConventions.MsDosConventions;
             Toolkit.Execute(args);
         }
 

@@ -108,7 +108,7 @@ namespace ConsoleToolkit.ApplicationStyles
             if (commandTypes.Count == 0)
                 throw new ConsoleApplicationRequiresDefaultCommand();
 
-            Config = new CommandLineInterpreterConfiguration(Toolkit.ParsingConventions)
+            Config = new CommandLineInterpreterConfiguration(Toolkit.Options.ParsingConventions)
                          {
                              DefaultCommand = CommandAttributeLoader.Load(commandTypes.Single())
                          };

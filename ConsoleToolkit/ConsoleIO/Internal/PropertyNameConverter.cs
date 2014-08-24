@@ -39,6 +39,8 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
         public static string ToPrompt(PropertyInfo prop)
         {
+            if (prop == null) return null;
+
             return ToHeading(prop);
         }
     }

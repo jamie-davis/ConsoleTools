@@ -168,6 +168,15 @@ namespace ConsoleToolkit.ConsoleIO
             return impl.Result;
         }
 
+        public bool Confirm(string prompt)
+        {
+            var info = Toolkit.Options.ConfirmationInfo;
+            var confirmed = ReadInput(Read.Int().Prompt(prompt)
+                .Option(1, info.YesText, info.YesPrompt)
+                .Option(2, info.NoText, info.NoPrompt));
+            return confirmed == 1;
+        }
+
         public Encoding GetEncoding()
         {
             return _writer.Encoding;

@@ -125,6 +125,17 @@ namespace ConsoleToolkit.ConsoleIO
         /// <typeparam name="T">The type to be populated.</typeparam>
         /// <returns>A populated instance of T, or null.</returns>
         T ReadInput<T>() where T : class;
+
+        /// <summary>
+        /// Get confirmation from the user. The user will be prompted to input a string value confirming
+        /// or not a piece of text supplied in the call.<para/>
+        /// The user will be prompted to choose between "true" text or "false" text. The actual text values
+        /// are specified globally and the defaults can be overridden.
+        /// <seealso cref="Toolkit."/>
+        /// </summary>
+        /// <param name="prompt">The message to display to the user.</param>
+        /// <returns>True if the user confirms the message, otherwise false.</returns>
+        bool Confirm(string prompt);
     }
 
     /// <summary>
