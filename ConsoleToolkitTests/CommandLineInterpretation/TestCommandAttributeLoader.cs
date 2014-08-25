@@ -124,6 +124,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             [Option(ShortCircuit = true)]
             public bool C { get; set; }
         }
+
+        [Command]
+        class SuffixTestCommand { }
+
         // ReSharper restore UnusedField.Compiler
         // ReSharper restore UnusedMember.Local
 #pragma warning restore 649
@@ -145,6 +149,13 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         public void DefaultCommandNameIsDerivedFromClass()
         {
             Assert.That(_defaultNameCommand.Name, Is.EqualTo("DefaultName".ToLower()));
+        }
+
+        [Test]
+        public void CommandIsDroppedFromDefaultCommandName()
+        {
+            var command = CommandAttributeLoader.Load(typeof (SuffixTestCommand));
+            Assert.That(command.Name, Is.EqualTo("SuffixTest".ToLower()));
         }
 
         [Test]

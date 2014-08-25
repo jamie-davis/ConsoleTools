@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
@@ -8,6 +9,7 @@ using System.Reflection;
 using System.Runtime.InteropServices.ComTypes;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.Utilities;
+using DescriptionAttribute = ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.DescriptionAttribute;
 
 namespace ConsoleToolkit.CommandLineInterpretation
 {
@@ -39,7 +41,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
         {
             var commandConfig = new CommandConfig<T>(() => new T());
 
-            commandConfig.Name = (name ?? typeof (T).Name).ToLower();
+            commandConfig.Name = (name ?? MakeDefaultName<T>()).ToLower();
             commandConfig.CommandType = typeof (T);
 
             AttachPropAndFieldElements(commandConfig);
@@ -48,6 +50,25 @@ namespace ConsoleToolkit.CommandLineInterpretation
                 (commandConfig as IContext).Description = desc;
 
             return commandConfig;
+        }
+
+        /// <summary>
+        /// The default name for a command is the class name. If the class name ends with the word 
+        /// "Command", this will be dropped automatically. e.g. HelpCommand would have the command
+        /// name "help".
+        /// </summary>
+        /// <typeparam name="T">The command type.</typeparam>
+        /// <returns>The default command name for the type.</returns>
+        private static string MakeDefaultName<T>() where T : class, new()
+        {
+            const string suffix = "command";
+
+            var name = typeof (T).Name.ToLower();
+            if (name.EndsWith(suffix) && name != suffix)
+            {
+                return name.Substring(0, name.Length - suffix.Length);
+            }
+            return name;
         }
 
         private static void AttachPropAndFieldElements<T>(CommandConfig<T> commandConfig) where T : class
