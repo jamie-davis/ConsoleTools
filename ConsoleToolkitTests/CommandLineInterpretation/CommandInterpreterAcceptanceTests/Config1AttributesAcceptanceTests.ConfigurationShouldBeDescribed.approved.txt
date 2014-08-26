@@ -31,15 +31,15 @@ c2  Command 2 an archive
                                                             
 c3  Generate loads of spam                                  
                                                             
-    c3 <iterations> <Message>                               
-    [<OverrunLength>] [options]                             
+    c3 <iterations> <message>                               
+    [<overrunlength>] [options]                             
                                                             
     Parameters:                                             
                                                             
     iterations     Number of times to                       
                    repeat                                   
-    Message        The message to spam.                     
-    OverrunLength  Amount packet should                     
+    message        The message to spam.                     
+    overrunlength  Amount packet should                     
                    be longer than it                        
                    claims Default value:                    
                    5                                        

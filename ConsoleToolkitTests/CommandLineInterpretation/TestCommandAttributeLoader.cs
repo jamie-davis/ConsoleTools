@@ -210,13 +210,13 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         [Test]
         public void PositionalFieldParametersAreExtracted()
         {
-            Assert.That(_defaultNameCommand.Positionals.Any(p => p.ParameterName == "PosField"));
+            Assert.That(_defaultNameCommand.Positionals.Any(p => p.ParameterName == "posfield"));
         }
 
         [Test]
         public void PositionalDescriptionIsExtracted()
         {
-            var positional = _defaultNameCommand.Positionals.First(p => p.ParameterName == "PosField");
+            var positional = _defaultNameCommand.Positionals.First(p => p.ParameterName == "posfield");
             Assert.That(positional.Description, Is.Not.Null);
         }
 
@@ -233,13 +233,13 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         [Test]
         public void OptionPropertyIsExtracted()
         {
-            Assert.That(_defaultNameCommand.Options.Any(o => o.Name == "OptionProp"));
+            Assert.That(_defaultNameCommand.Options.Any(o => o.Name == "optionprop"));
         }
 
         [Test]
         public void OptionFieldIsExtracted()
         {
-            Assert.That(_defaultNameCommand.Options.Any(o => o.Name == "OptionField"));
+            Assert.That(_defaultNameCommand.Options.Any(o => o.Name == "optionfield"));
         }
 
         [Test]
@@ -265,7 +265,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         public void OptionShortCircuitIsLoaded()
         {
             var cmd = CommandAttributeLoader.Load(typeof(CommandWithShortCircuitOption)) as CommandConfig<CommandWithShortCircuitOption>;
-            var option = cmd.Options.First(o => o.Name == "C");
+            var option = cmd.Options.First(o => o.Name == "c");
             Assert.That(option.IsShortCircuit, Is.True);
         }
 
@@ -273,7 +273,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         public void OptionsDoNothaveShortCircuitByDefault()
         {
             var cmd = CommandAttributeLoader.Load(typeof(CommandWithShortCircuitOption)) as CommandConfig<CommandWithShortCircuitOption>;
-            var option = cmd.Options.First(o => o.Name == "B");
+            var option = cmd.Options.First(o => o.Name == "b");
             Assert.That(option.IsShortCircuit, Is.False);
         }
 

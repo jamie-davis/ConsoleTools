@@ -7,11 +7,11 @@ command  A test command that does
 helpme   Get help on the commands                           
          supported by this application.                     
                                                             
-         helpme [<Subject>]                                 
+         helpme [<subject>]                                 
                                                             
          Parameters:                                        
                                                             
-         Subject  Optional command on                       
+         subject  Optional command on                       
                   which help is                             
                   required.                                 
                                                             

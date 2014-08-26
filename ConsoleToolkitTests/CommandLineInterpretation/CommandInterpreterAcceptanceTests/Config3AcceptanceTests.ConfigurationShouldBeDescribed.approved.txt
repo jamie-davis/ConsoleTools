@@ -93,7 +93,7 @@ add    Add file contents to the index.
                          content of such files with git     
                          diff and committing them with git  
                          commit -a.                         
-       --Refresh         Don’t add the file(s), but only    
+       --refresh         Don’t add the file(s), but only    
                          refresh their stat() information   
                          in the index.                      
        --ignore-errors   If some files could not be added   

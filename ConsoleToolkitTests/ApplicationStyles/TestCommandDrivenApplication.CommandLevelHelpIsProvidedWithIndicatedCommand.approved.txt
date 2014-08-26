@@ -1,10 +1,10 @@
 ﻿Get help on the commands supported by                       
 this application.                                           
                                                             
-helpme [<Subject>]                                          
+helpme [<subject>]                                          
                                                             
 Parameters:                                                 
                                                             
-Subject  Optional command on which help                     
+subject  Optional command on which help                     
          is required.                                       
                                                             

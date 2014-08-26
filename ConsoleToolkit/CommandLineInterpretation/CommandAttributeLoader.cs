@@ -39,7 +39,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
         {
             var commandConfig = new CommandConfig<T>(CommandConstructionLambdaGenerator<T>.Generate())
             {
-                Name = (name ?? MakeDefaultName<T>()).ToLower(),
+                Name = (name ?? MakeDefaultName<T>()).ToLowerInvariant(),
                 CommandType = typeof (T)
             };
 
@@ -63,7 +63,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
         {
             const string suffix = "command";
 
-            var name = typeof (T).Name.ToLower();
+            var name = typeof (T).Name.ToLowerInvariant();
             if (name.EndsWith(suffix) && name != suffix)
             {
                 return name.Substring(0, name.Length - suffix.Length);
@@ -96,7 +96,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
         private static void AttachPositional<T>(AttributedMember<PositionalAttribute> posMember, CommandConfig<T> commandConfig, AttributedMember<OptionSetAttribute> optionSet) where T : class
         {
-            var name = posMember.Attribute.Name ?? posMember.MemberInfo.Name;
+            var name = posMember.Attribute.Name ?? posMember.MemberInfo.Name.ToLowerInvariant();
             var positional = MakePositional(commandConfig, name, posMember.MemberInfo, posMember.Type, optionSet);
             var desc = GetDescription(posMember.MemberInfo);
             if (desc != null)
@@ -247,7 +247,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
             if (optionAttribute.ShortName != null)
                 return optionAttribute.ShortName;
 
-            return member.Name;
+            return member.Name.ToLowerInvariant();
         }
 
         private static string GetOptionAlias(OptionAttribute optionAttribute)

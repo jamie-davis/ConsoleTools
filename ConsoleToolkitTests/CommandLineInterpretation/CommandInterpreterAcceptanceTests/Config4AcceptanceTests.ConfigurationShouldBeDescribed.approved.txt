@@ -2,11 +2,11 @@
                                                             
 import  Import data previously exported from a database.    
                                                             
-        import <Filename> [options]                         
+        import <filename> [options]                         
                                                             
         Parameters:                                         
                                                             
-        Filename  The file to be imported.                  
+        filename  The file to be imported.                  
                                                             
         Options:                                            
                                                             
@@ -19,14 +19,14 @@ import  Import data previously exported from a database.
                                                             
 export  Export data from a database to a file.              
                                                             
-        export <Filename> <FromDate> <ToDate> [options]     
+        export <filename> <fromdate> <todate> [options]     
                                                             
         Parameters:                                         
                                                             
-        Filename  The file to be created or overwritten.    
-        FromDate  The lowest timestamp to be included in    
+        filename  The file to be created or overwritten.    
+        fromdate  The lowest timestamp to be included in    
                   the exported data.                        
-        ToDate    The highest timestamp to be included in   
+        todate    The highest timestamp to be included in   
                   the exported data.                        
                                                             
         Options:                                            
