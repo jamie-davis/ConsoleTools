@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using ApprovalTests.Reporters;
+using ApprovalUtilities.Utilities;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkitTests.TestingUtilities;
@@ -9,10 +10,12 @@ using Description = ConsoleToolkit.CommandLineInterpretation.ConfigurationAttrib
 
 namespace ConsoleToolkitTests.CommandLineInterpretation
 {
+
     [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestCommandAttributeLoader
     {
+        // ReSharper disable PossibleNullReferenceException
         private CommandConfig<DefaultName> _defaultNameCommand;
 
         #region Types for test
@@ -127,6 +130,33 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
 
         [Command]
         class SuffixTestCommand { }
+
+        class CommonOptions
+        {
+            [Option("dbname", "d")]
+            [Description("Database name")]
+            public string DbName { get; set; }
+
+            [Option("dbserver", "s")]
+            [Description("Database server")]
+            public string ServerName { get; set; }
+        }
+
+        [Command]
+        class ExtendedCommand
+        {
+            [Positional]
+            public string Group { get; set; }
+
+            [Positional]
+            public int AdditionalLength { get; set; }
+
+            [Option("showprogress")]
+            public bool DisplayProgress { get; set; }
+
+            [OptionSet]
+            public CommonOptions CommandOptions { get; set; }
+        }
 
         // ReSharper restore UnusedField.Compiler
         // ReSharper restore UnusedMember.Local
@@ -292,18 +322,29 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Assert.That(nonDefPositional.DefaultValue, Is.Null);
         }
 
-        [Test] public void PositionalWithNullDefaultIsOptional()
+        [Test]
+        public void PositionalWithNullDefaultIsOptional()
         {
             var deffo = CommandAttributeLoader.Load(typeof(CommandWithDefaultedPositional)) as CommandConfig<CommandWithDefaultedPositional>;
             var nonDefPositional = deffo.Positionals[2];
             Assert.That(nonDefPositional.IsOptional, Is.True);
         }
 
-        [Test] public void PositionalWithNullDefaultHasCorrectDefaultValue()
+        [Test]
+        public void PositionalWithNullDefaultHasCorrectDefaultValue()
         {
             var deffo = CommandAttributeLoader.Load(typeof(CommandWithDefaultedPositional)) as CommandConfig<CommandWithDefaultedPositional>;
             var nonDefPositional = deffo.Positionals[2];
             Assert.That(nonDefPositional.DefaultValue, Is.Null);
         }
+
+        [Test]
+        public void CommandImportsOptionSet()
+        {
+            var set = CommandAttributeLoader.Load(typeof(ExtendedCommand)) as CommandConfig<ExtendedCommand>;
+            var options = set.Options.Select(o => o.Name).JoinWith(",");
+            Assert.That(options, Is.EqualTo("showprogress,dbname,dbserver"));
+        }
+
     }
 }

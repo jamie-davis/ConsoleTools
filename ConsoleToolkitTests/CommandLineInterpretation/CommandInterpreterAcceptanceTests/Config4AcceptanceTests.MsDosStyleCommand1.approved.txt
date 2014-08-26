@@ -1,0 +1,66 @@
+﻿Test: export file.dat 2014-08-22 2014-08-26 /s:. /dbname:test /u:admin /p:adm1n
+
+ExportCommand
+{
+    Filename = file.dat
+    FromDate = 22/08/2014 00:00:00
+    ToDate = 26/08/2014 00:00:00
+    DbOptions
+    {
+        DatabaseName = test
+        ServerName = .
+        UserId = admin
+        Password = adm1n
+    }
+}
+
+
+Test: export file.dat 2014-08-22 2014-08-26
+
+ExportCommand
+{
+    Filename = file.dat
+    FromDate = 22/08/2014 00:00:00
+    ToDate = 26/08/2014 00:00:00
+    DbOptions
+    {
+        DatabaseName = <null>
+        ServerName = <null>
+        UserId = <null>
+        Password = <null>
+    }
+}
+
+
+Test: import file.dat /server:server2 /dbname:test /u:admin /p:adm1n /i
+
+ImportCommand
+{
+    Filename = file.dat
+    DbOptions
+    {
+        DatabaseName = test
+        ServerName = server2
+        UserId = admin
+        Password = adm1n
+    }
+    UniqueIds = True
+}
+
+
+Test: import file.dat
+
+ImportCommand
+{
+    Filename = file.dat
+    DbOptions
+    {
+        DatabaseName = <null>
+        ServerName = <null>
+        UserId = <null>
+        Password = <null>
+    }
+    UniqueIds = False
+}
+
+

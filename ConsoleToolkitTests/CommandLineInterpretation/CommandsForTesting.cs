@@ -47,12 +47,6 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             [Description("An option with two arguments. The arguments need to be described in the text.")]
             public MoreOption More { get; set; }
 
-            [Validate]
-            public string ValidateCommand()
-            {
-                return "error.";
-            }
-
             public class MoreOption
             {
                 [Positional(0)]

@@ -1,0 +1,39 @@
+﻿Available commands                                          
+                                                            
+import  Import data previously exported from a database.    
+                                                            
+        import <Filename> [options]                         
+                                                            
+        Parameters:                                         
+                                                            
+        Filename  The file to be imported.                  
+                                                            
+        Options:                                            
+                                                            
+        --unique-ids, -i  Generate unique ids for the rows  
+                          imported to the database.         
+        --dbname, -d      The name of the database.         
+        --server, -s      The name of the database server.  
+        --user, -u        The database user id.             
+        --pwd, -p         The database user's password.     
+                                                            
+export  Export data from a database to a file.              
+                                                            
+        export <Filename> <FromDate> <ToDate> [options]     
+                                                            
+        Parameters:                                         
+                                                            
+        Filename  The file to be created or overwritten.    
+        FromDate  The lowest timestamp to be included in    
+                  the exported data.                        
+        ToDate    The highest timestamp to be included in   
+                  the exported data.                        
+                                                            
+        Options:                                            
+                                                            
+        --dbname, -d  The name of the database.             
+        --server, -s  The name of the database server.      
+        --user, -u    The database user id.                 
+        --pwd, -p     The database user's password.         
+                                                            
+                                                            

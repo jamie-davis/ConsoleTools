@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Runtime.InteropServices.ComTypes;
+using ConsoleToolkit.Annotations;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.Utilities;
 using DescriptionAttribute = ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.DescriptionAttribute;
@@ -39,12 +37,14 @@ namespace ConsoleToolkit.CommandLineInterpretation
         // ReSharper disable once UnusedMember.Local
         private static CommandConfig<T> Create<T>(string name) where T : class, new()
         {
-            var commandConfig = new CommandConfig<T>(() => new T());
+            var commandConfig = new CommandConfig<T>(CommandConstructionLambdaGenerator<T>.Generate())
+            {
+                Name = (name ?? MakeDefaultName<T>()).ToLower(),
+                CommandType = typeof (T)
+            };
 
-            commandConfig.Name = (name ?? MakeDefaultName<T>()).ToLower();
-            commandConfig.CommandType = typeof (T);
-
-            AttachPropAndFieldElements(commandConfig);
+            AttachPropAndFieldElements(typeof(T), commandConfig);
+            AttachOptionSets(commandConfig);
             var desc = GetDescription(typeof (T));
             if (desc != null)
                 (commandConfig as IContext).Description = desc;
@@ -71,9 +71,8 @@ namespace ConsoleToolkit.CommandLineInterpretation
             return name;
         }
 
-        private static void AttachPropAndFieldElements<T>(CommandConfig<T> commandConfig) where T : class
+        private static void AttachPropAndFieldElements<T>(Type type, CommandConfig<T> commandConfig, AttributedMember<OptionSetAttribute> optionSet = null) where T : class
         {
-            var type = typeof (T);
             var positionals = GetMembersWithAttribute<PositionalAttribute>(type)
                 .OrderBy(m => m.Attribute.Index)
                 .ToList();
@@ -82,23 +81,23 @@ namespace ConsoleToolkit.CommandLineInterpretation
                 .ToList();
 
             foreach (var member in positionals)
-                AttachPositional(member, commandConfig);
+                AttachPositional(member, commandConfig, optionSet);
             foreach (var member in options)
-                AttachOption(member, commandConfig);
+                AttachOption(member, commandConfig, optionSet);
         }
 
-        private static void AttachOption<T>(AttributedMember<OptionAttribute> optionMember, CommandConfig<T> commandConfig) where T : class
+        private static void AttachOption<T>(AttributedMember<OptionAttribute> optionMember, CommandConfig<T> commandConfig, AttributedMember<OptionSetAttribute> optionSet) where T : class
         {
-            var option = MakeOption(optionMember.Attribute, commandConfig, optionMember.MemberInfo, optionMember.Type);
+            var option = MakeOption(optionMember.Attribute, commandConfig, optionMember.MemberInfo, optionMember.Type, optionSet);
             var desc = GetDescription(optionMember.MemberInfo);
             if (desc != null)
                 option.Description = desc;
         }
 
-        private static void AttachPositional<T>(AttributedMember<PositionalAttribute> posMember, CommandConfig<T> commandConfig) where T : class
+        private static void AttachPositional<T>(AttributedMember<PositionalAttribute> posMember, CommandConfig<T> commandConfig, AttributedMember<OptionSetAttribute> optionSet) where T : class
         {
             var name = posMember.Attribute.Name ?? posMember.MemberInfo.Name;
-            var positional = MakePositional(commandConfig, name, posMember.MemberInfo, posMember.Type);
+            var positional = MakePositional(commandConfig, name, posMember.MemberInfo, posMember.Type, optionSet);
             var desc = GetDescription(posMember.MemberInfo);
             if (desc != null)
                 positional.Description = desc;
@@ -108,6 +107,17 @@ namespace ConsoleToolkit.CommandLineInterpretation
                 positional.DefaultValue = posMember.Attribute.DefaultValue;
             }
         }
+
+        private static void AttachOptionSets<T>(CommandConfig<T> commandConfig) where T : class
+        {
+            var type = typeof(T);
+            var optionSets = GetMembersWithAttribute<OptionSetAttribute>(type)
+                .ToList();
+
+            foreach (var optionSet in optionSets)
+                AttachPropAndFieldElements(optionSet.Type, commandConfig, optionSet);
+        }
+
 
         private static IEnumerable<AttributedMember<T>> GetMembersWithAttribute<T>(Type type) where T : Attribute
         {
@@ -149,24 +159,37 @@ namespace ConsoleToolkit.CommandLineInterpretation
             return command.Options.FirstOrDefault(o => o.Name == optionName);
         }
 
-        private static BasePositional MakePositional<T>(CommandConfig<T> commandConfig, string name, MemberInfo member, Type memberType) where T : class
+        private static BasePositional MakePositional<T>(CommandConfig<T> commandConfig, string name, MemberInfo member, Type memberType, AttributedMember<OptionSetAttribute> optionSet) where T : class
         {
             var genericCallPositional = typeof (CommandAttributeLoader).GetMethod("CallPositional", BindingFlags.Static | BindingFlags.NonPublic);
             var callPositional = genericCallPositional.MakeGenericMethod(new[] {typeof (T), memberType});
 
             var parameterExpression = Expression.Variable(typeof(T));
+            var accessor = MakeMemberAccessor(member, parameterExpression, optionSet);
             return callPositional.Invoke(commandConfig, new object[]
             {
                 name, 
-                Expression.Lambda(Expression.MakeMemberAccess(parameterExpression, member), parameterExpression),
+                Expression.Lambda(accessor, parameterExpression),
                 commandConfig
             }) as BasePositional;
         }
 
-        private static BaseOption MakeOption<T>(OptionAttribute optionAttribute, CommandConfig<T> commandConfig, MemberInfo member, Type memberType) where T : class
+        private static MemberExpression MakeMemberAccessor([NotNull] MemberInfo member, [NotNull] Expression parameterExpression,
+            [CanBeNull] AttributedMember<OptionSetAttribute> optionSet)
+        {
+            Expression source;
+            if (optionSet == null)
+                source = parameterExpression;
+            else
+                source = Expression.MakeMemberAccess(parameterExpression, optionSet.MemberInfo);
+            
+            return Expression.MakeMemberAccess(source, member);
+        }
+
+        private static BaseOption MakeOption<T>(OptionAttribute optionAttribute, CommandConfig<T> commandConfig, MemberInfo member, Type memberType, AttributedMember<OptionSetAttribute> optionSet) where T : class
         {
             Type[] parameterTypes;
-            var optionInitialiser = ParameterAssignmentGenerator<T>.Generate(member, memberType, out parameterTypes);
+            var optionInitialiser = ParameterAssignmentGenerator<T>.Generate(member, memberType, out parameterTypes, optionSet == null ? null : optionSet.MemberInfo);
             
             //need to make a call to CommandConfig<T> Option<T1, T2, T3>(string optionName, Action<T, T1, T2, T3> optionInitialiser)
             var optionName = GetOptionName(optionAttribute, member);
@@ -206,6 +229,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
                                          && m.GetGenericArguments().Length == parameterTypes.Length
                                          && m.GetParameters().Length == 2
                                          && m.GetParameters()[1].ParameterType.Name.Contains("Action"));
+                Debug.Assert(genericOptionMethod != null, "genericOptionMethod != null");
                 optionMethod = genericOptionMethod.MakeGenericMethod(parameterTypes);
                 
             }
@@ -244,7 +268,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
                 var genericCreateMethod = typeof (CommandAttributeLoader).GetMethod("Create",
                     BindingFlags.Static | BindingFlags.NonPublic);
                 var createMethod = genericCreateMethod.MakeGenericMethod(new[] {commandClass});
-                return createMethod.Invoke(null, new []{ commandAttribute.Name }) as BaseCommandConfig;
+                return createMethod.Invoke(null, new object[]{ commandAttribute.Name }) as BaseCommandConfig;
             }
             catch (TargetInvocationException e)
             {

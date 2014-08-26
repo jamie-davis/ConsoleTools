@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using System.Linq;
 using System.Text;
 using ConsoleToolkit.CommandLineInterpretation;
@@ -28,13 +30,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 }
                 else
                 {
-                    sb.AppendLine(result.GetType().Name);
-                    sb.AppendLine("{");
-                    foreach (var propertyInfo in result.GetType().GetProperties())
-                    {
-                        sb.AppendLine(string.Format("    {0} = {1}", propertyInfo.Name, propertyInfo.GetValue(result)));
-                    }
-                    sb.AppendLine("}");
+                    DisplayType(sb, result);
                 }
 
                 sb.AppendLine();
@@ -42,6 +38,32 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             }
 
             return sb.ToString();
+        }
+
+        private static void DisplayType(StringBuilder sb, object result)
+        {
+            sb.AppendLine(result.GetType().Name);
+            sb.AppendLine("{");
+            foreach (var propertyInfo in result.GetType().GetProperties())
+            {
+                var value = propertyInfo.GetValue(result) ?? "<null>";
+                if (Type.GetTypeCode(value.GetType()) == TypeCode.Object)
+                {
+                    var nested = new StringBuilder();
+                    DisplayType(nested, value);
+                    using (var stream = new StringReader(nested.ToString()))
+                    {
+                        string line;
+                        while ((line = stream.ReadLine()) != null)
+                        {
+                            sb.AppendLine("    " + line);
+                        }                       
+                    }
+                }
+                else
+                    sb.AppendLine(string.Format("    {0} = {1}", propertyInfo.Name, value));
+            }
+            sb.AppendLine("}");
         }
     }
 }

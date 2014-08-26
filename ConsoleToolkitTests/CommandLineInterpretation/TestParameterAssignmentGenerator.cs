@@ -11,7 +11,6 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
     [UseReporter(typeof (CustomReporter))]
     public class TestParameterAssignmentGenerator
     {
-
         #region Types for test
         
         //Don't complain about unused things
@@ -85,6 +84,28 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
                     
                 }
             }
+        }
+
+        private class NestedMemberAssignment
+        {
+            public class ComplexOptionType 
+            {
+                public string P1 { get; set; }
+                public int P2 { get; set; }
+
+                public override string ToString()
+                {
+                    return string.Format("{0},{1}", P1, P2);
+                }
+            }
+
+            public class NestedType
+            {
+                public string String1 { get; set; }
+                public ComplexOptionType Complex { get; set; }
+            }
+
+            public NestedType Nested { get; set; }
         }
 
         // ReSharper restore UnusedParameter.Local
@@ -163,7 +184,8 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         {
             Type[] parameterTypes;
             var propertyInfo = typeof(TestType).GetProperty("NestedProp");
-            var assignment = (Action<TestType, int, string>)ParameterAssignmentGenerator<TestType>.Generate(propertyInfo, out parameterTypes);
+            var assignment = (Action<TestType, int, string>)ParameterAssignmentGenerator<TestType>
+                .Generate(propertyInfo, out parameterTypes);
             var item = new TestType();
             assignment(item, 10, "string value");
             Assert.That(item.NestedProp.ToString(), Is.EqualTo("10, string value"));
@@ -210,6 +232,34 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var propertyInfo = typeof(TestType).GetProperty("NestedProp");
             ParameterAssignmentGenerator<TestType>.Generate(propertyInfo, out parameterTypes);
             Assert.That(parameterTypes, Is.EqualTo(new [] {typeof(int), typeof(string)}));
+        }
+
+        [Test]
+        public void AssignmentToMemberOfNestedTypeIsGenerated()
+        {
+            var parent = typeof (NestedMemberAssignment).GetProperty("Nested");
+            var member = typeof (NestedMemberAssignment.NestedType).GetProperty("String1");
+            Type[] parameterTypes;
+            var fn = (Action<NestedMemberAssignment, string>) ParameterAssignmentGenerator<NestedMemberAssignment>
+                    .Generate(member, out parameterTypes, parent);
+
+            var item = new NestedMemberAssignment {Nested = new NestedMemberAssignment.NestedType()};
+            fn(item, "value");
+            Assert.That(item.Nested.String1, Is.EqualTo("value"));
+        }
+
+        [Test]
+        public void AssignmentToComplexMemberOfNestedTypeIsGenerated()
+        {
+            var parent = typeof (NestedMemberAssignment).GetProperty("Nested");
+            var member = typeof (NestedMemberAssignment.NestedType).GetProperty("Complex");
+            Type[] parameterTypes;
+            var fn = (Action<NestedMemberAssignment, string, int>) ParameterAssignmentGenerator<NestedMemberAssignment>
+                    .Generate(member, out parameterTypes, parent);
+
+            var item = new NestedMemberAssignment {Nested = new NestedMemberAssignment.NestedType()};
+            fn(item, "P1", 55);
+            Assert.That(item.Nested.Complex.ToString(), Is.EqualTo("P1,55"));
         }
     }
 }

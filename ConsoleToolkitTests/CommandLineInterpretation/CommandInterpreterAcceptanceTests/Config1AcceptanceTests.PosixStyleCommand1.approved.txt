@@ -5,7 +5,7 @@ C1Data
     CommandName = c1
     FileName = file
     DeleteAfter = False
-    ArchiveLocation = 
+    ArchiveLocation = <null>
 }
 
 
@@ -58,7 +58,7 @@ C1Data
     CommandName = c1
     FileName = -Ab,56
     DeleteAfter = False
-    ArchiveLocation = 
+    ArchiveLocation = <null>
 }
 
 
@@ -66,7 +66,7 @@ Test: c3 40 text 50
 
 C3Data
 {
-    CommandName = 
+    CommandName = <null>
     Iterations = 40
     Message = text
     OverrunLength = 50
@@ -78,7 +78,7 @@ Test: c3 40 text
 
 C3Data
 {
-    CommandName = 
+    CommandName = <null>
     Iterations = 40
     Message = text
     OverrunLength = 5

@@ -21,10 +21,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">TARGET_FRAMEWORK_4, DEBUG</DefineConstants>
-    <DefineConstants>DEBUG;TARGET_FRAMEWORK_4</DefineConstants>
+    <DefineConstants Condition=" '$(TargetFrameworkVersion)' != 'v4.0' ">DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">TARGET_FRAMEWORK_4</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -75,6 +74,7 @@
     <Compile Include="CommandLineInterpretation\CommandAttributeLoader.cs" />
     <Compile Include="CommandLineInterpretation\CommandConfig.cs" />
     <Compile Include="CommandLineInterpretation\CommandConfigurationInvalid.cs" />
+    <Compile Include="CommandLineInterpretation\CommandConstructionLambdaGenerator.cs" />
     <Compile Include="CommandLineInterpretation\CommandDescriber.cs" />
     <Compile Include="CommandLineInterpretation\CommandLineInterpreter.cs" />
     <Compile Include="CommandLineInterpretation\CommandLineInterpreterConfiguration.cs" />
@@ -82,6 +82,11 @@
     <Compile Include="CommandLineInterpretation\CommandLineTokeniser.cs" />
     <Compile Include="CommandLineInterpretation\CommandOption.cs" />
     <Compile Include="CommandLineInterpretation\CommandPositional.cs" />
+    <Compile Include="CommandLineInterpretation\ConfigurationAttributes\CommandAttribute.cs" />
+    <Compile Include="CommandLineInterpretation\ConfigurationAttributes\CommandHandlerAttribute.cs" />
+    <Compile Include="CommandLineInterpretation\ConfigurationAttributes\DescriptionAttribute.cs" />
+    <Compile Include="CommandLineInterpretation\ConfigurationAttributes\OptionAttribute.cs" />
+    <Compile Include="CommandLineInterpretation\ConfigurationAttributes\OptionSetAttribute.cs" />
     <Compile Include="CommandLineInterpretation\ConfigurationAttributes\PositionalAttribute.cs" />
     <Compile Include="CommandLineInterpretation\CustomParserNotFound.cs" />
     <Compile Include="CommandLineInterpretation\DefaultApplicationNameExtractor.cs" />

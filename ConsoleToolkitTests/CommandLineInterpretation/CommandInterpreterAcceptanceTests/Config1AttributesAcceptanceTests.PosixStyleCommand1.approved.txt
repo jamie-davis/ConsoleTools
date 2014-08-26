@@ -4,7 +4,7 @@ C1Data
 {
     FileName = file
     DeleteAfter = False
-    ArchiveLocation = 
+    ArchiveLocation = <null>
 }
 
 
@@ -54,7 +54,7 @@ C1Data
 {
     FileName = -Ab,56
     DeleteAfter = False
-    ArchiveLocation = 
+    ArchiveLocation = <null>
 }
 
 

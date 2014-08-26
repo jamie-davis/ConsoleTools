@@ -1,0 +1,132 @@
+﻿Test: add *.c
+
+AddCommand
+{
+    FilePattern = *.c
+    DryRun = False
+    Verbose = False
+    Force = False
+    Interactive = False
+    Patch = False
+    Edit = False
+    Update = False
+    All = False
+    IntentToAdd = False
+    Refresh = False
+    IgnoreErrors = False
+    IgnoreMissing = False
+}
+
+
+Test: clone /reference:my2.6 git://git.kernel.org/pub/scm/.../linux-2.7 my2.7
+
+CloneCommand
+{
+    Repository = git://git.kernel.org/pub/scm/.../linux-2.7
+    Directory = my2.7
+    Local = False
+    NoHardLinks = False
+    Shared = False
+    ReferenceRepository = my2.6
+    Quiet = False
+    Verbose = False
+    Progress = False
+    NoCheckout = False
+    Bare = False
+    Mirror = False
+    Origin = <null>
+    Branch = <null>
+    UploadPack = <null>
+    Template = <null>
+    Config = <null>
+    Depth = 0
+    SingleBranch = False
+    RecurseSubmodules = False
+    SeperateGitDir = <null>
+}
+
+
+Test: clone git@github.com:whatever
+
+CloneCommand
+{
+    Repository = git@github.com:whatever
+    Directory = 
+    Local = False
+    NoHardLinks = False
+    Shared = False
+    ReferenceRepository = <null>
+    Quiet = False
+    Verbose = False
+    Progress = False
+    NoCheckout = False
+    Bare = False
+    Mirror = False
+    Origin = <null>
+    Branch = <null>
+    UploadPack = <null>
+    Template = <null>
+    Config = <null>
+    Depth = 0
+    SingleBranch = False
+    RecurseSubmodules = False
+    SeperateGitDir = <null>
+}
+
+
+Test: clone git@github.com:whatever folder-name
+
+CloneCommand
+{
+    Repository = git@github.com:whatever
+    Directory = folder-name
+    Local = False
+    NoHardLinks = False
+    Shared = False
+    ReferenceRepository = <null>
+    Quiet = False
+    Verbose = False
+    Progress = False
+    NoCheckout = False
+    Bare = False
+    Mirror = False
+    Origin = <null>
+    Branch = <null>
+    UploadPack = <null>
+    Template = <null>
+    Config = <null>
+    Depth = 0
+    SingleBranch = False
+    RecurseSubmodules = False
+    SeperateGitDir = <null>
+}
+
+
+Test: clone /mirror https://github.com/exampleuser/repository-to-mirror.git
+
+CloneCommand
+{
+    Repository = https://github.com/exampleuser/repository-to-mirror.git
+    Directory = 
+    Local = False
+    NoHardLinks = False
+    Shared = False
+    ReferenceRepository = <null>
+    Quiet = False
+    Verbose = False
+    Progress = False
+    NoCheckout = False
+    Bare = False
+    Mirror = True
+    Origin = <null>
+    Branch = <null>
+    UploadPack = <null>
+    Template = <null>
+    Config = <null>
+    Depth = 0
+    SingleBranch = False
+    RecurseSubmodules = False
+    SeperateGitDir = <null>
+}
+
+

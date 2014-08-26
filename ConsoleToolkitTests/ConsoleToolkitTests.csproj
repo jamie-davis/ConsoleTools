@@ -60,11 +60,16 @@
     <Compile Include="ApplicationStyles\TestCommandDrivenApplication.cs" />
     <Compile Include="ApplicationStyles\TestConsoleApplication.cs" />
     <Compile Include="ApplicationStyles\UnitTestAppUtils.cs" />
+    <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\Config1AttributesAcceptanceTests.cs" />
+    <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\Config2AcceptanceTests.cs" />
+    <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\Config3AcceptanceTests.cs" />
+    <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\Config4AcceptanceTests.cs" />
     <Compile Include="CommandLineInterpretation\CommandsForTesting.cs" />
     <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\CommandExecutorUtil.cs" />
     <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\Config1AcceptanceTests.cs" />
     <Compile Include="CommandLineInterpretation\MockParserResult.cs" />
     <Compile Include="CommandLineInterpretation\TestCommandAttributeLoader.cs" />
+    <Compile Include="CommandLineInterpretation\TestCommandConstructionLambdaGenerator.cs" />
     <Compile Include="CommandLineInterpretation\TestCommandDescriber.cs" />
     <Compile Include="CommandLineInterpretation\TestCommandLineInterpreter.cs" />
     <Compile Include="CommandLineInterpretation\TestCommandLineInterpreterConfiguration.cs" />
