@@ -93,7 +93,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
             if (exactMatch != null)
                 return exactMatch;
 
-            var caseInsensitiveMatch = type.GetProperties().FirstOrDefault(p => String.Compare(parameterName, p.Name, true) == 0);
+            var caseInsensitiveMatch = type.GetProperties().FirstOrDefault(p => string.Compare(parameterName, p.Name, StringComparison.OrdinalIgnoreCase) == 0);
             if (caseInsensitiveMatch != null)
                 return caseInsensitiveMatch;
 

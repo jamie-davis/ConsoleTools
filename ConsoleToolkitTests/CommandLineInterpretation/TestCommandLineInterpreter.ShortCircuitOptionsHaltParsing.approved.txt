@@ -8,4 +8,4 @@ Argument list:
 
 Command type: DefaultCommandType
 
-CMD[default] Option[True] Option2[] OptionInt[0]
+CMD[default] Param1[x] Option[True] Option2[] OptionInt[0]

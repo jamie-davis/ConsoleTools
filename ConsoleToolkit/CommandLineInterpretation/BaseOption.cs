@@ -20,6 +20,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
         public bool IsBoolean { get; internal set; }
 
         public bool IsShortCircuit { get; set; }
+        public bool AllowMultiple { get; set; }
 
         public void Alias(string alias, IEnumerable<string> existingOptionNames)
         {

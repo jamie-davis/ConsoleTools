@@ -1,0 +1,14 @@
+﻿DefaultCommandType
+
+Argument list:
+  0: 1
+  1: 2a
+  2: 2b
+  3: 2c
+  4: 2d
+
+
+
+Command type: DefaultCommandType
+
+CMD[default] Param1[2a2b2c2d] Option[False] Option2[] OptionInt[0]

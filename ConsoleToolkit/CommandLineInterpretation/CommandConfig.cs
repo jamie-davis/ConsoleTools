@@ -209,6 +209,26 @@ namespace ConsoleToolkit.CommandLineInterpretation
             throw new ShortCircuitInvalid();
         }
 
+        /// <summary>
+        /// Allow this option or parameter to be specified multiple times.
+        /// </summary>
+        public CommandConfig<T> AllowMultiple()
+        {
+            if (_currentContext is BaseOption)
+            {
+                (_currentContext as BaseOption).AllowMultiple = true;
+                return this;
+            }
+
+            if (_currentContext is BasePositional)
+            {
+                (_currentContext as BasePositional).AllowMultiple = true;
+                return this;
+            }
+
+            throw new AllowMultipleInvalid();
+        }
+
         internal override object Create(string commandName)
         {
             return _initialiser(commandName);

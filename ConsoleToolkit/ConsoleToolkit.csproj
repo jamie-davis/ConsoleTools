@@ -66,6 +66,7 @@
     <Compile Include="ApplicationStyles\NoApplicationClassFound.cs" />
     <Compile Include="ApplicationStyles\NoCommandHandlerMethodFound.cs" />
     <Compile Include="CommandLineInterpretation\AliasNotSupported.cs" />
+    <Compile Include="CommandLineInterpretation\AllowMultipleInvalid.cs" />
     <Compile Include="CommandLineInterpretation\BaseCommandConfig.cs" />
     <Compile Include="CommandLineInterpretation\BaseOption.cs" />
     <Compile Include="CommandLineInterpretation\BasePositional.cs" />

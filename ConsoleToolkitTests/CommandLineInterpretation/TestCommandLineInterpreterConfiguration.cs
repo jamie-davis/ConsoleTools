@@ -306,6 +306,19 @@ a line break.")
                 .ShortCircuitOption();
         }
 
+        [Test]
+        public void ARepeatingOptionCanBeSpecified()
+        {
+            var config = new CommandLineInterpreterConfiguration();
+            config
+                .Parameters(() => new TestCommand())
+                .Description("Description of the whole program.")
+                .Positional<string>("pos", (command, s) => { })
+                    .Description("A positional parameter.")
+                .Option("h", (o, b) => { })
+                .AllowMultiple();
+        }
+
         [Test, ExpectedException(typeof (ShortCircuitInvalidOnPositionalParameter))]
         public void ShortCircuitOptionOnAPositionalThrows()
         {
@@ -316,6 +329,26 @@ a line break.")
                 .Positional<string>("pos", (command, s) => { })
                     .Description("A positional parameter.")
                     .ShortCircuitOption();
+        }
+
+        [Test]
+        public void ARepeatingPositionalCanBeSpecified()
+        {
+            var config = new CommandLineInterpreterConfiguration();
+            config
+                .Parameters(() => new TestCommand())
+                .Description("Description of the whole program.")
+                .Positional<string>("pos", (command, s) => { })
+                    .Description("A positional parameter.")
+                    .AllowMultiple();
+        }
+
+        [Test, ExpectedException(typeof(AllowMultipleInvalid))]
+        public void AllowMultipleIsInvalidOnCommands()
+        {
+            var config = new CommandLineInterpreterConfiguration();
+            config.Command("x", s => new TestCommand())
+                    .AllowMultiple();
         }
 
         [Test]

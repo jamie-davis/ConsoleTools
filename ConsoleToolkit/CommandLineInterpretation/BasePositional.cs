@@ -19,5 +19,6 @@ namespace ConsoleToolkit.CommandLineInterpretation
         public string Description { get; set; }
         public string DefaultValue { get; set; }
         public bool IsOptional { get; set; }
+        public bool AllowMultiple { get; set; }
     }
 }

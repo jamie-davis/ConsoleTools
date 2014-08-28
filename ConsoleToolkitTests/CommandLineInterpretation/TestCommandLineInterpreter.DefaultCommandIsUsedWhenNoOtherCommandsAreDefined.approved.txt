@@ -8,4 +8,4 @@ Argument list:
 
 Command type: DefaultCommandType
 
-CMD[default] Option[False] Option2[value] OptionInt[0]
+CMD[default] Param1[parameter] Option[False] Option2[value] OptionInt[0]

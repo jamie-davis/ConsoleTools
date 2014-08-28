@@ -49,7 +49,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
             BaseOption option;
             if (_options.TryGetValue(optionName, out option))
             {
-                if (_usedOptions.Contains(option))
+                if (_usedOptions.Contains(option) && !option.AllowMultiple)
                 {
                     Error = string.Format("The \"{0}\" option may only be specified once.", option.Name);
                     return ParseOutcome.Halt;
@@ -100,7 +100,8 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
         private bool AcceptPositional(string value, BasePositional positional)
         {
-            _positionals.Remove(positional);
+            if (!positional.AllowMultiple)
+                _positionals.Remove(positional);
             _usedPositionals.Add(positional.ParameterName);
 
             var error = positional.Accept(ParamObject, value);
@@ -123,7 +124,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
             foreach (var source in _positionals.Where(p => p.IsOptional).ToList())
             {
-                var value = source.DefaultValue == null ? String.Empty : source.DefaultValue.ToString();
+                var value = source.DefaultValue ?? String.Empty;
                 if (!AcceptPositional(value, source))
                 {
                     Status = ParseStatus.Failed;
@@ -131,13 +132,18 @@ namespace ConsoleToolkit.CommandLineInterpretation
                 }
             }
 
-            if (_positionals.Any() && !_usedOptions.Any(o => o.IsShortCircuit))
+            if (_positionals.Any(UnusedPositional) && !_usedOptions.Any(o => o.IsShortCircuit))
             {
                 Error = "Not enough parameters specified.";
                 Status = ParseStatus.Failed;
             }
             else
                 Status = ParseStatus.CompletedOk;
+        }
+
+        private bool UnusedPositional(BasePositional arg)
+        {
+            return !arg.AllowMultiple || _usedPositionals.All(p => !ReferenceEquals(arg.ParameterName, p));
         }
     }
 }

@@ -102,7 +102,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
 
             public override string ToString()
             {
-                return string.Format("CMD[default] Option[{0}] Option2[{1}] OptionInt[{2}]", Option, Option2, OptionInt);
+                return string.Format("CMD[default] Param1[{0}] Option[{1}] Option2[{2}] OptionInt[{3}]", Param1, Option, Option2, OptionInt);
             }
         }
 
@@ -503,6 +503,57 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var interpreter = new CommandLineInterpreter(config);
             string[] errors;
             var args = new string[] { };
+            var result = interpreter.Interpret(args, out errors);
+
+            Approvals.Verify(Describe(args, result, errors));
+        }
+
+        [Test]
+        public void RepeatablePositionalsAreAccepted()
+        {
+            var config = new CommandLineInterpreterConfiguration();
+            config.Parameters(() => new DefaultCommandType())
+                .Positional<string>("firstParam", (p, s) => { })
+                .Positional<string>("secondParam", (p, s) => p.Param1 += s)
+                .AllowMultiple();
+
+            var interpreter = new CommandLineInterpreter(config);
+            string[] errors;
+            var args = new [] { "1", "2a", "2b", "2c", "2d" };
+            var result = interpreter.Interpret(args, out errors);
+
+            Approvals.Verify(Describe(args, result, errors));
+        }
+
+        [Test]
+        public void RepeatablePositionalsMustBeSpecifiedAtLeastOnce()
+        {
+            var config = new CommandLineInterpreterConfiguration();
+            config.Parameters(() => new DefaultCommandType())
+                .Positional<string>("firstParam", (p, s) => { })
+                .Positional<string>("secondParam", (p, s) => p.Param1 += s)
+                .AllowMultiple();
+
+            var interpreter = new CommandLineInterpreter(config);
+            string[] errors;
+            var args = new [] { "1" };
+            var result = interpreter.Interpret(args, out errors);
+
+            Approvals.Verify(Describe(args, result, errors));
+        }
+
+        [Test]
+        public void RepeatableOptionsMayBeSpecifiedMultipleTimes()
+        {
+            var config = new CommandLineInterpreterConfiguration();
+            config.Parameters(() => new DefaultCommandType())
+                .Positional<string>("firstParam", (p, s) => p.Param1 = s)
+                .Option<string>("opt2", (c, s) => c.Option2 += s)
+                .AllowMultiple();
+
+            var interpreter = new CommandLineInterpreter(config);
+            string[] errors;
+            var args = new[] { "1", "-opt2", "1", "-opt2", "2","-opt2", "3", };
             var result = interpreter.Interpret(args, out errors);
 
             Approvals.Verify(Describe(args, result, errors));
