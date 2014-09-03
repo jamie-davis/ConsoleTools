@@ -38,7 +38,9 @@ CloneCommand
     Branch = <null>
     UploadPack = <null>
     Template = <null>
-    Config = <null>
+    Config = List`1
+    {
+    }
     Depth = 0
     SingleBranch = False
     RecurseSubmodules = False
@@ -66,7 +68,9 @@ CloneCommand
     Branch = <null>
     UploadPack = <null>
     Template = <null>
-    Config = <null>
+    Config = List`1
+    {
+    }
     Depth = 0
     SingleBranch = False
     RecurseSubmodules = False
@@ -94,7 +98,9 @@ CloneCommand
     Branch = <null>
     UploadPack = <null>
     Template = <null>
-    Config = <null>
+    Config = List`1
+    {
+    }
     Depth = 0
     SingleBranch = False
     RecurseSubmodules = False
@@ -105,6 +111,39 @@ CloneCommand
 Test: clone -mirror https://github.com/exampleuser/repository-to-mirror.git
 
 The parameter "https://github.com/exampleuser/repository-to-mirror.git" of the mirror option has an invalid value.
+
+
+Test: clone git@github.com:whatever -c A -c B -c C
+
+CloneCommand
+{
+    Repository = git@github.com:whatever
+    Directory = 
+    Local = False
+    NoHardLinks = False
+    Shared = False
+    ReferenceRepository = <null>
+    Quiet = False
+    Verbose = False
+    Progress = False
+    NoCheckout = False
+    Bare = False
+    Mirror = False
+    Origin = <null>
+    Branch = <null>
+    UploadPack = <null>
+    Template = <null>
+    Config = List`1
+    {
+        A
+        B
+        C
+    }
+    Depth = 0
+    SingleBranch = False
+    RecurseSubmodules = False
+    SeperateGitDir = <null>
+}
 
 
 Test: clone -mirror:True https://github.com/exampleuser/repository-to-mirror.git
@@ -127,7 +166,9 @@ CloneCommand
     Branch = <null>
     UploadPack = <null>
     Template = <null>
-    Config = <null>
+    Config = List`1
+    {
+    }
     Depth = 0
     SingleBranch = False
     RecurseSubmodules = False

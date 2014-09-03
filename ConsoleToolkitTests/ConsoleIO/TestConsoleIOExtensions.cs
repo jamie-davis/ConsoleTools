@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using ApprovalTests.Reporters;
+﻿using ApprovalTests.Reporters;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
@@ -29,7 +26,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             new object[] {"Red".Red(), "{>PSr}Red{<p}"},
             new object[] {"Magenta".Magenta(), "{>PSm}Magenta{<p}"},
             new object[] {"Yellow".Yellow(), "{>PSy}Yellow{<p}"},
-            new object[] {"White".White(), "{>PSw}White{<p}"},
+            new object[] {"White".White(), "{>PSw}White{<p}"}
         };
 
         private static readonly object[][] BGColourExtensionTestCases =
@@ -49,7 +46,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             new object[] {"Red".BGRed(), "{>Psr}Red{<p}"},
             new object[] {"Magenta".BGMagenta(), "{>Psm}Magenta{<p}"},
             new object[] {"Yellow".BGYellow(), "{>Psy}Yellow{<p}"},
-            new object[] {"White".BGWhite(), "{>Psw}White{<p}"},
+            new object[] {"White".BGWhite(), "{>Psw}White{<p}"}
         };
 
         [Test, TestCaseSource("FGColourExtensionTestCases")]

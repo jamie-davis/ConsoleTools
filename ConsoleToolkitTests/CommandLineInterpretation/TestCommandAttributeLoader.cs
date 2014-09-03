@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using ApprovalTests.Reporters;
 using ApprovalUtilities.Utilities;
@@ -130,6 +131,36 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
 
         [Command]
         class SuffixTestCommand { }
+
+        [Command]
+        class RepeatingPositionalCommand
+        {
+            [Positional]
+            public string Normal { get; set; }
+
+            [Positional]
+            public List<string> Repeating { get; set; }
+        }
+
+        [Command]
+        class RepeatingOptionCommand
+        {
+            [Option]
+            public string Normal { get; set; }
+
+            [Option]
+            public List<string> Repeating { get; set; }
+        }
+
+        [Command]
+        class RepeatingListCommand
+        {
+            [Option]
+            public string Normal { get; set; }
+
+            [Option]
+            public List<List<string>> Repeating { get; set; }
+        }
 
         class CommonOptions
         {
@@ -344,6 +375,71 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var set = CommandAttributeLoader.Load(typeof(ExtendedCommand)) as CommandConfig<ExtendedCommand>;
             var options = set.Options.Select(o => o.Name).JoinWith(",");
             Assert.That(options, Is.EqualTo("showprogress,dbname,dbserver"));
+        }
+
+        [Test]
+        public void RepeatingPositionalIsDetected()
+        {
+            var set = CommandAttributeLoader.Load(typeof(RepeatingPositionalCommand)) as CommandConfig<RepeatingPositionalCommand>;
+            var positionals = set.Positionals
+                .Select(pos => string.Format("{0}({1})", pos.ParameterName, pos.AllowMultiple))
+                .JoinWith(",");
+            Assert.That(positionals, Is.EqualTo("normal(False),repeating(True)"));
+        }
+
+        [Test]
+        public void RepeatingPositionalsHaveListType()
+        {
+            var set = CommandAttributeLoader.Load(typeof(RepeatingPositionalCommand)) as CommandConfig<RepeatingPositionalCommand>;
+            var positionals = set.Positionals
+                .Select(pos => string.Format("{0}({1})", pos.ParameterName, pos.ParameterType))
+                .JoinWith(",");
+            Assert.That(positionals, Is.EqualTo("normal(System.String),repeating(System.String)"));
+        }
+
+        [Test]
+        public void RepeatingPositionalsInsertValues()
+        {
+            var set = CommandAttributeLoader.Load(typeof(RepeatingPositionalCommand)) as CommandConfig<RepeatingPositionalCommand>;
+            var positional = set.Positionals.FirstOrDefault(p => p.ParameterName == "repeating");
+            var command = set.Create(null) as RepeatingPositionalCommand;
+            positional.Accept(command, "First");
+            positional.Accept(command, "Second");
+            positional.Accept(command, "Third");
+
+            var result = command.Repeating.JoinWith(",");
+            Assert.That(result, Is.EqualTo("First,Second,Third"));
+        }
+
+        [Test]
+        public void RepeatingOptionIsDetected()
+        {
+            var config = CommandAttributeLoader.Load(typeof(RepeatingOptionCommand)) as CommandConfig<RepeatingOptionCommand>;
+            var positionals = config.Options
+                .Select(pos => string.Format("{0}({1})", pos.Name, pos.AllowMultiple))
+                .JoinWith(",");
+            Assert.That(positionals, Is.EqualTo("normal(False),repeating(True)"));
+        }
+
+        [Test]
+        public void RepeatingOptionsInsertValues()
+        {
+            var config = CommandAttributeLoader.Load(typeof(RepeatingOptionCommand)) as CommandConfig<RepeatingOptionCommand>;
+            var option = config.Options.FirstOrDefault(p => p.Name == "repeating") as CommandOption<Action<RepeatingOptionCommand, string>>;
+            var command = config.Create(null) as RepeatingOptionCommand;
+            string error;
+            option.Apply(command, new [] {"First"}, out error);
+            option.Apply(command, new[] { "Second" }, out error);
+            option.Apply(command, new[] { "Third" }, out error);
+
+            var result = command.Repeating.JoinWith(",");
+            Assert.That(result, Is.EqualTo("First,Second,Third"));
+        }
+
+        [Test, ExpectedException]
+        public void RepeatingOptionTypeCannotBeCollection()
+        {
+            var config = CommandAttributeLoader.Load(typeof(RepeatingListCommand)) as CommandConfig<RepeatingListCommand>;
         }
 
     }

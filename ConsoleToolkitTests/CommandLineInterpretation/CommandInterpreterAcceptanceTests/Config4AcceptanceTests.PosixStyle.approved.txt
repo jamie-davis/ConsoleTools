@@ -3,9 +3,9 @@
 ExportCommand
 {
     Filename = file.dat
-    FromDate = 22/08/2014 00:00:00
-    ToDate = 26/08/2014 00:00:00
-    DbOptions
+    FromDate = 2014-08-22 00:00:00
+    ToDate = 2014-08-26 00:00:00
+    DbOptions = DbOptions
     {
         DatabaseName = test
         ServerName = .
@@ -20,9 +20,9 @@ Test: export file.dat 2014-08-22 2014-08-26
 ExportCommand
 {
     Filename = file.dat
-    FromDate = 22/08/2014 00:00:00
-    ToDate = 26/08/2014 00:00:00
-    DbOptions
+    FromDate = 2014-08-22 00:00:00
+    ToDate = 2014-08-26 00:00:00
+    DbOptions = DbOptions
     {
         DatabaseName = <null>
         ServerName = <null>
@@ -42,7 +42,7 @@ Test: import file.dat
 ImportCommand
 {
     Filename = file.dat
-    DbOptions
+    DbOptions = DbOptions
     {
         DatabaseName = <null>
         ServerName = <null>

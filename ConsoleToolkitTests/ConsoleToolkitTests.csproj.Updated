@@ -60,11 +60,16 @@
     <Compile Include="ApplicationStyles\TestCommandDrivenApplication.cs" />
     <Compile Include="ApplicationStyles\TestConsoleApplication.cs" />
     <Compile Include="ApplicationStyles\UnitTestAppUtils.cs" />
+    <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\Config1AttributesAcceptanceTests.cs" />
+    <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\Config2AcceptanceTests.cs" />
+    <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\Config3AcceptanceTests.cs" />
+    <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\Config4AcceptanceTests.cs" />
     <Compile Include="CommandLineInterpretation\CommandsForTesting.cs" />
     <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\CommandExecutorUtil.cs" />
     <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\Config1AcceptanceTests.cs" />
     <Compile Include="CommandLineInterpretation\MockParserResult.cs" />
     <Compile Include="CommandLineInterpretation\TestCommandAttributeLoader.cs" />
+    <Compile Include="CommandLineInterpretation\TestCommandConstructionLambdaGenerator.cs" />
     <Compile Include="CommandLineInterpretation\TestCommandDescriber.cs" />
     <Compile Include="CommandLineInterpretation\TestCommandLineInterpreter.cs" />
     <Compile Include="CommandLineInterpretation\TestCommandLineInterpreterConfiguration.cs" />
@@ -74,6 +79,7 @@
     <Compile Include="CommandLineInterpretation\TestParameterAssignmentGenerator.cs" />
     <Compile Include="CommandLineInterpretation\TestParserResult.cs" />
     <Compile Include="CommandLineInterpretation\TestPosixCommandLineParser.cs" />
+    <Compile Include="ConsoleIO\ConsoleInputAcceptanceTests.cs" />
     <Compile Include="ConsoleIO\Internal\RecordedCommands\TestFormatTableCommand.cs" />
     <Compile Include="ConsoleIO\Internal\RecordedCommands\TestNewLineCommand.cs" />
     <Compile Include="ConsoleIO\Internal\RecordedCommands\TestRenderCommand.cs" />
@@ -86,8 +92,13 @@
     <Compile Include="ConsoleIO\Internal\TestColourString.cs" />
     <Compile Include="ConsoleIO\Internal\TestColourWriter.cs" />
     <Compile Include="ConsoleIO\Internal\TestFormattingIntermediate.cs" />
+    <Compile Include="ConsoleIO\Internal\TestInstanceConstructor.cs" />
     <Compile Include="ConsoleIO\Internal\TestMinReportWidthCalculator.cs" />
+    <Compile Include="ConsoleIO\Internal\TestReadInputImpl.cs" />
+    <Compile Include="ConsoleIO\Internal\TestReadInputItem.cs" />
+    <Compile Include="ConsoleIO\Internal\TestReadValue.cs" />
     <Compile Include="ConsoleIO\Internal\TestRecordingConsoleAdapter.cs" />
+    <Compile Include="ConsoleIO\Internal\TestConstructPromptText.cs" />
     <Compile Include="ConsoleIO\TestCachedColumn.cs" />
     <Compile Include="ConsoleIO\TestCachedRow.cs" />
     <Compile Include="ConsoleIO\TestCachedRows.cs" />
@@ -123,6 +134,7 @@
     <Compile Include="TestingUtilities\CustomReporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestToolkit.cs" />
+    <Compile Include="TestToolkitOptions.cs" />
     <Compile Include="Utilities\TestStackWalker.cs" />
     <Compile Include="Utilities\TestTextFormatter.cs" />
   </ItemGroup>

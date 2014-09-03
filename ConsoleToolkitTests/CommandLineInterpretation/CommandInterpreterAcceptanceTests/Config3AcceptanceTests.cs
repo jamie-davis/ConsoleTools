@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.CommandLineInterpretation;
@@ -167,7 +168,7 @@ NOTE: see the NOTE for the --shared option.")]
 
             [Option("config", "c")]
             [Description(@"Set a configuration variable in the newly-created repository; this takes effect immediately after the repository is initialized, but before the remote history is fetched or any files checked out. The key is in the same format as expected by git-config(1) (e.g., core.eol=true). If multiple values are given for the same key, each value will be written to the config file. This makes it safe, for example, to add additional fetch refspecs to the origin remote.")]
-            public string Config  { get; set; }
+            public List<string> Config  { get; set; }
 
             [Option("depth")]
             [Description(@"Create a shallow clone with a history truncated to the specified number of revisions. A shallow repository has a number of limitations (you cannot clone or fetch from it, nor push from nor into it), but is adequate if you are only interested in the recent history of a large project with a long history, and would want to send in fixes as patches.")]
@@ -258,6 +259,7 @@ NOTE: see the NOTE for the --shared option.")]
                 @"clone git@github.com:whatever",
                 @"clone git@github.com:whatever folder-name",
                 @"clone -mirror https://github.com/exampleuser/repository-to-mirror.git",
+                @"clone git@github.com:whatever -c A -c B -c C",
                 @"clone -mirror:True https://github.com/exampleuser/repository-to-mirror.git"
             };
 

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using ApprovalUtilities.Utilities;
@@ -60,6 +61,18 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             public OptionSet2 SimpleOptions2 { get; set; }
         }
 
+        class CommandWithList
+        {
+            [Positional]
+            public List<string> Repeating { get; set; }
+
+            [Option]
+            public List<string> RepeatingOpt { get; set; }
+
+            [OptionSet]
+            public OptionSet1 SimpleOptions1 { get; set; }
+        }
+
         // ReSharper restore UnusedParameter.Local
         // ReSharper restore UnusedMember.Local
         // ReSharper restore MemberCanBePrivate.Local
@@ -111,6 +124,22 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var item = lambda();
             var description = Describe(item);
             Assert.That(description, Is.EqualTo("SimpleOptions1 = instance of OptionSet1,SimpleOptions2 = instance of OptionSet2"));
+        }
+
+        [Test]
+        public void ListPositionalIsConstructed()
+        {
+            var lambda = CommandConstructionLambdaGenerator<CommandWithList>.Generate();
+            var item = lambda();
+            Assert.That(item.Repeating, Is.Not.Null);
+        }
+
+        [Test]
+        public void ListOptionIsConstructed()
+        {
+            var lambda = CommandConstructionLambdaGenerator<CommandWithList>.Generate();
+            var item = lambda();
+            Assert.That(item.RepeatingOpt, Is.Not.Null);
         }
     }
 }

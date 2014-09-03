@@ -30,25 +30,57 @@ namespace ConsoleToolkit.CommandLineInterpretation
             parameters.Add(item);
             if (IsSimpleAssignment(memberType))
             {
-                var value = Expression.Parameter(memberType, "value");
-                parameters.Add(value);
-                var expression = ConstructResultAssigment(memberInfo, memberType, item, value, parent);
-                var genericMakeLambda = typeof (ParameterAssignmentGenerator<T>).GetMethod("MakeLambda1", BindingFlags.NonPublic | BindingFlags.Static);
-                var makeLambda = genericMakeLambda.MakeGenericMethod(new[] {memberType});
-                parameterTypes = new[] { memberType };
-                return makeLambda.Invoke(null, new object[] {expression, parameters.ToArray()});
+                return GenerateSimpleMemberAssignment(memberInfo, memberType, out parameterTypes, parent, parameters, item);
             }
+           
+            if (IsCollectionAssignment(memberType))
+            {
+                return GenerateCollectionMemberAssignment(memberInfo, memberType, out parameterTypes, parent, parameters, item);
+            }
+            
+            return GenerateNestedMemberAssignment(memberInfo, memberType, out parameterTypes, parent, parameters, item);
+        }
 
+        private static object GenerateSimpleMemberAssignment(MemberInfo memberInfo, Type memberType, out Type[] parameterTypes,
+            MemberInfo parent, List<ParameterExpression> parameters, ParameterExpression item)
+        {
+            var value = Expression.Parameter(memberType, "value");
+            parameters.Add(value);
+            var expression = ConstructResultAssigment(memberInfo, memberType, item, value, parent);
+            var genericMakeLambda = typeof (ParameterAssignmentGenerator<T>).GetMethod("MakeLambda1",
+                BindingFlags.NonPublic | BindingFlags.Static);
+            var makeLambda = genericMakeLambda.MakeGenericMethod(new[] {memberType});
+            parameterTypes = new[] {memberType};
+            return makeLambda.Invoke(null, new object[] {expression, parameters.ToArray()});
+        }
+
+        private static object GenerateNestedMemberAssignment(MemberInfo memberInfo, Type memberType, out Type[] parameterTypes,
+            MemberInfo parent, List<ParameterExpression> parameters, ParameterExpression item)
+        {
             ValidateNestedType(memberType);
 
             var properties = memberType.GetProperties()
-                .Select(p => new {Member = p as MemberInfo, Type = p.PropertyType, Position = p.GetCustomAttribute<PositionalAttribute>()});
+                .Select(
+                    p =>
+                        new
+                        {
+                            Member = p as MemberInfo,
+                            Type = p.PropertyType,
+                            Position = p.GetCustomAttribute<PositionalAttribute>()
+                        });
             var fields = memberType.GetFields()
-                .Select(f => new {Member = f as MemberInfo, Type = f.FieldType, Position = f.GetCustomAttribute<PositionalAttribute>()});
+                .Select(
+                    f =>
+                        new
+                        {
+                            Member = f as MemberInfo,
+                            Type = f.FieldType,
+                            Position = f.GetCustomAttribute<PositionalAttribute>()
+                        });
 
             var nestedParameters = properties
                 .Concat(fields)
-                .Select(m => new { m.Member, m.Type, Position = m.Position == null ? 0 : m.Position.Index })
+                .Select(m => new {m.Member, m.Type, Position = m.Position == null ? 0 : m.Position.Index})
                 .OrderBy(m => m.Position);
 
             var nestedValues = nestedParameters
@@ -59,12 +91,41 @@ namespace ConsoleToolkit.CommandLineInterpretation
             var inits = nestedValues.Select(n => Expression.Bind(n.Details.Member, n.Value));
             var memberInit = Expression.MemberInit(newExpression, inits);
 
-            var genericMakeLambdaN = typeof(ParameterAssignmentGenerator<T>).GetMethod(string.Format("MakeLambda{0}", nestedValues.Count),
-                BindingFlags.NonPublic | BindingFlags.Static);
+            var genericMakeLambdaN =
+                typeof (ParameterAssignmentGenerator<T>).GetMethod(string.Format("MakeLambda{0}", nestedValues.Count),
+                    BindingFlags.NonPublic | BindingFlags.Static);
             var makeLambdaN = genericMakeLambdaN.MakeGenericMethod(nestedValues.Select(p => p.Value.Type).ToArray());
             var body = ConstructResultAssigment(memberInfo, memberType, item, memberInit, parent);
             parameterTypes = nestedValues.Select(n => n.Details.Type).ToArray();
-            return makeLambdaN.Invoke(null, new object[] { body, parameters.ToArray() });
+            return makeLambdaN.Invoke(null, new object[] {body, parameters.ToArray()});
+        }
+
+        private static object GenerateCollectionMemberAssignment(MemberInfo memberInfo, Type memberType, out Type[] parameterTypes,
+            MemberInfo parent, List<ParameterExpression> parameters, ParameterExpression command)
+        {
+            Type itemType;
+            CollectionTypeAnalyser.TryExtractListItemType(memberType, out itemType);
+
+            if (itemType == null)
+                throw new ArgumentException(string.Format("Internal error: {0} expected to be a collection type.", memberType));
+
+            if (!IsSimpleAssignment(itemType))
+                throw new ArgumentException(string.Format("Only simple repeating options are supported"));
+
+            parameterTypes = new [] { itemType };
+
+            var valueParameter = Expression.Parameter(itemType);
+            parameters.Add(valueParameter);
+
+            var collectionType = typeof (ICollection<>).MakeGenericType(new [] {itemType});
+
+            var collection = Expression.Convert(Expression.MakeMemberAccess(command, memberInfo), collectionType);
+            var addMethod = collectionType.GetMethod("Add");
+            var addCall = Expression.Call(collection, addMethod, new Expression[] {valueParameter});
+
+            var delegateType = typeof (Action<,>).MakeGenericType(new [] {command.Type, itemType});
+
+            return Expression.Lambda(delegateType, addCall, new []{command, valueParameter}).Compile();
         }
 
         private static Expression ConstructResultAssigment(MemberInfo member, Type memberType, ParameterExpression item, Expression value, MemberInfo parent)
@@ -81,6 +142,11 @@ namespace ConsoleToolkit.CommandLineInterpretation
         private static bool IsSimpleAssignment(Type propertyType)
         {
             return Type.GetTypeCode(propertyType) != TypeCode.Object;
+        }
+
+        private static bool IsCollectionAssignment(Type memberType)
+        {
+            return CollectionTypeAnalyser.IsCollectionType(memberType);
         }
 
         // ReSharper disable UnusedMember.Local

@@ -152,6 +152,14 @@ namespace ConsoleToolkit.CommandLineInterpretation
         }
 
         // ReSharper disable once UnusedMember.Local
+        private static BasePositional CallActionPositional<T, TMember>(string parameterName, Action<T, TMember> action,
+            CommandConfig<T> command) where T : class
+        {
+            command.Positional(parameterName, action);
+            return command.Positionals.FirstOrDefault(p => p.ParameterName == parameterName);
+        }
+
+        // ReSharper disable once UnusedMember.Local
         private static BaseOption CallOption<T, TMember>(string optionName, Expression<Func<T, TMember>> expression,
             CommandConfig<T> command) where T : class
         {
@@ -161,14 +169,54 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
         private static BasePositional MakePositional<T>(CommandConfig<T> commandConfig, string name, MemberInfo member, Type memberType, AttributedMember<OptionSetAttribute> optionSet) where T : class
         {
-            var genericCallPositional = typeof (CommandAttributeLoader).GetMethod("CallPositional", BindingFlags.Static | BindingFlags.NonPublic);
+            Type itemType;
+            var isListType = CollectionTypeAnalyser.TryExtractListItemType(memberType, out itemType);
+            if (isListType)
+                return MakeListInsertPositional(commandConfig, name, member, itemType, optionSet);
+
+            return MakeCopyThroughPositional(commandConfig, name, member, memberType, optionSet);
+        }
+
+        private static BasePositional MakeListInsertPositional<T>(CommandConfig<T> commandConfig, string name, MemberInfo member,
+            Type itemType, AttributedMember<OptionSetAttribute> optionSet) where T : class
+        {
+
+            var genericCallPositional = typeof(CommandAttributeLoader).GetMethod("CallActionPositional",
+                BindingFlags.Static | BindingFlags.NonPublic);
+            var callPositional = genericCallPositional.MakeGenericMethod(new[] {typeof (T), itemType});
+
+            var commandVariable = Expression.Variable(typeof(T));
+            var itemVariable = Expression.Variable(itemType);
+            var listType = typeof (ICollection<>).MakeGenericType(itemType);
+            var accessor = Expression.Convert(MakeMemberAccessor(member, commandVariable, optionSet), listType);
+            var insertMethod = listType.GetMethod("Add");
+            var insert = Expression.Call(accessor, insertMethod, new Expression[] {itemVariable});
+
+            var positional = callPositional.Invoke(commandConfig, new object[]
+            {
+                name,
+                Expression.Lambda(insert, new [] {commandVariable, itemVariable}).Compile(),
+                commandConfig
+            }) as BasePositional;
+
+            positional.AllowMultiple = true;
+
+            return positional;
+        }
+
+        private static BasePositional MakeCopyThroughPositional<T>(CommandConfig<T> commandConfig, string name, MemberInfo member,
+            Type memberType, AttributedMember<OptionSetAttribute> optionSet) where T : class
+        {
+
+            var genericCallPositional = typeof (CommandAttributeLoader).GetMethod("CallPositional",
+                BindingFlags.Static | BindingFlags.NonPublic);
             var callPositional = genericCallPositional.MakeGenericMethod(new[] {typeof (T), memberType});
 
-            var parameterExpression = Expression.Variable(typeof(T));
+            var parameterExpression = Expression.Variable(typeof (T));
             var accessor = MakeMemberAccessor(member, parameterExpression, optionSet);
             return callPositional.Invoke(commandConfig, new object[]
             {
-                name, 
+                name,
                 Expression.Lambda(accessor, parameterExpression),
                 commandConfig
             }) as BasePositional;
@@ -189,13 +237,16 @@ namespace ConsoleToolkit.CommandLineInterpretation
         private static BaseOption MakeOption<T>(OptionAttribute optionAttribute, CommandConfig<T> commandConfig, MemberInfo member, Type memberType, AttributedMember<OptionSetAttribute> optionSet) where T : class
         {
             Type[] parameterTypes;
-            var optionInitialiser = ParameterAssignmentGenerator<T>.Generate(member, memberType, out parameterTypes, optionSet == null ? null : optionSet.MemberInfo);
+            var optionSetMember = optionSet == null ? null : optionSet.MemberInfo;
+            var optionSetter = ParameterAssignmentGenerator<T>.Generate(member, memberType, out parameterTypes, optionSetMember);
             
-            //need to make a call to CommandConfig<T> Option<T1, T2, T3>(string optionName, Action<T, T1, T2, T3> optionInitialiser)
             var optionName = GetOptionName(optionAttribute, member);
-            var option = CallOptionCreateMethod(commandConfig, optionName, memberType, optionInitialiser, parameterTypes);
-            if (option != null && optionAttribute.ShortCircuit)
-                option.IsShortCircuit = true;
+            var option = CallOptionCreateMethod(commandConfig, optionName, memberType, optionSetter, parameterTypes);
+            if (option != null)
+            {
+                option.IsShortCircuit = optionAttribute.ShortCircuit;
+                option.AllowMultiple = CollectionTypeAnalyser.IsCollectionType(memberType);
+            }
 
             var alias = GetOptionAlias(optionAttribute);
             if (option != null && alias != null)

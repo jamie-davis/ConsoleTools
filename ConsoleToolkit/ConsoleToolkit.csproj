@@ -71,6 +71,7 @@
     <Compile Include="CommandLineInterpretation\BaseOption.cs" />
     <Compile Include="CommandLineInterpretation\BasePositional.cs" />
     <Compile Include="CommandLineInterpretation\BuiltInCommandLineParsers.cs" />
+    <Compile Include="CommandLineInterpretation\CollectionTypeAnalyser.cs" />
     <Compile Include="CommandLineInterpretation\CommandAlreadySpecified.cs" />
     <Compile Include="CommandLineInterpretation\CommandAttributeLoader.cs" />
     <Compile Include="CommandLineInterpretation\CommandConfig.cs" />

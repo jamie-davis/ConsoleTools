@@ -17,10 +17,13 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TARGET_FRAMEWORK_4</DefineConstants>
+    <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">TARGET_FRAMEWORK_4</DefineConstants>
+    <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">TARGET_FRAMEWORK_4, DEBUG</DefineConstants>
+    <DefineConstants Condition=" '$(TargetFrameworkVersion)' != 'v4.0' ">DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -63,14 +66,17 @@
     <Compile Include="ApplicationStyles\NoApplicationClassFound.cs" />
     <Compile Include="ApplicationStyles\NoCommandHandlerMethodFound.cs" />
     <Compile Include="CommandLineInterpretation\AliasNotSupported.cs" />
+    <Compile Include="CommandLineInterpretation\AllowMultipleInvalid.cs" />
     <Compile Include="CommandLineInterpretation\BaseCommandConfig.cs" />
     <Compile Include="CommandLineInterpretation\BaseOption.cs" />
     <Compile Include="CommandLineInterpretation\BasePositional.cs" />
     <Compile Include="CommandLineInterpretation\BuiltInCommandLineParsers.cs" />
+    <Compile Include="CommandLineInterpretation\CollectionTypeAnalyser.cs" />
     <Compile Include="CommandLineInterpretation\CommandAlreadySpecified.cs" />
     <Compile Include="CommandLineInterpretation\CommandAttributeLoader.cs" />
     <Compile Include="CommandLineInterpretation\CommandConfig.cs" />
     <Compile Include="CommandLineInterpretation\CommandConfigurationInvalid.cs" />
+    <Compile Include="CommandLineInterpretation\CommandConstructionLambdaGenerator.cs" />
     <Compile Include="CommandLineInterpretation\CommandDescriber.cs" />
     <Compile Include="CommandLineInterpretation\CommandLineInterpreter.cs" />
     <Compile Include="CommandLineInterpretation\CommandLineInterpreterConfiguration.cs" />
@@ -78,6 +84,11 @@
     <Compile Include="CommandLineInterpretation\CommandLineTokeniser.cs" />
     <Compile Include="CommandLineInterpretation\CommandOption.cs" />
     <Compile Include="CommandLineInterpretation\CommandPositional.cs" />
+    <Compile Include="CommandLineInterpretation\ConfigurationAttributes\CommandAttribute.cs" />
+    <Compile Include="CommandLineInterpretation\ConfigurationAttributes\CommandHandlerAttribute.cs" />
+    <Compile Include="CommandLineInterpretation\ConfigurationAttributes\DescriptionAttribute.cs" />
+    <Compile Include="CommandLineInterpretation\ConfigurationAttributes\OptionAttribute.cs" />
+    <Compile Include="CommandLineInterpretation\ConfigurationAttributes\OptionSetAttribute.cs" />
     <Compile Include="CommandLineInterpretation\ConfigurationAttributes\PositionalAttribute.cs" />
     <Compile Include="CommandLineInterpretation\CustomParserNotFound.cs" />
     <Compile Include="CommandLineInterpretation\DefaultApplicationNameExtractor.cs" />
@@ -120,14 +131,25 @@
     <Compile Include="ConsoleIO\ConsoleRedirectTester.cs" />
     <Compile Include="ConsoleIO\DefaultConsole.cs" />
     <Compile Include="ConsoleIO\IConsoleAdapter.cs" />
-    <Compile Include="ConsoleIO\IConsoleInterface.cs" />
+    <Compile Include="ConsoleIO\IConsoleOutInterface.cs" />
     <Compile Include="ConsoleIO\Internal\ColourControlItem.cs" />
     <Compile Include="ConsoleIO\Internal\ColourControlSplitter.cs" />
     <Compile Include="ConsoleIO\Internal\ColourInstructionRebuilder.cs" />
     <Compile Include="ConsoleIO\Internal\ColourString.cs" />
     <Compile Include="ConsoleIO\Internal\ConsoleAdapterStream.cs" />
+    <Compile Include="ConsoleIO\Internal\ConsoleRedirectionStateDetector.cs" />
+    <Compile Include="ConsoleIO\Internal\ConstructPromptText.cs" />
     <Compile Include="ConsoleIO\Internal\FormattingIntermediate.cs" />
+    <Compile Include="ConsoleIO\Internal\InputItem.cs" />
+    <Compile Include="ConsoleIO\Internal\InstanceConstructor.cs" />
+    <Compile Include="ConsoleIO\Internal\IPropertySource.cs" />
+    <Compile Include="ConsoleIO\Internal\IReadInfo.cs" />
     <Compile Include="ConsoleIO\Internal\MinReportWidthCalculator.cs" />
+    <Compile Include="ConsoleIO\Internal\OptionDefinition.cs" />
+    <Compile Include="ConsoleIO\Internal\PropertyNameConverter.cs" />
+    <Compile Include="ConsoleIO\Internal\ReadInputImpl.cs" />
+    <Compile Include="ConsoleIO\Internal\ReadInputItem.cs" />
+    <Compile Include="ConsoleIO\Internal\ReadValue.cs" />
     <Compile Include="ConsoleIO\Internal\RecordedCommands\FormatTableCommand.cs" />
     <Compile Include="ConsoleIO\Internal\RecordedCommands\FormatTableCommandFactory.cs" />
     <Compile Include="ConsoleIO\Internal\RecordedCommands\IRecordedCommand.cs" />
@@ -165,16 +187,21 @@
     <Compile Include="ConsoleIO\Internal\WidthCalculators\TimeSpanWidthCalculator.cs" />
     <Compile Include="ConsoleIO\Internal\WordSplitter.cs" />
     <Compile Include="ConsoleIO\OutputTarget.cs" />
+    <Compile Include="ConsoleIO\Read.cs" />
     <Compile Include="ConsoleIO\RedirectedConsole.cs" />
     <Compile Include="ConsoleIO\ReportFormattingOptions.cs" />
     <Compile Include="ConsoleIO\TabularReport.cs" />
     <Compile Include="ConsoleIO\TempCulture.cs" />
+    <Compile Include="Exceptions\ReadPropertyInvalidWithoutTemplate.cs" />
+    <Compile Include="Exceptions\ReadPropertyMustBeInitialised.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Toolkit.cs" />
     <Compile Include="Utilities\ReflectionExtensionMethods.cs" />
     <Compile Include="Utilities\StackWalker.cs" />
     <Compile Include="Utilities\TextFormatter.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
