@@ -21,22 +21,29 @@ namespace ConsoleToolkit.CommandLineInterpretation
         /// <returns>A <see cref="Func{T}"/> that creates an instance of the generic type.</returns>
         internal static Func<T> Generate()
         {
+            var memberInit = GenerateInitialiser();
+            return Expression.Lambda<Func<T>>(memberInit).Compile();
+        }
+
+        private static Expression GenerateInitialiser()
+        {
             var optionSets = typeof (T).GetProperties()
-                .Where(p => p.GetCustomAttribute<OptionSetAttribute>() != null)
-                .ToList();
+                                       .Where(p => p.GetCustomAttribute<OptionSetAttribute>() != null)
+                                       .ToList();
 
             var lists = typeof (T).GetProperties()
-                .Where(IsConstructableList)
-                .ToList();
+                                  .Where(IsConstructableList)
+                                  .ToList();
 
             if (!optionSets.Any() && !lists.Any())
-                return () => new T();
+            {
+                return Expression.New(typeof (T));
+            }
 
-            var optionSetInitialisers = optionSets.Select(o => Expression.Bind(o, Expression.New(o.PropertyType)));
+            var optionSetInitialisers = optionSets.Select(o => Expression.Bind(o, MakeOptionSet(o)));
             var listInitialisers = lists.Select(o => Expression.Bind(o, Expression.New(o.PropertyType)));
             var createExpression = Expression.New(typeof (T));
-            var memberInit = Expression.MemberInit(createExpression, optionSetInitialisers.Concat(listInitialisers));
-            return Expression.Lambda<Func<T>>(memberInit).Compile();
+            return Expression.MemberInit(createExpression, optionSetInitialisers.Concat(listInitialisers));
         }
 
         private static bool IsConstructableList(PropertyInfo property)
@@ -52,6 +59,13 @@ namespace ConsoleToolkit.CommandLineInterpretation
                 return false;
 
             return property.PropertyType.GetConstructor(new Type[] {}) != null;
+        }
+
+        private static Expression MakeOptionSet(PropertyInfo o)
+        {
+            var generatorType = typeof (CommandConstructionLambdaGenerator<>).MakeGenericType(o.PropertyType);
+            var generateMethod = generatorType.GetMethod("GenerateInitialiser", BindingFlags.Static | BindingFlags.NonPublic);
+            return generateMethod.Invoke(null, null) as Expression;
         }
     }
 }

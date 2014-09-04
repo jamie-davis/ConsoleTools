@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using ConsoleToolkit.Utilities;
 
 namespace ConsoleToolkit.CommandLineInterpretation
 {
@@ -144,33 +141,10 @@ namespace ConsoleToolkit.CommandLineInterpretation
         /// word to be specified. (i.e. the usual mode for console applications.)
         /// </summary>
         /// <typeparam name="T">The type that collects the parameters.</typeparam>
-        /// <param name="applicationName">Specifies the application name. This is used only in usage reporting when the configuration <see cref="Describe"/> is called. The value specified here will be placed in the <see cref="ApplicationName"/> property.</param>
-        /// <param name="initialiser">A function that creates and initialises the command object (the <see cref="T"/> instance).</param>
-        public CommandConfig<T> Parameters<T>(string applicationName, Func<T> initialiser) where T : class
+        public CommandConfig<T> Parameters<T>() where T : class, new ()
         {
-            ApplicationName = applicationName;
-            return Parameters(initialiser);
-        }
-
-        /// <summary>
-        /// Specifies the default command (i.e. the command that gets all of the parameters if this is not a command oriented configuration).
-        /// 
-        /// Use this when your interface has no commands. It allows all of the options of a command to be specified, but does not need a command
-        /// word to be specified. (i.e. the usual mode for console applications.)
-        /// </summary>
-        /// <typeparam name="T">The type that collects the parameters.</typeparam>
-        /// <param name="applicationName">Specifies the application name. This is used only in usage reporting when the configuration <see cref="Describe"/> is called. The value specified here will be placed in the <see cref="ApplicationName"/> property.</param>
-        public CommandConfig<T> Parameters<T>(string applicationName = null) where T : class, new ()
-        {
-            ApplicationName = applicationName;
             return Parameters(() => new T());
         }
-
-        /// <summary>
-        /// The name of the application. This will be used by <see cref="Describe"/> when formatting the program's parameter description.
-        /// If no value is specified, the executing assembly's name will be retrieved and used.
-        /// </summary>
-        public string ApplicationName { get; set; }
 
         /// <summary>
         /// The default command. If this is set, this will be used when no commands are configured. Either the default command,

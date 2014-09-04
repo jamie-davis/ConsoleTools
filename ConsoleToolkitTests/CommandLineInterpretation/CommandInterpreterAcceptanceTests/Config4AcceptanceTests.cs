@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.CommandLineInterpretation;
@@ -38,6 +39,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             [Option("pwd", "p")]
             [Description("The database user's password.")]
             public string Password { get; set; }
+
+            [Option("filter", "f")]
+            [Description("Global data filter")]
+            public List<string> Filters { get; set; }
         }
 
         [Command]
@@ -113,8 +118,9 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             var commands = new[]
             {
                 @"export file.dat 2014-08-22 2014-08-26 -s. --dbname test -uadmin -padm1n",
-                @"export file.dat 2014-08-22 2014-08-26",
-                @"import file.dat -server server2 --dbname test -uadmin -padm1n",
+                @"export file.dat 2014-08-22 2014-08-26 -ffilter1 -ffilter2",
+                @"import file.dat --server server2 --dbname test -uadmin -padm1n",
+                @"import file.dat --server server2 --dbname test -uadmin -padm1n -ffilter1 -ffilter2",
                 @"import file.dat",
             };
 
@@ -127,8 +133,8 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             var commands = new[]
             {
                 @"export file.dat 2014-08-22 2014-08-26 /s:. /dbname:test /u:admin /p:adm1n",
-                @"export file.dat 2014-08-22 2014-08-26",
-                @"import file.dat /server:server2 /dbname:test /u:admin /p:adm1n /i",
+                @"export file.dat 2014-08-22 2014-08-26 /filter:filter1 /f:filter2",
+                @"import file.dat /server:server2 /dbname:test /u:admin /p:adm1n /i /filter:filter1 /f:filter2",
                 @"import file.dat",
             };
 
@@ -141,8 +147,9 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             var commands = new[]
             {
                 @"export file.dat 2014-08-22 2014-08-26 -s . -dbname test -u admin -p adm1n",
-                @"export file.dat 2014-08-22 2014-08-26",
+                @"export file.dat 2014-08-22 2014-08-26 -filter filter1 -f filter2",
                 @"import file.dat -server server2 -dbname test -u admin -p adm1n",
+                @"import file.dat -server server2 -dbname test -u admin -p adm1n -filter filter1 -f filter2",
                 @"import file.dat",
             };
 

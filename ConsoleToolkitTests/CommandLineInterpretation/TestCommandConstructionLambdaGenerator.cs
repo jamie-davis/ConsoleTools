@@ -34,6 +34,12 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             public string OptSet2 { get; set; }
         }
 
+        class ListOptionSet
+        {
+            [Option]
+            public List<string> StringList { get; set; }
+        }
+
         class SimpleCommand
         {
             [Option]
@@ -71,6 +77,12 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
 
             [OptionSet]
             public OptionSet1 SimpleOptions1 { get; set; }
+        }
+
+        class CommandWithListOptionSet
+        {
+            [OptionSet]
+            public ListOptionSet ListOptionSet { get; set; }
         }
 
         // ReSharper restore UnusedParameter.Local
@@ -140,6 +152,14 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var lambda = CommandConstructionLambdaGenerator<CommandWithList>.Generate();
             var item = lambda();
             Assert.That(item.RepeatingOpt, Is.Not.Null);
+        }
+
+        [Test]
+        public void ListOptionInOptionSetIsConstructed()
+        {
+            var lambda = CommandConstructionLambdaGenerator<CommandWithListOptionSet>.Generate();
+            var item = lambda();
+            Assert.That(item.ListOptionSet.StringList, Is.Not.Null);
         }
     }
 }

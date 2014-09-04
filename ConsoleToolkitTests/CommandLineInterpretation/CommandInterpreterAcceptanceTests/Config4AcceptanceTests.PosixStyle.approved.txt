@@ -11,11 +11,14 @@ ExportCommand
         ServerName = .
         UserId = admin
         Password = adm1n
+        Filters = List`1
+        {
+        }
     }
 }
 
 
-Test: export file.dat 2014-08-22 2014-08-26
+Test: export file.dat 2014-08-22 2014-08-26 -ffilter1 -ffilter2
 
 ExportCommand
 {
@@ -28,13 +31,53 @@ ExportCommand
         ServerName = <null>
         UserId = <null>
         Password = <null>
+        Filters = List`1
+        {
+            filter1
+            filter2
+        }
     }
 }
 
 
-Test: import file.dat -server server2 --dbname test -uadmin -padm1n
+Test: import file.dat --server server2 --dbname test -uadmin -padm1n
 
-Unexpected argument "server2"
+ImportCommand
+{
+    Filename = file.dat
+    DbOptions = DbOptions
+    {
+        DatabaseName = test
+        ServerName = server2
+        UserId = admin
+        Password = adm1n
+        Filters = List`1
+        {
+        }
+    }
+    UniqueIds = False
+}
+
+
+Test: import file.dat --server server2 --dbname test -uadmin -padm1n -ffilter1 -ffilter2
+
+ImportCommand
+{
+    Filename = file.dat
+    DbOptions = DbOptions
+    {
+        DatabaseName = test
+        ServerName = server2
+        UserId = admin
+        Password = adm1n
+        Filters = List`1
+        {
+            filter1
+            filter2
+        }
+    }
+    UniqueIds = False
+}
 
 
 Test: import file.dat
@@ -48,6 +91,9 @@ ImportCommand
         ServerName = <null>
         UserId = <null>
         Password = <null>
+        Filters = List`1
+        {
+        }
     }
     UniqueIds = False
 }

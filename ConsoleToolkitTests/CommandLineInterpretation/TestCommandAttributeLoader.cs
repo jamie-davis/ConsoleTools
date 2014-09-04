@@ -162,6 +162,44 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             public List<List<string>> Repeating { get; set; }
         }
 
+        [Command]
+        class RepeatingStructureCommand
+        {
+            public class Config
+            {
+                public string Key { get; set; }
+                public string Value { get; set; }
+            }
+
+            [Option]
+            public string Normal { get; set; }
+
+            [Option]
+            public List<Config> Repeating { get; set; }
+        }
+
+
+        class RepeatingOptions
+        {
+            [Option("dbnames", "d")]
+            [Description("Database names")]
+            public List<string> DbNames { get; set; }
+
+            [Option("dbservers", "s")]
+            [Description("Database servers")]
+            public List<string> ServerName { get; set; }
+        }
+
+        [Command]
+        class RepeatingOptionSetCommand
+        {
+            [Option]
+            public string Normal { get; set; }
+
+            [OptionSet]
+            public RepeatingOptions CommandOptions { get; set; }
+        }
+
         class CommonOptions
         {
             [Option("dbname", "d")]
@@ -442,5 +480,34 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var config = CommandAttributeLoader.Load(typeof(RepeatingListCommand)) as CommandConfig<RepeatingListCommand>;
         }
 
+        [Test]
+        public void RepeatingComplexTypeInsertsValues()
+        {
+            var config = CommandAttributeLoader.Load(typeof(RepeatingStructureCommand)) as CommandConfig<RepeatingStructureCommand>;
+            var option = config.Options.FirstOrDefault(p => p.Name == "repeating") as CommandOption<Action<RepeatingStructureCommand, string, string>>;
+            var command = config.Create(null) as RepeatingStructureCommand;
+            string error;
+            option.Apply(command, new [] {"key1", "one"}, out error);
+            option.Apply(command, new [] {"key2", "two"}, out error);
+            option.Apply(command, new [] {"key3", "three"}, out error);
+
+            var result = command.Repeating.Select(r => string.Format("[{0},{1}]", r.Key, r.Value)).JoinWith(",");
+            Assert.That(result, Is.EqualTo("[key1,one],[key2,two],[key3,three]"));
+        }
+
+        [Test]
+        public void RepeatingOptionSetOptionAcceptsValues()
+        {
+            var config = CommandAttributeLoader.Load(typeof(RepeatingOptionSetCommand)) as CommandConfig<RepeatingOptionSetCommand>;
+            var option = config.Options.FirstOrDefault(p => p.Name == "dbnames") as CommandOption<Action<RepeatingOptionSetCommand, string>>;
+            var command = config.Create(null) as RepeatingOptionSetCommand;
+            string error;
+            option.Apply(command, new [] {"one"}, out error);
+            option.Apply(command, new [] {"two"}, out error);
+            option.Apply(command, new [] {"three"}, out error);
+
+            var result = command.CommandOptions.DbNames.JoinWith(",");
+            Assert.That(result, Is.EqualTo("one,two,three"));
+        }
     }
 }

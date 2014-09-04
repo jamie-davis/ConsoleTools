@@ -44,7 +44,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
 
         private void Configure(CommandLineInterpreterConfiguration config)
         {
-            config.Parameters<Data>("testApp")
+            config.Parameters<Data>()
                 .Description("Do something to a file.")
                 .Positional("filename")
                 .Description("The name of the file.")

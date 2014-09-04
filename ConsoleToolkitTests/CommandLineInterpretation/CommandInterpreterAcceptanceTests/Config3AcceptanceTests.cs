@@ -9,9 +9,14 @@ using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
 using Description = ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.DescriptionAttribute;
 
+// ReSharper disable UnusedMember.Local
 
 namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAcceptanceTests
 {
+    /// <summary>
+    /// This test implements the arguments of the git add and clone commands, as a proof that relatively complex command options
+    /// can be specified. (i.e. its not just a made up example.)
+    /// </summary>
     [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class Config3AcceptanceTests
@@ -243,7 +248,7 @@ NOTE: see the NOTE for the --shared option.")]
                 @"clone /reference:my2.6 git://git.kernel.org/pub/scm/.../linux-2.7 my2.7",
                 @"clone git@github.com:whatever",
                 @"clone git@github.com:whatever folder-name",
-                @"clone /mirror https://github.com/exampleuser/repository-to-mirror.git",
+                @"clone /mirror https://github.com/exampleuser/repository-to-mirror.git"
             };
 
             Approvals.Verify(CommandExecutorUtil.Do(_msDos, commands, 50));
