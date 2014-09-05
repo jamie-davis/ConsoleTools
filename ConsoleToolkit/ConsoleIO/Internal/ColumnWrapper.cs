@@ -65,17 +65,26 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         /// <returns>An array of one or more lines.</returns>
         public static string[] WrapAndMeasureValue(object value, ColumnFormat format, int columnWidth, int tabLength, int firstLineHangingIndent, out int wrappedLines)
         {
-            var words = WordSplitter.Split(GetValueString(value), tabLength);
-            return WrapAndMeasureWords(words, format, columnWidth, firstLineHangingIndent, out wrappedLines);
+            var intermediate = value as FormattingIntermediate;
+            if (intermediate == null || intermediate.RenderableValue == null)
+            {
+                var words = WordSplitter.Split(GetValueString(value, columnWidth), tabLength);
+                return WrapAndMeasureWords(words, format, columnWidth, firstLineHangingIndent, out wrappedLines);
+                
+            }
+            
+            return intermediate.RenderableValue.Render(columnWidth, out wrappedLines).ToArray();
         }
 
-        private static string GetValueString(object value)
+        private static string GetValueString(object value, int columnWidth)
         {
             if (value is FormattingIntermediate)
             {
                 var intermediate = value as FormattingIntermediate;
                 if (intermediate.RenderableValue == null)
                     return intermediate.TextValue;
+                
+                return intermediate.ToString(columnWidth);
             }
             return value.ToString();
         }

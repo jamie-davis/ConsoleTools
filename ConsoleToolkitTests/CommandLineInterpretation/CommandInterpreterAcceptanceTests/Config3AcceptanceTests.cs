@@ -204,6 +204,7 @@ NOTE: see the NOTE for the --shared option.")]
 
             _consoleOutInterface = new ConsoleInterfaceForTesting();
             _consoleOutInterface.WindowWidth = 80;
+            _consoleOutInterface.BufferWidth = 80;
             _console = new ConsoleAdapter(_consoleOutInterface);
         }
 

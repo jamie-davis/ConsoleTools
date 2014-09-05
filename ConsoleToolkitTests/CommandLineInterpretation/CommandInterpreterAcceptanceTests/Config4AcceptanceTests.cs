@@ -4,6 +4,7 @@ using ApprovalTests.Reporters;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAcceptanceTests.AcceptanceTestConfig4Commands;
+using ConsoleToolkitTests.ConsoleIO.UnitTestUtilities;
 using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
 
@@ -48,7 +49,9 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
         {
             var interpreter = new CommandLineInterpreter(_posix);
             CommandDescriber.Describe(_posix, _console, _applicationName, interpreter.GetOptionNameAdorner());
-            var description = _consoleOutInterface.GetBuffer();
+            var description =  RulerFormatter.MakeRuler(_consoleOutInterface.WindowWidth) 
+                + Environment.NewLine
+                + _consoleOutInterface.GetBuffer();
             Console.WriteLine(description);
             Approvals.Verify(description);
         }
