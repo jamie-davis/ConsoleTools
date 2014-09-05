@@ -26,13 +26,14 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ApprovalTests">
@@ -60,6 +61,10 @@
     <Compile Include="ApplicationStyles\TestCommandDrivenApplication.cs" />
     <Compile Include="ApplicationStyles\TestConsoleApplication.cs" />
     <Compile Include="ApplicationStyles\UnitTestAppUtils.cs" />
+    <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\AcceptanceTestConfig4Commands\DbOptions.cs" />
+    <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\AcceptanceTestConfig4Commands\ExportCommand.cs" />
+    <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\AcceptanceTestConfig4Commands\HelpCommand.cs" />
+    <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\AcceptanceTestConfig4Commands\ImportCommand.cs" />
     <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\Config1AttributesAcceptanceTests.cs" />
     <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\Config2AcceptanceTests.cs" />
     <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\Config3AcceptanceTests.cs" />

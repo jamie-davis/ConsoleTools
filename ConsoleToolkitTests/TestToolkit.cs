@@ -29,7 +29,7 @@ namespace ConsoleToolkitTests
 
             public static void Main(string[] args)
             {
-                Toolkit.Execute(args);
+                Toolkit.Execute<TestApp>(args);
             }
 
             protected override void Initialise()
@@ -75,7 +75,7 @@ namespace ConsoleToolkitTests
         {
             public static void Main(string[] args)
             {
-                Toolkit.Execute(args);
+                Toolkit.Execute<BadTestApp>(args);
             }
         }
 

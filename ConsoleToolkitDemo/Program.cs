@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using ConsoleToolkit;
 using ConsoleToolkit.ApplicationStyles;
 using ConsoleToolkit.ConsoleIO;
@@ -10,7 +9,7 @@ namespace ConsoleToolkitDemo
     {
         static void Main(string[] args)
         {
-            Toolkit.Execute(args);
+            Toolkit.Execute<Program>(args);
         }
 
         public void Handle(TableDataCommand command, IConsoleOperations console)
@@ -20,7 +19,7 @@ namespace ConsoleToolkitDemo
             console.FormatTable(data);
         }
 
-protected override void Initialise()
+        protected override void Initialise()
         {
             HelpCommand<HelpCommand>(h => h.Topic);
         }

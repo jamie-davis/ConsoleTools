@@ -309,10 +309,15 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(sb.ToString());
         }
 
-        private RecordingConsoleAdapter MakeRenderable(int number)
+        private RecordingConsoleAdapter MakeRenderable(int number, bool narrow = false)
         {
             var output = new RecordingConsoleAdapter();
-            output.WrapLine("Some wrapped text containing the index number :{0} and some more stuff.", number);
+            if (narrow)
+                output.WrapLine("Narrow text");
+            else
+                output.WrapLine("Some wrapped text containing the index number :{0} and some more stuff.", number);
+
+
             var table = Enumerable.Range(0, number)
                 .Select(i => new { Text = string.Format("Nested row {0}", i)});
             output.FormatTable(table);

@@ -82,7 +82,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
 
             public static void Main(string[] args)
             {
-                Toolkit.Execute(args);
+                Toolkit.Execute<TestApp>(args);
             }
 
             protected override void Initialise()
@@ -128,7 +128,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
 
             public static void Main(string[] args)
             {
-                Toolkit.Execute(args);
+                Toolkit.Execute<DuplicateCommandHandlerApp>(args);
             }
 
             protected override void Initialise()
@@ -167,7 +167,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
 
             public static void Main(string[] args)
             {
-                Toolkit.Execute(args);
+                Toolkit.Execute<HelpCommandApp>(args);
             }
 
             protected override void Initialise()
@@ -190,7 +190,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
 
             public static void Main(string[] args)
             {
-                Toolkit.Execute(args);
+                Toolkit.Execute<InvalidHelpCommandApp>(args);
             }
 
             protected override void Initialise()

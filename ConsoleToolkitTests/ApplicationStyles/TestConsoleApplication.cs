@@ -41,7 +41,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
 
             public static void Main(string[] args)
             {
-                Toolkit.Execute(args);
+                Toolkit.Execute<TestApp>(args);
             }
 
             protected override void Initialise()
@@ -74,7 +74,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
 
             public static void Main(string[] args)
             {
-                Toolkit.Execute(args);
+                Toolkit.Execute<MultipleCommandHandlerApp>(args);
             }
 
             protected override void Initialise()
@@ -108,7 +108,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
 
             public static void Main(string[] args)
             {
-                Toolkit.Execute(args);
+                Toolkit.Execute<MultipleCommandApp>(args);
             }
 
             protected override void Initialise()
@@ -141,7 +141,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
 
             public static void Main(string[] args)
             {
-                Toolkit.Execute(args);
+                Toolkit.Execute<HelpApp>(args);
             }
 
             protected override void Initialise()
@@ -166,7 +166,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
 
             public static void Main(string[] args)
             {
-                Toolkit.Execute(args);
+                Toolkit.Execute<InvalidHelpApp>(args);
             }
 
             protected override void Initialise()
@@ -190,7 +190,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
 
             public static void Main(string[] args)
             {
-                Toolkit.Execute(args);
+                Toolkit.Execute<SelfHandledCommandApp>(args);
             }
 
             protected override void Initialise()
@@ -217,7 +217,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
 
             public static void Main(string[] args)
             {
-                Toolkit.Execute(args);
+                Toolkit.Execute<HandlerClassApp>(args);
             }
 
             protected override void Initialise()
@@ -249,7 +249,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
 
             public static void Main(string[] args)
             {
-                Toolkit.Execute(args);
+                Toolkit.Execute<CustomInjectionApp>(args);
             }
 
             protected override void Initialise()

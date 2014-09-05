@@ -82,7 +82,7 @@ namespace ConsoleToolkitTests.ConsoleIO
         [Test]
         public void ShortWidthTabularDataIsDisplayed()
         {
-            _adapter.WriteLine(RulerFormatter.MakeRuler(_adapter.BufferWidth));
+            _adapter.WriteLine(RulerFormatter.MakeRuler(_adapter.WindowWidth));
             var data = Enumerable.Range(1, 10)
                 .Select(i => new { Number = i, String = string.Join(" ", Enumerable.Repeat("blah", i)) });
             _adapter.FormatTable(data);

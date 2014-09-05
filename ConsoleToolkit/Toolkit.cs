@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using ConsoleToolkit.ApplicationStyles;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.ConsoleIO;
@@ -69,12 +70,14 @@ namespace ConsoleToolkit
             _options = new ToolkitOptions();
         }
 
-        public static void Execute(string[] args)
+        public static void Execute<T>(string[] args)
+        {
+            Execute(args, typeof(T));
+        }
+
+        private static void Execute(string[] args, Type type)
         {
             var consoleAdapter = CreateConsoleAdapter();
-            var typesInCallStack = StackWalker.StackedTypes().Reverse();
-            var type = typesInCallStack.FirstOrDefault(IsToolkitDerived);
-
             var toolkitBase = type == null ? null : GetToolkitBaseClass(type);
             if (toolkitBase == null)
                 throw new NoApplicationClassFound();
@@ -86,7 +89,7 @@ namespace ConsoleToolkit
             try
             {
                 instance = Activator.CreateInstance(type, null);
-                runMethod.Invoke(null, new [] {instance, args, consoleAdapter});
+                runMethod.Invoke(null, new[] {instance, args, consoleAdapter});
             }
             finally
             {

@@ -54,7 +54,7 @@ namespace ConsoleToolkitTests.ConsoleIO
 
             public static void Main(string[] args)
             {
-                Toolkit.Execute(args);
+                Toolkit.Execute<Program1>(args);
             }
         }
 

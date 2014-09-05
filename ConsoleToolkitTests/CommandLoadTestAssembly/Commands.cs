@@ -1,4 +1,5 @@
-﻿using ConsoleToolkit;
+﻿using System.Runtime.CompilerServices;
+using ConsoleToolkit;
 using ConsoleToolkit.ApplicationStyles;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
@@ -47,9 +48,10 @@ namespace CommandLoadTestAssembly
             return Config;
         }
 
+        [MethodImpl(MethodImplOptions.NoOptimization)]
         public static void Main(string[] args)
         {
-            Toolkit.Execute(args);
+            Toolkit.Execute<Program>(args);
         }
     }
 

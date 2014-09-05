@@ -1,15 +1,15 @@
-﻿Test: export file.dat 2014-08-22 2014-08-26 -s . -dbname test -u admin -p adm1n
+﻿Test: export file.dat 2014-08-22 2014-08-26 -s . -database test -u admin -p adm1n
 
 ExportCommand
 {
-    Filename = file.dat
-    FromDate = 2014-08-22 00:00:00
-    ToDate = 2014-08-26 00:00:00
+    File = file.dat
+    From = 2014-08-22 00:00:00
+    To = 2014-08-26 00:00:00
     DbOptions = DbOptions
     {
-        DatabaseName = test
-        ServerName = .
-        UserId = admin
+        Server = .
+        Database = test
+        User = admin
         Password = adm1n
         Filters = List`1
         {
@@ -22,14 +22,14 @@ Test: export file.dat 2014-08-22 2014-08-26 -filter filter1 -f filter2
 
 ExportCommand
 {
-    Filename = file.dat
-    FromDate = 2014-08-22 00:00:00
-    ToDate = 2014-08-26 00:00:00
+    File = file.dat
+    From = 2014-08-22 00:00:00
+    To = 2014-08-26 00:00:00
     DbOptions = DbOptions
     {
-        DatabaseName = <null>
-        ServerName = <null>
-        UserId = <null>
+        Server = <null>
+        Database = <null>
+        User = <null>
         Password = <null>
         Filters = List`1
         {
@@ -40,35 +40,38 @@ ExportCommand
 }
 
 
-Test: import file.dat -server server2 -dbname test -u admin -p adm1n
+Test: import file.dat -server server2 -database test -u admin -p adm1n
 
 ImportCommand
 {
-    Filename = file.dat
+    File = file.dat
+    From = 0001-01-01 00:00:00
+    To = 0001-01-01 00:00:00
     DbOptions = DbOptions
     {
-        DatabaseName = test
-        ServerName = server2
-        UserId = admin
+        Server = server2
+        Database = test
+        User = admin
         Password = adm1n
         Filters = List`1
         {
         }
     }
-    UniqueIds = False
 }
 
 
-Test: import file.dat -server server2 -dbname test -u admin -p adm1n -filter filter1 -f filter2
+Test: import file.dat -server server2 -database test -u admin -p adm1n -filter filter1 -f filter2
 
 ImportCommand
 {
-    Filename = file.dat
+    File = file.dat
+    From = 0001-01-01 00:00:00
+    To = 0001-01-01 00:00:00
     DbOptions = DbOptions
     {
-        DatabaseName = test
-        ServerName = server2
-        UserId = admin
+        Server = server2
+        Database = test
+        User = admin
         Password = adm1n
         Filters = List`1
         {
@@ -76,7 +79,6 @@ ImportCommand
             filter2
         }
     }
-    UniqueIds = False
 }
 
 
@@ -84,18 +86,19 @@ Test: import file.dat
 
 ImportCommand
 {
-    Filename = file.dat
+    File = file.dat
+    From = 0001-01-01 00:00:00
+    To = 0001-01-01 00:00:00
     DbOptions = DbOptions
     {
-        DatabaseName = <null>
-        ServerName = <null>
-        UserId = <null>
+        Server = <null>
+        Database = <null>
+        User = <null>
         Password = <null>
         Filters = List`1
         {
         }
     }
-    UniqueIds = False
 }
 
 

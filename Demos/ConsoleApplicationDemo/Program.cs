@@ -11,7 +11,7 @@ namespace ConsoleApplicationDemo
         static void Main(string[] args)
         {
             Toolkit.Options.ParsingConventions = CommandLineParserConventions.MsDosConventions;
-            Toolkit.Execute(args);
+            Toolkit.Execute<Program>(args);
         }
 
         protected override void Initialise()
