@@ -278,6 +278,26 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(result);
         }
 
+        [Test]
+        public void WrapAndMeasureWordsCanWorkWithSplitData()
+        {
+            //Arrange
+            var c = new ColumnFormat("h", typeof(string));
+            const string value = "One two three four five six seven eight nine ten eleven.";
+            var words = WordSplitter.SplitToList(value, 4);
+
+            //Act
+            int wrappedLines;
+            var wrapped = ColumnWrapper.WrapAndMeasureWords(words, c, 20, 0, out wrappedLines);
+
+            //Assert
+            var result = FormatResult(value, wrapped, 20)
+                + Environment.NewLine
+                + string.Format("Added line breaks = {0}", wrappedLines);
+            Console.WriteLine(result);
+            Approvals.Verify(result);
+        }
+
         private string FormatResult(string value, IEnumerable<string> wrapped, int guideWidth, int indent = 0)
         {
             var indentString = new string(' ', indent);

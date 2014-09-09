@@ -23,12 +23,14 @@ namespace ConsoleToolkit.ConsoleIO.Internal.RecordedCommands
         private readonly ReportFormattingOptions options;
         private readonly string _columnSeperator;
         private readonly CachedRows<T> _data;
+        private int _minReportWidth;
 
         public FormatTableCommand(IEnumerable<T> data, ReportFormattingOptions options, string columnSeperator)
         {
             this.options = options;
             _columnSeperator = columnSeperator ?? TabularReport.DefaultColumnDivider;
             _data = CachedRowsFactory.Make(data);
+            _minReportWidth = MinReportWidthCalculator.Calculate(_data, _columnSeperator.Length);
         }
 
         public void Replay(ReplayBuffer buffer)
@@ -44,12 +46,12 @@ namespace ConsoleToolkit.ConsoleIO.Internal.RecordedCommands
 
         public int GetFirstWordLength(int tabLength)
         {
-            return MinReportWidthCalculator.Calculate(_data, _columnSeperator.Length);
+            return _minReportWidth;
         }
 
         public int GetLongestWordLength(int tabLength)
         {
-            return MinReportWidthCalculator.Calculate(_data, _columnSeperator.Length);
+            return _minReportWidth;
         }
     }
 }

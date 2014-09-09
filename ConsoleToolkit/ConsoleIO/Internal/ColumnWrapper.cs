@@ -11,6 +11,9 @@ namespace ConsoleToolkit.ConsoleIO.Internal
     /// </summary>
     internal static class ColumnWrapper
     {
+        public static int _valueSplits = 0;/**/
+        public static int _wrapAndMeasure = 0/**/;
+
         /// <summary>
         /// Given a value for a column, wrap the value into as many lines as required.
         /// </summary>
@@ -46,9 +49,17 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         /// <returns>The number of added line breaks.</returns>
         public static int CountWordwrapLineBreaks(object value, ColumnFormat format, int columnWidth, int tabLength = 4, int firstLineHangingIndent = 0)
         {
-            int wrappedLines;
-            WrapAndMeasureValue(value, format, columnWidth, tabLength, firstLineHangingIndent, out wrappedLines);
-            return wrappedLines;
+            var intermediate = value as FormattingIntermediate;
+            if (intermediate != null && intermediate.RenderableValue != null)
+            {
+                int wrappedLines;
+                intermediate.RenderableValue.Render(columnWidth, out wrappedLines).ToArray();
+                return wrappedLines;
+            }
+
+            var words = ExtractSplitWords(value, columnWidth, tabLength, intermediate);
+
+            return CountLineBreaks(words, columnWidth, firstLineHangingIndent);
         }
 
         /// <summary>
@@ -65,28 +76,73 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         /// <returns>An array of one or more lines.</returns>
         public static string[] WrapAndMeasureValue(object value, ColumnFormat format, int columnWidth, int tabLength, int firstLineHangingIndent, out int wrappedLines)
         {
+            _wrapAndMeasure++;
+
             var intermediate = value as FormattingIntermediate;
-            if (intermediate == null || intermediate.RenderableValue == null)
-            {
-                var words = WordSplitter.Split(GetValueString(value, columnWidth), tabLength);
-                return WrapAndMeasureWords(words, format, columnWidth, firstLineHangingIndent, out wrappedLines);
-                
-            }
-            
-            return intermediate.RenderableValue.Render(columnWidth, out wrappedLines).ToArray();
+            if (intermediate != null && intermediate.RenderableValue != null)
+                    return intermediate.RenderableValue.Render(columnWidth, out wrappedLines).ToArray();
+
+            var words = ExtractSplitWords(value, columnWidth, tabLength, intermediate);
+
+            return WrapAndMeasureWords(words, format, columnWidth, firstLineHangingIndent, out wrappedLines);
         }
 
-        private static string GetValueString(object value, int columnWidth)
+        private static IEnumerable<SplitWord> ExtractSplitWords(object value, int columnWidth, int tabLength,
+                                                     FormattingIntermediate intermediate)
         {
-            if (value is FormattingIntermediate)
+            IEnumerable<SplitWord> words;
+            words = intermediate == null
+                        ? WordSplitter.Split(value.ToString(), tabLength)
+                        : intermediate.ValueWords(columnWidth, tabLength);
+            _valueSplits++;
+            return words;
+        }
+
+        /// <summary>
+        /// Given a value for a column, calculate the number of line breaks that must be added (i.e. not counting 
+        /// line breaks intrinsically part of the value, just additional ones due to wrapping).
+        /// </summary>
+        /// <param name="words">The words to be displayed in the column.</param>
+        /// <param name="columnWidth">The width allowed for the column.</param>
+        /// <param name="firstLineHangingIndent">Number of characters at the start of the first line that cannot be used for 
+        /// wrapping. This is required when the wrapped text begins part way along an existing line.</param>
+        /// <returns>The number of added line breaks.</returns>
+        private static int CountLineBreaks(IEnumerable<SplitWord> words, int columnWidth, int firstLineHangingIndent)
+        {
+            Debug.Assert(columnWidth > 0);
+            var pos = 0;
+            var breaks = 0;
+            var spaceDebt = 0;
+            foreach (var splitWord in words)
             {
-                var intermediate = value as FormattingIntermediate;
-                if (intermediate.RenderableValue == null)
-                    return intermediate.TextValue;
-                
-                return intermediate.ToString(columnWidth);
+                if (pos + spaceDebt + splitWord.Length > columnWidth)
+                {
+                    if (pos > 0)
+                        ++breaks;
+
+                    if (splitWord.Length > columnWidth)
+                    {
+                        breaks += splitWord.Length/columnWidth;
+                        pos = splitWord.Length%columnWidth;
+                    }
+                    else
+                        pos = splitWord.Length;
+                    spaceDebt = splitWord.TrailingSpaces;
+                }
+                else
+                {
+                    pos += spaceDebt + splitWord.Length;
+                    spaceDebt = splitWord.TrailingSpaces;
+                }
+
+                if (splitWord.TerminatesLine())
+                {
+                    pos = 0;
+                    spaceDebt = 0;
+                }
             }
-            return value.ToString();
+
+            return breaks;
         }
 
         /// <summary>

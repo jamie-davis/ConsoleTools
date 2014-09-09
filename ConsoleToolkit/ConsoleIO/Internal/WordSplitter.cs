@@ -17,6 +17,18 @@ namespace ConsoleToolkit.ConsoleIO.Internal
                 _tabLength = tabLength;
                 var items = ColourControlSplitter.Split(data);
                 _current = null;
+                InitFromColourControlItems(items);
+            }
+
+            public SplitImpl(IEnumerable<ColourControlItem> data, int tabLength)
+            {
+                _tabLength = tabLength;
+                _current = null;
+                InitFromColourControlItems(data);
+            }
+
+            private void InitFromColourControlItems(IEnumerable<ColourControlItem> items)
+            {
                 foreach (var colourControlItem in items)
                 {
                     ProcessColourControlItem(colourControlItem);
@@ -99,6 +111,21 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         public static SplitWord[] Split(string data, int tabLength)
         {
             return new SplitImpl(data, tabLength).Words.ToArray();
+        }
+
+        public static List<SplitWord> SplitToList(string data, int tabLength)
+        {
+            return new SplitImpl(data, tabLength).Words;
+        }
+
+        public static IEnumerable<SplitWord> Split(IEnumerable<ColourControlItem> data, int tabLength)
+        {
+            return new SplitImpl(data, tabLength).Words.ToArray();
+        }
+
+        public static List<SplitWord> SplitToList(IEnumerable<ColourControlItem> data, int tabLength)
+        {
+            return new SplitImpl(data, tabLength).Words;
         }
 
         private static SplitWord[] SplitWords(string data, int tabLength)

@@ -13,6 +13,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         private ColumnFormat _format;
         private int _idealMinWidth;
         private bool _idealMinWidthValid;
+        private Dictionary<int, int> _cachedMaxLineBreaks;
 
 
         public ColumnSizer(Type columnType, ColumnFormat format = null, int tabLength = 4)
@@ -28,9 +29,10 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         {
             if (value is IConsoleRenderer)
                 _values.Add(new FormattingIntermediate(value as IConsoleRenderer));
-            else 
+            else
                 _values.Add(FormatValue(value));
             _idealMinWidthValid = false;
+            _cachedMaxLineBreaks = null;
         }
 
         /// <summary>
@@ -40,7 +42,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         /// <returns>The number of characters the column needs to be to limit the line breaks to the specified count.</returns>
         public int MinWidth(int maxLineBreaks)
         {
-            if (_columnType == typeof (string))
+            if (_columnType == typeof(string))
             {
                 return _values.Max(v => FitToLines(v, maxLineBreaks));
             }
@@ -70,7 +72,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             _idealMinWidth = _values.Max(v => v.Width);
             _idealMinWidthValid = true;
             return _idealMinWidth;
-           
+
         }
 
         private string FormatValue(object v)
@@ -80,15 +82,43 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
         private int FitToLines(FormattingIntermediate v, int maxLineBreaks)
         {
-            for (var i = 1; i <= v.Width; i++)
-            {
-                var breaks = v.RenderableValue != null 
-                    ? v.RenderableValue.CountWordWrapLineBreaks(_format, i)
-                    : ColumnWrapper.CountWordwrapLineBreaks(v, _format, i);
-                if (breaks <= maxLineBreaks) return i;
-            }
+            var width = v.Width;
+            if (width == 0) return 1;
 
-            return v.Width;
+            var tooWide = 0;
+            var tooNarrow = 0;
+            do
+            {
+                var breaks = v.RenderableValue != null
+                                 ? v.RenderableValue.CountWordWrapLineBreaks(_format, width)
+                                 : ColumnWrapper.CountWordwrapLineBreaks(v, _format, width);
+                if (breaks <= maxLineBreaks)
+                    tooWide = width;
+                else
+                    tooNarrow = width;
+
+                if (tooWide - tooNarrow == 1) return tooWide;
+
+                if (tooWide == 0)
+                    width *= 2;
+                else
+                    width = tooNarrow + (tooWide - tooNarrow) / 2;
+            } while (true);
+
+            /*
+                        Func<int, int> measurer;
+                        if (v.RenderableValue != null)
+                            measurer = i => v.RenderableValue.CountWordWrapLineBreaks(_format, i);
+                        else
+                            measurer = i => ColumnWrapper.CountWordwrapLineBreaks(v.ValueWords(i, _tabLength), _format, i);
+
+                        for (var i = 1; i <= v.Width; i++)
+                        {
+                            if (measurer(i) <= maxLineBreaks) return i;
+                        }
+
+                        return v.Width;
+            */
         }
 
         public FormattingIntermediate GetSizeValue(int row)
@@ -99,7 +129,14 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
         public int GetMaxLineBreaks(int width)
         {
-            return _values.Max(v => ColumnWrapper.CountWordwrapLineBreaks(v, _format, width));
+            if (_cachedMaxLineBreaks == null)
+                _cachedMaxLineBreaks = new Dictionary<int, int>();
+            else if (_cachedMaxLineBreaks.ContainsKey(width))
+                return _cachedMaxLineBreaks[width];
+
+            var maxLineBreaks = _values.Max(v => ColumnWrapper.CountWordwrapLineBreaks(v, _format, width));
+            _cachedMaxLineBreaks[width] = maxLineBreaks;
+            return maxLineBreaks;
         }
     }
 }

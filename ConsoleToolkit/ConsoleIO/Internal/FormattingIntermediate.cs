@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ConsoleToolkit.ConsoleIO.Internal
@@ -10,6 +12,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
     /// </summary>
     internal class FormattingIntermediate
     {
+        private Dictionary<int, List<SplitWord>> _splitWords = new Dictionary<int, List<SplitWord>>();
         public string TextValue { get; private set; }
         public IConsoleRenderer RenderableValue { get; private set; }
 
@@ -69,6 +72,22 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             }
 
             return RenderableValue.GetFirstWordLength(tabLength);
+        }
+
+        public IEnumerable<SplitWord> ValueWords(int columnWidth, int tabLength)
+        {
+            List<SplitWord> splitWords;
+            if (_splitWords.TryGetValue(tabLength, out splitWords))
+                return splitWords;
+
+            if (RenderableValue == null)
+            {
+                splitWords = WordSplitter.SplitToList(TextValue, tabLength);
+                _splitWords[tabLength] = splitWords;
+                return splitWords;
+            }
+
+            return WordSplitter.SplitToList(ToString(columnWidth), tabLength);
         }
 
         /// <summary>

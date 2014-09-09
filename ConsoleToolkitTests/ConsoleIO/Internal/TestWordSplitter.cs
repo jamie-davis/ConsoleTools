@@ -155,6 +155,36 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         }
 
         [Test]
+        public void SplitToListExtractsWordsWithTrailingSpaceCounts()
+        {
+            const string testPhrase = "one two  three   none.";
+            var words = WordSplitter.SplitToList(testPhrase, 4);
+            var result = DescribeWords(words);
+            Console.WriteLine(result);
+            Assert.That(result, Is.EqualTo(@"[3,1,""one""][3,2,""two""][5,3,""three""][5,0,""none.""]"));
+        }
+
+        [Test]
+        public void ColourControlItemsCanBeSplit()
+        {
+            var testPhrase = "one ".White() + "two  ".Red() + "three   none.";
+            var words = WordSplitter.Split(testPhrase, 4);
+            var result = DescribeWords(words);
+            Console.WriteLine(result);
+            Assert.That(result, Is.EqualTo(@"[3,1,""one""][3,2,""two""][5,3,""three""][5,0,""none.""]"));
+        }
+
+        [Test]
+        public void ColourControlItemsCanBeSplitToList()
+        {
+            var testPhrase = "one ".White() + "two  ".Red() + "three   none.";
+            var words = WordSplitter.SplitToList(testPhrase, 4);
+            var result = DescribeWords(words);
+            Console.WriteLine(result);
+            Assert.That(result, Is.EqualTo(@"[3,1,""one""][3,2,""two""][5,3,""three""][5,0,""none.""]"));
+        }
+
+        [Test]
         public void TabsAreConvertedIntoSpaces()
         {
             const string testPhrase = "one\ttwo\t three \t eight.\t\t";

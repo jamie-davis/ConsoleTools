@@ -9,6 +9,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal.RecordedCommands
     {
         private static readonly ColumnFormat DefaultColumnFormat = new ColumnFormat(null);
         public int Width { get; private set; }
+        public static int _Buffers = 0/**/;
 
         /// <summary>
         /// The current cursor position.
@@ -27,6 +28,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal.RecordedCommands
         public ReplayBuffer(int width)
         {
             Width = width;
+            /**/++_Buffers;
         }
 
         public IEnumerable<string> ToLines()
@@ -39,14 +41,18 @@ namespace ConsoleToolkit.ConsoleIO.Internal.RecordedCommands
 
         public void Write(string data)
         {
-            var colourSplit = ColourControlSplitter.Split(data);
-            foreach (var item in colourSplit)
+            Write(ColourControlSplitter.Split(data));
+        }
+
+        public void Write(IEnumerable<ColourControlItem> items)
+        {
+            foreach (var item in items)
             {
                 Write(item);
             }
         }
 
-        private void Write(ColourControlItem item)
+        public void Write(ColourControlItem item)
         {
             if (_currentLine == null)
                 StartLine();

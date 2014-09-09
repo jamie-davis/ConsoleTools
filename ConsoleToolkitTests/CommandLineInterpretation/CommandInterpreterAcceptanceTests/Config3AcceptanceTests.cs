@@ -220,8 +220,11 @@ NOTE: see the NOTE for the --shared option.")]
             var interpreter = new CommandLineInterpreter(_posix);
             CommandDescriber.Describe(_posix, _console, _applicationName, interpreter.GetOptionNameAdorner());
             var description = _consoleOutInterface.GetBuffer();
-            Console.WriteLine(description);
+
             Approvals.Verify(description);
+            Console.WriteLine("Value splits: {0}", ConsoleToolkit.ConsoleIO.Internal.ColumnWrapper._valueSplits);
+            Console.WriteLine("Wrap and measure: {0}", ConsoleToolkit.ConsoleIO.Internal.ColumnWrapper._wrapAndMeasure);
+            Console.WriteLine("ReplayBuffer count: {0}", ConsoleToolkit.ConsoleIO.Internal.RecordedCommands.ReplayBuffer._Buffers);
         }
 
         [Test]

@@ -4,6 +4,7 @@ using ApprovalTests;
 using ApprovalTests.Reporters;
 using ApprovalUtilities.Utilities;
 using ConsoleToolkit.ConsoleIO;
+using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.ConsoleIO.Internal.RecordedCommands;
 using ConsoleToolkitTests.ConsoleIO.UnitTestUtilities;
 using NUnit.Framework;
@@ -143,6 +144,31 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal.RecordedCommands
                 + " and " + "pink".Magenta() 
                 + " and " + "green".Green();
             _buffer.Write(text);
+
+            Approvals.Verify(GetBufferResult());
+        }
+
+        [Test]
+        public void PreSplitColourItemsCanBeWritten()
+        {
+            var text = "Red".Red()
+                + " and " + "yellow".Yellow() 
+                + " and " + "pink".Magenta() 
+                + " and " + "green".Green();
+            _buffer.Write(ColourControlSplitter.Split(text));
+
+            Approvals.Verify(GetBufferResult());
+        }
+
+        [Test]
+        public void SingleColourSplitItemsCanBeWritten()
+        {
+            var text = "Red".Red()
+                + " and " + "yellow".Yellow() 
+                + " and " + "pink".Magenta() 
+                + " and " + "green".Green();
+            foreach (var colourControlItem in ColourControlSplitter.Split(text))
+                _buffer.Write(colourControlItem);
 
             Approvals.Verify(GetBufferResult());
         }

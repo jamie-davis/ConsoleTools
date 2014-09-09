@@ -144,6 +144,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             sb.AppendLine("Max Linebreaks:");
             for (var width = 15; width > 0; --width)
             {
+                Console.WriteLine(width);
                 sb.AppendLine();
                 sb.AppendFormat("Width = {0}, line breaks = {1}", width, sizer.GetMaxLineBreaks(width));
                 sb.AppendLine();

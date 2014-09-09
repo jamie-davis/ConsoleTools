@@ -8,7 +8,7 @@
 
         public void Replay(ReplayBuffer buffer)
         {
-            buffer.Write(_data);
+            buffer.Write(ColourSplitText);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using ConsoleToolkit;
 using ConsoleToolkit.ApplicationStyles;
 using ConsoleToolkit.ConsoleIO;
@@ -9,7 +10,11 @@ namespace ConsoleToolkitDemo
     {
         static void Main(string[] args)
         {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
             Toolkit.Execute<Program>(args);
+            stopwatch.Stop();
+            System.Console.WriteLine("Runtime: {0}", stopwatch.Elapsed);
         }
 
         public void Handle(TableDataCommand command, IConsoleOperations console)

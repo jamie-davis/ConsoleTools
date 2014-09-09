@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleToolkit", "ConsoleToolkit\ConsoleToolkit.csproj", "{A2662BFA-2746-4782-BAF9-B058D1695C18}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleToolkitDemo", "ConsoleToolkitDemo\ConsoleToolkitDemo.csproj", "{772B7703-D46E-4885-B5C4-03880AA58FFB}"
@@ -29,6 +27,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5. Spikes", "5. Spikes", "{85D7B04E-A0D7-4464-8FA0-2F9C84AB130E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InputSpike", "Spikes\InputSpike\InputSpike.csproj", "{9153184F-0731-4C88-9CDC-D9C44FFC12A1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{85C5D750-A99B-431B-8A15-2FDBC83340AB}"
+	ProjectSection(SolutionItems) = preProject
+		Performance1.psess = Performance1.psess
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -111,8 +114,5 @@ Global
 		{76F6C4B9-D3A2-49AD-9AE7-3AC698753BFF} = {5A0A62C9-CD4E-4602-BEB9-0589ACB4DB50}
 		{175B0883-CD7D-4DA0-9641-FEE19B147BA1} = {6D911E80-1263-45BA-91FB-E172390C00C5}
 		{9153184F-0731-4C88-9CDC-D9C44FFC12A1} = {85D7B04E-A0D7-4464-8FA0-2F9C84AB130E}
-		{175B0883-CD7D-4DA0-9641-FEE19B147BA1} = {6D911E80-1263-45BA-91FB-E172390C00C5}
-		{56C9C1DD-A7C6-46F6-A763-DC775FD1F58B} = {5A0A62C9-CD4E-4602-BEB9-0589ACB4DB50}
-		{76F6C4B9-D3A2-49AD-9AE7-3AC698753BFF} = {5A0A62C9-CD4E-4602-BEB9-0589ACB4DB50}
 	EndGlobalSection
 EndGlobal

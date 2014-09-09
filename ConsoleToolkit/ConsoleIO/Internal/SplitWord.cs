@@ -9,6 +9,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
     {
         private readonly List<ColourControlItem.ControlInstruction> _prefixInstructions = new List<ColourControlItem.ControlInstruction>();
         private readonly List<ColourControlItem.ControlInstruction> _suffixInstructions = new List<ColourControlItem.ControlInstruction>();
+        private Lazy<bool> _terminatesLine;
         public int Length { get; private set; }
         public int TrailingSpaces { get; private set; }
         public string WordValue { get; private set; }
@@ -21,6 +22,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             Length = length;
             TrailingSpaces = trailingSpaces;
             WordValue = wordValue;
+            _terminatesLine = new Lazy<bool>(() => _suffixInstructions.Any(i => i.Code == ColourControlItem.ControlCode.NewLine));
         }
 
         public string GetWordValue()
@@ -56,7 +58,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
         public bool TerminatesLine()
         {
-            return _suffixInstructions.Any(i => i.Code == ColourControlItem.ControlCode.NewLine);
+            return _terminatesLine.Value;
         }
 
         public void AddPrefixInstructions(IEnumerable<ColourControlItem.ControlInstruction> instructions)
