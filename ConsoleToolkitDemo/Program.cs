@@ -17,13 +17,6 @@ namespace ConsoleToolkitDemo
             System.Console.WriteLine("Runtime: {0}", stopwatch.Elapsed);
         }
 
-        public void Handle(TableDataCommand command, IConsoleOperations console)
-        {
-            var data = Enumerable.Range(0, 20)
-                .Select(i => new {Text = string.Format("item {0}", i), Index = i});
-            console.FormatTable(data);
-        }
-
         protected override void Initialise()
         {
             HelpCommand<HelpCommand>(h => h.Topic);
