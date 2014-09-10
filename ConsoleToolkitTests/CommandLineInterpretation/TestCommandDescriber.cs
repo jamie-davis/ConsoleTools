@@ -118,9 +118,13 @@ a line break.")
                 .Positional<string>("pos", (command, s) => { })
                 .Description("A positional parameter.");
 
+            config.DefaultCommand.Name = "shouldnotbedisplayed";
+
             _console.WriteLine(RulerFormatter.MakeRuler(_console.WindowWidth));
             CommandDescriber.Describe(config, _console, "Test");
-            Approvals.Verify(_consoleOutInterface.GetBuffer());
+            var buffer = _consoleOutInterface.GetBuffer();
+            Console.WriteLine(buffer);
+            Approvals.Verify(buffer);
         }
     }
 }

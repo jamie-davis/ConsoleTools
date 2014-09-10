@@ -20,7 +20,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
         private static void AddDefaultCommandText(IConsoleAdapter console, BaseCommandConfig defaultCommand, string applicationName, IOptionNameHelpAdorner adorner)
         {
-            console.Write(FormatFullCommandDescription(defaultCommand, string.Format("Usage: {0}", applicationName), adorner));
+            console.Write(FormatFullCommandDescription(defaultCommand, string.Format("Usage: {0}", applicationName), adorner, false));
         }
 
         private static void AddCommandListText(IConsoleAdapter console, CommandLineInterpreterConfiguration config, IOptionNameHelpAdorner adorner)
@@ -35,7 +35,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
             }
         }
 
-        private static IConsoleRenderer FormatFullCommandDescription(BaseCommandConfig command, string prefixText = null, IOptionNameHelpAdorner adorner = null)
+        private static IConsoleRenderer FormatFullCommandDescription(BaseCommandConfig command, string prefixText = null, IOptionNameHelpAdorner adorner = null, bool displayCommandName = true)
         {
             var formatter = new RecordingConsoleAdapter();
             formatter.WrapLine(((IContext)command).Description ?? string.Empty);
@@ -50,7 +50,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
                     " " + command.Positionals.Select(FormatParameterListEntry)
                         .Aggregate((t, i) => t + " " + i);
                 var options = !optionsPresent ? String.Empty : " [options]";
-                formatter.WrapLine(string.Format("{0}{1}{2}{3}", prefixText ?? String.Empty, command.Name, paramList, options));
+                formatter.WrapLine(string.Format("{0}{1}{2}{3}", prefixText ?? String.Empty, displayCommandName ? command.Name : null, paramList, options));
             }
 
             if (positionalsPresent)

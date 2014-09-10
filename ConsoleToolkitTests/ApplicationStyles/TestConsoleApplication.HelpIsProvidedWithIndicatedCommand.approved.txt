@@ -3,7 +3,7 @@ check that this text is displayed
 automatically as part of the help                           
 information.                                                
                                                             
-Usage: ConsoleToolkitcommand [options]                      
+Usage: ConsoleToolkit [options]                             
                                                             
 Options:                                                    
                                                             
