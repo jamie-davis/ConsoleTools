@@ -1,4 +1,5 @@
-﻿using ApprovalTests;
+﻿using System;
+using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit;
 using ConsoleToolkit.ApplicationStyles;
@@ -261,7 +262,17 @@ namespace ConsoleToolkitTests.ApplicationStyles
         public void HelpIsProvidedWithIndicatedCommand()
         {
             Toolkit.Options.ParsingConventions = CommandLineParserConventions.MsDosConventions;
+            _console.Write("helpme:" + Environment.NewLine + Environment.NewLine);
             UnitTestAppUtils.Run<HelpCommandApp>(new[] { "helpme" }, _console);
+            _console.Write(Environment.NewLine + Environment.NewLine);
+
+            _console.Write("helpme command:" + Environment.NewLine + Environment.NewLine);
+            UnitTestAppUtils.Run<HelpCommandApp>(new[] { "helpme", "command" }, _console);
+            _console.Write(Environment.NewLine + Environment.NewLine);
+
+            _console.Write("helpme helpme:" + Environment.NewLine + Environment.NewLine);
+            UnitTestAppUtils.Run<HelpCommandApp>(new[] { "helpme", "helpme" }, _console);
+
             Approvals.Verify(_console.GetBuffer());
         }
 

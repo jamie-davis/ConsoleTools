@@ -1,48 +1,53 @@
-﻿----+----|----+----|----+----|----+----|----+----|----+----|----+----|----+----|----+----|----+----|----+----|----+----|----+----|---
-Available commands                                                                                                                   
+﻿Available commands                                                                                                                   
                                                                                                                                      
 import  Import data from a file written previously by the export command.                                                            
-                                                                                                                                     
-        import <file> [options]                                                                                                      
-                                                                                                                                     
-        Parameters:                                                                                                                  
-                                                                                                                                     
-        file  The file to load.                                                                                                      
-                                                                                                                                     
-        Options:                                                                                                                     
-                                                                                                                                     
-        --begin, -b     Filter the data in the file such that none of the exported sessions were created before this date/time.      
-        --end, -e       Filter the data in the file such that none of the exported sessions were created after this date/time.       
-        --server, -s    The name of the database server.                                                                             
-        --database, -d  The name of the database on the specified server.                                                            
-        --user, -u      The user ID to use to connect to the database                                                                
-        --pwd, -p       The password to use to connect to the database                                                               
-        --filter, -f    Global data filter                                                                                           
-                                                                                                                                     
 export  Export the data from a specified time range to a file.                                                                       
-                                                                                                                                     
-        export <file> <from> <to> [options]                                                                                          
-                                                                                                                                     
-        Parameters:                                                                                                                  
-                                                                                                                                     
-        file  The file to create.                                                                                                    
-        from  Start date/time for the extract.                                                                                       
-        to    End date/time for the extract.                                                                                         
-                                                                                                                                     
-        Options:                                                                                                                     
-                                                                                                                                     
-        --server, -s    The name of the database server.                                                                             
-        --database, -d  The name of the database on the specified server.                                                            
-        --user, -u      The user ID to use to connect to the database                                                                
-        --pwd, -p       The password to use to connect to the database                                                               
-        --filter, -f    Global data filter                                                                                           
-                                                                                                                                     
 help    Display this help text.                                                                                                      
                                                                                                                                      
-        help [<topic>]                                                                                                               
+Description of import command:                                                                                                       
+Import data from a file written previously by the export command.                                                                    
                                                                                                                                      
-        Parameters:                                                                                                                  
+import <file> [options]                                                                                                              
                                                                                                                                      
-        topic  The command that you require help with. This parameter is optional.                                                   
+Parameters:                                                                                                                          
                                                                                                                                      
+file  The file to load.                                                                                                              
+                                                                                                                                     
+Options:                                                                                                                             
+                                                                                                                                     
+--begin, -b     Filter the data in the file such that none of the exported sessions were created before this date/time.              
+--end, -e       Filter the data in the file such that none of the exported sessions were created after this date/time.               
+--server, -s    The name of the database server.                                                                                     
+--database, -d  The name of the database on the specified server.                                                                    
+--user, -u      The user ID to use to connect to the database                                                                        
+--pwd, -p       The password to use to connect to the database                                                                       
+--filter, -f    Global data filter                                                                                                   
+                                                                                                                                     
+Description of export command:                                                                                                       
+Export the data from a specified time range to a file.                                                                               
+                                                                                                                                     
+export <file> <from> <to> [options]                                                                                                  
+                                                                                                                                     
+Parameters:                                                                                                                          
+                                                                                                                                     
+file  The file to create.                                                                                                            
+from  Start date/time for the extract.                                                                                               
+to    End date/time for the extract.                                                                                                 
+                                                                                                                                     
+Options:                                                                                                                             
+                                                                                                                                     
+--server, -s    The name of the database server.                                                                                     
+--database, -d  The name of the database on the specified server.                                                                    
+--user, -u      The user ID to use to connect to the database                                                                        
+--pwd, -p       The password to use to connect to the database                                                                       
+--filter, -f    Global data filter                                                                                                   
+                                                                                                                                     
+Description of help command:                                                                                                         
+Display this help text.                                                                                                              
+                                                                                                                                     
+help [<topic>]                                                                                                                       
+                                                                                                                                     
+Parameters:                                                                                                                          
+                                                                                                                                     
+topic  The command that you require help with. This parameter is optional.                                                           
                                                                                                                                      

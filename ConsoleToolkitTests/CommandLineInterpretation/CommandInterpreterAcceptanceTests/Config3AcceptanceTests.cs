@@ -217,14 +217,9 @@ NOTE: see the NOTE for the --shared option.")]
         [Test]
         public void ConfigurationShouldBeDescribed()
         {
-            var interpreter = new CommandLineInterpreter(_posix);
-            CommandDescriber.Describe(_posix, _console, _applicationName, interpreter.GetOptionNameAdorner());
+            CommandConfigDescriber.Describe(_posix, _console, "POSIX", CommandLineParserConventions.PosixConventions);
             var description = _consoleOutInterface.GetBuffer();
-
             Approvals.Verify(description);
-            Console.WriteLine("Value splits: {0}", ConsoleToolkit.ConsoleIO.Internal.ColumnWrapper._valueSplits);
-            Console.WriteLine("Wrap and measure: {0}", ConsoleToolkit.ConsoleIO.Internal.ColumnWrapper._wrapAndMeasure);
-            Console.WriteLine("ReplayBuffer count: {0}", ConsoleToolkit.ConsoleIO.Internal.RecordedCommands.ReplayBuffer._Buffers);
         }
 
         [Test]

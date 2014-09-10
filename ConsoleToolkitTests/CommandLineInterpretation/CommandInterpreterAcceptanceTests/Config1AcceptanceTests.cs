@@ -104,6 +104,15 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
         public void ConfigurationShouldBeDescribed()
         {
             CommandDescriber.Describe(_posix, _console,  "POSIX");
+
+            var adorner = new PosixCommandLineParser();
+            foreach (var baseCommandConfig in _posix.Commands)
+            {
+                _console.WriteLine();
+                _console.WriteLine("Description of {0} command:", baseCommandConfig.Name);
+                CommandDescriber.Describe(baseCommandConfig, _console, adorner);
+            }
+
             var description = _consoleOutInterface.GetBuffer();
             Approvals.Verify(description);
         }

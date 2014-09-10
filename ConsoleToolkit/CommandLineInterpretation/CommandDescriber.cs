@@ -20,7 +20,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
         private static void AddDefaultCommandText(IConsoleAdapter console, BaseCommandConfig defaultCommand, string applicationName, IOptionNameHelpAdorner adorner)
         {
-            console.Write(FormatCommandDescription(defaultCommand, string.Format("Usage: {0}", applicationName), adorner));
+            console.Write(FormatFullCommandDescription(defaultCommand, string.Format("Usage: {0}", applicationName), adorner));
         }
 
         private static void AddCommandListText(IConsoleAdapter console, CommandLineInterpreterConfiguration config, IOptionNameHelpAdorner adorner)
@@ -30,12 +30,12 @@ namespace ConsoleToolkit.CommandLineInterpretation
             {
                 console.WriteLine("Available commands");
                 console.WriteLine();
-                var commandItems = commands.Select(c => new {Command = c.Name, Text = FormatCommandDescription(c, adorner: adorner)});
+                var commandItems = commands.Select(c => new { Command = c.Name, Text = FormatShortCommandDescription(c) });
                 console.FormatTable(commandItems, FormattingOptions, ColumnSeperator);
             }
         }
 
-        private static IConsoleRenderer FormatCommandDescription(BaseCommandConfig command, string prefixText = null, IOptionNameHelpAdorner adorner = null)
+        private static IConsoleRenderer FormatFullCommandDescription(BaseCommandConfig command, string prefixText = null, IOptionNameHelpAdorner adorner = null)
         {
             var formatter = new RecordingConsoleAdapter();
             formatter.WrapLine(((IContext)command).Description ?? string.Empty);
@@ -77,6 +77,11 @@ namespace ConsoleToolkit.CommandLineInterpretation
             return formatter;
         }
 
+        private static string FormatShortCommandDescription(BaseCommandConfig command, string prefixText = null)
+        {
+            return ((IContext)command).Description ?? string.Empty;
+        }
+
         private static string GetOptionNameAndAliases(IOptionNameHelpAdorner adorner, BaseOption option)
         {
             var names = new [] { option.Name }.Concat(option.Aliases);
@@ -100,7 +105,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
         public static void Describe(BaseCommandConfig command, IConsoleAdapter console, IOptionNameHelpAdorner adorner)
         {
-            console.Write(FormatCommandDescription(command, adorner: adorner));
+            console.Write(FormatFullCommandDescription(command, adorner: adorner));
         }
     }
 }

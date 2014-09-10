@@ -136,6 +136,7 @@
     <Compile Include="ConsoleIO\UnitTestUtilities\RulerFormatter.cs" />
     <Compile Include="ConsoleIO\UnitTestUtilities\TabularReportRenderTool.cs" />
     <Compile Include="SetUpTests.cs" />
+    <Compile Include="TestingUtilities\CommandConfigDescriber.cs" />
     <Compile Include="TestingUtilities\CustomReporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestToolkit.cs" />

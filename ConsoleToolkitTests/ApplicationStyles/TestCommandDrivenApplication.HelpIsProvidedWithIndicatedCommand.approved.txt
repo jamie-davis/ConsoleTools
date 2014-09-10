@@ -1,18 +1,30 @@
-﻿Available commands                                          
+﻿helpme:                                                     
+                                                            
+Available commands                                          
                                                             
 command  A test command that does                           
          nothing. This text is here just                    
          to add help information.                           
-                                                            
 helpme   Get help on the commands                           
          supported by this application.                     
                                                             
-         helpme [<subject>]                                 
                                                             
-         Parameters:                                        
+helpme command:                                             
                                                             
-         subject  Optional command on                       
-                  which help is                             
-                  required.                                 
+A test command that does nothing. This                      
+text is here just to add help                               
+information.                                                
                                                             
+                                                            
+helpme helpme:                                              
+                                                            
+Get help on the commands supported by                       
+this application.                                           
+                                                            
+helpme [<subject>]                                          
+                                                            
+Parameters:                                                 
+                                                            
+subject  Optional command on which help                     
+         is required.                                       
                                                             

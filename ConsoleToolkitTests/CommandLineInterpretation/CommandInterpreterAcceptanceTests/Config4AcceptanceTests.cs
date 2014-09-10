@@ -1,10 +1,8 @@
-using System;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAcceptanceTests.AcceptanceTestConfig4Commands;
-using ConsoleToolkitTests.ConsoleIO.UnitTestUtilities;
 using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
 
@@ -19,7 +17,6 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
         private CommandLineInterpreterConfiguration _msStd;
         private ConsoleInterfaceForTesting _consoleOutInterface;
         private ConsoleAdapter _console;
-        private static readonly string _applicationName = "AcceptanceTest";
 
         [SetUp]
         public void SetUp()
@@ -47,12 +44,8 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
         [Test]
         public void ConfigurationShouldBeDescribed()
         {
-            var interpreter = new CommandLineInterpreter(_posix);
-            CommandDescriber.Describe(_posix, _console, _applicationName, interpreter.GetOptionNameAdorner());
-            var description =  RulerFormatter.MakeRuler(_consoleOutInterface.WindowWidth) 
-                + Environment.NewLine
-                + _consoleOutInterface.GetBuffer();
-            Console.WriteLine(description);
+            CommandConfigDescriber.Describe(_posix, _console, "POSIX", CommandLineParserConventions.PosixConventions);
+            var description = _consoleOutInterface.GetBuffer();
             Approvals.Verify(description);
         }
 
@@ -65,7 +58,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 @"export file.dat 2014-08-22 2014-08-26 -ffilter1 -ffilter2",
                 @"import file.dat --server server2 --database test -uadmin -padm1n",
                 @"import file.dat --server server2 --database test -uadmin -padm1n -ffilter1 -ffilter2",
-                @"import file.dat",
+                @"import file.dat"
             };
 
             Approvals.Verify(CommandExecutorUtil.Do(_posix, commands, 50));
@@ -79,7 +72,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 @"export file.dat 2014-08-22 2014-08-26 /s:. /database:test /u:admin /p:adm1n",
                 @"export file.dat 2014-08-22 2014-08-26 /filter:filter1 /f:filter2",
                 @"import file.dat /server:server2 /database:test /u:admin /p:adm1n /filter:filter1 /f:filter2",
-                @"import file.dat",
+                @"import file.dat"
             };
 
             Approvals.Verify(CommandExecutorUtil.Do(_msDos, commands, 50));
@@ -94,7 +87,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 @"export file.dat 2014-08-22 2014-08-26 -filter filter1 -f filter2",
                 @"import file.dat -server server2 -database test -u admin -p adm1n",
                 @"import file.dat -server server2 -database test -u admin -p adm1n -filter filter1 -f filter2",
-                @"import file.dat",
+                @"import file.dat"
             };
 
             Approvals.Verify(CommandExecutorUtil.Do(_msStd, commands, 50));

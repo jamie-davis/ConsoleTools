@@ -3,6 +3,7 @@ using ApprovalTests.Reporters;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.ConsoleIO;
+using ConsoleToolkitTests.ApplicationStyles;
 using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
 using Description = ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.DescriptionAttribute;
@@ -98,7 +99,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
         [Test]
         public void ConfigurationShouldBeDescribed()
         {
-            CommandDescriber.Describe(_posix, _console, "POSIX");
+            CommandConfigDescriber.Describe(_posix, _console, "POSIX", CommandLineParserConventions.PosixConventions);
             var description = _consoleOutInterface.GetBuffer();
             Approvals.Verify(description);
         }
