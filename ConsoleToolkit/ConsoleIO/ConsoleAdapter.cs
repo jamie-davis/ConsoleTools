@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using ConsoleToolkit.ConsoleIO.Internal;
 
@@ -137,6 +139,40 @@ namespace ConsoleToolkit.ConsoleIO
             var tabular = TabularReport.Format(items, null, _consoleOutInterface.WindowWidth, options: options, columnDivider: columnSeperator);
             foreach (var line in tabular)
                 Write(line);
+        }
+
+        public void FormatTable<T>(Report<T> report)
+        {
+            var filter = new ReportExceptionFilter();
+            var formatMethod = MakeFormatMethodInfo(report);
+            var parameters = new object[]
+                                 {
+                                     report.Query,
+                                     report.Columns,
+                                     _consoleOutInterface.WindowWidth,
+                                     0, //rows to use for sizing
+                                     report.Options,
+                                     report.ColumnDivider,
+                                     filter
+                                 };
+
+            var tabular = formatMethod.Invoke(null, parameters) as IEnumerable<string>;
+            foreach (var line in tabular)
+                Write(line);
+
+            if (filter.ExceptionCaptured)
+                throw filter.Exception;
+        }
+
+        private static MethodInfo MakeFormatMethodInfo<T>(Report<T> report)
+        {
+            var genericMethod = typeof (TabularReport)
+                .GetMethods(BindingFlags.Static | BindingFlags.Public)
+                .FirstOrDefault(m => m.Name == "Format"
+                                     && m.GetParameters()[0].ParameterType.GetInterfaces()
+                                                            .Any(i => i == typeof (IEnumerable)));
+            var formatMethod = genericMethod.MakeGenericMethod(report.RowType);
+            return formatMethod;
         }
 
         /// <summary>

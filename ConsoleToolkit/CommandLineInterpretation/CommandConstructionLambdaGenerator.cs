@@ -58,7 +58,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
             if (!CollectionTypeAnalyser.IsCollectionType(property.PropertyType))
                 return false;
 
-            return property.PropertyType.GetConstructor(new Type[] {}) != null;
+            return property.PropertyType.GetConstructor(Type.EmptyTypes) != null;
         }
 
         private static Expression MakeOptionSet(PropertyInfo o)

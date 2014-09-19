@@ -1,0 +1,14 @@
+﻿----+----|----+----|----+----|----+----|                    
+First 10        Halves                                      
+---------- -----------                                      
+blah******           0                                      
+blah blah*           1                                      
+blah blah            1                                      
+blah blah            2                                      
+blah blah            2                                      
+blah blah            3                                      
+blah blah            3                                      
+blah blah            4                                      
+blah blah            4                                      
+blah blah            5                                      
+                                                            

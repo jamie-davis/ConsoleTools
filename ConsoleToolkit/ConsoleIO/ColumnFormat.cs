@@ -8,7 +8,7 @@ namespace ConsoleToolkit.ConsoleIO
     /// </summary>
     public class ColumnFormat
     {
-        public string Heading { get; private set; }
+        public string Heading { get; internal set; }
         public Type Type { get; private set; }
         public ColumnAlign Alignment { get; private set; }
         public int DecimalPlaces { get; private set; }
@@ -28,7 +28,7 @@ namespace ConsoleToolkit.ConsoleIO
         /// <param name="decimalPlaces">The number of decimal places to show. This will only apply to Decimal or Double values.</param>
         /// <param name="format">A .NET format string that will be applied to the data. If this is specified, the decimal places setting will be ignored.</param>
         /// <param name="width">A string describing the width required for this column. If a string containing a number is provided, this will be the columns fixed width, if an asterisk is provided, this column will be as wide as possible. If no value is provided, the column's actual width will be determined from its contents.</param>
-        public ColumnFormat(string heading, Type type = null, ColumnAlign alignment = ColumnAlign.Auto, 
+        public ColumnFormat(string heading = null, Type type = null, ColumnAlign alignment = ColumnAlign.Auto, 
             int decimalPlaces = 2, string format = null, string width = null)
         {
             Heading = heading;

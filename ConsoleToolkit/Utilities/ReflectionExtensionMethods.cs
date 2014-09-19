@@ -9,7 +9,7 @@ namespace ConsoleToolkit.Utilities
     /// <summary>
     /// This class defines some extension methods to mimic the .NET 4.5 reflection method changes.
     /// </summary>
-    public static class ReflectionExtensionMethods
+    internal static class ReflectionExtensionMethods
     {
         public static T GetCustomAttribute<T>(this Type type) where T : Attribute
         {

@@ -48,6 +48,11 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             _steps.Add(new FormatTableCommand<T>(items, options, columnSeperator));
         }
 
+        public void FormatTable<T>(Report<T> report)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void WriteLine()
         {
             _steps.Add(new NewLineCommand());

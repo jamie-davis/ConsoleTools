@@ -105,14 +105,6 @@ namespace ConsoleToolkit
             return new ConsoleAdapter();
         }
 
-        private static bool IsToolkitDerived(Type type)
-        {
-            if (type.GetConstructor(new Type[] {}) == null)
-                return false;
-
-            return GetToolkitBaseClass(type) != null;
-        }
-
         private static Type GetToolkitBaseClass(Type type)
         {
             while (true)

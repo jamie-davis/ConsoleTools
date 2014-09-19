@@ -29,7 +29,7 @@ namespace ConsoleToolkit.ConsoleIO
         /// <param name="columnDivider">A string that will be used to divide columns.</param>
         /// <returns>The formatted report lines.</returns>
         public static IEnumerable<string> Format<T>(IEnumerable<T> data, IEnumerable<ColumnFormat> columns, 
-            int width, int numRowsToUseForSizing = 0, ReportFormattingOptions options = ReportFormattingOptions.Default, string columnDivider = null)
+            int width, int numRowsToUseForSizing = 0, ReportFormattingOptions options = ReportFormattingOptions.Default, string columnDivider = null, ReportExceptionFilter exceptionFilter = null)
         {
             var output = new BlockingCollection<string>();
             var culture = Thread.CurrentThread.CurrentCulture;
@@ -47,6 +47,7 @@ namespace ConsoleToolkit.ConsoleIO
                     {
                         output.Add("Exception while processing:");
                         output.Add(e.ToString());
+                        HandleException(exceptionFilter, e);
                     }
                     finally
                     {
@@ -56,6 +57,13 @@ namespace ConsoleToolkit.ConsoleIO
             });
 
             return output.GetConsumingEnumerable();
+        }
+
+        private static void HandleException(ReportExceptionFilter exceptionFilter, Exception exception)
+        {
+            if (exceptionFilter == null) return;
+
+            exceptionFilter.AddException(exception);
         }
 
         /// <summary>
@@ -69,7 +77,7 @@ namespace ConsoleToolkit.ConsoleIO
         /// <param name="options">Options that effect formatting.</param>
         /// <param name="columnDivider">A string that will be used to divide the report columns.</param>
         /// <returns>The formatted report lines.</returns>
-        public static IEnumerable<string> Format<T>(CachedRows<T> data, IEnumerable<ColumnFormat> columns, int width, ReportFormattingOptions options = ReportFormattingOptions.Default, string columnDivider = null)
+        public static IEnumerable<string> Format<T>(CachedRows<T> data, IEnumerable<ColumnFormat> columns, int width, ReportFormattingOptions options = ReportFormattingOptions.Default, string columnDivider = null, ReportExceptionFilter exceptionFilter = null)
         {
             var output = new BlockingCollection<string>();
             var culture = Thread.CurrentThread.CurrentCulture;
@@ -87,6 +95,7 @@ namespace ConsoleToolkit.ConsoleIO
                     {
                         output.Add("Exception while processing:");
                         output.Add(e.ToString());
+                        HandleException(exceptionFilter, e);
                     }
                     finally
                     {
@@ -126,6 +135,7 @@ namespace ConsoleToolkit.ConsoleIO
             {
                 output.Add("Exception while processing:");
                 output.Add(e.ToString());
+                throw;
             }
             finally
             {

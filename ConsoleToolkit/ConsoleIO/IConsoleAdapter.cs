@@ -58,6 +58,13 @@ namespace ConsoleToolkit.ConsoleIO
             string columnSeperator = null);
 
         /// <summary>
+        /// Format an enumerable set of rows as a tabular report, using a report definition.
+        /// </summary>
+        /// <typeparam name="T">The item type.</typeparam>
+        /// <param name="report">The report definition.</param>
+        void FormatTable<T>(Report<T> report);
+
+        /// <summary>
         /// Output a new line.
         /// </summary>
         void WriteLine();

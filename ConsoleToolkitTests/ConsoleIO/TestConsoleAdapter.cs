@@ -283,6 +283,31 @@ namespace ConsoleToolkitTests.ConsoleIO
             }
         }
 
+        [Test]
+        public void ReportFormattedTableIsDisplayed()
+        {
+            _adapter.WriteLine(RulerFormatter.MakeRuler(_adapter.WindowWidth));
+            var data = Enumerable.Range(1, 10)
+                                 .Select(i => new {Number = i, String = string.Join(" ", Enumerable.Repeat("blah", i))})
+                                 .AsReport(p => p.AddColumn(t => t.String.Length < 10 ? t.String.PadRight(10, '*') : t.String.Substring(0, 10), c => c.Heading("First 10"))
+                                                 .AddColumn(t => t.Number/2, c => c.Heading("Halves")));
+            _adapter.FormatTable(data);
+
+            Approvals.Verify(_consoleInterface.GetBuffer());
+        }
+
+        [Test, ExpectedException]
+        public void BadCodeInReportFormattingThrowsAnException()
+        {
+            _adapter.WriteLine(RulerFormatter.MakeRuler(_adapter.WindowWidth));
+            var data = Enumerable.Range(1, 10)
+                                 .Select(i => new {Number = i, String = string.Join(" ", Enumerable.Repeat("blah", i))})
+                                 .AsReport(p => p.AddColumn(t => t.String.Substring(0, 10), c => c.Heading("Bad"))
+                                                 .AddColumn(t => t.Number/2, c => c.Heading("Halves")));
+            _adapter.FormatTable(data);
+            Console.WriteLine(_consoleInterface.GetBuffer()); //shouldn't reach here, so any output may be informative
+        }
+
         private static RecordingConsoleAdapter MakeRecording()
         {
             var recorder = new RecordingConsoleAdapter();

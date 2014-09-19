@@ -129,7 +129,7 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
 
         private static ICommandHandler MakeHandler(MethodInfo handlerMethod, Type handlerClass, Type commandType)
         {
-            if (handlerClass != commandType && handlerClass.GetConstructor(new Type[] {}) == null)
+            if (handlerClass != commandType && handlerClass.GetConstructor(Type.EmptyTypes) == null)
                 throw new CommandHandlerMustHaveDefaultConstructor(handlerClass);
 
             var instance = Activator.CreateInstance(handlerClass);
