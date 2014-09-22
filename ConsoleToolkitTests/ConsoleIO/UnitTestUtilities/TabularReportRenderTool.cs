@@ -11,7 +11,7 @@ namespace ConsoleToolkitTests.ConsoleIO.UnitTestUtilities
     {
         public static string Report<T>(ColumnWidthNegotiator cwn, IEnumerable<T> items)
         {
-            return Report<T>(cwn.Columns, cwn.StackedColumns, cwn.StackedColumnWidth, cwn.TabLength, items);
+            return Report(cwn.Columns, cwn.StackedColumns, cwn.StackedColumnWidth, cwn.TabLength, items);
         }
 
         public static string Report<T>(ColumnSizingParameters csp, IEnumerable<T> items)

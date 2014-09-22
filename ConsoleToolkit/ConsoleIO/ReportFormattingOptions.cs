@@ -18,6 +18,6 @@ namespace ConsoleToolkit.ConsoleIO
         /// </summary>
         StretchColumns = 2,
 
-        Default = StretchColumns,
+        Default = 0,
     }
 }

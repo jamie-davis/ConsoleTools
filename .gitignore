@@ -179,3 +179,10 @@ FakesAssemblies/
 
 #Exclude Sync config
 sync.ffs_db
+
+#Random Tools
+*.csproj.Updated
+*.csproj.Original
+*.csproj.bak
+
+

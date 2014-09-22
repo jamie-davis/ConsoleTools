@@ -36,7 +36,7 @@ namespace ConsoleToolkitTests.ConsoleIO
                 })
                 .ToList();
 
-            var report = Report(data);
+            var report = Report(data, options: ReportFormattingOptions.StretchColumns);
             Approvals.Verify(report);
         }
 
@@ -148,7 +148,7 @@ namespace ConsoleToolkitTests.ConsoleIO
 
             var dataCache = CachedRowsFactory.Make(data);
 
-            var report = CachedReport(dataCache);
+            var report = CachedReport(dataCache, options: ReportFormattingOptions.StretchColumns);
             Approvals.Verify(report);
         }
 
@@ -320,7 +320,7 @@ namespace ConsoleToolkitTests.ConsoleIO
 
             var table = Enumerable.Range(0, number)
                 .Select(i => new { Text = string.Format("Nested row {0}", i)});
-            output.FormatTable(table);
+            output.FormatTable(table, ReportFormattingOptions.StretchColumns);
 
             return output;
         }

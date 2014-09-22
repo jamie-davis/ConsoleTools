@@ -6,10 +6,10 @@ namespace ConsoleToolkit.ConsoleIO
 {
     public static class ReportExtensions
     {
-        public static Report<T> AsReport<T>(this IEnumerable<T> items, Action<ReportParameters<T>> columns)
+        public static Report<T> AsReport<T>(this IEnumerable<T> items, Action<ReportParameters<T>> defineReport)
         {
             var reportParameters = new ReportParameters<T>();
-            columns(reportParameters);
+            defineReport(reportParameters);
             return new Report<T>(items, reportParameters);
         }
 

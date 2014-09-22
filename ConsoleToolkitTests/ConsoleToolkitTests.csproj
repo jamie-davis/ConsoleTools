@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -137,6 +137,7 @@
     <Compile Include="ConsoleIO\TestColumnFormat.cs" />
     <Compile Include="ConsoleIO\TestConsoleAdapter.cs" />
     <Compile Include="ConsoleIO\TestRedirectedConsole.cs" />
+    <Compile Include="ConsoleIO\TestReport.cs" />
     <Compile Include="ConsoleIO\TestTabularReport.cs" />
     <Compile Include="ConsoleIO\UnitTestUtilities\RulerFormatter.cs" />
     <Compile Include="ConsoleIO\UnitTestUtilities\TabularReportRenderTool.cs" />
