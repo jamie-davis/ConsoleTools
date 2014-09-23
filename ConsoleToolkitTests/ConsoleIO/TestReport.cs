@@ -85,5 +85,54 @@ namespace ConsoleToolkitTests.ConsoleIO
             //Assert
             Approvals.Verify(_consoleInterface.GetBuffer());
         }
+
+        [Test]
+        public void TheStretchColumnsOptionSetsTheReportOptions()
+        {
+            //Arrange
+            var data = Enumerable.Range(0, 4);
+
+            //Act
+            var report = data.AsReport(rep => rep.AddColumn(n => string.Format("Test value {0}", n),
+                                                            col => col.RightAlign())
+                                                 .StretchColumns());
+
+            //Assert
+            Assert.That(report.Options, Is.EqualTo(ReportFormattingOptions.StretchColumns));
+        }
+
+        [Test]
+        public void TheStretchColumnsOptionIsApplied()
+        {
+            //Arrange
+            var data = Enumerable.Range(0, 4);
+            var report = data.AsReport(rep => rep.AddColumn(n => string.Format("Test value {0}", n),
+                                                            col => col.RightAlign())
+                                                 .StretchColumns());
+
+            //Act
+            _adapter.FormatTable(report);
+
+            //Assert
+            Approvals.Verify(_consoleInterface.GetBuffer());
+        }
+
+        [Test]
+        public void AllOptionsCanBeSetAtOnce()
+        {
+            //Arrange
+            var data = Enumerable.Range(0, 4);
+
+            //Act
+            var report = data.AsReport(rep => rep.StretchColumns()
+                                                 .OmitHeadings()
+                                                 .AddColumn(n => string.Format("Test value {0}", n),
+                                                            col => col.RightAlign())
+                                                 );
+
+            //Assert
+            var expected = ReportFormattingOptions.StretchColumns | ReportFormattingOptions.OmitHeadings;
+            Assert.That(report.Options, Is.EqualTo(expected));
+        }
     }
 }

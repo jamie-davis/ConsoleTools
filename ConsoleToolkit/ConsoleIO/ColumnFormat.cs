@@ -1,5 +1,4 @@
 ﻿using System;
-using ConsoleToolkit.ConsoleIO.Internal;
 
 namespace ConsoleToolkit.ConsoleIO
 {
@@ -10,8 +9,8 @@ namespace ConsoleToolkit.ConsoleIO
     {
         public string Heading { get; internal set; }
         public Type Type { get; private set; }
-        public ColumnAlign Alignment { get; private set; }
-        public int DecimalPlaces { get; private set; }
+        public ColumnAlign Alignment { get; internal set; }
+        public int DecimalPlaces { get; internal set; }
         public int ActualWidth { get; private set; }
         public string FormatTemplate { get; private set; }
         public string Width { get; private set; }
@@ -78,7 +77,7 @@ namespace ConsoleToolkit.ConsoleIO
             }
         }
 
-        public void SetActualWidth(int actualWidth)
+        internal void SetActualWidth(int actualWidth)
         {
             ActualWidth = actualWidth;
         }

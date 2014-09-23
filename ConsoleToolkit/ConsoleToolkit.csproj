@@ -193,7 +193,7 @@
     <Compile Include="ConsoleIO\RedirectedConsole.cs" />
     <Compile Include="ConsoleIO\Report.cs" />
     <Compile Include="ConsoleIO\ReportDefinitions\ColumnConfig.cs" />
-    <Compile Include="ConsoleIO\ReportDefinitions\ColumnNameExtrator.cs" />
+    <Compile Include="ConsoleIO\ReportDefinitions\ColumnNameExtractor.cs" />
     <Compile Include="ConsoleIO\ReportDefinitions\ReportParameters.cs" />
     <Compile Include="ConsoleIO\ReportExtensions.cs" />
     <Compile Include="ConsoleIO\ReportFormattingOptions.cs" />

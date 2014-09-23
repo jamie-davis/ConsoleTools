@@ -11,14 +11,15 @@ namespace ConsoleToolkitDemo
         [CommandHandler]
         public void Handle(IConsoleAdapter console)
         {
+            console.WrapLine("Default table format");
             var data1 = Enumerable.Range(0, 5)
                                   .Select(i => new {Text = string.Format("item {0}", i), Index = i});
-            console.FormatTable(data1, 0);
+            console.FormatTable(data1);
 
+            console.WriteLine();
             var data = Enumerable.Range(0, 5)
                                  .Select(i => new {Text = string.Format("item {0}", i), Index = i})
-                                 .AsReport(x => x.OmitHeadings()
-                                                 .AddColumn(c => c.Index, d => d.Heading("Just The Index"))
+                                 .AsReport(x => x.AddColumn(c => c.Index, d => d.Heading("Just The Index"))
                                                  .AddColumn(c => string.Format("{0} miles", c.Index*2),
                                                             d => d.Heading("Index in miles")));
             console.FormatTable(data);

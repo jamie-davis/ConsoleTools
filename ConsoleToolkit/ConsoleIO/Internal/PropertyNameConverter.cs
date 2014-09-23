@@ -9,6 +9,11 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         public static string ToHeading(PropertyInfo prop)
         {
             var name = prop.Name;
+            return ToHeading(name);
+        }
+
+        public static string ToHeading(string name)
+        {
             if (name.All(char.IsUpper))
                 return name;
 

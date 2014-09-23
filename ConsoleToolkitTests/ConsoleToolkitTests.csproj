@@ -106,7 +106,9 @@
     <Compile Include="ConsoleIO\Internal\TestRecordingConsoleAdapter.cs" />
     <Compile Include="ConsoleIO\Internal\TestConstructPromptText.cs" />
     <Compile Include="ConsoleIO\Internal\TestReportExceptionFilter.cs" />
+    <Compile Include="ConsoleIO\ReportDefinitions\TestColumnConfig.cs" />
     <Compile Include="ConsoleIO\ReportDefinitions\TestColumnFormat.cs" />
+    <Compile Include="ConsoleIO\ReportDefinitions\TestColumnNameExtractor.cs" />
     <Compile Include="ConsoleIO\ReportDefinitions\TestReportParameterDetails.cs" />
     <Compile Include="ConsoleIO\ReportDefinitions\TestReportQueryBuilder.cs" />
     <Compile Include="ConsoleIO\ReportDefinitions\TestReportQueryRowFunctionBuilder.cs" />
