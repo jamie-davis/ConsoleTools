@@ -11,7 +11,7 @@ namespace ConsoleToolkitDemo
     class ColouredTextCommand
     {
         [CommandHandler]
-        public void Handle(IConsoleOperations console)
+        public void Handle(IConsoleOperations console, IErrorAdapter error)
         {
             console.WriteLine("Coloured".Red() + " text is " + "easy".Yellow() + " to configure.");
             console.WriteLine();
@@ -40,6 +40,7 @@ namespace ConsoleToolkitDemo
 Includes a hard newline.".Yellow()
                 });
             console.FormatTable(data);
+            error.WriteLine("This is " + "error".Red() + " text");
         }
     }
 }

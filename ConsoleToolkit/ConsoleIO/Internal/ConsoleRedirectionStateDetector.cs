@@ -17,6 +17,11 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             get { return FileType.Char != GetFileType(GetStdHandle(StdHandle.Stderr)); }
         }
 
+        public static bool IsOutputRedirected
+        {
+            get { return FileType.Char != GetFileType(GetStdHandle(StdHandle.Stdout)); }
+        }
+
         // P/Invoke:
         private enum FileType
         {

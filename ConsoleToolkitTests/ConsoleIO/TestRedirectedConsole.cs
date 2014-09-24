@@ -20,10 +20,11 @@ namespace ConsoleToolkitTests.ConsoleIO
         [SetUp]
         public void SetUp()
         {
-            _consoleOut = new RedirectedConsole();
-            _buffer = new StringWriter();
             _oldOut = Console.Out;
+            _buffer = new StringWriter();
             Console.SetOut(_buffer);
+
+            _consoleOut = new RedirectedConsole(ConsoleStream.Out);
         }
 
         [TearDown]

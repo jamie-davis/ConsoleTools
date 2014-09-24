@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Reflection;
 using ConsoleToolkit.ConsoleIO;
+using ConsoleToolkit.ConsoleIO.Internal;
 
 namespace ConsoleToolkitTests.ApplicationStyles
 {
@@ -26,7 +27,13 @@ namespace ConsoleToolkitTests.ApplicationStyles
             try
             {
                 instance = Activator.CreateInstance(type, null);
-                runMethod.Invoke(null, new[] { instance, args ?? new string[]{}, new ConsoleAdapter(consoleInterface ?? new ConsoleInterfaceForTesting())});
+                runMethod.Invoke(null, new[]
+                                           {
+                                               instance, 
+                                               args ?? new string[]{}, 
+                                               new ConsoleAdapter(consoleInterface ?? new ConsoleInterfaceForTesting()),
+                                               new ErrorAdapter(consoleInterface ?? new ConsoleInterfaceForTesting())
+                                           });
             }
             catch (TargetInvocationException e)
             {

@@ -7,9 +7,8 @@ using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
-using WriterFn = System.Action<System.IO.TextWriter>;
 
-namespace ConsoleToolkitTests.ConsoleIO
+namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
     [TestFixture]
     [UseReporter(typeof (CustomReporter))]
@@ -34,7 +33,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(_outInterface.GetBuffer());
         }
 
-        public static WriterFn[] WriteTests = new WriterFn[]
+        public static Action<TextWriter>[] WriteTests = new Action<TextWriter>[]
         {
             t => t.Write(true),
             t => t.Write('c'),
@@ -57,7 +56,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             t => t.Write("value"),
         };
 
-        public static WriterFn[] WriteLineTests = new WriterFn[]
+        public static Action<TextWriter>[] WriteLineTests = new Action<TextWriter>[]
         {
             t => t.WriteLine(true),
             t => t.WriteLine('q'),
@@ -81,7 +80,7 @@ namespace ConsoleToolkitTests.ConsoleIO
         };
 
         [Test, TestCaseSource("WriteTests")]
-        public void TextWriteMethodsWork(WriterFn fn)
+        public void TextWriteMethodsWork(Action<TextWriter> fn)
         {
             fn(_stream);
             fn(_stream);
@@ -94,7 +93,7 @@ namespace ConsoleToolkitTests.ConsoleIO
         }
 
         [Test, TestCaseSource("WriteLineTests")]
-        public void TextWriteLineMethodsWork(WriterFn fn)
+        public void TextWriteLineMethodsWork(Action<TextWriter> fn)
         {
             fn(_stream);
             fn(_stream);

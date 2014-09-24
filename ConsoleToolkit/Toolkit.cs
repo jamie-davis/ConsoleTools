@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using ConsoleToolkit.ApplicationStyles;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.ConsoleIO;
+using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.Utilities;
 
 namespace ConsoleToolkit
@@ -77,7 +78,10 @@ namespace ConsoleToolkit
 
         private static void Execute(string[] args, Type type)
         {
-            var consoleAdapter = CreateConsoleAdapter();
+            var consoleFactory = new ConsoleFactory();
+            var consoleAdapter = new ConsoleAdapter(consoleFactory.Console);
+            var errorAdapter = new ErrorAdapter(consoleFactory.Error);
+
             var toolkitBase = type == null ? null : GetToolkitBaseClass(type);
             if (toolkitBase == null)
                 throw new NoApplicationClassFound();
@@ -89,7 +93,7 @@ namespace ConsoleToolkit
             try
             {
                 instance = Activator.CreateInstance(type, null);
-                runMethod.Invoke(null, new[] {instance, args, consoleAdapter});
+                runMethod.Invoke(null, new[] {instance, args, consoleAdapter, errorAdapter});
             }
             finally
             {
@@ -98,11 +102,6 @@ namespace ConsoleToolkit
                     (instance as IDisposable).Dispose();
                 }
             }
-        }
-
-        private static IConsoleAdapter CreateConsoleAdapter()
-        {
-            return new ConsoleAdapter();
         }
 
         private static Type GetToolkitBaseClass(Type type)

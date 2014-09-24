@@ -67,12 +67,11 @@ namespace ConsoleToolkitTests.ApplicationStyles
             [CommandHandler]
             public class ClassHandledHandler
             {
-                public void Handle(IConsoleAdapter console, ClassHandledCommand cmd)
+                public void Handle(IConsoleAdapter console, IErrorAdapter error, ClassHandledCommand cmd)
                 {
                     console.WrapLine("Class handled command.");
                     console.WrapLine("Positional parameter: {0}", cmd.Pos);
                     console.WrapLine("Option TestOpt      : {0}", cmd.TestOpt);
-
                 }
             }
 
@@ -226,7 +225,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
         [Test]
         public void CommandIsExecuted()
         {
-            UnitTestAppUtils.Run<TestApp>(new[] { "C", "-TestOpt" }, new RedirectedConsole());
+            UnitTestAppUtils.Run<TestApp>(new[] { "C", "-TestOpt" }, new RedirectedConsole(ConsoleStream.Out));
             Assert.That(TestApp.LastTestApp.TestOptValue, Is.True);
         }
 

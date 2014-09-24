@@ -1,37 +1,40 @@
-using System;
+using ConsoleToolkit.ConsoleIO.Internal;
 
 namespace ConsoleToolkit.ConsoleIO
 {
-    internal class ConsoleRedirectTester
+    internal class ConsoleRedirectTester : IConsoleRedirectTester
     {
         private bool _consoleRedirectionTested;
-        private bool _consoleRedirected;
+        private bool _outRedirected;
+        private bool _errorRedirected;
 
         /// <summary>
-        /// Determine whether the console's output is redirected.
+        /// Determine whether the console's output stream is redirected.
         /// </summary>
-        /// <returns></returns>
         public bool IsOutputRedirected()
+        {
+            PerformTestIfFirstCall();
+            return _outRedirected;
+        }
+
+        /// <summary>
+        /// Determine whether the console's error stream is redirected.
+        /// </summary>
+        public bool IsErrorRedirected()
+        {
+            PerformTestIfFirstCall();
+            return _errorRedirected;
+        }
+
+        private void PerformTestIfFirstCall()
         {
             if (!_consoleRedirectionTested)
             {
-                try
-                {
-                    //This will throw if the console output is redirected.
-                    Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop);
-
-                    _consoleRedirected = false;
-                }
-                catch
-                {
-                    _consoleRedirected = true;
-                }
+                _outRedirected = ConsoleRedirectionStateDetector.IsOutputRedirected;
+                _errorRedirected = ConsoleRedirectionStateDetector.IsErrorRedirected;
 
                 _consoleRedirectionTested = true;
             }
-
-            return _consoleRedirected;
         }
-
     }
 }

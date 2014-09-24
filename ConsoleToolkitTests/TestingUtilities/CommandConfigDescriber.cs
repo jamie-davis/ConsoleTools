@@ -1,6 +1,7 @@
 ﻿using System;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.ConsoleIO;
+using ConsoleToolkit.ConsoleIO.Internal;
 
 namespace ConsoleToolkitTests.TestingUtilities
 {

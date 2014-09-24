@@ -59,9 +59,14 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
         /// </summary>
         protected IConsoleAdapter Console { get; set; }
 
+        /// <summary>
+        /// This is the error adapter for the application.
+        /// </summary>
+        protected IErrorAdapter Error { get; set; }
+
         internal ConsoleApplicationBase()
         {
-            Injector = new Lazy<MethodParameterInjector>(() => new MethodParameterInjector(new object[] { this, Console }));
+            Injector = new Lazy<MethodParameterInjector>(() => new MethodParameterInjector(new object[] { this, Console, Error }));
         }
 
         /// <summary>

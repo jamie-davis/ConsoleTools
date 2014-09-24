@@ -78,4 +78,13 @@ namespace ConsoleToolkit.ConsoleIO
     public interface IConsoleInterface : IConsoleOutInterface, IConsoleInInterface
     {
     }
+
+    /// <summary>
+    /// Identifies one of the console streams.
+    /// </summary>
+    internal enum ConsoleStream
+    {
+        Out,
+        Error
+    }
 }

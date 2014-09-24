@@ -29,9 +29,10 @@ namespace ConsoleToolkit.ApplicationStyles
         private HelpHandler _helpHandler;
 
         [UsedImplicitly]
-        protected static void Run(CommandDrivenApplication app, string[] args, IConsoleAdapter console)
+        protected static void Run(CommandDrivenApplication app, string[] args, IConsoleAdapter console, IErrorAdapter errorAdapter)
         {
             app.Console = console;
+            app.Error = errorAdapter;
             app.Initialise();
             app.PostInitialise();
 

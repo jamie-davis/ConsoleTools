@@ -1,8 +1,6 @@
 ﻿using System.Diagnostics;
-using System.Linq;
 using ConsoleToolkit;
 using ConsoleToolkit.ApplicationStyles;
-using ConsoleToolkit.ConsoleIO;
 
 namespace ConsoleToolkitDemo
 {

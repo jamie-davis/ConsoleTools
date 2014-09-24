@@ -209,9 +209,10 @@ namespace ConsoleToolkitTests.ApplicationStyles
             [CommandHandler(typeof(Options))]
             public class HandlerClass
             {
-                public void Handle(IConsoleAdapter console, Options command)
+                public void Handle(IConsoleAdapter console, Options command, IErrorAdapter error)
                 {
                     console.WriteLine("Text from handler class.");
+                    error.WriteLine("Error text");
                 }
             }
 
@@ -241,7 +242,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
             [CommandHandler(typeof(Options))]
             public class HandlerClass
             {
-                public void Handle(IConsoleAdapter console, Options command, CustomObject custom)
+                public void Handle(IConsoleAdapter console, IErrorAdapter error, Options command, CustomObject custom)
                 {
                     console.WriteLine("Custom string is \"{0}\"", custom.Message);
                 }
@@ -283,7 +284,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
         [Test]
         public void CommandIsExecuted()
         {
-            UnitTestAppUtils.Run<TestApp>(new[] { "-TestOpt" }, new RedirectedConsole());
+            UnitTestAppUtils.Run<TestApp>(new[] { "-TestOpt" }, new RedirectedConsole(ConsoleStream.Out));
             Assert.That(TestApp.LastTestApp.TestOptValue, Is.True);
         }
 

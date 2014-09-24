@@ -19,9 +19,10 @@ namespace ConsoleToolkit.ApplicationStyles
         private Func<object, bool> _helpOptionGetter;
         private Type _helpCommandType;
 
-        protected static void Run(ConsoleApplication app, string[] args, IConsoleAdapter console)
+        protected static void Run(ConsoleApplication app, string[] args, IConsoleAdapter console, IErrorAdapter errorAdapter)
         {
             app.Console = console;
+            app.Error = errorAdapter;
             app.Initialise();
             app.PostInitialise();
             ValidateHelpSettings(app);

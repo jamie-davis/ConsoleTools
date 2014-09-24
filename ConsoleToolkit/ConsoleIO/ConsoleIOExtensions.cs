@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ConsoleToolkit.ConsoleIO.Internal;
 
 namespace ConsoleToolkit.ConsoleIO
 {

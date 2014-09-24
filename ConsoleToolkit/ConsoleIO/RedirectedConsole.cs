@@ -1,16 +1,22 @@
 using System;
+using System.IO;
 using System.Text;
 
 namespace ConsoleToolkit.ConsoleIO
 {
-    public class RedirectedConsole : IConsoleInterface
+    internal class RedirectedConsole : IConsoleInterface
     {
         private int _width;
         private int _cursorLeft;
         private int _cursorTop;
         private const int DefaultWidth = 133;
 
-        public RedirectedConsole()
+        /// <summary>
+        /// The console stream to receive the output.
+        /// </summary>
+        private TextWriter _stream;
+
+        public RedirectedConsole(ConsoleStream stream)
         {
             try
             {
@@ -23,6 +29,8 @@ namespace ConsoleToolkit.ConsoleIO
                 _width = DefaultWidth;
                 Encoding = Encoding.Default;
             }
+
+            _stream = stream == ConsoleStream.Out ? Console.Out : Console.Error;
         }
 
         public ConsoleColor Foreground { get; set; }
@@ -43,20 +51,20 @@ namespace ConsoleToolkit.ConsoleIO
             var charactersLeft = BufferWidth - CursorLeft;
             while (data.Length >= charactersLeft)
             {
-                Console.WriteLine(data.Substring(0, charactersLeft));
+                _stream.WriteLine(data.Substring(0, charactersLeft));
                 data = data.Substring(charactersLeft);
                 charactersLeft = BufferWidth;
                 _cursorLeft = 0;
                 _cursorTop++;
             }
 
-            Console.Write(data);
+            _stream.Write(data);
             _cursorLeft += data.Length;
         }
 
         public void NewLine()
         {
-            Console.WriteLine();
+            _stream.WriteLine();
         }
 
         public int CursorLeft

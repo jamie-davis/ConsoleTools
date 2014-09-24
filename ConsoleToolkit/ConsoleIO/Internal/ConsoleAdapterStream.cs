@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ConsoleToolkit.ConsoleIO.Internal
 {
@@ -32,7 +30,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
         public override void Write(char value)
         {
-            _adapter.Write(value.ToString());
+            _adapter.Write(value.ToString(CultureInfo.InvariantCulture));
         }
 
         public override void WriteLine(string value)
@@ -42,37 +40,37 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
         public override void WriteLine(decimal value)
         {
-            _adapter.WriteLine(value.ToString());
+            _adapter.WriteLine(value.ToString(CultureInfo.InvariantCulture));
         }
 
         public override void WriteLine(double value)
         {
-            _adapter.WriteLine(value.ToString());
+            _adapter.WriteLine(value.ToString(CultureInfo.InvariantCulture));
         }
 
         public override void WriteLine(float value)
         {
-            _adapter.WriteLine(value.ToString());
+            _adapter.WriteLine(value.ToString(CultureInfo.InvariantCulture));
         }
 
         public override void WriteLine(int value)
         {
-            _adapter.WriteLine(value.ToString());
+            _adapter.WriteLine(value.ToString(CultureInfo.InvariantCulture));
         }
 
         public override void WriteLine(uint value)
         {
-            _adapter.WriteLine(value.ToString());
+            _adapter.WriteLine(value.ToString(CultureInfo.InvariantCulture));
         }
 
         public override void WriteLine(long value)
         {
-            _adapter.WriteLine(value.ToString());
+            _adapter.WriteLine(value.ToString(CultureInfo.InvariantCulture));
         }
 
         public override void WriteLine(ulong value)
         {
-            _adapter.WriteLine(value.ToString());
+            _adapter.WriteLine(value.ToString(CultureInfo.InvariantCulture));
         }
 
         public override void WriteLine(bool value)
@@ -82,7 +80,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
         public override void WriteLine(char value)
         {
-            _adapter.WriteLine(value.ToString());
+            _adapter.WriteLine(value.ToString(CultureInfo.InvariantCulture));
         }
 
         public override void  WriteLine(char[] buffer)
@@ -95,7 +93,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             var end = Math.Min(index + count, buffer.Length);
             var sb = new StringBuilder();
             while (index < end)
-                sb.Append(buffer[index++].ToString());
+                sb.Append(buffer[index++].ToString(CultureInfo.InvariantCulture));
             WriteLine(sb.ToString());
         }
     }

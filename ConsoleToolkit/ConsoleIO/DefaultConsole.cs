@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Text;
 using ConsoleToolkit.ConsoleIO.Internal;
 
@@ -9,24 +10,46 @@ namespace ConsoleToolkit.ConsoleIO
     /// 
     /// It is a very simple wrapper around the system <see cref="Console"/> and by its nature has no testable methods.
     /// </summary>
-    public class DefaultConsole : IConsoleInterface
+    internal class DefaultConsole : IConsoleInterface
     {
         /// <summary>
-        /// The console colour as it was at construction time. This will be sued to put the console back the way it started when
+        /// The console colour as it was at construction time. This will be used to put the console back the way it started when
         /// this class is finalized.
         /// </summary>
         private readonly ConsoleColor _constructionForeground;
 
         /// <summary>
-        /// The console colour as it was at construction time. This will be sued to put the console back the way it started when
+        /// The console colour as it was at construction time. This will be used to put the console back the way it started when
         /// this class is finalized.
         /// </summary>
         private readonly ConsoleColor _constructionBackground;
 
-        public DefaultConsole()
+        /// <summary>
+        /// The console colour that was last set. This will be used to set the colour of the actual console just before output
+        /// is displayed.
+        /// </summary>
+        private ConsoleColor _currentForeground;
+
+        /// <summary>
+        /// The console colour that was last set. This will be used to set the colour of the actual console just before output
+        /// is displayed.
+        /// </summary>
+        private ConsoleColor _currentBackground;
+
+        /// <summary>
+        /// The console stream to receive the output.
+        /// </summary>
+        private TextWriter _stream;
+
+        public DefaultConsole(ConsoleStream stream)
         {
             _constructionForeground = Console.ForegroundColor;
             _constructionBackground = Console.BackgroundColor;
+
+            _currentForeground = _constructionForeground;
+            _currentBackground = _constructionBackground;
+
+            _stream = stream == ConsoleStream.Out ? Console.Out : Console.Error;
         }
 
         /// <summary>
@@ -34,8 +57,8 @@ namespace ConsoleToolkit.ConsoleIO
         /// </summary>
         public ConsoleColor Foreground
         {
-            get { return Console.ForegroundColor; }
-            set { Console.ForegroundColor = value; }
+            get { return _currentForeground; }
+            set { _currentForeground = value; }
         }
 
         /// <summary>
@@ -43,8 +66,8 @@ namespace ConsoleToolkit.ConsoleIO
         /// </summary>
         public ConsoleColor Background
         {
-            get { return Console.BackgroundColor; }
-            set { Console.BackgroundColor = value; }
+            get { return _currentBackground; }
+            set { _currentBackground = value; }
         }
 
         public int WindowWidth { get { return Console.WindowWidth; } }
@@ -52,12 +75,14 @@ namespace ConsoleToolkit.ConsoleIO
 
         public void Write(string data)
         {
-            Console.Write(data);
+            ResetConsoleColours();
+            _stream.Write(data);
         }
 
         public void NewLine()
         {
-            Console.WriteLine();
+            ResetConsoleColours();
+            _stream.WriteLine();
         }
 
         public int CursorLeft 
@@ -99,6 +124,12 @@ namespace ConsoleToolkit.ConsoleIO
         public string ReadLine()
         {
             return Console.ReadLine();
+        }
+
+        private void ResetConsoleColours()
+        {
+            Console.ForegroundColor = _currentForeground;
+            Console.BackgroundColor = _currentBackground;
         }
     }
 }

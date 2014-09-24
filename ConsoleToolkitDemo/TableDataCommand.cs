@@ -9,8 +9,9 @@ namespace ConsoleToolkitDemo
     class TableDataCommand
     {
         [CommandHandler]
-        public void Handle(IConsoleAdapter console)
+        public void Handle(IConsoleAdapter console, IErrorAdapter error)
         {
+            error.WriteLine("This is bad.");
             console.WrapLine("Default table format");
             var data1 = Enumerable.Range(0, 5)
                                   .Select(i => new {Text = string.Format("item {0}", i), Index = i});

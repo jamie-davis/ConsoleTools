@@ -163,6 +163,22 @@ namespace ConsoleToolkit.ConsoleIO
     }
 
     /// <summary>
+    /// The interface of an error adapter.
+    /// </summary>
+    public interface IErrorAdapter : IConsoleOperations
+    {
+        /// <summary>
+        /// The width of the error buffer in characters.
+        /// </summary>
+        int BufferWidth { get; }
+
+        /// <summary>
+        /// The width of the error window in characters.
+        /// </summary>
+        int WindowWidth { get; }
+    }
+
+    /// <summary>
     /// This interface defines the functionality required to support rendering recorded console activity
     /// in the various ways that a the data is used by the toolkit.
     /// </summary>

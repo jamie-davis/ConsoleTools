@@ -97,6 +97,10 @@
     <Compile Include="ConsoleIO\Internal\TestColourSeal.cs" />
     <Compile Include="ConsoleIO\Internal\TestColourString.cs" />
     <Compile Include="ConsoleIO\Internal\TestColourWriter.cs" />
+    <Compile Include="ConsoleIO\Internal\TestConsoleAdapter.cs" />
+    <Compile Include="ConsoleIO\Internal\TestConsoleAdapterStream.cs" />
+    <Compile Include="ConsoleIO\Internal\TestConsoleFactory.cs" />
+    <Compile Include="ConsoleIO\Internal\TestConsoleOperationsImpl.cs" />
     <Compile Include="ConsoleIO\Internal\TestFormattingIntermediate.cs" />
     <Compile Include="ConsoleIO\Internal\TestInstanceConstructor.cs" />
     <Compile Include="ConsoleIO\Internal\TestMinReportWidthCalculator.cs" />
@@ -115,7 +119,6 @@
     <Compile Include="ConsoleIO\TestCachedColumn.cs" />
     <Compile Include="ConsoleIO\TestCachedRow.cs" />
     <Compile Include="ConsoleIO\TestCachedRows.cs" />
-    <Compile Include="ConsoleIO\TestConsoleAdapterStream.cs" />
     <Compile Include="ConsoleIO\TestConsoleInterfaceForTesting.cs" />
     <Compile Include="ConsoleIO\TestConsoleIOExtensions.cs" />
     <Compile Include="ConsoleIO\Internal\TestColumnExpander.cs" />
@@ -137,7 +140,6 @@
     <Compile Include="ConsoleIO\Internal\WidthCalculators\TestStringWidthCalculator.cs" />
     <Compile Include="ConsoleIO\Internal\WidthCalculators\TestTimeSpanWidthCalculator.cs" />
     <Compile Include="ConsoleIO\TestColumnFormat.cs" />
-    <Compile Include="ConsoleIO\TestConsoleAdapter.cs" />
     <Compile Include="ConsoleIO\TestRedirectedConsole.cs" />
     <Compile Include="ConsoleIO\TestReport.cs" />
     <Compile Include="ConsoleIO\TestTabularReport.cs" />

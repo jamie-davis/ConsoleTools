@@ -3,6 +3,7 @@ using ApprovalTests.Reporters;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.ConsoleIO;
+using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkitTests.ApplicationStyles;
 using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
