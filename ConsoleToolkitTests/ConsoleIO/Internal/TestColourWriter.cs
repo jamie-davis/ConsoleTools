@@ -1,15 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ApprovalTests;
 using ApprovalTests.Reporters;
+using ApprovalUtilities.Utilities;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
+using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
     [TestFixture]
-    [UseReporter(typeof (DiffReporter))]
+    [UseReporter(typeof (CustomReporter))]
     public class TestColourWriter
     {
         private ConsoleInterfaceForTesting _consoleOut;
@@ -151,6 +154,44 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             };
             _writer.Write(components);    
         
+            Approvals.Verify(_consoleOut.GetBuffer(ConsoleBufferFormat.Interleaved));
+        }
+
+        [Test]
+        public void PrefixTextIsPrintedBeforeContent()
+        {
+            _writer.PrefixText = "prefix: ";
+            _writer.Write(new List<ColourControlItem> { new ColourControlItem("data") });
+
+            Approvals.Verify(_consoleOut.GetBuffer(ConsoleBufferFormat.Interleaved));
+        }
+
+        [Test]
+        public void PrefixTextIsAddedWhenContentWraps()
+        {
+            _writer.PrefixText = "prefix: ";
+            var text = Enumerable.Range(0, 20).Select(i => string.Format("text{0}", i)).JoinWith(" ");
+            _writer.Write(new List<ColourControlItem> { new ColourControlItem(text) });
+
+            Approvals.Verify(_consoleOut.GetBuffer(ConsoleBufferFormat.Interleaved));
+        }
+
+        [Test]
+        public void TextColourDoesNotBleedIntoPrefix()
+        {
+            _writer.PrefixText = "prefix: ";
+            var text = Enumerable.Range(0, 20).Select(i => string.Format("text{0}", i)).JoinWith(" ");
+            var components = new List<ColourControlItem>
+            {
+                new ColourControlItem("first text "),
+                new ColourControlItem(instructions: Instructions("push")),
+                new ColourControlItem(instructions: Instructions("fore,r", "back,b")),
+                new ColourControlItem(text),
+                new ColourControlItem(instructions: Instructions("pop")),
+                new ColourControlItem(" more text"),
+            };
+            _writer.Write(components);
+
             Approvals.Verify(_consoleOut.GetBuffer(ConsoleBufferFormat.Interleaved));
         }
 

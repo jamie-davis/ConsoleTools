@@ -1,3 +1,11 @@
-﻿Console output                                              
+﻿Normal adapter:                                             
+-->                                                         
+Console output                                              
 More output.                                                
+<--                                                         
                                                             
+Prefixed adapter:                                           
+-->                                                         
+prefix: Console output                                      
+prefix: More output.                                        
+<--                                                         

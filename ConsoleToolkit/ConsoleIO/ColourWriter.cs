@@ -29,15 +29,21 @@ namespace ConsoleToolkit.ConsoleIO
 
         private readonly Stack<ColourState> _colourStack = new Stack<ColourState>();
         private bool _lastWriteWasPassiveNewLine;
+        private ConsoleColor _prefixForeground;
+        private ConsoleColor _prefixBackground;
 
         public ColourWriter(IConsoleOutInterface consoleOutInterface)
         {
             _consoleOutInterface = consoleOutInterface;
+            _prefixForeground = _consoleOutInterface.Foreground;
+            _prefixBackground = _consoleOutInterface.Background;
         }
 
         public Encoding Encoding {
             get { return _consoleOutInterface.Encoding; }
         }
+
+        public string PrefixText { get; set; }
 
         public void Write(List<ColourControlItem> components)
         {
@@ -94,9 +100,40 @@ namespace ConsoleToolkit.ConsoleIO
         private void WriteText(ColourControlItem colourControlItem)
         {
             var currentLine = _consoleOutInterface.CursorTop;
-            _consoleOutInterface.Write(colourControlItem.Text);
+            if (PrefixText != null)
+                WriteTextWithPrefix(colourControlItem);
+            else
+                _consoleOutInterface.Write(colourControlItem.Text);
+
             _lastWriteWasPassiveNewLine = (_consoleOutInterface.CursorTop == currentLine + 1 &&
                                            _consoleOutInterface.CursorLeft == 0);
+        }
+
+        private void WriteTextWithPrefix(ColourControlItem colourControlItem)
+        {
+            var text = colourControlItem.Text;
+            var remaining = text.Length;
+            var textPos = 0;
+            do
+            {
+                if (_consoleOutInterface.CursorLeft == 0)
+                {
+                    var currentFG = _consoleOutInterface.Foreground;
+                    var currentBG = _consoleOutInterface.Background;
+                    _consoleOutInterface.Foreground = _prefixForeground;
+                    _consoleOutInterface.Background = _prefixBackground;
+                    _consoleOutInterface.Write(PrefixText);
+                    _consoleOutInterface.Foreground = currentFG;
+                    _consoleOutInterface.Background = currentBG;
+                }
+
+                var available = _consoleOutInterface.BufferWidth - _consoleOutInterface.CursorLeft;
+                var section = remaining > available ? text.Substring(textPos, available) : text.Substring(textPos);
+
+                _consoleOutInterface.Write(section);
+                textPos += section.Length;
+                remaining -= section.Length;
+            } while (remaining > 0);
         }
     }
 }

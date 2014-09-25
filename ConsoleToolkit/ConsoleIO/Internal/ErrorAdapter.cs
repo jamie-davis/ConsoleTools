@@ -6,9 +6,8 @@ namespace ConsoleToolkit.ConsoleIO.Internal
     /// </summary>
     internal sealed class ErrorAdapter : ConsoleOperationsImpl, IErrorAdapter
     {
-        public ErrorAdapter(IConsoleInterface consoleInterface) : base(consoleInterface)
+        public ErrorAdapter(IConsoleInterface consoleInterface, string errorPrefix) : base(consoleInterface, errorPrefix)
         {
-            
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Reflection;
+using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 
@@ -26,13 +27,15 @@ namespace ConsoleToolkitTests.ApplicationStyles
             object instance = null;
             try
             {
+                var errorPrefix = string.Format("{0}: ", DefaultApplicationNameExtractor.Extract(typeof(T)));
+
                 instance = Activator.CreateInstance(type, null);
                 runMethod.Invoke(null, new[]
                                            {
                                                instance, 
                                                args ?? new string[]{}, 
                                                new ConsoleAdapter(consoleInterface ?? new ConsoleInterfaceForTesting()),
-                                               new ErrorAdapter(consoleInterface ?? new ConsoleInterfaceForTesting())
+                                               new ErrorAdapter(consoleInterface ?? new ConsoleInterfaceForTesting(), errorPrefix)
                                            });
             }
             catch (TargetInvocationException e)

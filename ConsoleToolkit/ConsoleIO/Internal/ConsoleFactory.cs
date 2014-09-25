@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ConsoleToolkit.ConsoleIO.Internal
+﻿namespace ConsoleToolkit.ConsoleIO.Internal
 {
     internal class ConsoleFactory
     {

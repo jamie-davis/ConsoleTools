@@ -1,4 +1,6 @@
-﻿Write.WriteLine.                                            
+﻿Normal adapter:                                             
+-->                                                         
+Write.WriteLine.                                            
 Some wrapped text added in chunks,                          
 followed by a final wrap line.                              
 Number String                                               
@@ -19,4 +21,31 @@ Number String
        blah blah blah blah                                  
 <--- END                                                    
 XXX                                                         
+<--                                                         
                                                             
+Prefixed adapter:                                           
+-->                                                         
+prefix: Write.WriteLine.                                    
+prefix: Some wrapped text added in                          
+prefix: chunks, followed by a final wrap                    
+prefix: line.                                               
+prefix: Number String                                       
+prefix: ------ -------------------------                    
+prefix:      1 blah                                         
+prefix:      2 blah blah                                    
+prefix:      3 blah blah blah                               
+prefix:      4 blah blah blah blah                          
+prefix:      5 blah blah blah blah blah                     
+prefix:      6 blah blah blah blah blah                     
+prefix:        blah                                         
+prefix:      7 blah blah blah blah blah                     
+prefix:        blah blah                                    
+prefix:      8 blah blah blah blah blah                     
+prefix:        blah blah blah                               
+prefix:      9 blah blah blah blah blah                     
+prefix:        blah blah blah blah                          
+prefix:     10 blah blah blah blah blah                     
+prefix:        blah blah blah blah blah                     
+prefix: <--- END                                            
+prefix: XXX                                                 
+<--                                                         
