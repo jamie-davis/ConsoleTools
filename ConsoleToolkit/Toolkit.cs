@@ -78,9 +78,11 @@ namespace ConsoleToolkit
 
         private static void Execute(string[] args, Type type)
         {
+            var errorPrefix = string.Format("{0}: ", DefaultApplicationNameExtractor.Extract(type));
+
             var consoleFactory = new ConsoleFactory();
             var consoleAdapter = new ConsoleAdapter(consoleFactory.Console);
-            var errorAdapter = new ErrorAdapter(consoleFactory.Error);
+            var errorAdapter = new ErrorAdapter(consoleFactory.Error, errorPrefix);
 
             var toolkitBase = type == null ? null : GetToolkitBaseClass(type);
             if (toolkitBase == null)

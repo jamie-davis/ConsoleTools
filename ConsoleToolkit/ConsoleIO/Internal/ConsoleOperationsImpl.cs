@@ -13,15 +13,23 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
         private readonly IConsoleOutInterface _consoleOutInterface;
         private readonly ColourWriter _writer;
+        private int _prefixLength;
 
-        internal ConsoleOperationsImpl(IConsoleOutInterface consoleOutInterface)
+        internal ConsoleOperationsImpl(IConsoleOutInterface consoleOutInterface, string prefixText = null)
         {
             _consoleOutInterface = consoleOutInterface;
             _writer = new ColourWriter(_consoleOutInterface);
+            if (prefixText != null)
+            {
+                _writer.PrefixText = prefixText;
+                _prefixLength = prefixText.Length;
+            }
+            else
+                _prefixLength = 0;
         }
 
-        public int BufferWidth { get { return _consoleOutInterface.BufferWidth; } }
-        public int WindowWidth { get { return _consoleOutInterface.WindowWidth; } }
+        public int BufferWidth { get { return _consoleOutInterface.BufferWidth - _prefixLength; } }
+        public int WindowWidth { get { return _consoleOutInterface.WindowWidth - _prefixLength; } }
 
         protected Encoding Encoding { get { return _writer.Encoding; } }
 
@@ -42,7 +50,9 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         /// <param name="arg">Replacement args for the format string.</param>
         public void Write(string format, params object[] arg)
         {
-            var formatted = string.Format(format, arg);
+            var anyArgs = !(arg == null || arg.Length == 0);
+
+            var formatted = anyArgs ? string.Format(format, arg) : format;
             var components = ColourControlSplitter.Split(formatted);
             _writer.Write(components);
         }
@@ -97,8 +107,11 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         private void WriteWrapped(bool lastLineIsWriteLine, string format, object[] arg)
         {
             var formatted = string.Format(format, arg);
-            var lines = ColumnWrapper.WrapValue(formatted, DefaultFormat, _consoleOutInterface.WindowWidth,
-                                                firstLineHangingIndent: _consoleOutInterface.CursorLeft + 1);
+            var allowanceForCursorPosition = _consoleOutInterface.CursorLeft > 0 
+                ? _consoleOutInterface.CursorLeft - _prefixLength //discount the prefix as this will not be counted in the window width
+                : 0; //no data on the line, so no allowance required.
+            var lines = ColumnWrapper.WrapValue(formatted, DefaultFormat, WindowWidth,
+                                                firstLineHangingIndent: allowanceForCursorPosition);
             if (lines.Length == 0) return;
 
             for (var n = 0; n < lines.Length - 1; ++n)
@@ -115,7 +128,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
         public void FormatTable<T>(IEnumerable<T> items, ReportFormattingOptions options = ReportFormattingOptions.Default, string columnSeperator = null)
         {
-            var tabular = TabularReport.Format(items, null, _consoleOutInterface.WindowWidth, options: options, columnDivider: columnSeperator);
+            var tabular = TabularReport.Format(items, null, WindowWidth, options: options, columnDivider: columnSeperator);
             foreach (var line in tabular)
                 Write(line);
         }
@@ -128,7 +141,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
                                  {
                                      report.Query,
                                      report.Columns,
-                                     _consoleOutInterface.WindowWidth,
+                                     WindowWidth,
                                      0, //rows to use for sizing
                                      report.Options,
                                      report.ColumnDivider,

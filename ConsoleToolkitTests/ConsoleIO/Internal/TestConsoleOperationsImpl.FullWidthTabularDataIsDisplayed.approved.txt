@@ -1,4 +1,6 @@
-﻿----+----|----+----|----+----|----+----|----+----|----+----|
+﻿Normal adapter:                                             
+-->                                                         
+----+----|----+----|----+----|----+----|----+----|----+----|
     Number String                                           
 ---------- -------------------------------------------------
          1 blah                                             
@@ -11,4 +13,22 @@
          8 blah blah blah blah blah blah blah blah          
          9 blah blah blah blah blah blah blah blah blah     
         10 blah blah blah blah blah blah blah blah blah blah
+<--                                                         
                                                             
+Prefixed adapter:                                           
+-->                                                         
+prefix: ----+----|----+----|----+----|----+----|----+----|--
+prefix: Number String                                       
+prefix: ------ ---------------------------------------------
+prefix:      1 blah                                         
+prefix:      2 blah blah                                    
+prefix:      3 blah blah blah                               
+prefix:      4 blah blah blah blah                          
+prefix:      5 blah blah blah blah blah                     
+prefix:      6 blah blah blah blah blah blah                
+prefix:      7 blah blah blah blah blah blah blah           
+prefix:      8 blah blah blah blah blah blah blah blah      
+prefix:      9 blah blah blah blah blah blah blah blah blah 
+prefix:     10 blah blah blah blah blah blah blah blah blah 
+prefix:        blah                                         
+<--                                                         

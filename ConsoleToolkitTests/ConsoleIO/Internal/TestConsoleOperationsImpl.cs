@@ -17,6 +17,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
     {
         private ConsoleInterfaceForTesting _consoleInterface;
         private ConsoleOperationsImpl _adapter;
+        private ConsoleOperationsImpl _prefixAdapter;
 
         [SetUp]
         public void SetUp()
@@ -24,23 +25,58 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Toolkit.GlobalReset();
             _consoleInterface = new ConsoleInterfaceForTesting();
             _adapter = new ConsoleOperationsImpl(_consoleInterface);
+            _prefixAdapter = new ConsoleOperationsImpl(_consoleInterface, "prefix: ");
+        }
+
+        /// <summary>
+        /// Execute a test on both the prefixed and unprefixed adapter
+        /// </summary>
+        /// <param name="testAction">The "act" part of the test.</param>
+        private void Execute(Action<ConsoleOperationsImpl> testAction)
+        {
+            _consoleInterface.Write("Normal adapter:");
+            _consoleInterface.NewLine();
+            _consoleInterface.Write("-->");
+            _consoleInterface.NewLine();
+            testAction(_adapter);
+            _consoleInterface.Write("<--");
+            _consoleInterface.NewLine();
+            _consoleInterface.NewLine();
+            _consoleInterface.Write("Prefixed adapter:");
+            _consoleInterface.NewLine();
+            _consoleInterface.Write("-->");
+            _consoleInterface.NewLine();
+            testAction(_prefixAdapter);
+            _consoleInterface.Write("<--");
         }
 
         [Test]
         public void LinesAreWrittenToTheConsole()
         {
-            _adapter.WriteLine("Console {0}", "output");
-            _adapter.WriteLine("More output.");
+            Action<ConsoleOperationsImpl> act = adapter =>
+                                                         {
+                                                             adapter.WriteLine("Console {0}", "output");
+                                                             adapter.WriteLine("More output.");
+                                                         };
 
-            Approvals.Verify(_consoleInterface.GetBuffer());
+            Execute(act);
+
+            var buffer = _consoleInterface.GetBuffer();
+            Console.WriteLine(buffer);
+            Approvals.Verify(buffer);
         }
 
         [Test]
         public void ConsoleColourChangesArePassedToConsoleInterface()
         {
-            _adapter.WriteLine("Console {0}", "output".Red().BGYellow());
-            _adapter.WriteLine("More output.".Green());
-            _adapter.WriteLine("Back to plain.");
+            Action<ConsoleOperationsImpl> act = adapter =>
+                                                    {
+                                                        adapter.WriteLine("Console {0}", "output".Red().BGYellow());
+                                                        adapter.WriteLine("More output.".Green());
+                                                        adapter.WriteLine("Back to plain.");
+                                                    };
+            
+            Execute(act);
 
             Approvals.Verify(_consoleInterface.GetBuffer(ConsoleBufferFormat.Interleaved));
         }
@@ -48,22 +84,34 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         [Test]
         public void FullWidthTabularDataIsDisplayed()
         {
-            _consoleInterface.WindowWidth = _adapter.BufferWidth;
-            _adapter.WriteLine(RulerFormatter.MakeRuler(_adapter.BufferWidth));
-            var data = Enumerable.Range(1, 10)
-                                 .Select(i => new { Number = i, String = string.Join(" ", Enumerable.Repeat("blah", i)) });
-            _adapter.FormatTable(data);
+            _consoleInterface.WindowWidth = _consoleInterface.BufferWidth;
 
+            Action<ConsoleOperationsImpl> act = adapter =>
+                                                    {
+                                                        adapter.WriteLine(RulerFormatter.MakeRuler(adapter.BufferWidth));
+                                                        var data = Enumerable.Range(1, 10)
+                                                                             .Select(i => new { Number = i, String = string.Join(" ",
+                                                                                                 Enumerable.Repeat("blah", i))
+                                                                                     });
+                                                        adapter.FormatTable(data);
+                                                    };
+
+            Execute(act);
             Approvals.Verify(_consoleInterface.GetBuffer());
         }
 
         [Test]
         public void ShortWidthTabularDataIsDisplayed()
         {
-            _adapter.WriteLine(RulerFormatter.MakeRuler(_adapter.WindowWidth));
-            var data = Enumerable.Range(1, 10)
-                                 .Select(i => new { Number = i, String = string.Join(" ", Enumerable.Repeat("blah", i)) });
-            _adapter.FormatTable(data);
+            Action<ConsoleOperationsImpl> act = adapter =>
+                                                    {
+                                                        adapter.WriteLine(RulerFormatter.MakeRuler(adapter.WindowWidth));
+                                                        var data = Enumerable.Range(1, 10)
+                                                                             .Select(i => new { Number = i, String = string.Join(" ", Enumerable.Repeat("blah", i)) });
+                                                        adapter.FormatTable(data);
+                                                    };
+
+            Execute(act);
 
             Approvals.Verify(_consoleInterface.GetBuffer());
         }
@@ -71,9 +119,33 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         [Test]
         public void WrapLinesAreWordWrappedToConsole()
         {
-            _adapter.WrapLine("Long console {0} that should require word wrapping to fit the display width, but remain short of the line end to illustrate WrapLine.", "output".Red().BGYellow());
-            _adapter.WrapLine("More output, and hopefully more wrapping. Must ensure that there is enough text. Also WrapLine'd.".Green());
-            _adapter.WrapLine("No wrapping needed.");
+            _consoleInterface.WindowWidth = _consoleInterface.BufferWidth;
+            _consoleInterface.Write(RulerFormatter.MakeRuler(_consoleInterface.WindowWidth));
+
+            Action<ConsoleOperationsImpl> act = adapter =>
+                                                    {
+                                                        adapter.WrapLine("Long console {0} that should require word wrapping to fit the display width, but remain short of the line end to illustrate WrapLine.", "output".Red().BGYellow());
+                                                        adapter.WrapLine("More output, and hopefully more wrapping. Must ensure that there is enough text. Also WrapLine'd.".Green());
+                                                        adapter.WrapLine("No wrapping needed.");
+                                                    };
+            Execute(act);
+
+            Approvals.Verify(_consoleInterface.GetBuffer(ConsoleBufferFormat.Interleaved));
+        }
+
+        [Test]
+        public void SingleLongDataLineIsWrappedCorrectly()
+        {
+            _consoleInterface.WindowWidth = _consoleInterface.BufferWidth;
+            _consoleInterface.Write(RulerFormatter.MakeRuler(_consoleInterface.WindowWidth));
+
+            var text = "Long console " + "output".Red().BGYellow() + " that should require word wrapping to fit the display width, specifically crafted "
+                       + "so that it can span at least three lines in the output. This will exercise the wrapping functionality such that ".Green()
+                       + "any issues with the display width should become obvious.";
+
+
+            Action<ConsoleOperationsImpl> act = adapter => adapter.WrapLine(text);
+            Execute(act);
 
             Approvals.Verify(_consoleInterface.GetBuffer(ConsoleBufferFormat.Interleaved));
         }
@@ -81,15 +153,22 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         [Test]
         public void PiecemealWritesAreWordWrappedToConsole()
         {
-            _adapter.Wrap("Long console {0} ", "output".Red().BGYellow());
-            _adapter.Wrap("that should require word wrapping to");
-            _adapter.Wrap(" fit the display width.");
-            _adapter.Wrap(" This was ");
-            _adapter.Wrap("split");
-            _adapter.Wrap(" into");
-            _adapter.Wrap(" many small writes");
+            Action<ConsoleOperationsImpl> act = adapter =>
+                                                    {
+                                                        adapter.WriteLine(RulerFormatter.MakeRuler(adapter.WindowWidth));
+                                                        adapter.Wrap("Long console {0} ", "output".Red().BGYellow());
+                                                        adapter.Wrap("that should require word wrapping to");
+                                                        adapter.Wrap(" fit the display width.");
+                                                        adapter.Wrap(" This was ");
+                                                        adapter.Wrap("split");
+                                                        adapter.Wrap(" into");
+                                                        adapter.Wrap(" many small writes");
+                                                    };
+            Execute(act);
 
-            Approvals.Verify(_consoleInterface.GetBuffer(ConsoleBufferFormat.Interleaved));
+            var buffer = _consoleInterface.GetBuffer(ConsoleBufferFormat.Interleaved);
+            Console.WriteLine(buffer);
+            Approvals.Verify(buffer);
         }
 
         [Test]
@@ -97,8 +176,13 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         {
             var recorder = MakeRecording();
 
-            _adapter.Write(recorder);
-            _adapter.Write("XXX");
+            Action<ConsoleOperationsImpl> act = adapter =>
+                                                    {
+                                                        adapter.Write(recorder);
+                                                        adapter.Write("XXX");
+                                                    };
+
+            Execute(act);
             Approvals.Verify(_consoleInterface.GetBuffer());
         }
 
@@ -107,8 +191,14 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         {
             var recorder = MakeRecording();
 
-            _adapter.Write("XXX");
-            _adapter.Write(recorder);
+            Action<ConsoleOperationsImpl> act = adapter =>
+                                                    {
+                                                        adapter.Write("XXX");
+                                                        adapter.Write(recorder);
+                                                    };
+
+            Execute(act);
+
             Approvals.Verify(_consoleInterface.GetBuffer());
         }
 
@@ -117,8 +207,13 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         {
             var recorder = MakeRecording();
 
-            _adapter.WriteLine(recorder);
-            _adapter.WriteLine("XXX");
+            Action<ConsoleOperationsImpl> act = adapter =>
+                                                    {
+                                                        adapter.WriteLine(recorder);
+                                                        adapter.WriteLine("XXX");
+                                                    };
+
+            Execute(act);
             Approvals.Verify(_consoleInterface.GetBuffer());
         }
 
@@ -127,21 +222,32 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         {
             var recorder = MakeRecording();
 
-            _adapter.Write("XXX");
-            _adapter.WriteLine(recorder);
-            _adapter.WriteLine("XXX");
+            Action<ConsoleOperationsImpl> act = adapter =>
+                                                    {
+                                                        adapter.Write("XXX");
+                                                        adapter.WriteLine(recorder);
+                                                        adapter.WriteLine("XXX");
+                                                    };
+
+            Execute(act);
             Approvals.Verify(_consoleInterface.GetBuffer());
         }
 
         [Test]
         public void ReportFormattedTableIsDisplayed()
         {
-            _adapter.WriteLine(RulerFormatter.MakeRuler(_adapter.WindowWidth));
-            var data = Enumerable.Range(1, 10)
-                                 .Select(i => new { Number = i, String = string.Join(" ", Enumerable.Repeat("blah", i)) })
-                                 .AsReport(p => p.AddColumn(t => t.String.Length < 10 ? t.String.PadRight(10, '*') : t.String.Substring(0, 10), c => c.Heading("First 10"))
-                                                 .AddColumn(t => t.Number / 2, c => c.Heading("Halves")));
-            _adapter.FormatTable(data);
+            Action<ConsoleOperationsImpl> act = adapter =>
+                                                    {
+                                                        adapter.WriteLine(RulerFormatter.MakeRuler(adapter.WindowWidth));
+                                                        var data = Enumerable.Range(1, 10)
+                                                                             .Select(i => new { Number = i, String = string.Join(" ", Enumerable.Repeat("blah", i)) })
+                                                                             .AsReport(p => p.AddColumn(t => t.String.Length < 10 ? t.String.PadRight(10, '*') : t.String.Substring(0, 10), c => c.Heading("First 10"))
+                                                                                             .AddColumn(t => t.Number / 2, c => c.Heading("Halves"))
+                                                                                             .StretchColumns());
+                                                        adapter.FormatTable(data);
+                                                    };
+
+            Execute(act);
 
             Approvals.Verify(_consoleInterface.GetBuffer());
         }

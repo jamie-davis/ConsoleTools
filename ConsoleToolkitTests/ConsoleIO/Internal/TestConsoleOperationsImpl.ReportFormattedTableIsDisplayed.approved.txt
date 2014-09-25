@@ -1,14 +1,33 @@
-﻿----+----|----+----|----+----|----+----|                    
-First 10        Halves                                      
----------- -----------                                      
-blah******           0                                      
-blah blah*           1                                      
-blah blah            1                                      
-blah blah            2                                      
-blah blah            2                                      
-blah blah            3                                      
-blah blah            3                                      
-blah blah            4                                      
-blah blah            4                                      
-blah blah            5                                      
+﻿Normal adapter:                                             
+-->                                                         
+----+----|----+----|----+----|----+----|                    
+First 10                          Halves                    
+---------------------------- -----------                    
+blah******                             0                    
+blah blah*                             1                    
+blah blah                              1                    
+blah blah                              2                    
+blah blah                              2                    
+blah blah                              3                    
+blah blah                              3                    
+blah blah                              4                    
+blah blah                              4                    
+blah blah                              5                    
+<--                                                         
                                                             
+Prefixed adapter:                                           
+-->                                                         
+prefix: ----+----|----+----|----+----|--                    
+prefix: First 10                  Halves                    
+prefix: -------------------- -----------                    
+prefix: blah******                     0                    
+prefix: blah blah*                     1                    
+prefix: blah blah                      1                    
+prefix: blah blah                      2                    
+prefix: blah blah                      2                    
+prefix: blah blah                      3                    
+prefix: blah blah                      3                    
+prefix: blah blah                      4                    
+prefix: blah blah                      4                    
+prefix: blah blah                      5                    
+<--                                                         

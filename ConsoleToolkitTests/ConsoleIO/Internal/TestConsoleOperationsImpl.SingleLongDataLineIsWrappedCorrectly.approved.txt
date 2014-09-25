@@ -10,21 +10,18 @@ Bkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
 FXXXXXXXXXXXXXrrrrrrXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 Bkkkkkkkkkkkkkyyyyyykkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
 +Long console output that should require word wrapping to fit
-FXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+FXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXgggggggggggggggggggX
 Bkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
-+the display width, but remain short of the line end to      
-FXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-Bkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
-+illustrate WrapLine.                                        
++the display width, specifically crafted so that it can span 
 FggggggggggggggggggggggggggggggggggggggggggggggggggggggggggXX
 Bkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
-+More output, and hopefully more wrapping. Must ensure that  
-FggggggggggggggggggggggggggggggggggggggXXXXXXXXXXXXXXXXXXXXXX
++at least three lines in the output. This will exercise the  
+FgggggggggggggggggggggggggggggggggXXXXXXXXXXXXXXXXXXXXXXXXXXX
 Bkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
-+there is enough text. Also WrapLine'd.                      
++wrapping functionality such that any issues with the display
 FXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 Bkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
-+No wrapping needed.                                         
++width should become obvious.                                
 FXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 Bkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
 +<--                                                         
@@ -42,19 +39,19 @@ Bkkkkkkkkkkkkkkkkkkkkkyyyyyykkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
 +prefix: Long console output that should require word        
 FXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 Bkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
-+prefix: wrapping to fit the display width, but remain short 
++prefix: wrapping to fit the display width, specifically     
+FXXXXXXXXXXXXXXXXgggggggggggggggggggggggggggggggggggggggggggX
+Bkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
++prefix: crafted so that it can span at least three lines in 
+FXXXXXXXXgggggggggggggggggggggggggggggggggggggggggggXXXXXXXXX
+Bkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
++prefix: the output. This will exercise the wrapping         
+FXXXXXXXXggggggggggggggggggggggggXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+Bkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
++prefix: functionality such that any issues with the display 
 FXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 Bkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
-+prefix: of the line end to illustrate WrapLine.             
-FXXXXXXXXggggggggggggggggggggggggggggggggggggggggggggggXXXXXX
-Bkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
-+prefix: More output, and hopefully more wrapping. Must      
-FXXXXXXXXggggggggggggggggggggggggggggggggggggggggggggggggggXX
-Bkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
-+prefix: ensure that there is enough text. Also WrapLine'd.  
-FXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-Bkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
-+prefix: No wrapping needed.                                 
++prefix: width should become obvious.                        
 FXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 Bkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
 +<--                                                         
