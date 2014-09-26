@@ -1,4 +1,5 @@
-﻿using ApprovalTests;
+﻿using System;
+using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit;
 using ConsoleToolkit.Annotations;
@@ -10,6 +11,8 @@ using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
 using DescriptionAttribute = ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.DescriptionAttribute;
+
+// ReSharper disable ClassNeverInstantiated.Global
 
 namespace ConsoleToolkitTests.ApplicationStyles
 {
@@ -32,6 +35,9 @@ namespace ConsoleToolkitTests.ApplicationStyles
             {
                 [Option]
                 public bool TestOpt { get; [UsedImplicitly] set; }
+
+                [Option]
+                public bool Fail { get; [UsedImplicitly] set; }
             }
 
             public TestApp()
@@ -54,7 +60,24 @@ namespace ConsoleToolkitTests.ApplicationStyles
             public void HandleCommand(Command c)
             {
                 TestOptValue = c.TestOpt;
+                if (c.Fail)
+                    Environment.ExitCode = 100;
             }
+
+            protected override void OnCommandSuccess()
+            {
+                CommandSuccessCalled = true;
+                base.OnCommandSuccess();
+            }
+
+            protected override void OnCommandFailure()
+            {
+                CommandFailureCalled = true;
+                base.OnCommandFailure();
+            }
+
+            public bool CommandSuccessCalled { get; set; }
+            public bool CommandFailureCalled { get; set; }
         }
 
         public class MultipleCommandHandlerApp : ConsoleApplication
@@ -266,6 +289,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
         public void SetUp()
         {
             _consoleOut = new ConsoleInterfaceForTesting();
+            Environment.ExitCode = 0;
         }
 
         [TearDown]
@@ -342,6 +366,35 @@ namespace ConsoleToolkitTests.ApplicationStyles
         {
             UnitTestAppUtils.Run<CustomInjectionApp>(new string[] {}, _consoleOut);
             Approvals.Verify(_consoleOut.GetBuffer());
+        }
+
+        [Test]
+        public void OnCommandSuccessIsCalledAfterSuccessfulRun()
+        {
+            UnitTestAppUtils.Run<TestApp>(new string[] {}, _consoleOut);
+            Assert.That(TestApp.LastTestApp.CommandSuccessCalled, Is.True);
+        }
+
+        [Test]
+        public void OnCommandSuccessIsNotCalledAfterFailedRun()
+        {
+            UnitTestAppUtils.Run<TestApp>(new[] { "-Fail" }, _consoleOut);
+            Assert.That(TestApp.LastTestApp.CommandSuccessCalled, Is.False);
+        }
+
+        [Test]
+        public void OnCommandFailureIsCalledAfterFailedRun()
+        {
+            UnitTestAppUtils.Run<TestApp>(new[] { "-Fail" }, _consoleOut);
+            Console.WriteLine(_consoleOut.GetBuffer());
+            Assert.That(TestApp.LastTestApp.CommandFailureCalled, Is.True);
+        }
+
+        [Test]
+        public void OnCommandFailureIsNotCalledAfterSuccesfulRun()
+        {
+            UnitTestAppUtils.Run<TestApp>(new string[] {}, _consoleOut);
+            Assert.That(TestApp.LastTestApp.CommandFailureCalled, Is.False);
         }
 
     }

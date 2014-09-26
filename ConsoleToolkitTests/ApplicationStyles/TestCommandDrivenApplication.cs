@@ -35,6 +35,11 @@ namespace ConsoleToolkitTests.ApplicationStyles
                 public bool TestOpt { get; set; }
             }
 
+            [Command("F")]
+            public class FailingCommand
+            {
+            }
+
             [Command("d")]
             public class SelfCommand
             {
@@ -96,6 +101,26 @@ namespace ConsoleToolkitTests.ApplicationStyles
             {
                 TestOptValue = c.TestOpt;
             }
+
+            public void HandleCommand(FailingCommand c)
+            {
+                Environment.ExitCode = 100;
+            }
+
+            protected override void OnCommandSuccess()
+            {
+                PostSuccessCalled = true;
+                base.OnCommandSuccess();
+            }
+
+            protected override void OnCommandFailure()
+            {
+                PostFailureCalled = true;
+                base.OnCommandFailure();
+            }
+
+            public bool PostSuccessCalled { get; set; }
+            public bool PostFailureCalled { get; set; }
         }
         
         public class DuplicateCommandHandlerApp : CommandDrivenApplication
@@ -207,6 +232,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
         public void SetUp()
         {
             _console = new ConsoleInterfaceForTesting();
+            Environment.ExitCode = 0;
         }
 
         [TearDown]
@@ -288,6 +314,46 @@ namespace ConsoleToolkitTests.ApplicationStyles
         {
             Toolkit.Options.ParsingConventions = CommandLineParserConventions.MsDosConventions;
             UnitTestAppUtils.Run<InvalidHelpCommandApp>(new[] { "helpme" }, _console);
+        }
+
+        [Test]
+        public void OnCommandSuccessIsCalledAfterSuccessfulCommand()
+        {
+            //Act
+            UnitTestAppUtils.Run<TestApp>(new[] { "C", "-TestOpt" }, new RedirectedConsole(ConsoleStream.Out));
+
+            //Assert
+            Assert.That(TestApp.LastTestApp.PostSuccessCalled, Is.True);
+        }
+
+        [Test]
+        public void OnCommandFailureIsNotCalledAfterSuccessfulCommand()
+        {
+            //Act
+            UnitTestAppUtils.Run<TestApp>(new[] { "C", "-TestOpt" }, new RedirectedConsole(ConsoleStream.Out));
+
+            //Assert
+            Assert.That(TestApp.LastTestApp.PostFailureCalled, Is.False);
+        }
+
+        [Test]
+        public void OnCommandFailureIsCalledAfterFailedCommand()
+        {
+            //Act
+            UnitTestAppUtils.Run<TestApp>(new[] { "F" }, new RedirectedConsole(ConsoleStream.Out));
+
+            //Assert
+            Assert.That(TestApp.LastTestApp.PostFailureCalled, Is.True);
+        }
+
+        [Test]
+        public void OnCommandSuccessIsNotCalledAfterFailedCommand()
+        {
+            //Act
+            UnitTestAppUtils.Run<TestApp>(new[] { "F" }, new RedirectedConsole(ConsoleStream.Out));
+
+            //Assert
+            Assert.That(TestApp.LastTestApp.PostSuccessCalled, Is.False);
         }
     }
 }

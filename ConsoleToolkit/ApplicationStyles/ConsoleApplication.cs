@@ -70,12 +70,22 @@ namespace ConsoleToolkit.ApplicationStyles
             if (handler != null)
             {
                 handler.Execute(app, command, app.Console, app.Injector.Value);
+                RunPostCommandMethod(app);
             }
             else
             {
                 app.Console.WrapLine("No command handler found.");
                 Environment.ExitCode = app.MissingCommandHandlerExitCode;
             }
+        }
+
+        private static void RunPostCommandMethod(ConsoleApplication app)
+        {
+            var success = Environment.ExitCode == 0;
+            if (success)
+                app.OnCommandSuccess();
+            else
+                app.OnCommandFailure();
         }
 
         private static bool AutoHelpConfigured(ConsoleApplication app, object command)

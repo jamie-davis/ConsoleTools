@@ -61,12 +61,22 @@ namespace ConsoleToolkit.ApplicationStyles
             if (app.Handlers.TryGetValue(command.GetType(), out handler))
             {
                 handler.Execute(app, command, app.Console, app.Injector.Value);
+                RunPostCommandMethod(app);
             }
             else
             {
                 app.Console.WrapLine("No command handler found.");
                 Environment.ExitCode = app.MissingCommandHandlerExitCode;
             }
+        }
+
+        private static void RunPostCommandMethod(CommandDrivenApplication app)
+        {
+            var success = Environment.ExitCode == 0;
+            if (success)
+                app.OnCommandSuccess();
+            else
+                app.OnCommandFailure();
         }
 
         internal override void LoadConfigFromAssembly()

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.ConsoleIO;
@@ -93,6 +92,24 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
         /// </summary>
         protected virtual void Initialise()
         {
+        }
+
+        /// <summary>
+        /// This method will be called by the framework after execution of a command has succeeded. Success is defined
+        /// as Environment.ExitCode == 0.
+        /// </summary>
+        protected virtual void OnCommandSuccess()
+        {
+            
+        }
+
+        /// <summary>
+        /// This method will be called by the framework after execution of a command has failed. Failure is defined
+        /// as Environment.ExitCode != 0.
+        /// </summary>
+        protected virtual void OnCommandFailure()
+        {
+            
         }
 
         private void LoadHandlersFromCommands(Type[] commandTypesArray, MethodParameterInjector injector)
