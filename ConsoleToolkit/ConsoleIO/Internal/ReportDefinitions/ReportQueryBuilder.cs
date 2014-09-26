@@ -29,11 +29,11 @@ namespace ConsoleToolkit.ConsoleIO.Internal.ReportDefinitions
             var genericMethod = typeof (ReportQueryRowFunctionBuilder).GetMethod("MakeQueryFunction");
             var method = genericMethod.MakeGenericMethod(rowType);
 
-            var func = method.Invoke(null, new object[] {expressions}) as Func<object, object>;
+            var func = MethodInvoker.Invoke(method, null, new object[] {expressions}) as Func<object, object>;
 
             var runQuery = typeof (ReportQueryBuilder).GetMethod("RunQuery", BindingFlags.NonPublic | BindingFlags.Static)
                 .MakeGenericMethod(rowType);
-            return runQuery.Invoke(null, new object[] {items.Cast<object>(), func}) as IEnumerable;
+            return MethodInvoker.Invoke(runQuery, null, new object[] {items.Cast<object>(), func}) as IEnumerable;
         }
 
         private static IEnumerable RunQuery<TOutput>(IEnumerable<object> items, Func<object, TOutput> func)

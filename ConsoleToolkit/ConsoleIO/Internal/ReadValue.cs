@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using ConsoleToolkit.Utilities;
 
 namespace ConsoleToolkit.ConsoleIO.Internal
 {
@@ -60,22 +61,28 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         {
             try
             {
+                if (input != null && type == input.GetType())
+                {
+                    result = input;
+                    return true;
+                } 
+                
                 var conversion = typeof(Convert).GetMethods()
                     .FirstOrDefault(m => m.ReturnType == type
                                          && m.GetParameters().Length == 1
                                          && m.GetParameters()[0].ParameterType == typeof(string));
                 if (conversion != null)
                 {
-                    result = conversion.Invoke(null, new object[] { input });
+                    result = MethodInvoker.Invoke(conversion, null, new object[] { input });
                     return true;
                 }
 
                 result = null;
             }
-            catch (TargetInvocationException e)
+            catch (Exception e)
             {
                 result = null;
-                consoleOut.WrapLine(e.InnerException.Message);
+                consoleOut.WrapLine(e.Message);
             }
             return false;
         }

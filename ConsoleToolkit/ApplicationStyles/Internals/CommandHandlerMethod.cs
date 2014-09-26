@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using ConsoleToolkit.ConsoleIO;
+using ConsoleToolkit.Utilities;
 
 namespace ConsoleToolkit.ApplicationStyles.Internals
 {
@@ -26,7 +27,7 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
             try
             {
                 var parameters = injector.GetParameters(_method, new[] { command });
-                _method.Invoke(app, parameters);
+                MethodInvoker.Invoke(_method, app, parameters);
             }
             catch (TargetInvocationException e)
             {
@@ -43,7 +44,7 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
 
         public SelfHandler(MethodInfo method)
         {
-            this._method = method;
+            _method = method;
             CommandType = method.DeclaringType;
         }
 
@@ -53,7 +54,7 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
             try
             {
                 var parameters = injector.GetParameters(_method, new[] { command });
-                _method.Invoke(command, parameters);
+                MethodInvoker.Invoke(_method, command, parameters);
             }
             catch (TargetInvocationException e)
             {

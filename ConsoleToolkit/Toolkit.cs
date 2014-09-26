@@ -95,7 +95,7 @@ namespace ConsoleToolkit
             try
             {
                 instance = Activator.CreateInstance(type, null);
-                runMethod.Invoke(null, new[] {instance, args, consoleAdapter, errorAdapter});
+                MethodInvoker.Invoke(runMethod, null, new[] {instance, args, consoleAdapter, errorAdapter});
             }
             finally
             {

@@ -4,6 +4,7 @@ using System.Reflection;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
+using ConsoleToolkit.Utilities;
 
 namespace ConsoleToolkitTests.ApplicationStyles
 {
@@ -30,7 +31,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
                 var errorPrefix = string.Format("{0}: ", DefaultApplicationNameExtractor.Extract(typeof(T)));
 
                 instance = Activator.CreateInstance(type, null);
-                runMethod.Invoke(null, new[]
+                MethodInvoker.Invoke(runMethod, null, new[]
                                            {
                                                instance, 
                                                args ?? new string[]{}, 

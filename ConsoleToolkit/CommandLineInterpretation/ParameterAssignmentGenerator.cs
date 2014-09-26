@@ -69,7 +69,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
                 BindingFlags.NonPublic | BindingFlags.Static);
             var makeLambda = genericMakeLambda.MakeGenericMethod(new[] {memberType});
             parameterTypes = new[] {memberType};
-            return makeLambda.Invoke(null, new object[] {expression, parameters.ToArray()});
+            return MethodInvoker.Invoke(makeLambda, null, new object[] {expression, parameters.ToArray()});
         }
 
         private static object GenerateNestedMemberAssignment(MemberInfo memberInfo, Type memberType, out Type[] parameterTypes,
@@ -84,7 +84,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
             var makeLambdaN = genericMakeLambdaN.MakeGenericMethod(nestedValues.Select(p => p.Value.Type).ToArray());
             var body = ConstructResultAssigment(memberInfo, item, memberInit, parent);
             parameterTypes = nestedValues.Select(n => n.Details.Type).ToArray();
-            return makeLambdaN.Invoke(null, new object[] {body, parameters.ToArray()});
+            return MethodInvoker.Invoke(makeLambdaN, null, new object[] {body, parameters.ToArray()});
         }
 
         private static List<NestedParameters> InitNestedMemberProperties(Type memberType, List<ParameterExpression> parameters, out MemberInitExpression memberInit)
@@ -152,7 +152,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
                 var makeLambdaN = genericMakeLambdaN.MakeGenericMethod(nestedValues.Select(p => p.Value.Type).ToArray());
                 var addCall = Expression.Call(collection, addMethod, new Expression[] { memberInitExpression });
                 parameterTypes = nestedValues.Select(n => n.Details.Type).ToArray();
-                return makeLambdaN.Invoke(null, new object[] { addCall, parameters.ToArray() });
+                return MethodInvoker.Invoke(makeLambdaN, null, new object[] { addCall, parameters.ToArray() });
             }
             else
             {

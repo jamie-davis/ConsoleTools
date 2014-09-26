@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ConsoleToolkit.Utilities;
 
 namespace ConsoleToolkit.CommandLineInterpretation
 {
@@ -43,7 +44,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
         {
             object[] callParameters;
             if (CreateCallParameters(command, parameters, out callParameters, out error))
-                _actionType.GetMethod("Invoke").Invoke(_optionInitialiser, callParameters);
+                MethodInvoker.Invoke(_actionType.GetMethod("Invoke"), _optionInitialiser, callParameters);
             else if (error == null)
                 error = "Internal error parsing command.";
         }

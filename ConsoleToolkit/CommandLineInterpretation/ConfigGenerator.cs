@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using ConsoleToolkit.Utilities;
 
 namespace ConsoleToolkit.CommandLineInterpretation
 {
@@ -27,7 +28,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
             var method = typeof (ConfigGenerator).GetMethod("PositionalFromExpression");
             var genericMethod = method.MakeGenericMethod(new[] {typeof (T), prop.PropertyType});
-            return genericMethod.Invoke(null, new object[] {parameterName, accessor}) as BasePositional;
+            return MethodInvoker.Invoke(genericMethod, null, new object[] {parameterName, accessor}) as BasePositional;
         }
 
         /// <summary>

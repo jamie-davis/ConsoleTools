@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using ConsoleToolkit.Utilities;
 
 namespace ConsoleToolkit.ConsoleIO.Internal
 {
@@ -148,7 +149,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
                                      filter
                                  };
 
-            var tabular = formatMethod.Invoke(null, parameters) as IEnumerable<string>;
+            var tabular = MethodInvoker.Invoke(formatMethod, null, parameters) as IEnumerable<string>;
             foreach (var line in tabular)
                 Write(line);
 

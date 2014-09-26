@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using ConsoleToolkit.ConsoleIO;
+using ConsoleToolkit.Utilities;
 
 namespace ConsoleToolkit.ApplicationStyles.Internals
 {
@@ -29,7 +30,7 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
             try
             {
                 var parameters = injector.GetParameters(_method, new [] {command});
-                _method.Invoke(_handler, parameters);
+                MethodInvoker.Invoke(_method, _handler, parameters);
             }
             catch (TargetInvocationException e)
             {

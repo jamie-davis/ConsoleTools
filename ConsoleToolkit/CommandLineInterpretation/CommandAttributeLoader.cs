@@ -192,7 +192,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
             var insertMethod = listType.GetMethod("Add");
             var insert = Expression.Call(accessor, insertMethod, new Expression[] {itemVariable});
 
-            var positional = callPositional.Invoke(commandConfig, new object[]
+            var positional = MethodInvoker.Invoke(callPositional, commandConfig, new object[]
             {
                 name,
                 Expression.Lambda(insert, new [] {commandVariable, itemVariable}).Compile(),
@@ -214,7 +214,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
             var parameterExpression = Expression.Variable(typeof (T));
             var accessor = MakeMemberAccessor(member, parameterExpression, optionSet);
-            return callPositional.Invoke(commandConfig, new object[]
+            return MethodInvoker.Invoke(callPositional, commandConfig, new object[]
             {
                 name,
                 Expression.Lambda(accessor, parameterExpression),
@@ -286,7 +286,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
             }
             Debug.Assert(optionMethod != null);
 
-            optionMethod.Invoke(commandConfig, new[] {optionName, optionInitialiser});
+            MethodInvoker.Invoke(optionMethod, commandConfig, new[] {optionName, optionInitialiser});
             return commandConfig.Options.FirstOrDefault(o => o.Name == optionName);
         }
 
@@ -319,7 +319,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
                 var genericCreateMethod = typeof (CommandAttributeLoader).GetMethod("Create",
                     BindingFlags.Static | BindingFlags.NonPublic);
                 var createMethod = genericCreateMethod.MakeGenericMethod(new[] {commandClass});
-                return createMethod.Invoke(null, new object[]{ commandAttribute.Name }) as BaseCommandConfig;
+                return MethodInvoker.Invoke(createMethod, null, new object[]{ commandAttribute.Name }) as BaseCommandConfig;
             }
             catch (TargetInvocationException e)
             {

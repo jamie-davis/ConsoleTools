@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using ConsoleToolkit.Utilities;
 
 namespace ConsoleToolkit.ConsoleIO.Internal
 {
@@ -51,7 +52,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             if (toString == null)
                 return value.ToString();
 
-            return toString.Invoke(value, new object[] { formatTemplate }) as string;
+            return MethodInvoker.Invoke(toString, value, new object[] { formatTemplate }) as string;
         }
 
         private static bool IsFormattable(Type type)

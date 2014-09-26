@@ -151,6 +151,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestToolkit.cs" />
     <Compile Include="TestToolkitOptions.cs" />
+    <Compile Include="Utilities\MethodInvoker.cs" />
     <Compile Include="Utilities\TestRuntimeTypeBuilder.cs" />
     <Compile Include="Utilities\TestStackWalker.cs" />
   </ItemGroup>

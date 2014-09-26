@@ -65,7 +65,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
         {
             var generatorType = typeof (CommandConstructionLambdaGenerator<>).MakeGenericType(o.PropertyType);
             var generateMethod = generatorType.GetMethod("GenerateInitialiser", BindingFlags.Static | BindingFlags.NonPublic);
-            return generateMethod.Invoke(null, null) as Expression;
+            return MethodInvoker.Invoke(generateMethod, null, null) as Expression;
         }
     }
 }
