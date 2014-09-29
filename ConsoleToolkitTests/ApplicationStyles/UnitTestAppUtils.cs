@@ -31,17 +31,12 @@ namespace ConsoleToolkitTests.ApplicationStyles
                 var errorPrefix = string.Format("{0}: ", DefaultApplicationNameExtractor.Extract(typeof(T)));
 
                 instance = Activator.CreateInstance(type, null);
-                MethodInvoker.Invoke(runMethod, null, new[]
-                                           {
+                MethodInvoker.Invoke(runMethod, null, 
                                                instance, 
                                                args ?? new string[]{}, 
                                                new ConsoleAdapter(consoleInterface ?? new ConsoleInterfaceForTesting()),
                                                new ErrorAdapter(consoleInterface ?? new ConsoleInterfaceForTesting(), errorPrefix)
-                                           });
-            }
-            catch (TargetInvocationException e)
-            {
-                throw e.InnerException;
+                                           );
             }
             finally
             {
