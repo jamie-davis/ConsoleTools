@@ -29,7 +29,7 @@ namespace ConsoleToolkit.Utilities
         private static readonly MethodInfo MoveNextMethod = typeof(IEnumerator).GetMethod("MoveNext");
         private static readonly PropertyInfo GetCurrent = typeof(IEnumerator<object>).GetProperty("Current");
 
-        internal static object Invoke(MethodInfo method, object handler, object[] parameters)
+        internal static object Invoke(MethodInfo method, object handler, params object[] parameters)
         {
             lock (_lock)
             {
