@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -118,7 +118,7 @@
     <Compile Include="ConsoleIO\TestCachedColumn.cs" />
     <Compile Include="ConsoleIO\TestCachedRow.cs" />
     <Compile Include="ConsoleIO\TestCachedRows.cs" />
-    <Compile Include="ConsoleIO\TestConsoleInterfaceForTesting.cs" />
+    <Compile Include="ConsoleIO\Testing\TestConsoleInterfaceForTesting.cs" />
     <Compile Include="ConsoleIO\TestConsoleIOExtensions.cs" />
     <Compile Include="ConsoleIO\Internal\TestColumnExpander.cs" />
     <Compile Include="ConsoleIO\Internal\TestColumnSizer.cs" />
@@ -139,6 +139,7 @@
     <Compile Include="ConsoleIO\Internal\WidthCalculators\TestStringWidthCalculator.cs" />
     <Compile Include="ConsoleIO\Internal\WidthCalculators\TestTimeSpanWidthCalculator.cs" />
     <Compile Include="ConsoleIO\TestColumnFormat.cs" />
+    <Compile Include="ConsoleIO\Testing\TestUnitTestConsole.cs" />
     <Compile Include="ConsoleIO\TestRedirectedConsole.cs" />
     <Compile Include="ConsoleIO\TestReport.cs" />
     <Compile Include="ConsoleIO\TestTabularReport.cs" />

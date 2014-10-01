@@ -7,10 +7,11 @@ using System.Reflection;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using ApprovalUtilities.Utilities;
-using ConsoleToolkit.Annotations;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
+using ConsoleToolkit.ConsoleIO.Testing;
 using ConsoleToolkit.Exceptions;
+using ConsoleToolkit.Properties;
 using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
 

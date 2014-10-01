@@ -1,3 +1,5 @@
+using ConsoleToolkit.ConsoleIO.Testing;
+
 namespace ConsoleToolkit.ConsoleIO
 {
     /// <summary>

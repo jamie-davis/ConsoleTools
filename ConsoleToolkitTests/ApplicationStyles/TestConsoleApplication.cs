@@ -2,12 +2,13 @@
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit;
-using ConsoleToolkit.Annotations;
 using ConsoleToolkit.ApplicationStyles;
 using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.ConsoleIO;
+using ConsoleToolkit.ConsoleIO.Testing;
+using ConsoleToolkit.Properties;
 using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
 using DescriptionAttribute = ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.DescriptionAttribute;

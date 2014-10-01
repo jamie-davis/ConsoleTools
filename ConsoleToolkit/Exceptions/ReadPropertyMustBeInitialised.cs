@@ -1,6 +1,6 @@
 ﻿using System;
-using ConsoleToolkit.Annotations;
 using ConsoleToolkit.ConsoleIO;
+using ConsoleToolkit.Properties;
 
 namespace ConsoleToolkit.Exceptions
 {

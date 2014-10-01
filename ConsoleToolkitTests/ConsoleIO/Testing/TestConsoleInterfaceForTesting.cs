@@ -5,10 +5,11 @@ using ApprovalTests;
 using ApprovalTests.Reporters;
 using ApprovalUtilities.Utilities;
 using ConsoleToolkit.ConsoleIO;
+using ConsoleToolkit.ConsoleIO.Testing;
 using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
 
-namespace ConsoleToolkitTests.ConsoleIO
+namespace ConsoleToolkitTests.ConsoleIO.Testing
 {
     [TestFixture]
     [UseReporter(typeof (CustomReporter))]

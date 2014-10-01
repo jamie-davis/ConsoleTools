@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
-using ConsoleToolkit.Annotations;
 using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.ConsoleIO;
+using ConsoleToolkit.Properties;
 
 namespace ConsoleToolkit.ApplicationStyles
 {

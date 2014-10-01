@@ -4,6 +4,7 @@ using System.Reflection;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
+using ConsoleToolkit.ConsoleIO.Testing;
 using ConsoleToolkit.Utilities;
 
 namespace ConsoleToolkitTests.ApplicationStyles

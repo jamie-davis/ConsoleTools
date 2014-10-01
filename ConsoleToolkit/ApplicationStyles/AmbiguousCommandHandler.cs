@@ -1,5 +1,5 @@
 ﻿using System;
-using ConsoleToolkit.Annotations;
+using ConsoleToolkit.Properties;
 
 namespace ConsoleToolkit.ApplicationStyles
 {

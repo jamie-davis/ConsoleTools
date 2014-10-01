@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace ConsoleToolkit.ConsoleIO
+namespace ConsoleToolkit.ConsoleIO.Testing
 {
     /// <summary>
     /// This class implements the <see cref="IConsoleOutInterface"/> and captures the console output in a format that facilitates
