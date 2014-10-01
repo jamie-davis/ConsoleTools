@@ -7,7 +7,7 @@
     <ProjectGuid>{A2662BFA-2746-4782-BAF9-B058D1695C18}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ConsoleToolkit</RootNamespace>
+    <RootNamespace>JAD.ConsoleToolkit</RootNamespace>
     <AssemblyName>ConsoleToolkit</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -167,7 +167,6 @@
     <Compile Include="ConsoleIO\Internal\ReportDefinitions\IColumnSource.cs" />
     <Compile Include="ConsoleIO\Internal\ReportDefinitions\ReportParameterDetails.cs" />
     <Compile Include="ConsoleIO\Internal\ReportDefinitions\ReportQueryBuilder.cs" />
-    <Compile Include="ConsoleIO\Internal\ReportExceptionFilter.cs" />
     <Compile Include="ConsoleIO\InvalidOperationForRedirectedConsole.cs" />
     <Compile Include="ConsoleIO\Internal\ColumnExpander.cs" />
     <Compile Include="ConsoleIO\Internal\ColumnShrinker.cs" />

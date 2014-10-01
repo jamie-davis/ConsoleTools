@@ -35,13 +35,13 @@ namespace ConsoleToolkit.ConsoleIO.Internal.RecordedCommands
 
         public void Replay(ReplayBuffer buffer)
         {
-            int wrappedLineBreaks;
-            var report = TabularReport.Format(_data, null, buffer.Width, out wrappedLineBreaks, options, _columnSeperator);
+            var  wrappedLineBreaks = new TabularReport.Statistics();
+            var report = TabularReport.Format(_data, null, buffer.Width, wrappedLineBreaks, options, _columnSeperator);
             foreach (var line in report)
             {
                 buffer.Write(line);
             }
-            buffer.RecordWrapLineBreaks(wrappedLineBreaks);
+            buffer.RecordWrapLineBreaks(wrappedLineBreaks.WordWrapLineBreaks);
         }
 
         public int GetFirstWordLength(int tabLength)

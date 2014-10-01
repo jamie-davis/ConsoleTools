@@ -136,7 +136,6 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
         public void FormatTable<T>(Report<T> report)
         {
-            var filter = new ReportExceptionFilter();
             var formatMethod = MakeFormatMethodInfo(report);
             var parameters = new object[]
                                  {
@@ -145,16 +144,12 @@ namespace ConsoleToolkit.ConsoleIO.Internal
                                      WindowWidth,
                                      0, //rows to use for sizing
                                      report.Options,
-                                     report.ColumnDivider,
-                                     filter
+                                     report.ColumnDivider
                                  };
 
             var tabular = MethodInvoker.Invoke(formatMethod, null, parameters) as IEnumerable<string>;
             foreach (var line in tabular)
                 Write(line);
-
-            if (filter.ExceptionCaptured)
-                throw filter.Exception;
         }
 
         private static MethodInfo MakeFormatMethodInfo<T>(Report<T> report)
