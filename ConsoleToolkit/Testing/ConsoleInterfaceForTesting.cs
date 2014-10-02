@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using ConsoleToolkit.ConsoleIO;
 
-namespace ConsoleToolkit.ConsoleIO.Testing
+namespace ConsoleToolkit.Testing
 {
     /// <summary>
     /// This class implements the <see cref="IConsoleOutInterface"/> and captures the console output in a format that facilitates

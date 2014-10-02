@@ -8,8 +8,8 @@ using ConsoleToolkit;
 using ConsoleToolkit.ApplicationStyles;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.ConsoleIO;
-using ConsoleToolkit.ConsoleIO.Testing;
 using ConsoleToolkit.Properties;
+using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.ApplicationStyles;
 using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
@@ -80,7 +80,7 @@ namespace ConsoleToolkitTests.ConsoleIO
                 "text",
                 "45"
             });
-            UnitTestAppUtils.Run<Program1>(consoleInterface: _console);
+            UnitTestAppRunner.Run<Program1>(consoleInterface: _console);
             Approvals.Verify(_console.GetBuffer());
         }
 
@@ -94,7 +94,7 @@ namespace ConsoleToolkitTests.ConsoleIO
                 "still bad",
                 "45"
             });
-            UnitTestAppUtils.Run<Program1>(consoleInterface: _console);
+            UnitTestAppRunner.Run<Program1>(consoleInterface: _console);
             var buffer = _console.GetBuffer();
             Console.WriteLine(buffer);
             Approvals.Verify(buffer);
@@ -112,7 +112,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             });
             _console.InputIsRedirected = true;
 
-            UnitTestAppUtils.Run<Program1>(consoleInterface: _console);
+            UnitTestAppRunner.Run<Program1>(consoleInterface: _console);
             var buffer = _console.GetBuffer();
             Console.WriteLine(buffer);
             Approvals.Verify(buffer);

@@ -1,4 +1,4 @@
-using ConsoleToolkit.ConsoleIO.Testing;
+using ConsoleToolkit.Testing;
 
 namespace ConsoleToolkit.ConsoleIO
 {
