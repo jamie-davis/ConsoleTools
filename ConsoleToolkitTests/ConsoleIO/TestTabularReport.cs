@@ -329,6 +329,24 @@ namespace ConsoleToolkitTests.ConsoleIO
         }
 
         [Test]
+        public void ChildReportsCanHaveChildren()
+        {
+            var data = Enumerable.Range(0, 1)
+                .AsReport(p => p.AddColumn(r => "X", cc => cc.Heading("Value"))
+                    .AddColumn(r => "Text", cc => cc.Heading("Text."))
+                    .AddChild(i => Enumerable.Range(0, 2),
+                        cr => cr.AddColumn(i => i, cc => cc.Heading("Child Int"))
+                                .AddChild(j => Enumerable.Range(0, 2),
+                                    ccr => ccr.AddColumn(i => i, cc => cc.Heading("Child of Child Int")))));
+
+            var sb = new StringBuilder();
+
+            sb.Append(Report(data, 50));
+
+            Approvals.Verify(sb.ToString());
+        }
+
+        [Test]
         public void APrimitiveProducesAOneColumnReport()
         {
             var data = Enumerable.Range(0, 15);

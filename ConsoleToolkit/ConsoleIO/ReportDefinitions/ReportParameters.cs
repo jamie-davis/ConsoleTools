@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
+using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.ConsoleIO.Internal.ReportDefinitions;
 
 namespace ConsoleToolkit.ConsoleIO.ReportDefinitions
@@ -103,14 +105,9 @@ namespace ConsoleToolkit.ConsoleIO.ReportDefinitions
 
         public override string Render(object item, int width)
         {
-            var tabular = TabularReport.Format(_childDataAccessor(_originalRowExtractor(item)), 
-                _reportParameters.ColumnSource.Columns, 
-                width, 
-                0, //num rows to use for sizing
-                _reportParameters.Details.Options, 
-                _reportParameters.Details.ColumnDivider, 
-                _reportParameters.Children);
-            return string.Join(string.Empty, tabular);
+            var childData = _childDataAccessor(_originalRowExtractor(item));
+            var report = new Report<TValueItem>(childData, _reportParameters);
+            return string.Join(string.Empty, ReportExecutor.GetLines(report, width));
         }
     }
 

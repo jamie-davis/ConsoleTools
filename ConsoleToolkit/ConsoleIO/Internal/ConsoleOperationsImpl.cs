@@ -1,10 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
-using ConsoleToolkit.Utilities;
 
 namespace ConsoleToolkit.ConsoleIO.Internal
 {
@@ -136,32 +133,9 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
         public void FormatTable<T>(Report<T> report)
         {
-            var formatMethod = MakeFormatMethodInfo(report);
-            var parameters = new object[]
-                                 {
-                                     report.Query,
-                                     report.Columns,
-                                     WindowWidth,
-                                     0, //rows to use for sizing
-                                     report.Options,
-                                     report.ColumnDivider,
-                                     report.Children
-                                 };
-
-            var tabular = MethodInvoker.Invoke(formatMethod, null, parameters) as IEnumerable<string>;
+            var tabular = ReportExecutor.GetLines(report, WindowWidth);
             foreach (var line in tabular)
                 Write(line);
-        }
-
-        private static MethodInfo MakeFormatMethodInfo<T>(Report<T> report)
-        {
-            var genericMethod = typeof(TabularReport)
-                .GetMethods(BindingFlags.Static | BindingFlags.Public)
-                .FirstOrDefault(m => m.Name == "Format"
-                                     && m.GetParameters()[0].ParameterType.GetInterfaces()
-                                                            .Any(i => i == typeof(IEnumerable)));
-            var formatMethod = genericMethod.MakeGenericMethod(report.RowType, typeof(T));
-            return formatMethod;
         }
 
         /// <summary>
