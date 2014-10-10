@@ -136,5 +136,23 @@ namespace ConsoleToolkitTests.ConsoleIO
             var expected = ReportFormattingOptions.StretchColumns | ReportFormattingOptions.OmitHeadings;
             Assert.That(report.Options, Is.EqualTo(expected));
         }
+
+        [Test]
+        public void ChildReportsCanBeAdded()
+        {
+            //Arrange
+            var data = Enumerable.Range(0, 4);
+
+            //Act
+            var report = data.AsReport(rep => rep.AddColumn(n => string.Format("Test value {0}", n),
+                                                            col => col.Heading("Test values"))
+                                                 .AddChild(n => Enumerable.Range(1, 4),
+                                                           p => p.AddColumn(i => i, c => c.Heading("Nested Number")))
+                );
+
+            //Assert
+            _adapter.FormatTable(report);
+            Approvals.Verify(_consoleInterface.GetBuffer());
+        }
     }
 }

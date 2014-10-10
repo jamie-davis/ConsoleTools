@@ -37,7 +37,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
                 Double = Math.PI,
                 DateTime = DateTime.Parse("2014-05-05 19:23:52")
             };
-            _cols = FormatAnalyser.Analyse(_data.GetType(), null);
+            _cols = FormatAnalyser.Analyse(_data.GetType(), null, true);
         }
 
         [Test]

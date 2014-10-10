@@ -64,7 +64,7 @@ namespace ConsoleToolkitTests.ConsoleIO.UnitTestUtilities
 
         public static string ReportSizingData(ColumnWidthNegotiator cwn)
         {
-            var rows = cwn.GetSizingValues().Select(v => String.Join(",", v.Select(i => i.ToString()))).ToList();
+            var rows = cwn.GetSizingValues().Select(v => String.Join(",", v.GetValues().Select(i => i.ToString()))).ToList();
             var output = String.Join(Environment.NewLine, rows);
             return output;
         }

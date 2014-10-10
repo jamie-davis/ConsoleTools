@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -29,6 +30,7 @@ namespace ConsoleToolkit.Utilities
         private static readonly MethodInfo MoveNextMethod = typeof(IEnumerator).GetMethod("MoveNext");
         private static readonly PropertyInfo GetCurrent = typeof(IEnumerator<object>).GetProperty("Current");
 
+        [DebuggerHidden]
         internal static object Invoke(MethodInfo method, object handler, params object[] parameters)
         {
             lock (_lock)

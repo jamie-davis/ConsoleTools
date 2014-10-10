@@ -1,0 +1,1 @@
+﻿<null>      = ColumnFormat("Int32", System.Int32, Right, 2DP, Actual 0, , Requested )

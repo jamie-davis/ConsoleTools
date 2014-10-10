@@ -1,9 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using ConsoleToolkit.ConsoleIO.Internal;
+using ConsoleToolkit.ConsoleIO.ReportDefinitions;
 using ConsoleToolkit.Utilities;
 
 namespace ConsoleToolkit.ConsoleIO
@@ -11,7 +14,7 @@ namespace ConsoleToolkit.ConsoleIO
     /// <summary>
     /// A formatter for tabular data.
     /// </summary>
-    public static class TabularReport
+    internal static class TabularReport
     {
         internal const string DefaultColumnDivider = " ";
 
@@ -24,22 +27,24 @@ namespace ConsoleToolkit.ConsoleIO
         /// Format a collection of rows as a tabular report.
         /// </summary>
         /// <typeparam name="T">The item type.</typeparam>
+        /// <typeparam name="TChild">The original row type for child reports.</typeparam>
         /// <param name="data">The enumerable items.</param>
         /// <param name="columns">Column formatting information. If this is not provided, default column formats will be used.</param>
         /// <param name="width">The width that the report is allowed to occupy.</param>
         /// <param name="numRowsToUseForSizing">The number of rows that should be used for automatically sizing columns.</param>
         /// <param name="options">Options that control the formatting of the report.</param>
         /// <param name="columnDivider">A string that will be used to divide columns.</param>
+        /// <param name="childReports">The nested reports that should be output for each table row.</param>
         /// <returns>The formatted report lines.</returns>
-        public static IEnumerable<string> Format<T>(IEnumerable<T> data, IEnumerable<ColumnFormat> columns, 
-            int width, int numRowsToUseForSizing = 0, ReportFormattingOptions options = ReportFormattingOptions.Default, string columnDivider = null)
+        public static IEnumerable<string> Format<T, TChild>(IEnumerable<T> data, IEnumerable<ColumnFormat> columns,
+            int width, int numRowsToUseForSizing = 0, ReportFormattingOptions options = ReportFormattingOptions.Default, string columnDivider = null, IEnumerable<BaseChildItem<TChild>> childReports = null)
         {
             var culture = Thread.CurrentThread.CurrentCulture;
 
             using (new TempCulture(culture))
             {
                     var statistics = new Statistics();
-                    foreach (var l in DoFormat(data, columns, width, numRowsToUseForSizing, 4, options, columnDivider, statistics))
+                    foreach (var l in DoFormat(data, columns, width, numRowsToUseForSizing, 4, options, columnDivider, statistics, childReports))
                         yield return l;
             }
         }
@@ -54,15 +59,17 @@ namespace ConsoleToolkit.ConsoleIO
         /// <param name="width">The width that the report is allowed to occupy.</param>
         /// <param name="options">Options that effect formatting.</param>
         /// <param name="columnDivider">A string that will be used to divide the report columns.</param>
+        /// <param name="childReports">The nested reports that should be output for each table row.</param>
         /// <returns>The formatted report lines.</returns>
-        public static IEnumerable<string> Format<T>(CachedRows<T> data, IEnumerable<ColumnFormat> columns, int width, ReportFormattingOptions options = ReportFormattingOptions.Default, string columnDivider = null)
+        public static IEnumerable<string> Format<T>(CachedRows<T> data, IEnumerable<ColumnFormat> columns, 
+            int width, ReportFormattingOptions options = ReportFormattingOptions.Default, string columnDivider = null, IEnumerable<BaseChildItem<T>> childReports = null)
         {
             var culture = Thread.CurrentThread.CurrentCulture;
 
             using (new TempCulture(culture))
             {
                 var statistics = new Statistics();
-                foreach (var l in DoFormatFromCachedRows(data, columns, width, 0, 4, options, columnDivider, statistics))
+                foreach (var l in DoFormatFromCachedRows(data, columns, width, 0, 4, options, columnDivider, statistics, childReports))
                     yield return l;
             }
         }
@@ -78,37 +85,50 @@ namespace ConsoleToolkit.ConsoleIO
         /// <param name="wrappingLineBreaks">The number of linebreaks added due to wrapping.</param>
         /// <param name="options">Options that effect the formatting.</param>
         /// <param name="columnDivider">The string to be used to divide columns.</param>
+        /// <param name="childReports">The nested reports that should be output for each table row.</param>
         /// <returns>The formatted report lines.</returns>
-        internal static IEnumerable<string> Format<T>(CachedRows<T> data, IEnumerable<ColumnFormat> columns, int width, Statistics wrappingLineBreaks, ReportFormattingOptions options = ReportFormattingOptions.Default, string columnDivider = null)
+        internal static IEnumerable<string> Format<T>(CachedRows<T> data, IEnumerable<ColumnFormat> columns, int width, Statistics wrappingLineBreaks, ReportFormattingOptions options = ReportFormattingOptions.Default, string columnDivider = null, IEnumerable<BaseChildItem<T>> childReports = null)
         {
             var addedLineBreaks = 0;
 
             var statistics = new Statistics();
-            foreach (var l in DoFormatFromCachedRows(data, columns, width, 0, 4, options, columnDivider, statistics))
+            foreach (var l in DoFormatFromCachedRows(data, columns, width, 0, 4, options, columnDivider, statistics, childReports))
                 yield return l;
             addedLineBreaks = statistics.WordWrapLineBreaks;
 
             wrappingLineBreaks.WordWrapLineBreaks = addedLineBreaks;
         }
 
-        private static IEnumerable<string> DoFormatFromCachedRows<T>(CachedRows<T> data, IEnumerable<ColumnFormat> specifiedColumns, int width, int numRowsToUseForSizing, int tabLength, ReportFormattingOptions options, string columnDivider, Statistics statistics)
+        private static IEnumerable<string> DoFormatFromCachedRows<T>(CachedRows<T> data, IEnumerable<ColumnFormat> specifiedColumns, int width, int numRowsToUseForSizing, int tabLength, ReportFormattingOptions options, string columnDivider, Statistics statistics, IEnumerable<BaseChildItem<T>> childReports)
         {
-            var columns = FormatAnalyser.Analyse(typeof(T), specifiedColumns);
-            return FormatFromDataFeed<CachedRow<T>>(data.GetRows(), width, numRowsToUseForSizing, tabLength, columns, (sz, item) => sz.AddRow(item), options, columnDivider, statistics);
+            var columns = FormatAnalyser.Analyse(typeof(T), specifiedColumns, IncludeAllColumns(specifiedColumns, options));
+            var cachedChildren = childReports == null
+                ? null
+                : childReports.Select(child => new CachedRowChild<T>(child));
+            Action<ColumnWidthNegotiator, CachedRow<T>> addRowAction = (sz, item) => sz.AddRow(item);
+
+            return FormatFromDataFeed(data.GetRows(), width, numRowsToUseForSizing, 
+                tabLength, columns, addRowAction, options, columnDivider, statistics, 
+                cachedChildren);
         }
 
-        private static IEnumerable<string> DoFormat<T>(IEnumerable<T> data, IEnumerable<ColumnFormat> specifiedColumns, int width, int numRowsToUseForSizing, int tabLength, ReportFormattingOptions options, string columnDivider, Statistics statistics)
+        private static IEnumerable<string> DoFormat<T, TChild>(IEnumerable<T> data, IEnumerable<ColumnFormat> specifiedColumns, int width, int numRowsToUseForSizing, int tabLength, ReportFormattingOptions options, string columnDivider, Statistics statistics, IEnumerable<BaseChildItem<TChild>> childReports)
         {
-            var columns = FormatAnalyser.Analyse(typeof(T), specifiedColumns);
-            return FormatFromDataFeed<T>(data, width, numRowsToUseForSizing, tabLength, columns, (sz, item) => sz.AddRow(item), options, columnDivider, statistics);
+            var columns = FormatAnalyser.Analyse(typeof(T), specifiedColumns, IncludeAllColumns(specifiedColumns, options));
+            Action<ColumnWidthNegotiator, T> addRowAction = (sz, item) => sz.AddRow(item);
+
+            return FormatFromDataFeed(data, width, numRowsToUseForSizing, tabLength, columns, addRowAction, options, columnDivider, statistics, childReports);
         }
 
-        private static IEnumerable<string> FormatFromDataFeed<T>(IEnumerable data,
-            int width, int numRowsToUseForSizing, int tabLength,
-            List<PropertyColumnFormat> columns, Action<ColumnWidthNegotiator, T> addRowAction,
-            ReportFormattingOptions options,
-            string columnDivider,
-            Statistics statistics)
+        private static bool IncludeAllColumns(IEnumerable<ColumnFormat> specifiedColumns, ReportFormattingOptions options)
+        {
+            return specifiedColumns == null || options.HasFlag(ReportFormattingOptions.IncludeAllColumns);
+        }
+
+        private static IEnumerable<string> FormatFromDataFeed<T, TChild>(IEnumerable data, int width, int numRowsToUseForSizing, 
+            int tabLength, List<PropertyColumnFormat> columns, Action<ColumnWidthNegotiator, T> addRowAction, 
+            ReportFormattingOptions options, string columnDivider, Statistics statistics,
+            IEnumerable<BaseChildItem<TChild>> childReports)
         {
             if (columnDivider == null) columnDivider = DefaultColumnDivider;
 
@@ -140,7 +160,7 @@ namespace ConsoleToolkit.ConsoleIO
                     yield return l;
 
             var sizeStats = new Statistics();
-            foreach (var l in ReportRowsUsedForSizing(columns, sizer, tabLength, columnDivider, widths, sizeStats))
+            foreach (var l in ReportRowsUsedForSizing<T, TChild>(columns, sizer, tabLength, columnDivider, widths, sizeStats, childReports))
                 yield return l;
 
             statistics.WordWrapLineBreaks = sizeStats.WordWrapLineBreaks;
@@ -150,43 +170,49 @@ namespace ConsoleToolkit.ConsoleIO
                 do
                 {
                     var reportStats = new Statistics();
-                    foreach (var l in ReportRow(dataEnumerator.Current, columns, sizer, tabLength, columnDivider, widths, reportStats))
+                    foreach (var l in ReportRow<T, TChild>(dataEnumerator.Current, columns, sizer, tabLength, columnDivider, widths, reportStats, childReports))
                         yield return l;
                     statistics.WordWrapLineBreaks += reportStats.WordWrapLineBreaks;
                 } while (dataEnumerator.MoveNext());
             }
         }
 
-        private static IEnumerable<string> ReportRow(object item, List<PropertyColumnFormat> columns, ColumnWidthNegotiator sizer, int tabLength, string columnSeperator, int[] widths, Statistics statistics)
+        private static IEnumerable<string> ReportRow<T, TChild>(object item, List<PropertyColumnFormat> columns, ColumnWidthNegotiator sizer, int tabLength, string columnSeperator, int[] widths, Statistics statistics, IEnumerable<BaseChildItem<TChild>> children)
         {
             var rowValues = columns
                 .Select(c => GetColValue(item, c))
                 .ToList();
-            foreach (var l in ReportRowValues(columns, sizer, tabLength, columnSeperator, rowValues, widths, statistics))
+            foreach (var l in ReportRowValues<T, TChild>(columns, sizer, tabLength, columnSeperator, item, rowValues, widths, statistics, children))
                 yield return l;
         }
 
         private static FormattingIntermediate GetColValue(object item, PropertyColumnFormat c)
         {
-            var value = c.Property.GetValue(item);
+            object value;
+            if (c.Property == null)
+                value = item;
+            else
+                value = c.Property.GetValue(item);
+
             if (c.Format.Type == typeof (IConsoleRenderer) && value is IConsoleRenderer)
                 return new FormattingIntermediate(value as IConsoleRenderer);
 
             return new FormattingIntermediate(ValueFormatter.Format(c.Format, value));
         }
 
-        private static IEnumerable<string> ReportRowsUsedForSizing(List<PropertyColumnFormat> columns, ColumnWidthNegotiator sizer, int tabLength, string columnSeperator, int[] widths, Statistics statistics)
+        private static IEnumerable<string> ReportRowsUsedForSizing<T, TChild>(List<PropertyColumnFormat> columns, ColumnWidthNegotiator sizer, int tabLength, string columnSeperator, int[] widths, Statistics statistics, IEnumerable<BaseChildItem<TChild>> children)
         {
-            foreach (var rowValues in sizer.GetSizingValues().Select(v => v.ToList()))
+            foreach (var rowValues in sizer.GetSizingValues())
             {
                 var stats = new Statistics();
-                foreach (var l in ReportRowValues(columns, sizer, tabLength, columnSeperator, rowValues, widths, stats))
+                var columnValues = rowValues.GetValues().ToList();
+                foreach (var l in ReportRowValues<T, TChild>(columns, sizer, tabLength, columnSeperator, rowValues.RowItem, columnValues, widths, stats, children))
                     yield return l;
                 statistics.WordWrapLineBreaks += stats.WordWrapLineBreaks;
             }
         }
 
-        private static IEnumerable<string> ReportRowValues(List<PropertyColumnFormat> columns, ColumnWidthNegotiator sizer, int tabLength, string columnSeperator, IList<FormattingIntermediate> rowValues, int[] widths, Statistics statistics)
+        private static IEnumerable<string> ReportRowValues<T, TChild>(List<PropertyColumnFormat> columns, ColumnWidthNegotiator sizer, int tabLength, string columnSeperator, object rowItem, IList<FormattingIntermediate> rowValues, int[] widths, Statistics statistics, IEnumerable<BaseChildItem<TChild>> children)
         {
             var maxLineBreaks = 0;
             var wrappedValues = columns
@@ -209,6 +235,24 @@ namespace ConsoleToolkit.ConsoleIO
             statistics.WordWrapLineBreaks = maxLineBreaks;
 
             yield return ReportColumnAligner.AlignColumns(widths, wrappedValues, ColVerticalAligment.Top, columnSeperator);
+
+            if (children != null)
+            {
+                var childRendered = false;
+                foreach (var baseChildItem in children)
+                {
+                    var childOutput = PrefixLines.Do(baseChildItem.Render(rowItem, sizer.AvailableWidth - 4), "    ");
+                    if (string.IsNullOrEmpty(childOutput))
+                        continue;
+
+                    childRendered = true;
+                    yield return Environment.NewLine;
+                    yield return childOutput;
+                }
+
+                if (childRendered)
+                    yield return Environment.NewLine;
+            }
         }
 
         private static string[] RenderCol(int tabLength, FormattingIntermediate rowValue, PropertyColumnFormat c, out int wrappedLines)

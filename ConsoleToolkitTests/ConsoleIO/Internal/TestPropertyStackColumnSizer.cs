@@ -25,7 +25,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         public void SetUp()
         {
             _sizer = new PropertyStackColumnSizer();
-            _columnFormats = FormatAnalyser.Analyse(typeof (TestType), null).ToList();
+            _columnFormats = FormatAnalyser.Analyse(typeof(TestType), null, true).ToList();
         }
 
         [Test]

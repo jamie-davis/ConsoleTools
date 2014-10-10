@@ -34,7 +34,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         [SetUp]
         public void TestFixtureSetUp()
         {
-            _formats = FormatAnalyser.Analyse(typeof(TestType), null);
+            _formats = FormatAnalyser.Analyse(typeof(TestType), null, true);
         }
 
         [Test]

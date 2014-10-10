@@ -1,0 +1,7 @@
+﻿IntCol      = ColumnFormat("Defined Col", System.Int32, Right, 2DP, Actual 0, , Requested )
+StringCol   = ColumnFormat("String Col", System.String, Left, 2DP, Actual 0, , Requested )
+DateTimeCol = ColumnFormat("Date Time Col", System.DateTime, Left, 2DP, Actual 0, , Requested )
+DoubleCol   = ColumnFormat("Double Col", System.Double, Right, 2DP, Actual 0, , Requested )
+FloatCol    = ColumnFormat("Float Col", System.Single, Right, 2DP, Actual 0, , Requested )
+DecimalCol  = ColumnFormat("Decimal Col", System.Decimal, Right, 2DP, Actual 0, , Requested )
+ABC         = ColumnFormat("ABC", System.Int32, Right, 2DP, Actual 0, , Requested )

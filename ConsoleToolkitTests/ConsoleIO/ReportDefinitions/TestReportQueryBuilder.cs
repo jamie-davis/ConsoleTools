@@ -20,6 +20,11 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
             public int Integer { get; set; }
             public double Double { get; set; }
             public string String { get; set; }
+
+            public override string ToString()
+            {
+                return "QueryType";
+            }
         }
 
         #endregion
@@ -59,11 +64,12 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
 
             //Act
             Type rowType;
-            var output = ReportQueryBuilder.Build(_testData, expressions, out rowType);
+            Func<object, QueryType> rowGetter;
+            var output = ReportQueryBuilder.Build(_testData, expressions, out rowType, out rowGetter);
 
             //Assert
             var properties = GetPropertyDesc(rowType);
-            Assert.That(properties, Is.EqualTo("Int32 exp1; String exp2;"));
+            Assert.That(properties, Is.EqualTo("Int32 exp1; String exp2; QueryType row;"));
         }
 
         [Test]
@@ -78,7 +84,8 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
 
             //Act
             Type rowType;
-            var output = ReportQueryBuilder.Build(_testData, expressions, out rowType);
+            Func<object, QueryType> rowGetter;
+            var output = ReportQueryBuilder.Build(_testData, expressions, out rowType, out rowGetter);
 
             //Assert
             var sb = new StringBuilder();
@@ -89,7 +96,27 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
                                 .Select(p => string.Format("{0} = {1}", p.Name, p.GetValue(item, null)))
                                 .JoinWith(" "));
             }
-            Assert.That(sb.ToString(), Is.EqualTo("[exp1 = 100 exp2 = ***alpha][exp1 = 200 exp2 = ****beta]"));
+            var actual = sb.ToString();
+            Assert.That(actual, Is.EqualTo("[exp1 = 100 exp2 = ***alpha row = QueryType][exp1 = 200 exp2 = ****beta row = QueryType]"));
+        }
+
+        [Test]
+        public void RowItemRetrieverReturnsTheOriginalRowObject()
+        {
+            //Arrange
+            var expressions = new Expression[]
+                                  {
+                                      Exp<QueryType, int>(q => q.Integer),
+                                      Exp<QueryType, string>(q => q.String.PadLeft(8, '*'))
+                                  };
+
+            //Act
+            Type rowType;
+            Func<object, QueryType> rowGetter;
+            var output = ReportQueryBuilder.Build(_testData, expressions, out rowType, out rowGetter);
+
+            //Assert
+            Assert.That(rowGetter(output.Cast<object>().First()), Is.SameAs(_testData.First()));
         }
     }
 }

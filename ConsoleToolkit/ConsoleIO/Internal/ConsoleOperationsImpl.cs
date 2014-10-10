@@ -129,7 +129,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
         public void FormatTable<T>(IEnumerable<T> items, ReportFormattingOptions options = ReportFormattingOptions.Default, string columnSeperator = null)
         {
-            var tabular = TabularReport.Format(items, null, WindowWidth, options: options, columnDivider: columnSeperator);
+            var tabular = TabularReport.Format<T, T>(items, null, WindowWidth, options: options, columnDivider: columnSeperator);
             foreach (var line in tabular)
                 Write(line);
         }
@@ -144,7 +144,8 @@ namespace ConsoleToolkit.ConsoleIO.Internal
                                      WindowWidth,
                                      0, //rows to use for sizing
                                      report.Options,
-                                     report.ColumnDivider
+                                     report.ColumnDivider,
+                                     report.Children
                                  };
 
             var tabular = MethodInvoker.Invoke(formatMethod, null, parameters) as IEnumerable<string>;
@@ -159,7 +160,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
                 .FirstOrDefault(m => m.Name == "Format"
                                      && m.GetParameters()[0].ParameterType.GetInterfaces()
                                                             .Any(i => i == typeof(IEnumerable)));
-            var formatMethod = genericMethod.MakeGenericMethod(report.RowType);
+            var formatMethod = genericMethod.MakeGenericMethod(report.RowType, typeof(T));
             return formatMethod;
         }
 

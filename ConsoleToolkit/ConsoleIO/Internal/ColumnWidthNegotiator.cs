@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,7 +16,8 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
             public ColumnSizerInfo(PropertyColumnFormat pcf, int tabLength)
             {
-                Sizer = new ColumnSizer(pcf.Property.PropertyType, pcf.Format, tabLength);
+                var propertyType = pcf.Property == null ? pcf.Format.Type : pcf.Property.PropertyType;
+                Sizer = new ColumnSizer(propertyType, pcf.Format, tabLength);
                 PropertyColumnFormat = pcf;
             }
         }
@@ -23,7 +25,9 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         private readonly ColumnSizingParameters _parameters = new ColumnSizingParameters();
         private int _sizeRows;
         private int _headingsRowIndex = -1;
+        private List<object> _rowItems = new List<object>();
         public List<PropertyColumnFormat> Columns { get { return _parameters.Columns; } }
+        public int AvailableWidth { get; private set; }
 
         public List<PropertyColumnFormat> StackedColumns
         {
@@ -47,10 +51,15 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         {
             foreach (var sizer in _parameters.Sizers)
             {
-                var value = sizer.PropertyColumnFormat.Property.GetValue(row, null);
+                object value;
+                if (sizer.PropertyColumnFormat.Property == null)
+                    value = row;
+                else
+                    value = sizer.PropertyColumnFormat.Property.GetValue(row, null);
                 sizer.Sizer.ColumnValue(value);
             }
 
+            _rowItems.Add(row);
             ++_sizeRows;
         }
 
@@ -66,11 +75,13 @@ namespace ConsoleToolkit.ConsoleIO.Internal
                     sizer.Sizer.ColumnValue(null);
             }
 
+            _rowItems.Add(row.RowItem);
             ++_sizeRows;
         }
 
         public void CalculateWidths(int width, ReportFormattingOptions options = ReportFormattingOptions.Default)
         {
+            AvailableWidth = width;
             SizeColumns(width);
 
             var maximiseWidth = (options & ReportFormattingOptions.StretchColumns) > 0;
@@ -119,8 +130,9 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             _headingsRowIndex = _sizeRows++;
         }
 
-        public IEnumerable<IEnumerable<FormattingIntermediate>> GetSizingValues()
+        public IEnumerable<SizingValues> GetSizingValues()
         {
+            var dataRow = 0;
             for (var row = 0; row < _sizeRows; ++row)
             {
                 if (row != _headingsRowIndex)
@@ -128,13 +140,33 @@ namespace ConsoleToolkit.ConsoleIO.Internal
                     // ReSharper disable once AccessToModifiedClosure
                     //use of the row number within the delegate is okay because we only use it here, within the loop 
                     var sizedColumnValues = _parameters.Sizers.Select(s => s.Sizer.GetSizeValue(row));
+                    var rowItem = _rowItems[dataRow++];
                     if (_parameters.StackSizer != null)
                     {
-                        yield return sizedColumnValues.Concat(_parameters.StackSizer.GetSizeValues(row));
+                        var intermediates = sizedColumnValues.Concat(_parameters.StackSizer.GetSizeValues(row));
+                        yield return new SizingValues(rowItem, intermediates);
                     }
                     else
-                        yield return sizedColumnValues;
+                        yield return new SizingValues(rowItem, sizedColumnValues);
                 }
+            }
+        }
+
+        public class SizingValues
+        {
+            private readonly IEnumerable<FormattingIntermediate> _values;
+
+            public SizingValues(object rowItem, IEnumerable<FormattingIntermediate> values)
+            {
+                RowItem = rowItem;
+                _values = values;
+            }
+
+            public object RowItem { get; private set; }
+
+            public IEnumerable<FormattingIntermediate> GetValues()
+            {
+                return _values;
             }
         }
     }

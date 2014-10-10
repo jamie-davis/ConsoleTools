@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using ConsoleToolkit.ConsoleIO.ReportDefinitions;
 
 namespace ConsoleToolkit.ConsoleIO.Internal.RecordedCommands
 {
@@ -21,13 +23,15 @@ namespace ConsoleToolkit.ConsoleIO.Internal.RecordedCommands
     internal class FormatTableCommand<T> : IRecordedCommand
     {
         private readonly ReportFormattingOptions options;
+        private readonly IEnumerable<BaseChildItem<T>> _childReports;
         private readonly string _columnSeperator;
         private readonly CachedRows<T> _data;
         private int _minReportWidth;
 
-        public FormatTableCommand(IEnumerable<T> data, ReportFormattingOptions options, string columnSeperator)
+        public FormatTableCommand(IEnumerable<T> data, ReportFormattingOptions options, string columnSeperator, IEnumerable<BaseChildItem<T>> childReports = null)
         {
             this.options = options;
+            _childReports = childReports == null ? null : childReports.ToList();
             _columnSeperator = columnSeperator ?? TabularReport.DefaultColumnDivider;
             _data = CachedRowsFactory.Make(data);
             _minReportWidth = MinReportWidthCalculator.Calculate(_data, _columnSeperator.Length);
@@ -36,7 +40,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal.RecordedCommands
         public void Replay(ReplayBuffer buffer)
         {
             var  wrappedLineBreaks = new TabularReport.Statistics();
-            var report = TabularReport.Format(_data, null, buffer.Width, wrappedLineBreaks, options, _columnSeperator);
+            var report = TabularReport.Format(_data, null, buffer.Width, wrappedLineBreaks, options, _columnSeperator, _childReports);
             foreach (var line in report)
             {
                 buffer.Write(line);

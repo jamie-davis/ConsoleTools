@@ -48,7 +48,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
                 .ToList();
 
             _parameters = new ColumnSizingParameters();
-            _parameters.Columns = FormatAnalyser.Analyse(typeof(TestType), null);
+            _parameters.Columns = FormatAnalyser.Analyse(typeof(TestType), null, true);
             _parameters.Sizers = _parameters.Columns.Select(f => new ColumnWidthNegotiator.ColumnSizerInfo(f, 4)).ToList();
             _parameters.TabLength = 4;
             _parameters.SeperatorLength = 1;

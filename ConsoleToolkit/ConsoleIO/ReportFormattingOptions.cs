@@ -18,6 +18,11 @@ namespace ConsoleToolkit.ConsoleIO
         /// </summary>
         StretchColumns = 2,
 
+        /// <summary>
+        /// If column definitions are used, include columns without a definition.
+        /// </summary>
+        IncludeAllColumns = 4,
+
         Default = 0,
     }
 }

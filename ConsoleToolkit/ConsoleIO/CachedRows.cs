@@ -48,8 +48,11 @@ namespace ConsoleToolkit.ConsoleIO
     {
         public CachedRow(T item)
         {
+            RowItem = item;
             Columns = typeof (T).GetProperties().Select(p => new CachedColumn(p, p.GetValue(item))).ToList();
         }
+
+        public T RowItem { get; set; }
 
         public IEnumerable<CachedColumn> Columns { get; private set; }
     }

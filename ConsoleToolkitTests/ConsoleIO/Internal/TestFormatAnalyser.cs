@@ -38,7 +38,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         [Test]
         public void NoColumnDefinitionReturnsAFullSetOfColumnFormats()
         {
-            var propFormats = FormatAnalyser.Analyse(typeof (TestType), null);
+            var propFormats = FormatAnalyser.Analyse(typeof (TestType), null, true);
             Approvals.Verify(ReportFormats(propFormats));
         }
 
@@ -48,7 +48,25 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             var cols = typeof (TestType).GetProperties()
                 .Select(p => new ColumnFormat("Expected", p.PropertyType))
                 .Concat(Enumerable.Range(0, 5).Select(i => new ColumnFormat("Extra")));
-            var propFormats = FormatAnalyser.Analyse(typeof(TestType), cols);
+            var propFormats = FormatAnalyser.Analyse(typeof(TestType), cols, true);
+            Approvals.Verify(ReportFormats(propFormats));
+        }
+
+        [Test]
+        public void ColumnsWithNoDefinitionAreExtracted()
+        {
+            var intColProp = typeof (TestType).GetProperty("IntCol");
+            var cols = new [] {new ColumnFormat("Defined Col", intColProp.PropertyType)};
+            var propFormats = FormatAnalyser.Analyse(typeof(TestType), cols, true);
+            Approvals.Verify(ReportFormats(propFormats));
+        }
+
+        [Test]
+        public void ColumnsWithNoDefinitionAreOmittedWhenIncludeAllColumnsIsFalse()
+        {
+            var intColProp = typeof (TestType).GetProperty("IntCol");
+            var cols = new [] {new ColumnFormat("Defined Col", intColProp.PropertyType)};
+            var propFormats = FormatAnalyser.Analyse(typeof(TestType), cols, false);
             Approvals.Verify(ReportFormats(propFormats));
         }
 
@@ -57,7 +75,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         {
             var cols = typeof (TestType).GetProperties().Take(2)
                 .Select(p => new ColumnFormat("Included", p.PropertyType));
-            var propFormats = FormatAnalyser.Analyse(typeof(TestType), cols);
+            var propFormats = FormatAnalyser.Analyse(typeof(TestType), cols, true);
             Approvals.Verify(ReportFormats(propFormats));
         }
 
@@ -66,7 +84,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         {
             var cols = typeof (TestType).GetProperties()
                 .Select(p => p.Name == "StringCol" ? new ColumnFormat("My String", p.PropertyType) : null);
-            var propFormats = FormatAnalyser.Analyse(typeof(TestType), cols);
+            var propFormats = FormatAnalyser.Analyse(typeof(TestType), cols, true);
             Approvals.Verify(ReportFormats(propFormats));
         }
 
@@ -75,7 +93,14 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         {
             var cols = typeof (TestType).GetProperties()
                 .Select(p => p.Name == "StringCol" ? new ColumnFormat("My String", p.PropertyType) : null);
-            var propFormats = FormatAnalyser.Analyse(typeof(TestTypeWithRenderable), cols);
+            var propFormats = FormatAnalyser.Analyse(typeof(TestTypeWithRenderable), cols, true);
+            Approvals.Verify(ReportFormats(propFormats));
+        }
+
+        [Test]
+        public void PrimitivesProduceASingleColumn()
+        {
+            var propFormats = FormatAnalyser.Analyse(typeof(int), null, true);
             Approvals.Verify(ReportFormats(propFormats));
         }
 
@@ -85,7 +110,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
 
             foreach (var propertyColumnFormat in propFormats)
             {
-                sb.AppendFormat("{0,-11} = {1}", propertyColumnFormat.Property.Name, propertyColumnFormat.Format);
+                sb.AppendFormat("{0,-11} = {1}", propertyColumnFormat.Property ==null ? "<null>" : propertyColumnFormat.Property.Name, propertyColumnFormat.Format);
                 sb.AppendLine();
             }
 

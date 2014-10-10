@@ -1,0 +1,1 @@
+﻿IntCol      = ColumnFormat("Defined Col", System.Int32, Right, 2DP, Actual 0, , Requested )

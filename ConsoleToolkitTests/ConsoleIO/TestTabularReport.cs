@@ -1,11 +1,15 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
+using ConsoleToolkit.ConsoleIO.ReportDefinitions;
+using ConsoleToolkit.Utilities;
 using ConsoleToolkitTests.ConsoleIO.UnitTestUtilities;
 using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
@@ -297,7 +301,7 @@ namespace ConsoleToolkitTests.ConsoleIO
 
             sb.AppendLine("With headings:");
             sb.AppendLine();
-            sb.Append(Report(data, 50, options: 0));
+            sb.Append(Report(data, 50));
             sb.AppendLine();
             sb.AppendLine();
             sb.AppendLine("Without headings:");
@@ -305,6 +309,46 @@ namespace ConsoleToolkitTests.ConsoleIO
 
             sb.Append(Report(data, 50, options: ReportFormattingOptions.OmitHeadings));
             sb.AppendLine();
+
+            Approvals.Verify(sb.ToString());
+        }
+
+        [Test]
+        public void AChildReportsIsRendered()
+        {
+            var data = Enumerable.Range(0, 1)
+                .AsReport(p => p.AddColumn(r => "X", cc => cc.Heading("Value"))
+                                .AddColumn(r => "Text", cc => cc.Heading("Text."))
+                                .AddChild(i => Enumerable.Range(0,2), cr => cr.AddColumn(i => i, cc => cc.Heading("Child Int"))));
+
+            var sb = new StringBuilder();
+
+            sb.Append(Report(data, 50));
+
+            Approvals.Verify(sb.ToString());
+        }
+
+        [Test]
+        public void APrimitiveProducesAOneColumnReport()
+        {
+            var data = Enumerable.Range(0, 15);
+
+            var sb = new StringBuilder();
+
+            sb.Append(Report(data, 50, 10));
+
+            Approvals.Verify(sb.ToString());
+        }
+
+        [Test]
+        public void APrimitiveOneColumnReportCanHaveAColumnFormat()
+        {
+            var data = Enumerable.Range(0, 15)
+                .AsReport(p => p.AddColumn(r => r, cc => cc.Heading("Int Value").LeftAlign()));
+
+            var sb = new StringBuilder();
+
+            sb.Append(Report(data, 50, 10));
 
             Approvals.Verify(sb.ToString());
         }
@@ -317,7 +361,6 @@ namespace ConsoleToolkitTests.ConsoleIO
             else
                 output.WrapLine("Some wrapped text containing the index number :{0} and some more stuff.", number);
 
-
             var table = Enumerable.Range(0, number)
                 .Select(i => new { Text = string.Format("Nested row {0}", i)});
             output.FormatTable(table, ReportFormattingOptions.StretchColumns);
@@ -329,12 +372,44 @@ namespace ConsoleToolkitTests.ConsoleIO
         {
             var report = RulerFormatter.MakeRuler(width)
                          + Environment.NewLine
-                         + string.Join(string.Empty, TabularReport.Format(data, null, width, numRowsToUseForSizing, options, columnDivider));
+                         + string.Join(string.Empty, TabularReport.Format<T, T>(data, null, width, numRowsToUseForSizing, options, columnDivider));
             Console.WriteLine(report);
             return report;
         }
 
-        private static string CachedReport<T>(CachedRows<T> data, int width = 80, ReportFormattingOptions options = ReportFormattingOptions.Default, string columnDivider = null)
+        private static string Report<T>(Report<T> report, int width = 80, int numRowsToUseForSizing = 0)
+        {
+            var formatMethod = MakeFormatMethodInfo(report);
+            var parameters = new object[]
+                                 {
+                                     report.Query,
+                                     report.Columns,
+                                     width,
+                                     numRowsToUseForSizing, //rows to use for sizing
+                                     report.Options,
+                                     report.ColumnDivider,
+                                     report.Children
+                                 };
+
+            var tabular = MethodInvoker.Invoke(formatMethod, null, parameters) as IEnumerable<string>;
+            var output = RulerFormatter.MakeRuler(width)
+                         + Environment.NewLine
+                         + string.Join(string.Empty, tabular);
+            return output;
+        }
+
+        private static MethodInfo MakeFormatMethodInfo<T>(Report<T> report)
+        {
+            var genericMethod = typeof(TabularReport)
+                .GetMethods(BindingFlags.Static | BindingFlags.Public)
+                .FirstOrDefault(m => m.Name == "Format"
+                                     && m.GetParameters()[0].ParameterType.GetInterfaces()
+                                                            .Any(i => i == typeof(IEnumerable)));
+            var formatMethod = genericMethod.MakeGenericMethod(report.RowType, typeof(T));
+            return formatMethod;
+        }
+
+        private static string CachedReport<T>(CachedRows<T> data, int width = 80, ReportFormattingOptions options = ReportFormattingOptions.Default | ReportFormattingOptions.IncludeAllColumns, string columnDivider = null)
         {
             var report = RulerFormatter.MakeRuler(width)
                          + Environment.NewLine

@@ -17,6 +17,8 @@ namespace ConsoleToolkit.ConsoleIO
         private List<ColumnFormat> _columns;
         private IEnumerable _query;
         private Type _output;
+        private List<BaseChildItem<T>> _children;
+        private Func<object, T> _rowGetter;
 
         public Report(IEnumerable<T> items, ReportParameters<T> reportParameters)
         {
@@ -24,8 +26,13 @@ namespace ConsoleToolkit.ConsoleIO
             _columns = reportParameters.ColumnSource.Columns.ToList();
             Options = reportParameters.Details.Options;
             ColumnDivider = reportParameters.Details.ColumnDivider;
+            _children = reportParameters.Children;
 
-            _query = ReportQueryBuilder.Build(_items, reportParameters.ColumnConfigs.Select(c => c.ValueExpression), out _output);
+            _query = ReportQueryBuilder.Build(_items, reportParameters.ColumnConfigs.Select(c => c.ValueExpression), out _output, out _rowGetter);
+            foreach (var baseChildItem in _children)
+            {
+                baseChildItem.SetOriginalRowExtractor(_rowGetter);
+            }
         }
 
         /// <summary>
@@ -42,6 +49,11 @@ namespace ConsoleToolkit.ConsoleIO
         /// The custom formatters for each column in the report.
         /// </summary>
         internal IEnumerable<ColumnFormat> Columns { get { return _columns; } }
+
+        /// <summary>
+        /// The defintions of this report's children.
+        /// </summary>
+        internal IEnumerable<BaseChildItem<T>> Children { get { return _children; } }
 
         /// <summary>
         /// The report options to apply for this report.

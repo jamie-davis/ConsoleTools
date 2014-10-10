@@ -41,7 +41,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
         private static int PerformCalculation<T>(int tabLength, int seperatorLength, Action<List<ColumnWidthNegotiator.ColumnSizerInfo>> applyRows)
         {
-            var columns = FormatAnalyser.Analyse(typeof (T), null);
+            var columns = FormatAnalyser.Analyse(typeof(T), null, true);
             var sizers = columns
                 .Select(c => new ColumnWidthNegotiator.ColumnSizerInfo(c, tabLength))
                 .ToList();
