@@ -45,12 +45,12 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
         public void FormatTable<T>(IEnumerable<T> items, ReportFormattingOptions options = ReportFormattingOptions.Default, string columnSeperator = null)
         {
-            _steps.Add(new FormatTableCommand<T>(items, options, columnSeperator));
+            _steps.Add(new FormatTableCommand<T, T>(items, options, columnSeperator));
         }
 
         public void FormatTable<T>(Report<T> report)
         {
-            throw new System.NotImplementedException();
+            _steps.Add(FormatTableCommandFactory.Make(report));
         }
 
         public void WriteLine()

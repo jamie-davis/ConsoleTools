@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Runtime.Serialization;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.ConsoleIO.Internal.ReportDefinitions;
 
@@ -62,28 +60,6 @@ namespace ConsoleToolkit.ConsoleIO.ReportDefinitions
         public abstract string Render(object item, int width);
 
         public abstract void SetOriginalRowExtractor(Func<object, T> rowGetter);
-    }
-
-    internal sealed class CachedRowChild<T> : BaseChildItem<CachedRow<T>>
-    {
-        private readonly BaseChildItem<T> _child;
-
-        public CachedRowChild(BaseChildItem<T> child)
-        {
-            _child = child;
-        }
-
-        public override string Render(object item, int width)
-        {
-            var cachedRowItem = (CachedRow<T>) item;
-            return _child.Render(cachedRowItem.RowItem, width);
-        }
-
-        public override void SetOriginalRowExtractor(Func<object, CachedRow<T>> rowGetter)
-        {
-            Func<object, T> childRowGetter = o => rowGetter(o).RowItem;
-            _child.SetOriginalRowExtractor(childRowGetter);
-        }
     }
 
     internal sealed class Child<T, TValueItem> : BaseChildItem<T>

@@ -1,9 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.ConsoleIO.ReportDefinitions;
@@ -45,6 +43,31 @@ namespace ConsoleToolkit.ConsoleIO
             {
                     var statistics = new Statistics();
                     foreach (var l in DoFormat(data, columns, width, numRowsToUseForSizing, 4, options, columnDivider, statistics, childReports))
+                        yield return l;
+            }
+        }
+
+        /// <summary>
+        /// Format a collection of rows as a tabular report.
+        /// </summary>
+        /// <typeparam name="T">The item type.</typeparam>
+        /// <typeparam name="TChild">The original row type for child reports.</typeparam>
+        /// <param name="data">The cached row items.</param>
+        /// <param name="columns">Column formatting information. If this is not provided, default column formats will be used.</param>
+        /// <param name="width">The width that the report is allowed to occupy.</param>
+        /// <param name="statistics">An object that captures statistics about the formatting process.</param>
+        /// <param name="options">Options that control the formatting of the report.</param>
+        /// <param name="columnDivider">A string that will be used to divide columns.</param>
+        /// <param name="childReports">The nested reports that should be output for each table row.</param>
+        /// <returns>The formatted report lines.</returns>
+        public static IEnumerable<string> Format<T, TChild>(CachedRows<T> data, IEnumerable<ColumnFormat> columns,
+            int width, Statistics statistics, ReportFormattingOptions options = ReportFormattingOptions.Default, string columnDivider = null, IEnumerable<BaseChildItem<TChild>> childReports = null)
+        {
+            var culture = Thread.CurrentThread.CurrentCulture;
+
+            using (new TempCulture(culture))
+            {
+                    foreach (var l in DoFormatFromCachedRows(data, columns, width, 0, 4, options, columnDivider, statistics, childReports))
                         yield return l;
             }
         }
@@ -99,17 +122,14 @@ namespace ConsoleToolkit.ConsoleIO
             wrappingLineBreaks.WordWrapLineBreaks = addedLineBreaks;
         }
 
-        private static IEnumerable<string> DoFormatFromCachedRows<T>(CachedRows<T> data, IEnumerable<ColumnFormat> specifiedColumns, int width, int numRowsToUseForSizing, int tabLength, ReportFormattingOptions options, string columnDivider, Statistics statistics, IEnumerable<BaseChildItem<T>> childReports)
+        private static IEnumerable<string> DoFormatFromCachedRows<T, TChild>(CachedRows<T> data, IEnumerable<ColumnFormat> specifiedColumns, int width, int numRowsToUseForSizing, int tabLength, ReportFormattingOptions options, string columnDivider, Statistics statistics, IEnumerable<BaseChildItem<TChild>> childReports)
         {
             var columns = FormatAnalyser.Analyse(typeof(T), specifiedColumns, IncludeAllColumns(specifiedColumns, options));
-            var cachedChildren = childReports == null
-                ? null
-                : childReports.Select(child => new CachedRowChild<T>(child));
             Action<ColumnWidthNegotiator, CachedRow<T>> addRowAction = (sz, item) => sz.AddRow(item);
 
             return FormatFromDataFeed(data.GetRows(), width, numRowsToUseForSizing, 
-                tabLength, columns, addRowAction, options, columnDivider, statistics, 
-                cachedChildren);
+                tabLength, columns, addRowAction, options, columnDivider, statistics,
+                childReports);
         }
 
         private static IEnumerable<string> DoFormat<T, TChild>(IEnumerable<T> data, IEnumerable<ColumnFormat> specifiedColumns, int width, int numRowsToUseForSizing, int tabLength, ReportFormattingOptions options, string columnDivider, Statistics statistics, IEnumerable<BaseChildItem<TChild>> childReports)

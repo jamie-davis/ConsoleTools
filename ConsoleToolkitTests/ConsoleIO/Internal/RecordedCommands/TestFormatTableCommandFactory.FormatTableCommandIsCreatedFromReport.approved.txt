@@ -1,0 +1,99 @@
+﻿Command type: FormatTableCommand`2
+
+String One                  String Two            
+--------------------------- ----------------------
+String value 0                                    
+
+    Char
+    ----
+
+String value 1              N                     
+
+    Char
+    ----
+    N   
+
+String value 2              NN                    
+
+    Char
+    ----
+    N   
+    N   
+
+String value 3              NNN                   
+
+    Char
+    ----
+    N   
+    N   
+    N   
+
+String value 4              NNNN                  
+
+    Char
+    ----
+    N   
+    N   
+    N   
+    N   
+
+String value 5              NNNNN                 
+
+    Char
+    ----
+    N   
+    N   
+    N   
+    N   
+    N   
+
+String value 6              NNNNNN                
+
+    Char
+    ----
+    N   
+    N   
+    N   
+    N   
+    N   
+    N   
+
+String value 7              NNNNNNN               
+
+    Char
+    ----
+    N   
+    N   
+    N   
+    N   
+    N   
+    N   
+    N   
+
+String value 8              NNNNNNNN              
+
+    Char
+    ----
+    N   
+    N   
+    N   
+    N   
+    N   
+    N   
+    N   
+    N   
+
+String value 9              NNNNNNNNN             
+
+    Char
+    ----
+    N   
+    N   
+    N   
+    N   
+    N   
+    N   
+    N   
+    N   
+    N   
+

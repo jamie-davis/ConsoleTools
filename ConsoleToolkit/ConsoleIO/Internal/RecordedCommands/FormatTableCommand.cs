@@ -19,18 +19,21 @@ namespace ConsoleToolkit.ConsoleIO.Internal.RecordedCommands
     /// be able to render itself correctly. However, if it cannot and it must resort to stacking, then
     /// the result will not be very readable. That is the consequence of having a lot of data but very 
     /// little space.</remarks>
-    /// <typeparam name="T">The table row data type.</typeparam>
-    internal class FormatTableCommand<T> : IRecordedCommand
+    /// <typeparam name="T">The table row data type. In reports, this will be a generated type.</typeparam>
+    /// <typeparam name="TChild">The child report element type. This will be different to the row data type in reports, where it will be the original row type rather than the generated report type. See <see cref="Report{T}"/>.</typeparam>
+    internal class FormatTableCommand<T, TChild> : IRecordedCommand
     {
         private readonly ReportFormattingOptions options;
-        private readonly IEnumerable<BaseChildItem<T>> _childReports;
+        private readonly IEnumerable<ColumnFormat> _columns;
+        private readonly IEnumerable<BaseChildItem<TChild>> _childReports;
         private readonly string _columnSeperator;
         private readonly CachedRows<T> _data;
         private int _minReportWidth;
 
-        public FormatTableCommand(IEnumerable<T> data, ReportFormattingOptions options, string columnSeperator, IEnumerable<BaseChildItem<T>> childReports = null)
+        public FormatTableCommand(IEnumerable<T> data, ReportFormattingOptions options, string columnSeperator, IEnumerable<BaseChildItem<TChild>> childReports = null, IEnumerable<ColumnFormat> columns = null)
         {
             this.options = options;
+            _columns = columns;
             _childReports = childReports == null ? null : childReports.ToList();
             _columnSeperator = columnSeperator ?? TabularReport.DefaultColumnDivider;
             _data = CachedRowsFactory.Make(data);
@@ -40,7 +43,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal.RecordedCommands
         public void Replay(ReplayBuffer buffer)
         {
             var  wrappedLineBreaks = new TabularReport.Statistics();
-            var report = TabularReport.Format(_data, null, buffer.Width, wrappedLineBreaks, options, _columnSeperator, _childReports);
+            var report = TabularReport.Format(_data, _columns, buffer.Width, wrappedLineBreaks, options, _columnSeperator, _childReports);
             foreach (var line in report)
             {
                 buffer.Write(line);

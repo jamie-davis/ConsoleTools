@@ -86,6 +86,7 @@
     <Compile Include="CommandLineInterpretation\TestPosixCommandLineParser.cs" />
     <Compile Include="ConsoleIO\ConsoleInputAcceptanceTests.cs" />
     <Compile Include="ConsoleIO\Internal\RecordedCommands\TestFormatTableCommand.cs" />
+    <Compile Include="ConsoleIO\Internal\RecordedCommands\TestFormatTableCommandFactory.cs" />
     <Compile Include="ConsoleIO\Internal\RecordedCommands\TestNewLineCommand.cs" />
     <Compile Include="ConsoleIO\Internal\RecordedCommands\TestRenderCommand.cs" />
     <Compile Include="ConsoleIO\Internal\RecordedCommands\TestReplayBuffer.cs" />

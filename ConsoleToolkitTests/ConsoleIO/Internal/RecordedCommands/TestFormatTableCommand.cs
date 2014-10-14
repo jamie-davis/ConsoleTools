@@ -55,6 +55,22 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal.RecordedCommands
             Approvals.Verify(_buffer.ToLines().JoinWith(Environment.NewLine));
         }
 
+        [Test]
+        public void WriteCommandReplaysReportOperation()
+        {
+            var data = Enumerable.Range(1, 10)
+                     .AsReport(rep => rep.AddColumn(i => i, col => col.Heading("Number")));
+
+            var command = FormatTableCommandFactory.Make(data);
+            
+            _buffer.Write("XXX");
+            _buffer.NewLine();
+            command.Replay(_buffer);
+            _buffer.Write("YYY");
+
+            Approvals.Verify(_buffer.ToLines().JoinWith(Environment.NewLine));
+        }
+
 
         [Test]
         public void FirstWordLengthIsCalculated()
