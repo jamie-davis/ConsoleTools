@@ -15,7 +15,6 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         private bool _idealMinWidthValid;
         private Dictionary<int, int> _cachedMaxLineBreaks;
 
-
         public ColumnSizer(Type columnType, ColumnFormat format = null, int tabLength = 4)
         {
             _columnType = columnType;
@@ -37,11 +36,17 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
         /// <summary>
         /// Answers the question: how wide does the column have to be to format every value with no more than <see cref="maxLineBreaks"/>?
+        /// <para/>
+        /// This method needs to take the width restrictions into account, so for some columns, it may be that the width returned actually
+        /// results in a different number of linebreaks than expected.
         /// </summary>
         /// <param name="maxLineBreaks">The maximum desired number of line breaks. Zero means "no line breaks allowed".</param>
         /// <returns>The number of characters the column needs to be to limit the line breaks to the specified count.</returns>
         public int MinWidth(int maxLineBreaks)
         {
+            if (_format.FixedWidth > 0)
+                return _format.FixedWidth;
+
             if (_columnType == typeof(string))
             {
                 return _values.Max(v => FitToLines(v, maxLineBreaks));
@@ -62,6 +67,13 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
         private int CalculateIdealMinWidth()
         {
+            if (_format.FixedWidth > 0)
+            {
+                _idealMinWidth = _format.FixedWidth;
+                _idealMinWidthValid = true;
+                return _idealMinWidth;
+            }
+
             if (_columnType == typeof(string))
             {
                 _idealMinWidth = _values.Max(v => v.GetLongestWordLength(_tabLength));
@@ -104,21 +116,6 @@ namespace ConsoleToolkit.ConsoleIO.Internal
                 else
                     width = tooNarrow + (tooWide - tooNarrow) / 2;
             } while (true);
-
-            /*
-                        Func<int, int> measurer;
-                        if (v.RenderableValue != null)
-                            measurer = i => v.RenderableValue.CountWordWrapLineBreaks(_format, i);
-                        else
-                            measurer = i => ColumnWrapper.CountWordwrapLineBreaks(v.ValueWords(i, _tabLength), _format, i);
-
-                        for (var i = 1; i <= v.Width; i++)
-                        {
-                            if (measurer(i) <= maxLineBreaks) return i;
-                        }
-
-                        return v.Width;
-            */
         }
 
         public FormattingIntermediate GetSizeValue(int row)

@@ -59,5 +59,32 @@ namespace ConsoleToolkitTests.ConsoleIO
             Console.WriteLine(sb);
             Approvals.Verify(sb.ToString());
         }
+
+        [Test]
+        public void DefaultColumnRequiresWidthCalculatedFromData()
+        {
+            //Arrange
+            var format = new ColumnFormat("test", typeof(int));
+
+            //Act
+            var result = format.DetermineWidthFromData();
+
+            //Assert
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void FixedWidthColumnDoesNotRequireWidthCalculation()
+        {
+            //Arrange
+            var format = new ColumnFormat("test", typeof(int));
+
+            //Act
+            format.FixedWidth = 6;
+            var result = format.DetermineWidthFromData();
+
+            //Assert
+            Assert.That(result, Is.False);
+        }
     }
 }

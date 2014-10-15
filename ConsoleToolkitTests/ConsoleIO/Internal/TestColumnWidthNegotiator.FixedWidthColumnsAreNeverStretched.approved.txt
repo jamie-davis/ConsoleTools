@@ -1,0 +1,34 @@
+﻿                   Long
+Short              Stri
+String     Integer ng  
+------ ----------- ----
+AAAA0           30 AAAA
+                   AAA 
+                   AAAA
+                   AAAA
+                   AAAA
+                   AAAA
+AAAA1           30 AAAA
+                   AAA 
+                   AAAA
+                   AAAA
+                   AAAA
+                   AAAA
+AAAA2           30 AAAA
+                   AAA 
+                   AAAA
+                   AAAA
+                   AAAA
+                   AAAA
+AAAA3           30 AAAA
+                   AAA 
+                   AAAA
+                   AAAA
+                   AAAA
+                   AAAA
+AAAA4           30 AAAA
+                   AAA 
+                   AAAA
+                   AAAA
+                   AAAA
+                   AAAA

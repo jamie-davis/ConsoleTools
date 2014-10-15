@@ -85,5 +85,19 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
             //Assert
             Assert.That(config.ColumnFormat.DecimalPlaces, Is.EqualTo(6));
         }
+
+        [Test]
+        public void ColumnWidthCanBeSet()
+        {
+            //Arrange
+            var config = new ColumnConfig(_stringExp);
+            config.MakeFormat<string>();
+
+            //Act
+            config.Width(6);
+
+            //Assert
+            Assert.That(config.ColumnFormat.FixedWidth, Is.EqualTo(6));
+        }
     }
 }

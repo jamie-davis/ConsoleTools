@@ -170,7 +170,7 @@ namespace ConsoleToolkitTests.ConsoleIO
                 })
                 .ToList();
 
-            var report = Report(data, 19);
+            var report = Report(data, width: 19);
             Approvals.Verify(report);
         }
 
@@ -188,7 +188,7 @@ namespace ConsoleToolkitTests.ConsoleIO
                 })
                 .ToList();
 
-            var report = Report(data, 17);
+            var report = Report(data, width: 17);
             Approvals.Verify(report);
         }
 
@@ -205,7 +205,7 @@ namespace ConsoleToolkitTests.ConsoleIO
                 })
                 .ToList();
 
-            var report = Report(data, 20);
+            var report = Report(data, width: 20);
             Approvals.Verify(report);
         }
 
@@ -222,7 +222,7 @@ namespace ConsoleToolkitTests.ConsoleIO
                 })
                 .ToList();
 
-            var report = Report(data, 4);
+            var report = Report(data, width: 4);
             Approvals.Verify(report);
         }
 
@@ -237,7 +237,7 @@ namespace ConsoleToolkitTests.ConsoleIO
                 })
                 .ToList();
 
-            var report = Report(data, 9, 9);
+            var report = Report(data, width: 9, numRowsToUseForSizing: 9);
             Approvals.Verify(report);
         }
 
@@ -259,7 +259,35 @@ namespace ConsoleToolkitTests.ConsoleIO
             for (var width = 80; width > 0; width -= 5)
             {
                 sb.AppendLine(string.Format("Test width {0}:", width));
-                sb.Append(Report(data, width));
+                sb.Append(Report(data, width: width));
+                sb.AppendLine();
+            }
+            Approvals.Verify(sb.ToString());
+        }
+
+        [Test]
+        public void ReportWithFixedWidthColumnDegradesGracefully()
+        {
+            var data = Enumerable.Range(0, 1)
+                .Select(i => new
+                {
+                    Value = 1.5,
+                    LongText = "Long text that could be wrapped quite easily if required.",
+                    Short = "Short text",
+                    Date = DateTime.Parse("2014-05-07 19:59:20"),
+                })
+                .ToList();
+
+            var cols = FormatAnalyser.Analyse(data.First().GetType(), null, true);
+            cols[0].Format.FixedWidth = 10;
+            cols[1].Format.FixedWidth = 10;
+
+            var sb = new StringBuilder();
+
+            for (var width = 80; width > 0; width -= 5)
+            {
+                sb.AppendLine(string.Format("Test width {0}:", width));
+                sb.Append(Report(data, width, columnFormats: cols.Select(c => c.Format)));
                 sb.AppendLine();
             }
             Approvals.Verify(sb.ToString());
@@ -280,7 +308,7 @@ namespace ConsoleToolkitTests.ConsoleIO
 
             var sb = new StringBuilder();
 
-            sb.Append(Report(data, 50, columnDivider: "XXX"));
+            sb.Append(Report(data, width: 50, columnDivider: "XXX"));
             sb.AppendLine();
 
             Approvals.Verify(sb.ToString());
@@ -301,13 +329,13 @@ namespace ConsoleToolkitTests.ConsoleIO
 
             sb.AppendLine("With headings:");
             sb.AppendLine();
-            sb.Append(Report(data, 50));
+            sb.Append(Report(data, width: 50));
             sb.AppendLine();
             sb.AppendLine();
             sb.AppendLine("Without headings:");
             sb.AppendLine();
 
-            sb.Append(Report(data, 50, options: ReportFormattingOptions.OmitHeadings));
+            sb.Append(Report(data, width: 50, options: ReportFormattingOptions.OmitHeadings));
             sb.AppendLine();
 
             Approvals.Verify(sb.ToString());
@@ -353,7 +381,7 @@ namespace ConsoleToolkitTests.ConsoleIO
 
             var sb = new StringBuilder();
 
-            sb.Append(Report(data, 50, 10));
+            sb.Append(Report(data, width: 50, numRowsToUseForSizing: 10));
 
             Approvals.Verify(sb.ToString());
         }
@@ -386,11 +414,12 @@ namespace ConsoleToolkitTests.ConsoleIO
             return output;
         }
 
-        private static string Report<T>(IEnumerable<T> data, int width = 80, int numRowsToUseForSizing = 0, ReportFormattingOptions options = ReportFormattingOptions.Default, string columnDivider = null)
+        private static string Report<T>(IEnumerable<T> data, int width = 80, int numRowsToUseForSizing = 0, ReportFormattingOptions options = ReportFormattingOptions.Default, string columnDivider = null, IEnumerable<ColumnFormat> columnFormats = null)
         {
             var report = RulerFormatter.MakeRuler(width)
                          + Environment.NewLine
-                         + string.Join(string.Empty, TabularReport.Format<T, T>(data, null, width, numRowsToUseForSizing, options, columnDivider));
+                         + string.Join(string.Empty, TabularReport.Format<T, T>(data, columnFormats, width, 
+                                            numRowsToUseForSizing, options, columnDivider));
             Console.WriteLine(report);
             return report;
         }

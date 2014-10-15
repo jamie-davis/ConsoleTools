@@ -115,6 +115,30 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         }
 
         [Test]
+        public void FixedColumnIdealMinWidthIsAlwaysFixed()
+        {
+            var sizer = new ColumnSizer(typeof(string), new ColumnFormat(type: typeof(string))  { FixedWidth = 4});
+            sizer.ColumnValue("XXXX XXXX");
+            sizer.ColumnValue("YYYYYY XXXXX");
+
+            var oldWidth = sizer.GetIdealMinimumWidth();
+            sizer.ColumnValue("YYYYYYY");
+
+            Assert.That(sizer.GetIdealMinimumWidth(), Is.EqualTo(4));
+        }
+
+        [Test]
+        public void FixedColumnMinWidthIsAlwaysFixed()
+        {
+            var sizer = new ColumnSizer(typeof(string), new ColumnFormat(type: typeof(string))  { FixedWidth = 4});
+            sizer.ColumnValue("XXXX XXXX");
+            sizer.ColumnValue("YYYYYY XXXXX");
+
+            var width = sizer.MinWidth(0);
+            Assert.That(width, Is.EqualTo(4));
+        }
+
+        [Test]
         public void RenderableColumnValuesAreNotConvertedToText()
         {
             var sizer = new ColumnSizer(typeof(string));

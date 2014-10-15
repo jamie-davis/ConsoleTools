@@ -1,0 +1,207 @@
+﻿Test width 80:
+----+----|----+----|----+----|----+----|----+----|----+----|----+----|----+----|
+     Value Long Text  Short      Date               
+---------- ---------- ---------- -------------------
+      1.50 Long text  Short text 07/05/2014 19:59:20
+           that could                               
+           be wrapped                               
+           quite                                    
+           easily if                                
+           required.                                
+
+Test width 75:
+----+----|----+----|----+----|----+----|----+----|----+----|----+----|----+
+     Value Long Text  Short      Date               
+---------- ---------- ---------- -------------------
+      1.50 Long text  Short text 07/05/2014 19:59:20
+           that could                               
+           be wrapped                               
+           quite                                    
+           easily if                                
+           required.                                
+
+Test width 70:
+----+----|----+----|----+----|----+----|----+----|----+----|----+----|
+     Value Long Text  Short      Date               
+---------- ---------- ---------- -------------------
+      1.50 Long text  Short text 07/05/2014 19:59:20
+           that could                               
+           be wrapped                               
+           quite                                    
+           easily if                                
+           required.                                
+
+Test width 65:
+----+----|----+----|----+----|----+----|----+----|----+----|----+
+     Value Long Text  Short      Date               
+---------- ---------- ---------- -------------------
+      1.50 Long text  Short text 07/05/2014 19:59:20
+           that could                               
+           be wrapped                               
+           quite                                    
+           easily if                                
+           required.                                
+
+Test width 60:
+----+----|----+----|----+----|----+----|----+----|----+----|
+     Value Long Text  Short      Date               
+---------- ---------- ---------- -------------------
+      1.50 Long text  Short text 07/05/2014 19:59:20
+           that could                               
+           be wrapped                               
+           quite                                    
+           easily if                                
+           required.                                
+
+Test width 55:
+----+----|----+----|----+----|----+----|----+----|----+
+     Value Long Text  Short      Date               
+---------- ---------- ---------- -------------------
+      1.50 Long text  Short text 07/05/2014 19:59:20
+           that could                               
+           be wrapped                               
+           quite                                    
+           easily if                                
+           required.                                
+
+Test width 50:
+----+----|----+----|----+----|----+----|----+----|
+     Value Long Text  Short    Date               
+---------- ---------- -------- -------------------
+      1.50 Long text  Short    07/05/2014 19:59:20
+           that could text                        
+           be wrapped                             
+           quite                                  
+           easily if                              
+           required.                              
+
+Test width 45:
+----+----|----+----|----+----|----+----|----+
+     Value Long Text  Short 
+---------- ---------- ------
+      1.50 Long text  Short  Date: 07/05/2014
+           that could text   19:59:20        
+           be wrapped                        
+           quite                             
+           easily if                         
+           required.                         
+
+Test width 40:
+----+----|----+----|----+----|----+----|
+     Value Long Text 
+---------- ----------
+      1.50 Long text  Short:     Short
+           that could text            
+           be wrapped Date: 07/05/2014
+           quite      19:59:20        
+           easily if                  
+           required.                  
+
+Test width 35:
+----+----|----+----|----+----|----+
+     Value
+----------
+      1.50 Long Text:  Long
+           text that could 
+           be wrapped quite
+           easily if       
+           required.       
+           Short:     Short
+           text            
+           Date: 07/05/2014
+           19:59:20        
+
+Test width 30:
+----+----|----+----|----+----|
+     Value
+----------
+      1.50 Long Text:  Long
+           text that could 
+           be wrapped quite
+           easily if       
+           required.       
+           Short:     Short
+           text            
+           Date: 07/05/2014
+           19:59:20        
+
+Test width 25:
+----+----|----+----|----+
+Value:               1.50
+Long Text: Long text that
+could be wrapped quite   
+easily if required.      
+Short:         Short text
+Date: 07/05/2014 19:59:20
+
+Test width 20:
+----+----|----+----|
+Value:          1.50
+Long Text: Long text
+that could be       
+wrapped quite easily
+if required.        
+Short:    Short text
+Date:     07/05/2014
+19:59:20            
+
+Test width 15:
+----+----|----+
+Value:     1.50
+Long Text: Long
+text that could
+be wrapped     
+quite easily if
+required.      
+Short:    Short
+text           
+Date:          
+07/05/2014     
+19:59:20       
+
+Test width 10:
+----+----|
+Value:  1.
+        50
+Long Text:
+Long text 
+that could
+be wrapped
+quite     
+easily if 
+required. 
+Short:    
+Short text
+Date:     
+07/05/2014
+19:59:20  
+
+Test width 5:
+----+
+Value
+:  1.
+     
+Long 
+Text:
+Long 
+text 
+that 
+could
+be   
+wrapp
+ed   
+quite
+easil
+y if 
+requi
+red. 
+Short
+:    
+Short
+text 
+Date:
+07/05
+/2014
+19:59
+:20  
+

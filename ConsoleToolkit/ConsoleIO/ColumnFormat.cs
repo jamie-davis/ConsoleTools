@@ -14,7 +14,7 @@ namespace ConsoleToolkit.ConsoleIO
         public int ActualWidth { get; private set; }
         public string FormatTemplate { get; private set; }
         public string Width { get; private set; }
-        public bool DisplayAsChild { get; set; }
+        public int FixedWidth { get; set; }
 
         /// <summary>
         /// Constructor. All parameters other than heading are optional, and designed to be set by name. For example:
@@ -53,6 +53,11 @@ namespace ConsoleToolkit.ConsoleIO
                         Alignment = ColumnAlign.Left;
                 }
             }
+        }
+
+        public bool DetermineWidthFromData()
+        {
+            return FixedWidth == 0;
         }
 
         private bool IsNumeric(Type type)

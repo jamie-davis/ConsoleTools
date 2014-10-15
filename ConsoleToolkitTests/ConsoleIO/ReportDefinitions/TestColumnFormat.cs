@@ -36,5 +36,16 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
             //Assert
             Assert.That(format.ColumnFormat.Type, Is.EqualTo(typeof(int)));
         }
+
+        [Test]
+        public void DefaultColumnFormatHasNoFixedWidth()
+        {
+            //Arrange
+            var format = new ColumnConfig(null);
+            format.MakeFormat<int>();
+
+            //Assert
+            Assert.That(format.ColumnFormat.FixedWidth, Is.EqualTo(0));
+        }
     }
 }

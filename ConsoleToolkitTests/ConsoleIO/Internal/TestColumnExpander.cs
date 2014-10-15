@@ -107,5 +107,17 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             var report = TabularReportRenderTool.Report(_parameters, _data);
             Approvals.Verify(_initialReport + ruler + report);
         }
+
+        [Test]
+        public void FixedWidthColumnsAreNotExpanded()
+        {
+            const int width = 43;
+            _parameters.Columns.First(c => c.Format.Heading == "Long String").Format.FixedWidth = 4;
+            ColumnExpander.FillAvailableSpace(width, _seperatorOverhead, _parameters, true);
+
+            var ruler = RulerFormatter.MakeRuler(width) + Environment.NewLine;
+            var report = TabularReportRenderTool.Report(_parameters, _data);
+            Approvals.Verify(_initialReport + ruler + report);
+        }
     }
 }

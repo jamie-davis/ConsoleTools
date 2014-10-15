@@ -18,7 +18,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         /// <param name="maximiseWidth">True to systematically use all of the available width when sizing the columns.</param>
         public static void FillAvailableSpace(int width, int seperatorOverhead, ColumnSizingParameters parameters, bool maximiseWidth)
         {
-            var columnPriorityList = parameters.Sizers.ToList();
+            var columnPriorityList = parameters.Sizers.Where(s => s.PropertyColumnFormat.Format.DetermineWidthFromData()).ToList();
             while (CurrentWidth(seperatorOverhead, parameters.Sizers, parameters.StackedColumnWidth) < width)
             {
                 if (!WidenBasedOnLineBreaks(columnPriorityList) 

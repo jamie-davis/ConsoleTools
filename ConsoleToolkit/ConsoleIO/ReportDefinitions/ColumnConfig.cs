@@ -48,6 +48,16 @@ namespace ConsoleToolkit.ConsoleIO.ReportDefinitions
         }
 
         /// <summary>
+        /// Indicates that the column must have a fixed width.
+        /// </summary>
+        /// <returns></returns>
+        public ColumnConfig Width(int n)
+        {
+            ColumnFormat.FixedWidth = n;
+            return this;
+        }
+
+        /// <summary>
         /// Set the heading text for the column.
         /// </summary>
         public ColumnConfig Heading(string heading)

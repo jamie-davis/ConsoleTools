@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ApprovalTests;
 using ApprovalTests.Reporters;
+using ApprovalUtilities.Utilities;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkitTests.ConsoleIO.UnitTestUtilities;
@@ -151,6 +152,72 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             var output = TabularReportRenderTool.ReportSizingData(cwn);
             Console.WriteLine(output);
             Approvals.Verify(output);
+        }
+
+        [Test]
+        public void FixedWidthColumnsAreNeverStretched()
+        {
+            var longStringColFormat = _formats.First(f => f.Property.Name == "LongString").Format;
+            longStringColFormat.FixedWidth = 4;
+            longStringColFormat.SetActualWidth(4);
+            var cwn = new ColumnWidthNegotiator(_formats, 1);
+            var items = Enumerable.Range(0, 5)
+                .Select(i => new TestType("AAAA" + i, "AAAAAAA AAAAAAAA AAAAAAAA"))
+                .ToList();
+
+            cwn.AddHeadings();
+            foreach (var item in items)
+            {
+                cwn.AddRow(item);
+            }
+            cwn.CalculateWidths(40);
+
+            var output = TabularReportRenderTool.Report(cwn, items);
+            Approvals.Verify(output);
+        }
+
+        [Test]
+        public void FixedWidthColumnsAreNeverShrunk()
+        {
+            var longStringColFormat = _formats.First(f => f.Property.Name == "LongString").Format;
+            longStringColFormat.FixedWidth = 25;
+
+            var cwn = new ColumnWidthNegotiator(_formats, 1);
+            var items = Enumerable.Range(0, 5)
+                .Select(i => new TestType("AAAA" + i, "AAAAAAA AAAAAAAA AAAA"))
+                .ToList();
+
+            cwn.AddHeadings();
+            foreach (var item in items)
+            {
+                cwn.AddRow(item);
+            }
+            cwn.CalculateWidths(40);
+
+            var output = TabularReportRenderTool.Report(cwn, items);
+            Approvals.Verify(output);
+        }
+
+        [Test]
+        public void FixedWidthColumnsCanBeStacked()
+        {
+            var longStringColFormat = _formats.Last().Format;
+            longStringColFormat.FixedWidth = 35;
+
+            var cwn = new ColumnWidthNegotiator(_formats, 1);
+            var items = Enumerable.Range(0, 5)
+                .Select(i => new TestType("AAAA" + i, "AAAAAAA AAAAAAAA AAAA"))
+                .ToList();
+
+            cwn.AddHeadings();
+            foreach (var item in items)
+            {
+                cwn.AddRow(item);
+            }
+            cwn.CalculateWidths(40);
+
+            var output = cwn.StackedColumns.Select(sc => sc.Property.Name).JoinWith(", ");
+            Assert.That(output, Is.EqualTo("LongString"));
         }
     }
 }

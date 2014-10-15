@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,7 +8,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
     /// </summary>
     internal class ColumnWidthNegotiator
     {
-        public class ColumnSizerInfo
+        internal class ColumnSizerInfo
         {
             public PropertyColumnFormat PropertyColumnFormat { get; private set; }
             public ColumnSizer Sizer { get; private set; }
