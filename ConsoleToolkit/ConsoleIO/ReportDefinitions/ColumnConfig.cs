@@ -58,6 +58,25 @@ namespace ConsoleToolkit.ConsoleIO.ReportDefinitions
         }
 
         /// <summary>
+        /// Indicates that the column has a minimum width.
+        /// </summary>
+        /// <returns></returns>
+        public ColumnConfig MinWidth(int n)
+        {
+            ColumnFormat.MinWidth = n;
+            return this;
+        }
+        /// <summary>
+        /// Indicates that the column has a maximum width.
+        /// </summary>
+        /// <returns></returns>
+        public ColumnConfig MaxWidth(int n)
+        {
+            ColumnFormat.MaxWidth = n;
+            return this;
+        }
+
+        /// <summary>
         /// Set the heading text for the column.
         /// </summary>
         public ColumnConfig Heading(string heading)

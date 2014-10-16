@@ -18,7 +18,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
     {
         private List<PropertyColumnFormat> _formats;
 
-        class TestType
+        private class TestType
         {
             public string ShortString { get; set; }
             public int Integer { get; set; }
@@ -35,7 +35,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         [SetUp]
         public void TestFixtureSetUp()
         {
-            _formats = FormatAnalyser.Analyse(typeof(TestType), null, true);
+            _formats = FormatAnalyser.Analyse(typeof (TestType), null, true);
         }
 
         [Test]
@@ -218,6 +218,50 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
 
             var output = cwn.StackedColumns.Select(sc => sc.Property.Name).JoinWith(", ");
             Assert.That(output, Is.EqualTo("LongString"));
+        }
+
+        [Test]
+        public void MinWidthColumnsAreNotShrunkPastMinimum()
+        {
+            var longStringColFormat = _formats.First(f => f.Property.Name == "Integer").Format;
+            longStringColFormat.MinWidth = 9;
+
+            var cwn = new ColumnWidthNegotiator(_formats, 1);
+            var items = Enumerable.Range(0, 5)
+                .Select(i => new TestType("AAAA" + i, "AAAAAAA AAAAAAAA AAAA"))
+                .ToList();
+
+            cwn.AddHeadings();
+            foreach (var item in items)
+            {
+                cwn.AddRow(item);
+            }
+            cwn.CalculateWidths(30);
+
+            var output = TabularReportRenderTool.Report(cwn, items);
+            Approvals.Verify(output);
+        }
+
+        [Test]
+        public void MinWidthColumnsCanBeWiderThanMinimum()
+        {
+            var longStringColFormat = _formats.First(f => f.Property.Name == "LongString").Format;
+            longStringColFormat.MinWidth = 9;
+
+            var cwn = new ColumnWidthNegotiator(_formats, 1);
+            var items = Enumerable.Range(0, 5)
+                .Select(i => new TestType("AAAA" + i, "AAAAAAA AAAAAAAA AAAA"))
+                .ToList();
+
+            cwn.AddHeadings();
+            foreach (var item in items)
+            {
+                cwn.AddRow(item);
+            }
+            cwn.CalculateWidths(30);
+
+            var output = TabularReportRenderTool.Report(cwn, items);
+            Approvals.Verify(output);
         }
     }
 }

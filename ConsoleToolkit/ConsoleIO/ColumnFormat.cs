@@ -15,6 +15,8 @@ namespace ConsoleToolkit.ConsoleIO
         public string FormatTemplate { get; private set; }
         public string Width { get; private set; }
         public int FixedWidth { get; set; }
+        public int MinWidth { get; set; }
+        public int MaxWidth { get; set; }
 
         /// <summary>
         /// Constructor. All parameters other than heading are optional, and designed to be set by name. For example:

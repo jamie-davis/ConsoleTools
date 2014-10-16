@@ -99,5 +99,33 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
             //Assert
             Assert.That(config.ColumnFormat.FixedWidth, Is.EqualTo(6));
         }
+
+        [Test]
+        public void ColumnMinWidthCanBeSet()
+        {
+            //Arrange
+            var config = new ColumnConfig(_stringExp);
+            config.MakeFormat<string>();
+
+            //Act
+            config.MinWidth(6);
+
+            //Assert
+            Assert.That(config.ColumnFormat.MinWidth, Is.EqualTo(6));
+        }
+
+        [Test]
+        public void ColumnMaxWidthCanBeSet()
+        {
+            //Arrange
+            var config = new ColumnConfig(_stringExp);
+            config.MakeFormat<string>();
+
+            //Act
+            config.MaxWidth(8);
+
+            //Assert
+            Assert.That(config.ColumnFormat.MaxWidth, Is.EqualTo(8));
+        }
     }
 }

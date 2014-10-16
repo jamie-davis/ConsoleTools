@@ -75,6 +75,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         private static bool WidenBasedOnLineBreaks(List<ColumnWidthNegotiator.ColumnSizerInfo> columnPriorityList)
         {
             var lineBreaks = columnPriorityList
+                .Where(c => c.PropertyColumnFormat.Format.MaxWidth == 0 || c.PropertyColumnFormat.Format.ActualWidth < c.PropertyColumnFormat.Format.MaxWidth)
                 .Select(s => new {Sizer = s, MaxBreaks = s.Sizer.GetMaxLineBreaks(s.PropertyColumnFormat.Format.ActualWidth)})
                 .Where(l => l.MaxBreaks > 0)
                 .OrderByDescending(l => l.MaxBreaks)

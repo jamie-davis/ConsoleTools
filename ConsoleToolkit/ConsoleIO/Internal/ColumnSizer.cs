@@ -44,10 +44,16 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         /// <returns>The number of characters the column needs to be to limit the line breaks to the specified count.</returns>
         public int MinWidth(int maxLineBreaks)
         {
-            if (_format.FixedWidth > 0)
-                return _format.FixedWidth;
+            var minWidth = GetFixedMinWidth();
+            if (minWidth > 0)
+                return minWidth;
 
-            if (_columnType == typeof(string))
+            return Math.Max(ComputeMinWidthFromData(maxLineBreaks), _format.MinWidth);
+        }
+
+        private int ComputeMinWidthFromData(int maxLineBreaks)
+        {
+            if (_columnType == typeof (string))
             {
                 return _values.Max(v => FitToLines(v, maxLineBreaks));
             }
@@ -67,9 +73,10 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
         private int CalculateIdealMinWidth()
         {
-            if (_format.FixedWidth > 0)
+            var fixedWidth = GetFixedMinWidth();
+            if (fixedWidth > 0)
             {
-                _idealMinWidth = _format.FixedWidth;
+                _idealMinWidth = fixedWidth;
                 _idealMinWidthValid = true;
                 return _idealMinWidth;
             }
@@ -85,6 +92,12 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             _idealMinWidthValid = true;
             return _idealMinWidth;
 
+        }
+
+        private int GetFixedMinWidth()
+        {
+            var fixedWidth = _format.FixedWidth > 0 ? _format.FixedWidth : _format.MinWidth;
+            return fixedWidth;
         }
 
         private string FormatValue(object v)

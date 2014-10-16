@@ -19,6 +19,11 @@ namespace ConsoleToolkit.ConsoleIO.Internal
                 Sizer = new ColumnSizer(propertyType, pcf.Format, tabLength);
                 PropertyColumnFormat = pcf;
             }
+
+            public override string ToString()
+            {
+                return string.Format("ColumnSizerInfo: {0}, W:{1}", PropertyColumnFormat.Format.Heading, PropertyColumnFormat.Format.ActualWidth);
+            }
         }
 
         private readonly ColumnSizingParameters _parameters = new ColumnSizingParameters();

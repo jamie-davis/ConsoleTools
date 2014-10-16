@@ -119,5 +119,17 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             var report = TabularReportRenderTool.Report(_parameters, _data);
             Approvals.Verify(_initialReport + ruler + report);
         }
+
+        [Test]
+        public void ColumnsAreNotExpandedBeyondMaxWidth()
+        {
+            const int width = 43;
+            _parameters.Columns.First(c => c.Format.Heading == "Long String").Format.MaxWidth = 13;
+            ColumnExpander.FillAvailableSpace(width, _seperatorOverhead, _parameters, true);
+
+            var ruler = RulerFormatter.MakeRuler(width) + Environment.NewLine;
+            var report = TabularReportRenderTool.Report(_parameters, _data);
+            Approvals.Verify(_initialReport + ruler + report);
+        }
     }
 }

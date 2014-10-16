@@ -1,0 +1,13 @@
+﻿Short                         
+String Integer Long String    
+------ ------- ---------------
+AAAA0       26 AAAAAAA        
+               AAAAAAAA AAAA  
+AAAA1       26 AAAAAAA        
+               AAAAAAAA AAAA  
+AAAA2       26 AAAAAAA        
+               AAAAAAAA AAAA  
+AAAA3       26 AAAAAAA        
+               AAAAAAAA AAAA  
+AAAA4       26 AAAAAAA        
+               AAAAAAAA AAAA  

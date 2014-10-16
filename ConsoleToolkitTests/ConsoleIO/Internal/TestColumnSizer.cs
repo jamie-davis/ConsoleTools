@@ -139,6 +139,30 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         }
 
         [Test]
+        public void MinWidthColumnIdealMinWidthIsAlwaysMinimum()
+        {
+            var sizer = new ColumnSizer(typeof(string), new ColumnFormat(type: typeof(string))  { MinWidth = 6});
+            sizer.ColumnValue("XXXX XXXX");
+            sizer.ColumnValue("YYYYYY XXXXX");
+
+            var oldWidth = sizer.GetIdealMinimumWidth();
+            sizer.ColumnValue("YYYYYYY");
+
+            Assert.That(sizer.GetIdealMinimumWidth(), Is.EqualTo(6));
+        }
+
+        [Test]
+        public void MinWidthColumnMinWidthIsAlwaysMinimum()
+        {
+            var sizer = new ColumnSizer(typeof(string), new ColumnFormat(type: typeof(string)) { MinWidth = 6 });
+            sizer.ColumnValue("XXXX XXXX");
+            sizer.ColumnValue("YYYYYY XXXXX");
+
+            var width = sizer.MinWidth(0);
+            Assert.That(width, Is.EqualTo(6));
+        }
+
+        [Test]
         public void RenderableColumnValuesAreNotConvertedToText()
         {
             var sizer = new ColumnSizer(typeof(string));
