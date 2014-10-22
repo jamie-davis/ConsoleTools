@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleToolkit.ConsoleIO.Internal
 {
@@ -10,5 +11,10 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         public PropertyStackColumnSizer StackSizer { get; set; }
         public int StackedColumnWidth { get; set; }
         public List<PropertyColumnFormat> Columns { get; set; }
+
+        public bool ProportionalColumnSizingRequired
+        {
+            get { return Sizers.Any(s => s.WidthIsProportional()); }
+        }
     }
 }

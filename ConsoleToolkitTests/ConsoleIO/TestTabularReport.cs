@@ -294,6 +294,37 @@ namespace ConsoleToolkitTests.ConsoleIO
         }
 
         [Test]
+        public void ReportWithProportionalWidthColumnsDegradesGracefully()
+        {
+            var data = Enumerable.Range(0, 1)
+                .Select(i => new
+                {
+                    Value = 1.5,
+                    LongText = "Long text that could be wrapped quite easily if required.",
+                    Short = "Short text",
+                    Date = DateTime.Parse("2014-05-07 19:59:20"),
+                })
+                .ToList();
+
+            var cols = FormatAnalyser.Analyse(data.First().GetType(), null, true);
+            cols[0].Format.ProportionalWidth = 10;
+            cols[1].Format.ProportionalWidth = 10;
+            cols[0].Format.MinWidth = 4;
+            cols[0].Format.MaxWidth = 15;
+            cols[1].Format.MinWidth = 4;
+
+            var sb = new StringBuilder();
+
+            for (var width = 80; width > 0; width -= 5)
+            {
+                sb.AppendLine(string.Format("Test width {0}:", width));
+                sb.Append(Report(data, width, columnFormats: cols.Select(c => c.Format)));
+                sb.AppendLine();
+            }
+            Approvals.Verify(sb.ToString());
+        }
+
+        [Test]
         public void ColumnsCanBeDividedWithCustomText()
         {
             var data = Enumerable.Range(0, 1)

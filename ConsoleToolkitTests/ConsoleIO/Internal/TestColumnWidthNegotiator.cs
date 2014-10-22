@@ -263,5 +263,29 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             var output = TabularReportRenderTool.Report(cwn, items);
             Approvals.Verify(output);
         }
+
+        [Test]
+        public void ProportionalColumnsShareTheAvailableSpace()
+        {
+            var longStringColFormat = _formats.First(f => f.Property.Name == "LongString").Format;
+            var shortStringColFormat = _formats.First(f => f.Property.Name == "ShortString").Format;
+            longStringColFormat.ProportionalWidth = 1;
+            shortStringColFormat.ProportionalWidth = 1;
+
+            var cwn = new ColumnWidthNegotiator(_formats, 1);
+            var items = Enumerable.Range(0, 5)
+                .Select(i => new TestType("AAAA" + i, "AAAAAAA AAAAAAAA AAAA"))
+                .ToList();
+
+            cwn.AddHeadings();
+            foreach (var item in items)
+            {
+                cwn.AddRow(item);
+            }
+            cwn.CalculateWidths(29);
+
+            var output = TabularReportRenderTool.Report(cwn, items);
+            Approvals.Verify(output);
+        }
     }
 }

@@ -85,6 +85,7 @@
     <Compile Include="CommandLineInterpretation\TestParserResult.cs" />
     <Compile Include="CommandLineInterpretation\TestPosixCommandLineParser.cs" />
     <Compile Include="ConsoleIO\ConsoleInputAcceptanceTests.cs" />
+    <Compile Include="ConsoleIO\ConsoleOutputAcceptanceTests.cs" />
     <Compile Include="ConsoleIO\Internal\RecordedCommands\TestFormatTableCommand.cs" />
     <Compile Include="ConsoleIO\Internal\RecordedCommands\TestFormatTableCommandFactory.cs" />
     <Compile Include="ConsoleIO\Internal\RecordedCommands\TestNewLineCommand.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="ConsoleIO\Internal\TestFormattingIntermediate.cs" />
     <Compile Include="ConsoleIO\Internal\TestInstanceConstructor.cs" />
     <Compile Include="ConsoleIO\Internal\TestMinReportWidthCalculator.cs" />
+    <Compile Include="ConsoleIO\Internal\TestProportionalColumnSizer.cs" />
     <Compile Include="ConsoleIO\Internal\TestReadInputImpl.cs" />
     <Compile Include="ConsoleIO\Internal\TestReadInputItem.cs" />
     <Compile Include="ConsoleIO\Internal\TestReadValue.cs" />

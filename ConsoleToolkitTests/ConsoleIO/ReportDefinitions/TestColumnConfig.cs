@@ -127,5 +127,19 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
             //Assert
             Assert.That(config.ColumnFormat.MaxWidth, Is.EqualTo(8));
         }
+
+        [Test]
+        public void ColumnProportionalWidthCanBeSet()
+        {
+            //Arrange
+            var config = new ColumnConfig(_stringExp);
+            config.MakeFormat<string>();
+
+            //Act
+            config.ProportionalWidth(8.4);
+
+            //Assert
+            Assert.That(config.ColumnFormat.ProportionalWidth, Is.EqualTo(8.4));
+        }
     }
 }

@@ -76,6 +76,12 @@ namespace ConsoleToolkit.ConsoleIO.ReportDefinitions
             return this;
         }
 
+        public ColumnConfig ProportionalWidth(double proportion)
+        {
+            ColumnFormat.ProportionalWidth = proportion;
+            return this;
+        }
+
         /// <summary>
         /// Set the heading text for the column.
         /// </summary>

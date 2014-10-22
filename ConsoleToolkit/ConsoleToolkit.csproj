@@ -150,6 +150,7 @@
     <Compile Include="ConsoleIO\Internal\MinReportWidthCalculator.cs" />
     <Compile Include="ConsoleIO\Internal\OptionDefinition.cs" />
     <Compile Include="ConsoleIO\Internal\PropertyNameConverter.cs" />
+    <Compile Include="ConsoleIO\Internal\ProportionalColumnSizer.cs" />
     <Compile Include="ConsoleIO\Internal\ReadInputImpl.cs" />
     <Compile Include="ConsoleIO\Internal\ReadInputItem.cs" />
     <Compile Include="ConsoleIO\Internal\ReadValue.cs" />

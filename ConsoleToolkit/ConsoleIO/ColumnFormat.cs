@@ -17,6 +17,7 @@ namespace ConsoleToolkit.ConsoleIO
         public int FixedWidth { get; set; }
         public int MinWidth { get; set; }
         public int MaxWidth { get; set; }
+        public double ProportionalWidth { get; set; }
 
         /// <summary>
         /// Constructor. All parameters other than heading are optional, and designed to be set by name. For example:

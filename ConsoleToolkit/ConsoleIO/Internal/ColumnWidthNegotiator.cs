@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,6 +24,11 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             public override string ToString()
             {
                 return string.Format("ColumnSizerInfo: {0}, W:{1}", PropertyColumnFormat.Format.Heading, PropertyColumnFormat.Format.ActualWidth);
+            }
+
+            public bool WidthIsProportional()
+            {
+                return PropertyColumnFormat.Format.FixedWidth == 0 && PropertyColumnFormat.Format.ProportionalWidth > 0.0;
             }
         }
 
@@ -88,8 +94,20 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             AvailableWidth = width;
             SizeColumns(width);
 
-            var maximiseWidth = (options & ReportFormattingOptions.StretchColumns) > 0;
-            StretchColumnsToFillWidth(width, maximiseWidth);
+            if (_parameters.ProportionalColumnSizingRequired)
+            {
+                SizeProportionalColumns(width);
+            }
+            else
+            {
+                var maximiseWidth = (options & ReportFormattingOptions.StretchColumns) > 0;
+                StretchColumnsToFillWidth(width, maximiseWidth);
+            }
+        }
+
+        private void SizeProportionalColumns(int width)
+        {
+            ProportionalColumnSizer.Size(width, SeperatorOverhead(), _parameters);
         }
 
         private void SizeColumns(int width)
