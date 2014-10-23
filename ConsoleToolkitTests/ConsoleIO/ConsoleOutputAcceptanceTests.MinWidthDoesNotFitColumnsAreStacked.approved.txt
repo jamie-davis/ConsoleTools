@@ -1,0 +1,63 @@
+﻿----+----|----+----|----+----|----+----|----+----|----+----
+Character  Name Length Backwards                           
+---------- ----------- ----------                          
+Alpha                5 ahplA      Repeated:    Alpha       
+                                  Alpha Alpha Alpha        
+                                  Alpha                    
+Beta                 4 ateB       Repeated:     Beta       
+                                  Beta Beta Beta           
+Gamma                5 ammaG      Repeated:    Gamma       
+                                  Gamma Gamma Gamma        
+                                  Gamma                    
+Delta                5 atleD      Repeated:    Delta       
+                                  Delta Delta Delta        
+                                  Delta                    
+Epsilon              7 nolispE    Repeated:  Epsilon       
+                                  Epsilon Epsilon          
+                                  Epsilon Epsilon          
+                                  Epsilon Epsilon          
+Zeta                 4 ateZ       Repeated:     Zeta       
+                                  Zeta Zeta Zeta           
+Eta                  3 atE        Repeated:  Eta Eta       
+                                  Eta                      
+Theta                5 atehT      Repeated:    Theta       
+                                  Theta Theta Theta        
+                                  Theta                    
+Iota                 4 atoI       Repeated:     Iota       
+                                  Iota Iota Iota           
+Kappa                5 appaK      Repeated:    Kappa       
+                                  Kappa Kappa Kappa        
+                                  Kappa                    
+Lambda               6 adbmaL     Repeated:   Lambda       
+                                  Lambda Lambda            
+                                  Lambda Lambda            
+                                  Lambda                   
+Mu                   2 uM         Repeated:    Mu Mu       
+Nu                   2 uN         Repeated:    Nu Nu       
+Xi                   2 iX         Repeated:    Xi Xi       
+Omicron              7 norcimO    Repeated:  Omicron       
+                                  Omicron Omicron          
+                                  Omicron Omicron          
+                                  Omicron Omicron          
+Pi                   2 iP         Repeated:    Pi Pi       
+Rho                  3 ohR        Repeated:  Rho Rho       
+                                  Rho                      
+Sigma                5 amgiS      Repeated:    Sigma       
+                                  Sigma Sigma Sigma        
+                                  Sigma                    
+Tau                  3 uaT        Repeated:  Tau Tau       
+                                  Tau                      
+Upsilon              7 nolispU    Repeated:  Upsilon       
+                                  Upsilon Upsilon          
+                                  Upsilon Upsilon          
+                                  Upsilon Upsilon          
+Phi                  3 ihP        Repeated:  Phi Phi       
+                                  Phi                      
+Chi                  3 ihC        Repeated:  Chi Chi       
+                                  Chi                      
+Psi                  3 isP        Repeated:  Psi Psi       
+                                  Psi                      
+Omega                5 agemO      Repeated:    Omega       
+                                  Omega Omega Omega        
+                                  Omega                    
+                                                           

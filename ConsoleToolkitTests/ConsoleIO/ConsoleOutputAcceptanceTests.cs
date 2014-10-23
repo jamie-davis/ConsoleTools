@@ -47,6 +47,10 @@ namespace ConsoleToolkitTests.ConsoleIO
                         case 60:
                             FixedColumnsThatRequiredSixtyChars(adapter);
                             break;
+
+                        case 61:
+                            ColumnsHaveMinWidthToFillSixtyChars(adapter);
+                            break;
                     }
                 }
 
@@ -60,6 +64,19 @@ namespace ConsoleToolkitTests.ConsoleIO
                                                           col => col.Heading("Backwards").Width(10))
                                                       .AddColumn(a => string.Join(" ", Enumerable.Repeat(a, a.Length)),
                                                           col => col.Heading("Repeated").Width(27)));
+                    adapter.FormatTable(report);
+                }
+
+                private void ColumnsHaveMinWidthToFillSixtyChars(IConsoleAdapter adapter)
+                {
+                    var report = _data.AsReport(p => p.AddColumn(a => a,
+                                                          col => col.Heading("Character").MinWidth(10))
+                                                      .AddColumn(a => a.Length,
+                                                          col => col.Heading("Name Length").MinWidth(10))
+                                                      .AddColumn(a => new string(a.Reverse().ToArray()),
+                                                          col => col.Heading("Backwards").MinWidth(10))
+                                                      .AddColumn(a => string.Join(" ", Enumerable.Repeat(a, a.Length)),
+                                                          col => col.Heading("Repeated").MinWidth(27)));
                     adapter.FormatTable(report);
                 }
             }
@@ -103,6 +120,32 @@ namespace ConsoleToolkitTests.ConsoleIO
 
             //Act
             UnitTestAppUtils.Run<Program1>(Args("-Test 60"), _console);
+
+            //Assert
+            Approvals.Verify(_console.GetBuffer());
+        }
+
+        [Test]
+        public void MinWidthDoesNotFitColumnsAreStacked()
+        {
+            //Arrange
+            SetConsoleWidth(59);
+
+            //Act
+            UnitTestAppUtils.Run<Program1>(Args("-Test 61"), _console);
+
+            //Assert
+            Approvals.Verify(_console.GetBuffer());
+        }
+
+        [Test]
+        public void MinWidthThatFillsWholeLineIsFormatted()
+        {
+            //Arrange
+            SetConsoleWidth(60);
+
+            //Act
+            UnitTestAppUtils.Run<Program1>(Args("-Test 61"), _console);
 
             //Assert
             Approvals.Verify(_console.GetBuffer());
