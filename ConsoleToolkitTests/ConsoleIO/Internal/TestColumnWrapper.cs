@@ -235,6 +235,18 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         }
 
         [Test]
+        public void RightAlignedLinesWithExcessiveColumnWidthAreExpandedToCorrectLength()
+        {
+            var c = new ColumnFormat("h", typeof (string), ColumnAlign.Right);
+            c.SetActualWidth(20);
+            var value = (("Red" + Environment.NewLine + "Lines").Cyan() + Environment.NewLine + "lines").BGDarkRed() + "Clear";
+            var wrapped = ColumnWrapper.WrapValue(value, c, 10).Select(l => "-->" + l + "<--");
+            var result = FormatResult(value, wrapped, 10, 3);
+            Console.WriteLine(result);
+            Approvals.Verify(result);
+        }
+
+        [Test]
         public void ColouredWordsTooLongForALineAreCorrectlyChunked()
         {
             var c = new ColumnFormat("h", typeof (string));

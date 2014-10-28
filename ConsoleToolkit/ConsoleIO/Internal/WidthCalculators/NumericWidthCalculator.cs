@@ -5,7 +5,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal.WidthCalculators
     /// <summary>
     /// Calculate defaults for numeric column widths.
     /// </summary>
-    public static class NumericWidthCalculator
+    internal static class NumericWidthCalculator
     {
         public static int Min(ColumnFormat format)
         {

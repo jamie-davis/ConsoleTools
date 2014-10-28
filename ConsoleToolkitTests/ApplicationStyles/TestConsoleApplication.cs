@@ -7,6 +7,7 @@ using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.ConsoleIO;
+using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.ConsoleIO.Testing;
 using ConsoleToolkit.Properties;
 using ConsoleToolkitTests.TestingUtilities;

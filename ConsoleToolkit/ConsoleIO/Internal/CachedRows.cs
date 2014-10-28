@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.Utilities;
 
-namespace ConsoleToolkit.ConsoleIO
+namespace ConsoleToolkit.ConsoleIO.Internal
 {
     /// <summary>
     /// Data cached from an <see cref="IEnumerable{T}"/> collection. This store can be used to repeatedly format
@@ -13,7 +12,7 @@ namespace ConsoleToolkit.ConsoleIO
     /// <seealso cref="CachedColumn"/>
     /// </summary>
     /// <typeparam name="T">The original row type.</typeparam>
-    public class CachedRows<T>
+    internal class CachedRows<T>
     {
         private readonly List<CachedRow<T>> _rows;
 
@@ -31,7 +30,7 @@ namespace ConsoleToolkit.ConsoleIO
     /// <summary>
     /// Static class exposing a factory method that allows caches of anonymous types to be constructed.
     /// </summary>
-    public static class CachedRowsFactory
+    internal static class CachedRowsFactory
     {
         public static CachedRows<T> Make<T>(IEnumerable<T> rows)
         {
@@ -44,7 +43,7 @@ namespace ConsoleToolkit.ConsoleIO
     /// <seealso cref="CachedColumn"/>
     /// </summary>
     /// <typeparam name="T">The original row's type.</typeparam>
-    public class CachedRow<T>
+    internal class CachedRow<T>
     {
         public CachedRow(T item)
         {
@@ -61,7 +60,7 @@ namespace ConsoleToolkit.ConsoleIO
     /// A cached column value. Used in <see cref="CachedRow{T}"/>.
     /// <seealso cref="CachedRows{T}"/>
     /// </summary>
-    public class CachedColumn
+    internal class CachedColumn
     {
         public PropertyInfo Property { get; private set; }
         public object Value { get; private set; }

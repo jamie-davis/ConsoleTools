@@ -231,7 +231,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
             if (format.ActualWidth == 0) return lines.ToArray();
 
-            return lines.Select(l => new {Line = l, Width = format.ActualWidth + (l.Length - ColourString.Length(l))})
+            return lines.Select(l => new {Line = l, Width = Math.Min(format.ActualWidth, columnWidth) + (l.Length - ColourString.Length(l))})
                 .Select(l => ExpandLine(format, l.Line, l.Width))
                 .ToArray();
         }

@@ -115,7 +115,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             do
             {
                 var breaks = v.RenderableValue != null
-                                 ? v.RenderableValue.CountWordWrapLineBreaks(_format, width)
+                                 ? v.RenderableValue.CountWordWrapLineBreaks(width)
                                  : ColumnWrapper.CountWordwrapLineBreaks(v, _format, width);
                 if (breaks <= maxLineBreaks)
                     tooWide = width;

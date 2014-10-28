@@ -201,7 +201,7 @@ Test width 5:
 ----+
 Value
 :  1.
-     
+   50
 Long 
 Text:
 Long 

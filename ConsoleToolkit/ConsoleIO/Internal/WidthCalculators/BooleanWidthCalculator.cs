@@ -5,7 +5,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal.WidthCalculators
     /// <summary>
     /// Calculate the defaults for Boolean column widths.
     /// </summary>
-    public static class BooleanWidthCalculator
+    internal static class BooleanWidthCalculator
     {
         public static int Max(ColumnFormat format)
         {

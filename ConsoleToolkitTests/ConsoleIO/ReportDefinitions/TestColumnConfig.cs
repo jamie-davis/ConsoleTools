@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using ConsoleToolkit.ConsoleIO;
+using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.ConsoleIO.ReportDefinitions;
 using NUnit.Framework;
 

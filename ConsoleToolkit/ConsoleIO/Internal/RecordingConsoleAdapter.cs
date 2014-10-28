@@ -82,7 +82,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             return _steps.Max(s => s.GetLongestWordLength(tabLength));
         }
 
-        public int CountWordWrapLineBreaks(ColumnFormat format, int width)
+        public int CountWordWrapLineBreaks(int width)
         {
             return RenderToBuffer(width).WordWrapLineBreakCount;
         }

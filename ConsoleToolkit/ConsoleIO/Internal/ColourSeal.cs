@@ -1,10 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
-using ConsoleToolkit.ConsoleIO.Internal;
 
-namespace ConsoleToolkit.ConsoleIO
+namespace ConsoleToolkit.ConsoleIO.Internal
 {
     /// <summary>
     /// This class "seals" a set of lines with colours, so that the colour changes cannot "leak" out if the

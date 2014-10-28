@@ -1,0 +1,13 @@
+﻿RightAlignedLinesWithExcessiveColumnWidthAreExpandedToCorrectLength
+
+Original:
+>PsR>PScRed
+Lines<p
+lines<pClear
+
+Wrapped:
+   1234567890
+   ---------+
+-->       >PsRPScRed<--
+-->     Lines<p<--
+-->lines<pClear<--

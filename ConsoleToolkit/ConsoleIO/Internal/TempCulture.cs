@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using System.Threading;
 
-namespace ConsoleToolkit.ConsoleIO
+namespace ConsoleToolkit.ConsoleIO.Internal
 {
     /// <summary>
     /// Temporarily impose a change of culture within a using block. On disposal, the original culture is restored.

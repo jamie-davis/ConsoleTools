@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace ConsoleToolkit.ConsoleIO
+namespace ConsoleToolkit.ConsoleIO.Internal
 {
     /// <summary>
     /// This class is used to format values that are to be displayed in a column.
     /// </summary>
-    public class ColumnFormat
+    internal class ColumnFormat
     {
         public string Heading { get; internal set; }
         public Type Type { get; private set; }

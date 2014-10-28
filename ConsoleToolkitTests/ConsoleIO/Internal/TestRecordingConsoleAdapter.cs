@@ -177,7 +177,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             var recorder = MakeRecording();
             int wrappedLines;
             Console.WriteLine(recorder.Render(20, out wrappedLines).JoinWith(Environment.NewLine));
-            Assert.That(recorder.CountWordWrapLineBreaks(null, 20), Is.EqualTo(23));
+            Assert.That(recorder.CountWordWrapLineBreaks(20), Is.EqualTo(23));
         }
 
         private static RecordingConsoleAdapter MakeRecording()

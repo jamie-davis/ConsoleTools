@@ -1,6 +1,4 @@
-using ConsoleToolkit.ConsoleIO.Internal;
-
-namespace ConsoleToolkit.ConsoleIO
+namespace ConsoleToolkit.ConsoleIO.Internal
 {
     internal class ConsoleRedirectTester : IConsoleRedirectTester
     {

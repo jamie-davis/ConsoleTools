@@ -3,6 +3,7 @@ using System.IO;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.ConsoleIO;
+using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkitTests.ConsoleIO.UnitTestUtilities;
 using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;

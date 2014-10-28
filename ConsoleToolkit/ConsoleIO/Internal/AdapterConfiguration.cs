@@ -1,12 +1,11 @@
 using System;
-using System.Collections;
 
-namespace ConsoleToolkit.ConsoleIO
+namespace ConsoleToolkit.ConsoleIO.Internal
 {
     /// <summary>
     /// The global adapter configuration.
     /// </summary>
-    public static class AdapterConfiguration
+    internal static class AdapterConfiguration
     {
         internal const string PrefixAffinity = ">";
         internal const string SuffixAffinity = "<";

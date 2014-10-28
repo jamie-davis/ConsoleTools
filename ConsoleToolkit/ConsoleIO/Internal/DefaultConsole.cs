@@ -1,9 +1,8 @@
 using System;
 using System.IO;
 using System.Text;
-using ConsoleToolkit.ConsoleIO.Internal;
 
-namespace ConsoleToolkit.ConsoleIO
+namespace ConsoleToolkit.ConsoleIO.Internal
 {
     /// <summary>
     /// This implementation of the console interface is the default version, and interfaces with the actual console.

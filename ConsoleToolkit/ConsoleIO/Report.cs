@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.ConsoleIO.Internal.ReportDefinitions;
 using ConsoleToolkit.ConsoleIO.ReportDefinitions;
 

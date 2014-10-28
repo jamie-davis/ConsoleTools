@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace ConsoleToolkit.ConsoleIO
+namespace ConsoleToolkit.ConsoleIO.Internal
 {
     internal class RedirectedConsole : IConsoleInterface
     {

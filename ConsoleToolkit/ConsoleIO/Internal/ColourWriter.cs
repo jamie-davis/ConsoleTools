@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using ConsoleToolkit.ConsoleIO.Internal;
 
-namespace ConsoleToolkit.ConsoleIO
+namespace ConsoleToolkit.ConsoleIO.Internal
 {
     /// <summary>
     /// This class performs write operations on a <see cref="IConsoleOutInterface"/>. It implements all of the colour 

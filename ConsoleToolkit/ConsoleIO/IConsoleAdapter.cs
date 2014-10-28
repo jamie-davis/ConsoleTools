@@ -187,6 +187,6 @@ namespace ConsoleToolkit.ConsoleIO
         IEnumerable<string> Render(int width, out int wrappedLines);
         int GetFirstWordLength(int tabLength);
         int GetLongestWordLength(int tabLength);
-        int CountWordWrapLineBreaks(ColumnFormat format, int width);
+        int CountWordWrapLineBreaks(int width);
     }
 }

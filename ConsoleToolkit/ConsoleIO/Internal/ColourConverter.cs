@@ -1,11 +1,11 @@
 using System;
 
-namespace ConsoleToolkit.ConsoleIO
+namespace ConsoleToolkit.ConsoleIO.Internal
 {
     /// <summary>
     /// Translates console colours to and from the control sequence instruction equivalent.
     /// </summary>
-    public static class ColourConverter
+    internal static class ColourConverter
     {
         public static char Convert(ConsoleColor colour)
         {

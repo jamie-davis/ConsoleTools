@@ -89,7 +89,11 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             private void AddSuffixInstructionsToCurrent(List<ColourControlItem.ControlInstruction> instructions)
             {
                 if (_current == null)
+                {
                     _current = new SplitWord(0, 0, string.Empty);
+                    _current.AddPrefixInstructions(_cachedPrefixInstructions);
+                    _cachedPrefixInstructions.Clear();
+                }
 
                 _current.AddSuffixInstructions(instructions);
             }

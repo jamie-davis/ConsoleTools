@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using ConsoleToolkit.ConsoleIO.Internal;
 
 namespace ConsoleToolkit.ConsoleIO.ReportDefinitions
 {

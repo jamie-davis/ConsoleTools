@@ -314,7 +314,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         [Test]
         public void LeadingSpacesWithinColourInstructionsAreSoftSpaces()
         {
-            var testPhrase = " red".Red() +" green".Green() + " blue".Blue();
+            var testPhrase = " red".Red() + " green".Green() + " blue".Blue();
             var words = WordSplitter.Split(testPhrase, 4);
             var result = DescribeWords2(words);
             Console.WriteLine(result);
@@ -325,6 +325,22 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
                 + "[5,0,T:no<(Pop Black)]"                        // green
                 + "[0,1,T:no>(Push Black,SetForeground Blue)]"    // blank
                 + "[4,0,T:no<(Pop Black)]";                       // blue
+            Assert.That(result, Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void EmptyTextWithinColourControlItemsIsExtracted()
+        {
+            var testPhrase = " red".Red() + string.Empty.Green() + " blue".Blue();
+            var words = WordSplitter.Split(testPhrase, 4);
+            var result = DescribeWords2(words);
+            Console.WriteLine(result);
+            const string expected =
+                  "[0,1,T:no>(Push Black,SetForeground Red)]"               // blank
+                + "[3,0,T:no<(Pop Black)]"                                  // red
+                + "[0,0,T:no>(Push Black,SetForeground Green)<(Pop Black)]" // string.Empty
+                + "[0,1,T:no>(Push Black,SetForeground Blue)]"              // blank
+                + "[4,0,T:no<(Pop Black)]";                                 // blue
             Assert.That(result, Is.EqualTo(expected));
         }
 
