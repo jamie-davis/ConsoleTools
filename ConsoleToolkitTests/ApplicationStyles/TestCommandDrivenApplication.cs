@@ -11,6 +11,8 @@ using ConsoleToolkit.ConsoleIO.Testing;
 using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
 using DescriptionAttribute = ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.DescriptionAttribute;
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable ClassNeverInstantiated.Global
 
 namespace ConsoleToolkitTests.ApplicationStyles
 {
@@ -26,6 +28,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
         public class TestApp : CommandDrivenApplication
         {
             public static TestApp LastTestApp { get; set; }
+            public Exception Exception { get; set; }
             public bool Initialised { get; set; }
             public bool TestOptValue { get; set; }
 
@@ -40,6 +43,37 @@ namespace ConsoleToolkitTests.ApplicationStyles
             public class FailingCommand
             {
             }
+
+            [Command("T")]
+            public class ThrowingCommand
+            {
+            }
+
+            [Command("TSelf")]
+            public class SelfThrowingCommand
+            {
+                [CommandHandler]
+                public void SelfHandler()
+                {
+                    throw new Exception("Exception from throwing self handling command.");
+                }
+            }
+
+            [Command("TClass")]
+            public class ClassHandledThrowingCommand
+            {
+                
+            }
+
+            [CommandHandler]
+            public class ClassHandledThrowingCommandHandler
+            {
+                public void Handle(IConsoleAdapter console, IErrorAdapter error, ClassHandledThrowingCommand cmd)
+                {
+                    throw new Exception("Exception from throwing class handled command.");
+                }
+            }
+
 
             [Command("d")]
             public class SelfCommand
@@ -96,6 +130,12 @@ namespace ConsoleToolkitTests.ApplicationStyles
                 Initialised = true;
 
                 SetConfigTypeFilter(t => t.DeclaringType == GetType());
+                Toolkit.SetCommandExceptionHandler(ExceptionHandler);
+            }
+
+            private void ExceptionHandler(IConsoleAdapter console, IErrorAdapter error, Exception exception, object command)
+            {
+                Exception = exception;
             }
 
             public void HandleCommand(Command c)
@@ -106,6 +146,11 @@ namespace ConsoleToolkitTests.ApplicationStyles
             public void HandleCommand(FailingCommand c)
             {
                 Environment.ExitCode = 100;
+            }
+
+            public void HandleCommand(ThrowingCommand c)
+            {
+                throw new Exception("Exception from throwing command.");
             }
 
             protected override void OnCommandSuccess()
@@ -223,6 +268,29 @@ namespace ConsoleToolkitTests.ApplicationStyles
             {
                 SetConfigTypeFilter(t => t.DeclaringType == GetType());
                 HelpCommand<HelpMe>(h => null);
+            }
+        }
+
+        public class DefaultExceptionHandlerApp : CommandDrivenApplication
+        {
+            [Command("X")]
+            public class Command
+            {
+                [CommandHandler]
+                public void Handle()
+                {
+                    throw new Exception("Failure exception message");
+                }
+            }
+
+            public static void Main(string[] args)
+            {
+                Toolkit.Execute<DefaultExceptionHandlerApp>(args);
+            }
+
+            protected override void Initialise()
+            {
+                SetConfigTypeFilter(t => t.DeclaringType == GetType());
             }
         }
 
@@ -355,6 +423,56 @@ namespace ConsoleToolkitTests.ApplicationStyles
 
             //Assert
             Assert.That(TestApp.LastTestApp.PostSuccessCalled, Is.False);
+        }
+
+        [Test]
+        public void OnCommandSuccessIsNotCalledAfterThrowingCommand()
+        {
+            //Act
+            UnitTestAppUtils.Run<TestApp>(new[] { "T" }, new RedirectedConsole(ConsoleStream.Out));
+
+            //Assert
+            Assert.That(TestApp.LastTestApp.PostSuccessCalled, Is.False);
+        }
+
+        [Test]
+        public void ExceptionHandlerIsCalledWhenCommandThrows()
+        {
+            //Act
+            UnitTestAppUtils.Run<TestApp>(new[] { "T" }, new RedirectedConsole(ConsoleStream.Out));
+
+            //Assert
+            Assert.That(TestApp.LastTestApp.Exception.Message, Is.EqualTo("Exception from throwing command."));
+        }
+
+        [Test]
+        public void ExceptionHandlerIsCalledWhenSelfHandlerCommandThrows()
+        {
+            //Act
+            UnitTestAppUtils.Run<TestApp>(new[] { "TSelf" }, new RedirectedConsole(ConsoleStream.Out));
+
+            //Assert
+            Assert.That(TestApp.LastTestApp.Exception.Message, Is.EqualTo("Exception from throwing self handling command."));
+        }
+
+        [Test]
+        public void ExceptionHandlerIsCalledWhenClassHandlerThrows()
+        {
+            //Act
+            UnitTestAppUtils.Run<TestApp>(new[] { "TClass" }, new RedirectedConsole(ConsoleStream.Out));
+
+            //Assert
+            Assert.That(TestApp.LastTestApp.Exception.Message, Is.EqualTo("Exception from throwing class handled command."));
+        }
+
+        [Test]
+        public void DefaultExceptionHandlerDisplaysExceptionMessage()
+        {
+            //Act
+            UnitTestAppUtils.Run<DefaultExceptionHandlerApp>(new[] { "X" }, _console);
+
+            //Assert
+            Approvals.Verify(_console.GetBuffer());
         }
     }
 }

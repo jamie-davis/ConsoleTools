@@ -1,0 +1,5 @@
+﻿ConsoleToolkit: Processing halted due to                    
+ConsoleToolkit: exception:                                  
+ConsoleToolkit: Failure exception                           
+ConsoleToolkit: message                                     
+                                                            

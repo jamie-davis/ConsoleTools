@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.Utilities;
 
@@ -32,11 +33,9 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
                 var parameters = injector.GetParameters(_method, new [] {command});
                 MethodInvoker.Invoke(_method, _handler, parameters);
             }
-            catch (TargetInvocationException e)
+            catch (Exception e)
             {
-                if (e.InnerException != null)
-                    throw e.InnerException;
-                throw;
+                Toolkit.HandleException(e, command, injector);
             }
         }
     }

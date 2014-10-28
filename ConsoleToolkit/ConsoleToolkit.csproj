@@ -58,6 +58,7 @@
     <Compile Include="ApplicationStyles\Internals\CommandHandlerMustHaveDefaultConstructor.cs" />
     <Compile Include="ApplicationStyles\Internals\CommandsMayOnlyDeclareOneHandlerMethod.cs" />
     <Compile Include="ApplicationStyles\Internals\ConsoleApplicationBase.cs" />
+    <Compile Include="ApplicationStyles\Internals\DefaultCommandExceptionHandler.cs" />
     <Compile Include="ApplicationStyles\Internals\HelpCommandMustBePartOfConfiguration.cs" />
     <Compile Include="ApplicationStyles\Internals\ICommandHandler.cs" />
     <Compile Include="ApplicationStyles\Internals\MethodParameterInjector.cs" />

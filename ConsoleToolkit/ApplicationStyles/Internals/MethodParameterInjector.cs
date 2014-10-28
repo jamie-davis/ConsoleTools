@@ -63,5 +63,17 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
         {
             _instancesForSpecifiedTypes[typeof (T)] = instance;
         }
+
+        public T GetParameter<T>()
+        {
+            object value;
+            if (!_instancesForSpecifiedTypes.TryGetValue(typeof(T), out value))
+            {
+                var matchedType = _injectableReferences.FirstOrDefault(i => Matches(typeof (T), i.GetType()));
+                return matchedType == null ? default(T) : (T)matchedType;
+            }
+
+            return (T)value;
+        }
     }
 }

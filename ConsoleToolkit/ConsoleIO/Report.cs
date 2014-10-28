@@ -13,25 +13,23 @@ namespace ConsoleToolkit.ConsoleIO
     /// <typeparam name="T">The item type of the input enumerable.</typeparam>
     public class Report<T>
     {
-        private readonly IEnumerable<T> _items;
         private List<ColumnFormat> _columns;
         private IEnumerable _query;
         private Type _output;
         private List<BaseChildItem<T>> _children;
-        private Func<object, T> _rowGetter;
 
         public Report(IEnumerable<T> items, ReportParameters<T> reportParameters)
         {
-            _items = items;
             _columns = reportParameters.ColumnSource.Columns.ToList();
             Options = reportParameters.Details.Options;
             ColumnDivider = reportParameters.Details.ColumnDivider;
             _children = reportParameters.Children;
 
-            _query = ReportQueryBuilder.Build(_items, reportParameters.ColumnConfigs.Select(c => c.ValueExpression), out _output, out _rowGetter);
+            Func<object, T> rowGetter;
+            _query = ReportQueryBuilder.Build(items, reportParameters.ColumnConfigs.Select(c => c.ValueExpression), out _output, out rowGetter);
             foreach (var baseChildItem in _children)
             {
-                baseChildItem.SetOriginalRowExtractor(_rowGetter);
+                baseChildItem.SetOriginalRowExtractor(rowGetter);
             }
         }
 

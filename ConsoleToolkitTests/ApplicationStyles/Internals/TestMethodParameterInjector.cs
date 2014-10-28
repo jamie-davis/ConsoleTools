@@ -116,5 +116,30 @@ namespace ConsoleToolkitTests.ApplicationStyles.Internals
             injector.GetParameters(_method3, new object[] { this });
             Assert.That(injector.GetParameters(_method3, new object[] { this })[1], Is.SameAs(testImpl));
         }
+
+        [Test]
+        public void GetParameterReturnsAnInstanceMatchingTheTypeRequested()
+        {
+            var testImpl = new TestImpl();
+            var injector = new MethodParameterInjector(new object[] { "string", 5 });
+
+            injector.AddInstance<ITestInterface>(testImpl);
+
+            Assert.That(injector.GetParameter<ITestInterface>(), Is.SameAs(testImpl));
+        }
+
+        [Test]
+        public void GetParameterReturnsNullForAnUnknownType()
+        {
+            var injector = new MethodParameterInjector(new object[] { "string", 5 });
+            Assert.That(injector.GetParameter<ITestInterface>(), Is.Null);
+        }
+
+        [Test]
+        public void GetParameterReturnsTheDefaultForAnUnknownValueType()
+        {
+            var injector = new MethodParameterInjector(new object[] { "string", 5 });
+            Assert.That(injector.GetParameter<DateTime>(), Is.EqualTo(default(DateTime)));
+        }
     }
 }

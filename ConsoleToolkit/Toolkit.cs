@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using ConsoleToolkit.ApplicationStyles;
+using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
@@ -62,6 +64,12 @@ namespace ConsoleToolkit
             typeof(CommandDrivenApplication),
         };
 
+        internal static Action<IConsoleAdapter, IErrorAdapter, Exception, object> CommandExceptionHandler;
+
+        static Toolkit()
+        {
+            SetCommandExceptionHandler(DefaultCommandExceptionHandler.Handler);
+        }
 
         /// <summary>
         /// Reset the toolkit to its default state. Only useful to unit tests.
@@ -69,6 +77,12 @@ namespace ConsoleToolkit
         internal static void GlobalReset()
         {
             _options = new ToolkitOptions();
+            SetCommandExceptionHandler(DefaultCommandExceptionHandler.Handler);
+        }
+
+        public static void SetCommandExceptionHandler(Action<IConsoleAdapter, IErrorAdapter, Exception, object> handler)
+        {
+            CommandExceptionHandler = handler;
         }
 
         public static void Execute<T>(string[] args)
@@ -119,6 +133,15 @@ namespace ConsoleToolkit
 
                 type = type.BaseType;
             }
+        }
+
+        internal static void HandleException(Exception exception, object command, MethodParameterInjector injector)
+        {
+            if (Environment.ExitCode == 0)
+                Environment.ExitCode = 500;
+
+            if (CommandExceptionHandler != null)
+                CommandExceptionHandler(injector.GetParameter<IConsoleAdapter>(), injector.GetParameter<IErrorAdapter>(), exception, command);
         }
     }
 }

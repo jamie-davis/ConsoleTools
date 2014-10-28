@@ -30,6 +30,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
             public static TestApp LastTestApp { get; set; }
             public bool Initialised { get; set; }
             public bool TestOptValue { get; set; }
+            public Exception LastException { get; private set; }
 
             [Command]
             public class Command
@@ -39,6 +40,9 @@ namespace ConsoleToolkitTests.ApplicationStyles
 
                 [Option]
                 public bool Fail { get; [UsedImplicitly] set; }
+
+                [Option]
+                public bool Throw { get; [UsedImplicitly] set; }
             }
 
             public TestApp()
@@ -56,6 +60,12 @@ namespace ConsoleToolkitTests.ApplicationStyles
                 Initialised = true;
 
                 SetConfigTypeFilter(t => t.DeclaringType == GetType());
+                Toolkit.SetCommandExceptionHandler(ExceptionHandler);
+            }
+
+            private void ExceptionHandler(IConsoleAdapter console, IErrorAdapter error, Exception exception, object options)
+            {
+                LastException = exception;
             }
 
             public void HandleCommand(Command c)
@@ -63,6 +73,9 @@ namespace ConsoleToolkitTests.ApplicationStyles
                 TestOptValue = c.TestOpt;
                 if (c.Fail)
                     Environment.ExitCode = 100;
+
+                if (c.Throw)
+                    throw new Exception("TestApp exception.");
             }
 
             protected override void OnCommandSuccess()
@@ -392,10 +405,26 @@ namespace ConsoleToolkitTests.ApplicationStyles
         }
 
         [Test]
+        public void OnCommandFailureIsCalledAfterExceptionIsThrown()
+        {
+            UnitTestAppUtils.Run<TestApp>(new[] { "-Throw" }, _consoleOut);
+            Console.WriteLine(_consoleOut.GetBuffer());
+            Assert.That(TestApp.LastTestApp.CommandFailureCalled, Is.True);
+        }
+
+        [Test]
         public void OnCommandFailureIsNotCalledAfterSuccesfulRun()
         {
             UnitTestAppUtils.Run<TestApp>(new string[] {}, _consoleOut);
             Assert.That(TestApp.LastTestApp.CommandFailureCalled, Is.False);
+        }
+
+        [Test]
+        public void ExceptionHandlerIsCalledWhenExceptionIsThrownByCommandHandler()
+        {
+            UnitTestAppUtils.Run<TestApp>(new[] { "-Throw" }, _consoleOut);
+            Console.WriteLine(_consoleOut.GetBuffer());
+            Assert.That(TestApp.LastTestApp.LastException.Message, Is.EqualTo("TestApp exception."));
         }
 
     }

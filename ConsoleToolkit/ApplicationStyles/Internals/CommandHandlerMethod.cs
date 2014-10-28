@@ -29,11 +29,9 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
                 var parameters = injector.GetParameters(_method, new[] { command });
                 MethodInvoker.Invoke(_method, app, parameters);
             }
-            catch (TargetInvocationException e)
+            catch (Exception e)
             {
-                if (e.InnerException != null)
-                    throw e.InnerException;
-                throw;
+                Toolkit.HandleException(e, command, injector);
             }
         }
     }
@@ -56,11 +54,9 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
                 var parameters = injector.GetParameters(_method, new[] { command });
                 MethodInvoker.Invoke(_method, command, parameters);
             }
-            catch (TargetInvocationException e)
+            catch (Exception e)
             {
-                if (e.InnerException != null)
-                    throw e.InnerException;
-                throw;
+                Toolkit.HandleException(e, command, injector);
             }
         }
     }
