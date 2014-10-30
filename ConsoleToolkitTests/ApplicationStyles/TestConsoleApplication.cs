@@ -8,6 +8,7 @@ using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
+using ConsoleToolkit.Exceptions;
 using ConsoleToolkit.Properties;
 using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.TestingUtilities;

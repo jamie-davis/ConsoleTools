@@ -1,6 +1,6 @@
 using System;
 
-namespace ConsoleToolkit.CommandLineInterpretation
+namespace ConsoleToolkit.Exceptions
 {
     public class CustomParserNotFound : Exception
     {

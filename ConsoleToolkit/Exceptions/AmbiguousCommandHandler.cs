@@ -1,7 +1,7 @@
 ﻿using System;
 using ConsoleToolkit.Properties;
 
-namespace ConsoleToolkit.ApplicationStyles
+namespace ConsoleToolkit.Exceptions
 {
     public class AmbiguousCommandHandler : Exception
     {

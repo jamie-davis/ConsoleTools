@@ -1,6 +1,6 @@
 using System;
 
-namespace ConsoleToolkit.ConsoleIO
+namespace ConsoleToolkit.Exceptions
 {
     public class InvalidOperationForRedirectedConsole : Exception
     {

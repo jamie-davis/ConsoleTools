@@ -10,6 +10,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         internal class NoConstructorWithParametersMathingPropertyFound : Exception
         {
         }
+
         public static T MakeInstance<T2>(IEnumerable<T2> properties) where T2 : IPropertySource
         {
             var props = properties.Cast<IPropertySource>().ToList();

@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using ConsoleToolkit.Exceptions;
 using ConsoleToolkit.Utilities;
 
 namespace ConsoleToolkit.CommandLineInterpretation

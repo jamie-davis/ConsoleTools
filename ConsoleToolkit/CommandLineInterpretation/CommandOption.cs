@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ConsoleToolkit.Exceptions;
 using ConsoleToolkit.Utilities;
 
 namespace ConsoleToolkit.CommandLineInterpretation

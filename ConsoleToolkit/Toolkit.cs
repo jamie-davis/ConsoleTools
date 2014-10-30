@@ -10,6 +10,7 @@ using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
+using ConsoleToolkit.Exceptions;
 using ConsoleToolkit.Utilities;
 
 namespace ConsoleToolkit

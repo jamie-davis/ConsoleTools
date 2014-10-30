@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ConsoleToolkit.ApplicationStyles
+namespace ConsoleToolkit.Exceptions
 {
     public class CallOrderViolationException : Exception
     {

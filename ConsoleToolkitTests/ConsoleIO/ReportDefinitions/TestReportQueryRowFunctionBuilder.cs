@@ -3,6 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using ApprovalUtilities.Utilities;
 using ConsoleToolkit.ConsoleIO.Internal.ReportDefinitions;
+using ConsoleToolkit.Exceptions;
 using NUnit.Framework;
 
 namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions

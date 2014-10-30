@@ -1,6 +1,6 @@
 using System;
 
-namespace ConsoleToolkit.ApplicationStyles.Internals
+namespace ConsoleToolkit.Exceptions
 {
     internal class ParameterTypeCannotBeResolved : Exception
     {

@@ -4,6 +4,7 @@ using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.ConsoleIO;
+using ConsoleToolkit.Exceptions;
 
 namespace ConsoleToolkit.ApplicationStyles
 {

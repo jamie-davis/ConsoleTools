@@ -6,6 +6,7 @@ using ConsoleToolkit.ApplicationStyles;
 using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
+using ConsoleToolkit.Exceptions;
 using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
 

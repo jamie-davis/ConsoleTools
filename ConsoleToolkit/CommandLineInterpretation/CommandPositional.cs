@@ -1,4 +1,5 @@
 using System;
+using ConsoleToolkit.Exceptions;
 
 namespace ConsoleToolkit.CommandLineInterpretation
 {

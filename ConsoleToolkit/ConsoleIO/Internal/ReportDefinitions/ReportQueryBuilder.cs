@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using ConsoleToolkit.Exceptions;
 using ConsoleToolkit.Utilities;
 
 namespace ConsoleToolkit.ConsoleIO.Internal.ReportDefinitions
@@ -68,28 +69,5 @@ namespace ConsoleToolkit.ConsoleIO.Internal.ReportDefinitions
                        };
         }
 
-    }
-
-    internal class ReportQueryExpression
-    {
-        public Expression Expression { get; set; }
-        public Type ReturnType { get; set; }
-        public ParameterExpression ParameterVariable { get; set; }
-    }
-
-    internal class BadExpressionType : Exception
-    {
-        public BadExpressionType(Expression expression) 
-            : base(string.Format("The expression \"{0}\" is not acceptable in a report.", expression))
-        {
-        }
-    }
-
-    internal class MixedInputTypesInQueryExpressions : Exception
-    {
-    }
-
-    internal class ResultTypeCannotAcceptQuery : Exception
-    {
     }
 }

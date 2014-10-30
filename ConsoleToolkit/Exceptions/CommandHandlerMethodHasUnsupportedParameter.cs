@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace ConsoleToolkit.ApplicationStyles.Internals
+namespace ConsoleToolkit.Exceptions
 {
     internal class CommandHandlerMethodHasUnsupportedParameter : Exception
     {

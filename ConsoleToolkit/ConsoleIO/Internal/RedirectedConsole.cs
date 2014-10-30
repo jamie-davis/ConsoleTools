@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text;
+using ConsoleToolkit.Exceptions;
 
 namespace ConsoleToolkit.ConsoleIO.Internal
 {

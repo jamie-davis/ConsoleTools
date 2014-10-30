@@ -1,6 +1,6 @@
 using System;
 
-namespace ConsoleToolkit.CommandLineInterpretation
+namespace ConsoleToolkit.Exceptions
 {
     /// <summary>
     /// This exception is thrown when a parameter is specified with an unsupported type.

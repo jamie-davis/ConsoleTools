@@ -5,6 +5,7 @@ using ApprovalTests.Reporters;
 using ApprovalUtilities.Utilities;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
+using ConsoleToolkit.Exceptions;
 using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
 using Description = ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.DescriptionAttribute;

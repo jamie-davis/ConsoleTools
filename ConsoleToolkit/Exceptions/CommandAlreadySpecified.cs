@@ -1,7 +1,7 @@
 using System;
 using ConsoleToolkit.Properties;
 
-namespace ConsoleToolkit.CommandLineInterpretation
+namespace ConsoleToolkit.Exceptions
 {
     public class CommandAlreadySpecified : Exception
     {

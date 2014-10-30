@@ -1,5 +1,6 @@
 using System;
 using System.Linq.Expressions;
+using ConsoleToolkit.Exceptions;
 
 namespace ConsoleToolkit.CommandLineInterpretation
 {

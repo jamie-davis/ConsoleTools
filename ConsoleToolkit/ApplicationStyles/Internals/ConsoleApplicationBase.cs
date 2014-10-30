@@ -5,6 +5,7 @@ using System.Linq;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.ConsoleIO;
+using ConsoleToolkit.Exceptions;
 
 namespace ConsoleToolkit.ApplicationStyles.Internals
 {

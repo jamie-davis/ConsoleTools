@@ -1,6 +1,7 @@
 using System;
+using ConsoleToolkit.CommandLineInterpretation;
 
-namespace ConsoleToolkit.CommandLineInterpretation
+namespace ConsoleToolkit.Exceptions
 {
     public class DefaultValueMayOnlyBeSpecifiedForPositionalParameters : Exception
     {

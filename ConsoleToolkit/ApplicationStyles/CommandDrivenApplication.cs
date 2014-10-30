@@ -4,6 +4,7 @@ using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.ConsoleIO;
+using ConsoleToolkit.Exceptions;
 using ConsoleToolkit.Properties;
 
 namespace ConsoleToolkit.ApplicationStyles
@@ -150,14 +151,6 @@ namespace ConsoleToolkit.ApplicationStyles
                     }
                 }
             }
-        }
-    }
-
-    public class MultipleCommandsInvalid : Exception
-    {
-        public MultipleCommandsInvalid() : base("ConsoleApplication derived classes must not have multiple commands defined.")
-        {
-            
         }
     }
 }
