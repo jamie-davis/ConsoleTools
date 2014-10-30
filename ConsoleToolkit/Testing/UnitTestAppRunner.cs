@@ -4,12 +4,11 @@ using System.Reflection;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
-using ConsoleToolkit.ConsoleIO.Testing;
 using ConsoleToolkit.Utilities;
 
-namespace ConsoleToolkitTests.ApplicationStyles
+namespace ConsoleToolkit.Testing
 {
-    public static class UnitTestAppUtils
+    public static class UnitTestAppRunner
     {
         /// <summary>
         /// Run an instance of a console application derived type.

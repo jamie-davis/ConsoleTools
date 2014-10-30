@@ -6,7 +6,7 @@ using ApprovalTests.Reporters;
 using ApprovalUtilities.Utilities;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
-using ConsoleToolkit.ConsoleIO.Testing;
+using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
 

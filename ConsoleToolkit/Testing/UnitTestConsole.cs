@@ -1,6 +1,7 @@
-﻿using ConsoleToolkit.ConsoleIO.Internal;
+﻿using ConsoleToolkit.ConsoleIO;
+using ConsoleToolkit.ConsoleIO.Internal;
 
-namespace ConsoleToolkit.ConsoleIO.Testing
+namespace ConsoleToolkit.Testing
 {
     /// <summary>
     /// This class instantiates a console and an error adapter for use in testing command implementations. Both adapters write to the same

@@ -60,7 +60,6 @@
     <Compile Include="ApplicationStyles\Internals\TestMethodParameterInjector.cs" />
     <Compile Include="ApplicationStyles\TestCommandDrivenApplication.cs" />
     <Compile Include="ApplicationStyles\TestConsoleApplication.cs" />
-    <Compile Include="ApplicationStyles\UnitTestAppUtils.cs" />
     <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\AcceptanceTestConfig4Commands\DbOptions.cs" />
     <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\AcceptanceTestConfig4Commands\ExportCommand.cs" />
     <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\AcceptanceTestConfig4Commands\HelpCommand.cs" />

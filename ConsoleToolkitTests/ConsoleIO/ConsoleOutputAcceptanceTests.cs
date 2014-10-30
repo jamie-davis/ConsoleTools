@@ -6,9 +6,8 @@ using ConsoleToolkit.ApplicationStyles;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.ConsoleIO;
-using ConsoleToolkit.ConsoleIO.Testing;
 using ConsoleToolkit.Properties;
-using ConsoleToolkitTests.ApplicationStyles;
+using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.ConsoleIO.UnitTestUtilities;
 using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
@@ -119,7 +118,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             SetConsoleWidth(60);
 
             //Act
-            UnitTestAppUtils.Run<Program1>(Args("-Test 60"), _console);
+            UnitTestAppRunner.Run<Program1>(Args("-Test 60"), _console);
 
             //Assert
             Approvals.Verify(_console.GetBuffer());
@@ -132,7 +131,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             SetConsoleWidth(59);
 
             //Act
-            UnitTestAppUtils.Run<Program1>(Args("-Test 61"), _console);
+            UnitTestAppRunner.Run<Program1>(Args("-Test 61"), _console);
 
             //Assert
             Approvals.Verify(_console.GetBuffer());
@@ -145,7 +144,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             SetConsoleWidth(60);
 
             //Act
-            UnitTestAppUtils.Run<Program1>(Args("-Test 61"), _console);
+            UnitTestAppRunner.Run<Program1>(Args("-Test 61"), _console);
 
             //Assert
             Approvals.Verify(_console.GetBuffer());
@@ -158,7 +157,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             SetConsoleWidth(59);
 
             //Act
-            UnitTestAppUtils.Run<Program1>(Args("-Test 60"), _console);
+            UnitTestAppRunner.Run<Program1>(Args("-Test 60"), _console);
 
             //Assert
             Approvals.Verify(_console.GetBuffer());

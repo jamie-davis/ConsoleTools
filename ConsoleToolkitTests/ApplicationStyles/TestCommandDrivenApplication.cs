@@ -8,7 +8,7 @@ using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
-using ConsoleToolkit.ConsoleIO.Testing;
+using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
 using DescriptionAttribute = ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.DescriptionAttribute;
@@ -314,28 +314,28 @@ namespace ConsoleToolkitTests.ApplicationStyles
         [Test]
         public void InitialiseIsCalled()
         {
-            UnitTestAppUtils.Run<TestApp>();
+            UnitTestAppRunner.Run<TestApp>();
             Assert.That(TestApp.LastTestApp.Initialised);
         }
 
         [Test]
         public void CommandIsExecuted()
         {
-            UnitTestAppUtils.Run<TestApp>(new[] { "C", "-TestOpt" }, new RedirectedConsole(ConsoleStream.Out));
+            UnitTestAppRunner.Run<TestApp>(new[] { "C", "-TestOpt" }, new RedirectedConsole(ConsoleStream.Out));
             Assert.That(TestApp.LastTestApp.TestOptValue, Is.True);
         }
 
         [Test]
         public void SelfHandledCommandIsExecuted()
         {
-            UnitTestAppUtils.Run<TestApp>(new[] { "d", "positional", "-TestOpt:opt" }, _console);
+            UnitTestAppRunner.Run<TestApp>(new[] { "d", "positional", "-TestOpt:opt" }, _console);
             Approvals.Verify(_console.GetBuffer());
         }
 
         [Test]
         public void ClassHandledCommandIsExecuted()
         {
-            UnitTestAppUtils.Run<TestApp>(new[] { "e", "positional", "-TestOpt:opt" }, _console);
+            UnitTestAppRunner.Run<TestApp>(new[] { "e", "positional", "-TestOpt:opt" }, _console);
             Approvals.Verify(_console.GetBuffer());
         }
 
@@ -343,14 +343,14 @@ namespace ConsoleToolkitTests.ApplicationStyles
         public void StaticParsingConventionsAreUsed()
         {
             Toolkit.Options.ParsingConventions = CommandLineParserConventions.MsDosConventions;
-            UnitTestAppUtils.Run<TestApp>(new [] {"c","/TestOpt"});
+            UnitTestAppRunner.Run<TestApp>(new [] {"c","/TestOpt"});
             Assert.That(TestApp.LastTestApp.TestOptValue, Is.True);
         }
 
         [Test, ExpectedException(typeof(MultipleHandlersForCommand))]
         public void ApplicationWithDuplicateCommandHandlersWillNotInitialise()
         {
-            UnitTestAppUtils.Run<DuplicateCommandHandlerApp>(new string[] {});
+            UnitTestAppRunner.Run<DuplicateCommandHandlerApp>(new string[] {});
         }
 
         [Test]
@@ -358,15 +358,15 @@ namespace ConsoleToolkitTests.ApplicationStyles
         {
             Toolkit.Options.ParsingConventions = CommandLineParserConventions.MsDosConventions;
             _console.Write("helpme:" + Environment.NewLine + Environment.NewLine);
-            UnitTestAppUtils.Run<HelpCommandApp>(new[] { "helpme" }, _console);
+            UnitTestAppRunner.Run<HelpCommandApp>(new[] { "helpme" }, _console);
             _console.Write(Environment.NewLine + Environment.NewLine);
 
             _console.Write("helpme command:" + Environment.NewLine + Environment.NewLine);
-            UnitTestAppUtils.Run<HelpCommandApp>(new[] { "helpme", "command" }, _console);
+            UnitTestAppRunner.Run<HelpCommandApp>(new[] { "helpme", "command" }, _console);
             _console.Write(Environment.NewLine + Environment.NewLine);
 
             _console.Write("helpme helpme:" + Environment.NewLine + Environment.NewLine);
-            UnitTestAppUtils.Run<HelpCommandApp>(new[] { "helpme", "helpme" }, _console);
+            UnitTestAppRunner.Run<HelpCommandApp>(new[] { "helpme", "helpme" }, _console);
 
             Approvals.Verify(_console.GetBuffer());
         }
@@ -375,7 +375,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
         public void CommandLevelHelpIsProvidedWithIndicatedCommand()
         {
             Toolkit.Options.ParsingConventions = CommandLineParserConventions.MsDosConventions;
-            UnitTestAppUtils.Run<HelpCommandApp>(new[] { "helpme", "helpme" }, _console);
+            UnitTestAppRunner.Run<HelpCommandApp>(new[] { "helpme", "helpme" }, _console);
             Approvals.Verify(_console.GetBuffer());
         }
 
@@ -383,14 +383,14 @@ namespace ConsoleToolkitTests.ApplicationStyles
         public void HelpCommandTypeMustBeAConfiguredCommand()
         {
             Toolkit.Options.ParsingConventions = CommandLineParserConventions.MsDosConventions;
-            UnitTestAppUtils.Run<InvalidHelpCommandApp>(new[] { "helpme" }, _console);
+            UnitTestAppRunner.Run<InvalidHelpCommandApp>(new[] { "helpme" }, _console);
         }
 
         [Test]
         public void OnCommandSuccessIsCalledAfterSuccessfulCommand()
         {
             //Act
-            UnitTestAppUtils.Run<TestApp>(new[] { "C", "-TestOpt" }, new RedirectedConsole(ConsoleStream.Out));
+            UnitTestAppRunner.Run<TestApp>(new[] { "C", "-TestOpt" }, new RedirectedConsole(ConsoleStream.Out));
 
             //Assert
             Assert.That(TestApp.LastTestApp.PostSuccessCalled, Is.True);
@@ -400,7 +400,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
         public void OnCommandFailureIsNotCalledAfterSuccessfulCommand()
         {
             //Act
-            UnitTestAppUtils.Run<TestApp>(new[] { "C", "-TestOpt" }, new RedirectedConsole(ConsoleStream.Out));
+            UnitTestAppRunner.Run<TestApp>(new[] { "C", "-TestOpt" }, new RedirectedConsole(ConsoleStream.Out));
 
             //Assert
             Assert.That(TestApp.LastTestApp.PostFailureCalled, Is.False);
@@ -410,7 +410,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
         public void OnCommandFailureIsCalledAfterFailedCommand()
         {
             //Act
-            UnitTestAppUtils.Run<TestApp>(new[] { "F" }, new RedirectedConsole(ConsoleStream.Out));
+            UnitTestAppRunner.Run<TestApp>(new[] { "F" }, new RedirectedConsole(ConsoleStream.Out));
 
             //Assert
             Assert.That(TestApp.LastTestApp.PostFailureCalled, Is.True);
@@ -420,7 +420,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
         public void OnCommandSuccessIsNotCalledAfterFailedCommand()
         {
             //Act
-            UnitTestAppUtils.Run<TestApp>(new[] { "F" }, new RedirectedConsole(ConsoleStream.Out));
+            UnitTestAppRunner.Run<TestApp>(new[] { "F" }, new RedirectedConsole(ConsoleStream.Out));
 
             //Assert
             Assert.That(TestApp.LastTestApp.PostSuccessCalled, Is.False);
@@ -430,7 +430,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
         public void OnCommandSuccessIsNotCalledAfterThrowingCommand()
         {
             //Act
-            UnitTestAppUtils.Run<TestApp>(new[] { "T" }, new RedirectedConsole(ConsoleStream.Out));
+            UnitTestAppRunner.Run<TestApp>(new[] { "T" }, new RedirectedConsole(ConsoleStream.Out));
 
             //Assert
             Assert.That(TestApp.LastTestApp.PostSuccessCalled, Is.False);
@@ -440,7 +440,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
         public void ExceptionHandlerIsCalledWhenCommandThrows()
         {
             //Act
-            UnitTestAppUtils.Run<TestApp>(new[] { "T" }, new RedirectedConsole(ConsoleStream.Out));
+            UnitTestAppRunner.Run<TestApp>(new[] { "T" }, new RedirectedConsole(ConsoleStream.Out));
 
             //Assert
             Assert.That(TestApp.LastTestApp.Exception.Message, Is.EqualTo("Exception from throwing command."));
@@ -450,7 +450,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
         public void ExceptionHandlerIsCalledWhenSelfHandlerCommandThrows()
         {
             //Act
-            UnitTestAppUtils.Run<TestApp>(new[] { "TSelf" }, new RedirectedConsole(ConsoleStream.Out));
+            UnitTestAppRunner.Run<TestApp>(new[] { "TSelf" }, new RedirectedConsole(ConsoleStream.Out));
 
             //Assert
             Assert.That(TestApp.LastTestApp.Exception.Message, Is.EqualTo("Exception from throwing self handling command."));
@@ -460,7 +460,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
         public void ExceptionHandlerIsCalledWhenClassHandlerThrows()
         {
             //Act
-            UnitTestAppUtils.Run<TestApp>(new[] { "TClass" }, new RedirectedConsole(ConsoleStream.Out));
+            UnitTestAppRunner.Run<TestApp>(new[] { "TClass" }, new RedirectedConsole(ConsoleStream.Out));
 
             //Assert
             Assert.That(TestApp.LastTestApp.Exception.Message, Is.EqualTo("Exception from throwing class handled command."));
@@ -470,7 +470,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
         public void DefaultExceptionHandlerDisplaysExceptionMessage()
         {
             //Act
-            UnitTestAppUtils.Run<DefaultExceptionHandlerApp>(new[] { "X" }, _console);
+            UnitTestAppRunner.Run<DefaultExceptionHandlerApp>(new[] { "X" }, _console);
 
             //Assert
             Approvals.Verify(_console.GetBuffer());
