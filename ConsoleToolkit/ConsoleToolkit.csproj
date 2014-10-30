@@ -217,7 +217,6 @@
     <Compile Include="Utilities\ReflectionExtensionMethods.cs" />
     <Compile Include="Utilities\RuntimeTypeBuilder.cs" />
     <Compile Include="Utilities\RuntimeTypeBuilderProperty.cs" />
-    <Compile Include="Utilities\StackWalker.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

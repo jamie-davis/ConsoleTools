@@ -156,7 +156,6 @@
     <Compile Include="Utilities\MethodInvoker.cs" />
     <Compile Include="Utilities\TestPrefixLines.cs" />
     <Compile Include="Utilities\TestRuntimeTypeBuilder.cs" />
-    <Compile Include="Utilities\TestStackWalker.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ConsoleToolkit\ConsoleToolkit.csproj">
