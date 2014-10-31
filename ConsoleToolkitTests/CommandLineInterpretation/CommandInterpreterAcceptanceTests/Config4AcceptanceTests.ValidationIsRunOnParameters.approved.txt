@@ -1,0 +1,20 @@
+﻿Test: export file.dat 2014-08-22 2014-08-26 -s 123456789ABC -database test -u admin -p adm1n
+
+Server name too long.
+
+
+Test: export file*.dat 2014-08-22 2014-08-26 -filter filter1 -f filter2
+
+Invalid characters in filename.
+
+
+Test: import file:.dat -server server2 -database test -u admin -p adm1n
+
+Invalid characters in filename.
+
+
+Test: import file*.dat -server server2 -database test -u admin -p adm1n -filter filter1 -f filter2
+
+Invalid characters in filename.
+
+

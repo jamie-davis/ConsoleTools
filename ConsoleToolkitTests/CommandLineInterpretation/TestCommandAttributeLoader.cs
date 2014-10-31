@@ -228,6 +228,54 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             public CommonOptions CommandOptions { get; set; }
         }
 
+        [Command]
+        class ValidatedCommand
+        {
+            [CommandValidator]
+            public bool Valid(IList<string> errors)
+            {
+                errors.Add("error message");
+                return false;
+            }
+        }
+
+        [Command]
+        class ThrowingValidatorCommand
+        {
+            [CommandValidator]
+            public bool Valid()
+            {
+                throw new Exception("Thrown error message.");
+            }
+        }
+
+        [Command]
+        class MultiValidatorCommand
+        {
+            public bool NoParamValidatorCalled;
+            public bool ErrorListValidatorCalled;
+            private bool _failNoParamValidation;
+
+            [CommandValidator]
+            public bool Valid()
+            {
+                NoParamValidatorCalled = true;
+                return _failNoParamValidation ? false : true;
+            }
+
+            [CommandValidator]
+            public bool Valid(IList<string> errors)
+            {
+                ErrorListValidatorCalled = true;
+                return true;
+            }
+
+            public void FailNoParamValidation()
+            {
+                _failNoParamValidation = true;
+            }
+        }
+
         // ReSharper restore UnusedField.Compiler
         // ReSharper restore UnusedMember.Local
 #pragma warning restore 649
@@ -509,6 +557,47 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
 
             var result = command.CommandOptions.DbNames.JoinWith(",");
             Assert.That(result, Is.EqualTo("one,two,three"));
+        }
+
+        [Test]
+        public void ValidationMethodCanBeSpecified()
+        {
+            var config = CommandAttributeLoader.Load(typeof(ValidatedCommand)) as CommandConfig<ValidatedCommand>;
+            var command = config.Create(null) as ValidatedCommand;
+            var errors = new List<string>();
+            config.Validate(command, errors);
+            Assert.That(errors, Is.EqualTo(new [] {"error message"}));
+        }
+
+        [Test]
+        public void ValidationMethodCanThrowErrors()
+        {
+            var config = CommandAttributeLoader.Load(typeof(ThrowingValidatorCommand)) as CommandConfig<ThrowingValidatorCommand>;
+            var command = config.Create(null) as ThrowingValidatorCommand;
+            var errors = new List<string>();
+            config.Validate(command, errors);
+            Assert.That(errors, Is.EqualTo(new [] {"Thrown error message."}));
+        }
+
+        [Test]
+        public void MultipleValidationMethodsCanBeSpecified()
+        {
+            var config = CommandAttributeLoader.Load(typeof(MultiValidatorCommand)) as CommandConfig<MultiValidatorCommand>;
+            var command = config.Create(null) as MultiValidatorCommand;
+            var errors = new List<string>();
+            config.Validate(command, errors);
+            Assert.That(command.ErrorListValidatorCalled && command.NoParamValidatorCalled, Is.True);
+        }
+
+        [Test]
+        public void ValidatorCallsShortCircuit()
+        {
+            var config = CommandAttributeLoader.Load(typeof(MultiValidatorCommand)) as CommandConfig<MultiValidatorCommand>;
+            var command = config.Create(null) as MultiValidatorCommand;
+            var errors = new List<string>();
+            command.FailNoParamValidation();
+            config.Validate(command, errors);
+            Assert.That(command.ErrorListValidatorCalled, Is.False);
         }
     }
 }

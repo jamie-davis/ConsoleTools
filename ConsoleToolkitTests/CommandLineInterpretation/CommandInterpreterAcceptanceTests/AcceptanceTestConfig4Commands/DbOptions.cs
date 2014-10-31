@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.ConsoleIO;
 
@@ -28,6 +29,15 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
         [Option("filter", "f")]
         [Description("Global data filter")]
         public List<string> Filters { get; set; }
+
+        [CommandValidator]
+        public bool Validate()
+        {
+            if (Server != null && Server.Length > 10)
+                throw new Exception("Server name too long.");
+
+            return true;
+        }
 
         public bool ValidateDatabaseParameters(IConsoleAdapter adapter)
         {

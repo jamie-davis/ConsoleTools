@@ -45,9 +45,12 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
             AttachPropAndFieldElements(typeof(T), commandConfig);
             AttachOptionSets(commandConfig);
+            AttachValidator(commandConfig);
+
             var desc = GetDescription(typeof (T));
             if (desc != null)
                 (commandConfig as IContext).Description = desc;
+
 
             return commandConfig;
         }
@@ -118,6 +121,88 @@ namespace ConsoleToolkit.CommandLineInterpretation
                 AttachPropAndFieldElements(optionSet.Type, commandConfig, optionSet);
         }
 
+        private static void AttachValidator<T>(CommandConfig<T> commandConfig) where T : class
+        {
+            var func = MakeValidationFunc<T>();
+            if (func != null)
+                commandConfig.Validator(func);
+        }
+
+        private static Func<T, IList<string>, bool> MakeValidationFunc<T>()
+        {
+            var type = typeof (T);
+            var validatorMethods = type.GetMethods()
+                .Where(m => m.GetCustomAttribute<CommandValidatorAttribute>() != null)
+                .ToList();
+
+            var command = Expression.Parameter(typeof (T), "command");
+            var errorList = Expression.Parameter(typeof (IList<string>), "errors");
+            var listType = typeof (List<Tuple<object, MethodInfo>>);
+            var methods = Expression.Parameter(listType, "validators");
+            
+            var expressions = new List<Expression>();
+            expressions.Add(Expression.Assign(methods, Expression.New(listType)));
+            var addMethod = typeof(List<Tuple<object, MethodInfo>>).GetMethod("Add");
+
+            var tupleConstructor = typeof(Tuple<object, MethodInfo>).GetConstructor(new[] { typeof(object), typeof(MethodInfo) });
+            Debug.Assert(tupleConstructor != null);
+
+            var numValidators = 0;
+            foreach (var method in validatorMethods)
+            {
+                var newTuple = Expression.New(tupleConstructor, command, Expression.Constant(method));
+                expressions.Add(Expression.Call(methods, addMethod, new [] { newTuple }));
+                ++numValidators;
+            }
+
+            var optionSets = GetMembersWithAttribute<OptionSetAttribute>(typeof(T))
+                .ToList();
+            foreach (var optionSetMember in optionSets)
+            {
+                var optionSetValidators = optionSetMember.Type.GetMethods()
+                                            .Where(m => m.GetCustomAttribute<CommandValidatorAttribute>() != null)
+                                            .ToList();
+                foreach (var optionSetMethod in optionSetValidators)
+                {
+                    var newTuple = Expression.New(tupleConstructor, Expression.MakeMemberAccess(command, optionSetMember.MemberInfo), Expression.Constant(optionSetMethod));
+                    expressions.Add(Expression.Call(methods, addMethod, new[] { newTuple }));
+                    ++numValidators;
+                }
+            }
+
+            if (numValidators == 0)
+                return null;
+            
+            var runner = typeof (CommandAttributeLoader).GetMethod("RunValidation", BindingFlags.NonPublic | BindingFlags.Static);
+            expressions.Add(Expression.Call(null, runner, new [] {methods, errorList}));
+
+            var body = Expression.Block(new [] { methods }, expressions);
+            var parameters = new[] {command, errorList};
+            return Expression.Lambda<Func<T, IList<string>, bool>>(body, parameters).Compile();
+        }
+
+        // ReSharper disable once UnusedMember.Local
+        private static bool RunValidation(IEnumerable<Tuple<object, MethodInfo>> methods, IList<string> errors)
+        {
+            foreach (var method in methods)
+            {
+                try
+                {
+                    var outcome = (bool) MethodInvoker.Invoke(method.Item2, method.Item1, errors);
+                    if (!outcome)
+                    {
+                        return false;
+                    }
+                }
+                catch (Exception e)
+                {
+                    errors.Add(e.Message);
+                    return false;
+                }
+            }
+
+            return true;
+        }
 
         private static IEnumerable<AttributedMember<T>> GetMembersWithAttribute<T>(Type type) where T : Attribute
         {

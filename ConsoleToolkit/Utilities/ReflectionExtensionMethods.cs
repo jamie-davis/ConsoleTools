@@ -29,6 +29,15 @@ namespace ConsoleToolkit.Utilities
             return null;
         }
 
+        public static T GetCustomAttribute<T>(this MethodInfo method) where T : Attribute
+        {
+            var attribute = method.GetCustomAttributes(typeof (T), true).FirstOrDefault();
+            if (attribute != null)
+                return attribute as T;
+
+            return null;
+        }
+
         public static object GetValue(this PropertyInfo prop, object instance)
         {
             return prop.GetValue(instance, null);

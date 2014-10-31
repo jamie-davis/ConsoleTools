@@ -71,6 +71,7 @@
     <Compile Include="CommandLineInterpretation\CommandPositional.cs" />
     <Compile Include="CommandLineInterpretation\ConfigurationAttributes\CommandAttribute.cs" />
     <Compile Include="CommandLineInterpretation\ConfigurationAttributes\CommandHandlerAttribute.cs" />
+    <Compile Include="CommandLineInterpretation\ConfigurationAttributes\CommandValidatorAttribute.cs" />
     <Compile Include="CommandLineInterpretation\ConfigurationAttributes\DescriptionAttribute.cs" />
     <Compile Include="CommandLineInterpretation\ConfigurationAttributes\OptionAttribute.cs" />
     <Compile Include="CommandLineInterpretation\ConfigurationAttributes\OptionSetAttribute.cs" />

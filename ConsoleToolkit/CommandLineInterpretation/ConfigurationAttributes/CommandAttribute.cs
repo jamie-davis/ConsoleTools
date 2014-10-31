@@ -3,7 +3,7 @@ using System;
 namespace ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes
 {
     /// <summary>
-    /// This attribute decorates a class aand indicates that it is a command.
+    /// This attribute decorates a class and indicates that it is a command.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public class CommandAttribute : Attribute

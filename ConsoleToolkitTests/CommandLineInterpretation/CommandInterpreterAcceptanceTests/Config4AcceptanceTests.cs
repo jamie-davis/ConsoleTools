@@ -1,7 +1,6 @@
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.CommandLineInterpretation;
-using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAcceptanceTests.AcceptanceTestConfig4Commands;
@@ -90,6 +89,20 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 @"import file.dat -server server2 -database test -u admin -p adm1n",
                 @"import file.dat -server server2 -database test -u admin -p adm1n -filter filter1 -f filter2",
                 @"import file.dat"
+            };
+
+            Approvals.Verify(CommandExecutorUtil.Do(_msStd, commands, 50));
+        }
+
+        [Test]
+        public void ValidationIsRunOnParameters()
+        {
+            var commands = new[]
+            {
+                @"export file.dat 2014-08-22 2014-08-26 -s 123456789ABC -database test -u admin -p adm1n",
+                @"export file*.dat 2014-08-22 2014-08-26 -filter filter1 -f filter2",
+                @"import file:.dat -server server2 -database test -u admin -p adm1n",
+                @"import file*.dat -server server2 -database test -u admin -p adm1n -filter filter1 -f filter2"
             };
 
             Approvals.Verify(CommandExecutorUtil.Do(_msStd, commands, 50));

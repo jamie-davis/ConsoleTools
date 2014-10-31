@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.ConsoleIO;
 
@@ -25,6 +27,19 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
 
         [OptionSet]
         public DbOptions DbOptions { get; set; }
+
+        [CommandValidator]
+        public bool Validate(IList<string> errors)
+        {
+            if (File.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
+            {
+                errors.Add("Invalid characters in filename.");
+                return false;
+            }
+
+            return true;
+        }
+
 
         [CommandHandler]
         public void Handle(IConsoleAdapter adapter)
