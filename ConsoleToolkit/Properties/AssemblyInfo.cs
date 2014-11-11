@@ -6,11 +6,13 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ConsoleToolkit")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription(@"A library providing the messy bits of console applications.
+
+This package provides a framework for building console applications, improved handling of input and output to the console, and a rich command line parsing infrastructure.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("ConsoleToolkit")]
-[assembly: AssemblyCopyright("Copyright ©  2014")]
+[assembly: AssemblyCopyright("Copyright © 2014 Jamie Davis")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
