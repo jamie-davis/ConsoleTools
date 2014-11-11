@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>Console Toolkit</title>
+    <authors>Jamie Davis</authors>
+    <owners>Jamie Davis</owners>
+    <licenseUrl>http://jamie-davis.github.io/ConsoleTools/LICENSE</licenseUrl>
+    <projectUrl>http://jamie-davis.github.io/ConsoleTools/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>Initial release</releaseNotes>
+    <copyright>Copyright 2014</copyright>
+    <tags>Console Toolkit .NET</tags>
+  </metadata>
+</package>
