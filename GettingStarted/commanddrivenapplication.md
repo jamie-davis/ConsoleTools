@@ -242,7 +242,7 @@ namespace SampleConsoleApp
 
 If you run the program with the `help` command, you should see this:
 
-<img src="assets/images/CommandApplicationNoTextHelp.png" />
+<img src="assets/images/commandapplicationnotexthelp.png" />
 
 Here I've run:
 
@@ -308,7 +308,7 @@ namespace SampleConsoleApp
 
 Now the program gives better help output:
 
-<img src="assets/images/CommandApplicationHelp.png" />
+<img src="assets/images/commandapplicationhelp.png" />
 
 ####Finished
 
