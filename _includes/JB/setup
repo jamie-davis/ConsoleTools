@@ -13,6 +13,8 @@
       {% assign HOME_PATH = "/" %}
     {% endif %}
 
+    {% assign GITHUB_PATH = site.GITHUB_PATH %}
+
     {% if site.JB.ASSET_PATH %}
       {% assign ASSET_PATH = site.JB.ASSET_PATH %}
     {% else %}
