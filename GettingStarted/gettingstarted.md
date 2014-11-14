@@ -3,6 +3,7 @@ layout: page
 title: Getting Started
 category : lessons
 tags : [intro, beginner, tutorial]
+group: navigation
 ---
 Lets start a new console project. I'm going to walk you through a simple set of steps to create a basic console application using the Console Toolkit. It'll reflect how I like to set up my apps, which isn't the only way, and you will find alternatives in the main documentation.
                             

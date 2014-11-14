@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Documentation
+group: navigation
 ---
 
 The Console Toolkit documentation covers the following areas:
