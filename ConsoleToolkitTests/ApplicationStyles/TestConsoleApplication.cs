@@ -33,6 +33,9 @@ namespace ConsoleToolkitTests.ApplicationStyles
             public bool Initialised { get; set; }
             public bool TestOptValue { get; set; }
             public Exception LastException { get; private set; }
+            public object ValidatedCommandObject { get; set; }
+            public bool OnCommandLineValidCalled { get; set; }
+            public Command HandledCommandObject { get; set; }
 
             [Command]
             public class Command
@@ -65,6 +68,14 @@ namespace ConsoleToolkitTests.ApplicationStyles
                 Toolkit.SetCommandExceptionHandler(ExceptionHandler);
             }
 
+            protected override void OnCommandLineValid(object command)
+            {
+                OnCommandLineValidCalled = true;
+                ValidatedCommandObject = command;
+
+                base.OnCommandLineValid(command);
+            }
+
             private void ExceptionHandler(IConsoleAdapter console, IErrorAdapter error, Exception exception, object options)
             {
                 LastException = exception;
@@ -78,6 +89,8 @@ namespace ConsoleToolkitTests.ApplicationStyles
 
                 if (c.Throw)
                     throw new Exception("TestApp exception.");
+
+                HandledCommandObject = c;
             }
 
             protected override void OnCommandSuccess()
@@ -319,6 +332,20 @@ namespace ConsoleToolkitTests.ApplicationStyles
         {
             UnitTestAppRunner.Run<TestApp>();
             Assert.That(TestApp.LastTestApp.Initialised);
+        }
+
+        [Test]
+        public void OnCommandLineValidIsCalled()
+        {
+            UnitTestAppRunner.Run<TestApp>();
+            Assert.That(TestApp.LastTestApp.OnCommandLineValidCalled);
+        }
+
+        [Test]
+        public void OnCommandLineValidReceivesCommand()
+        {
+            UnitTestAppRunner.Run<TestApp>();
+            Assert.That(TestApp.LastTestApp.ValidatedCommandObject, Is.SameAs(TestApp.LastTestApp.HandledCommandObject));
         }
 
         [Test]

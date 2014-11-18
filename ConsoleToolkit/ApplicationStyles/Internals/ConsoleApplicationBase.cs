@@ -96,12 +96,19 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
         }
 
         /// <summary>
+        /// This method will be called by the framework after validation of the command line parameters.
+        /// </summary>
+        /// <param name="command">The command object derived from the command line parameters.</param>
+        protected virtual void OnCommandLineValid(object command)
+        {
+        }
+
+        /// <summary>
         /// This method will be called by the framework after execution of a command has succeeded. Success is defined
         /// as Environment.ExitCode == 0.
         /// </summary>
         protected virtual void OnCommandSuccess()
         {
-            
         }
 
         /// <summary>
@@ -110,7 +117,6 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
         /// </summary>
         protected virtual void OnCommandFailure()
         {
-            
         }
 
         private void LoadHandlersFromCommands(Type[] commandTypesArray, MethodParameterInjector injector)

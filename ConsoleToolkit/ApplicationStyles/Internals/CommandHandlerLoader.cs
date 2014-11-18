@@ -43,7 +43,7 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
         {
             return type.GetMethods()
                 .Select(m => new {Method = m, Params = m.GetParameters()})
-                .Where(p => IsValidCommandHandler(handlerAttribute.CommandType, p.Params, injector))
+                .Where(p => IsValidCommandHandler(handlerAttribute.CommandType, p.Method, p.Params, injector))
                 .Select(p => new MethodCommandTypeTuple{ Method = p.Method, HandlerType = p.Method.DeclaringType, CommandType = handlerAttribute.CommandType})
                 .ToList();
         }
@@ -52,15 +52,23 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
         {
             return type.GetMethods()
                 .Select(m => new {Method = m, Params = m.GetParameters()})
-                .Where(p => commandTypes.Any(ct => IsValidCommandHandler(ct, p.Params, injector)))
+                .Where(p => commandTypes.Any(ct => IsValidCommandHandler(ct, p.Method, p.Params, injector)))
                 .Select(p => new MethodCommandTypeTuple { Method = p.Method, HandlerType = p.Method.DeclaringType, CommandType = FindCommandTypeInMethodParameters(commandTypes, p.Method)})
                 .ToList();
         }
 
-        private static bool IsValidCommandHandler(Type commandType, ParameterInfo[] parameters, MethodParameterInjector injector)
+        private static bool IsValidCommandHandler(Type commandType, MethodInfo method, ParameterInfo[] parameters, MethodParameterInjector injector)
         {
+            if (method.DeclaringType != null && method.DeclaringType.GetProperties().Any(p => IsPropertyAccessor(method, p)))
+                return false;
             return parameters.Any(p => p.ParameterType == commandType) 
                    && parameters.All(p => p.ParameterType == commandType || injector.CanSupply(p.ParameterType));
+        }
+
+        private static bool IsPropertyAccessor(MethodInfo method, PropertyInfo propertyInfo)
+        {
+            return string.Format("get_{0}", propertyInfo.Name) == method.Name 
+                || string.Format("set_{0}", propertyInfo.Name) == method.Name;
         }
 
         public static IEnumerable<ICommandHandler> LoadHandlerMethods(Type type, Type[] commandTypes, MethodParameterInjector injector)

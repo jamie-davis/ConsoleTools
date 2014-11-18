@@ -70,6 +70,7 @@ namespace ConsoleToolkit.ApplicationStyles
             var handler = app.Handlers.FirstOrDefault().Value;
             if (handler != null)
             {
+                app.OnCommandLineValid(command);
                 handler.Execute(app, command, app.Console, app.Injector.Value);
                 RunPostCommandMethod(app);
             }
