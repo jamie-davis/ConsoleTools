@@ -12,13 +12,13 @@ The Console Toolkit documentation covers the following areas:
 	2. [Console applications](consoleapps.html)
 	2. [Command driven applications](commandapps.html)
 	3. Parsing conventions
-	4. Ioc and passing services into handlers. 
+	4. [Ioc and passing services into handlers](ioc.html) 
 * Defining commands and program options.
 	1. [Overview](commandoverview.html)
 	2. Positional Parameters
 	3. Options
 	4. Reusing options through OptionSet
-	5. Defining handlers 
+	5. [Defining handlers](defininghandlers.html) 
 * Formatting output on the console.
 	1. Word wrapping
 	2. Colour
