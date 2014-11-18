@@ -42,7 +42,6 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         [Test]
         public void PositionalParametersAreExtracted()
         {
-            
             var args = CommandLineTokeniser.Tokenise("parameter1 param2 p3");
             _parser.Parse(args, _options, _positionals, _result);
 
@@ -99,7 +98,6 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         [Test]
         public void OptionNamesWithParametersAreNotCaseSensitive()
         {
-            
             var args = CommandLineTokeniser.Tokenise("/OPt:45");
             _parser.Parse(args, _options, _positionals, _result);
 
@@ -110,7 +108,6 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         [Test]
         public void UnrecognisedOptionsArePassedThroughVerbatim()
         {
-            
             var args = CommandLineTokeniser.Tokenise("/OPt /Unrecognized ");
             _parser.Parse(args, _options, _positionals, _result);
 
@@ -121,8 +118,41 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         [Test]
         public void ConjoinedOptionParametersAreExtracted()
         {
-            
             var args = CommandLineTokeniser.Tokenise("/Opt1:arg");
+            _parser.Parse(args, _options, _positionals, _result);
+
+            Console.WriteLine(_result.Log);
+            Approvals.Verify(_result.Log);
+        }
+
+        [Test]
+        public void DisconnectedOptionParametersAreExtracted()
+        {
+            var args = CommandLineTokeniser.Tokenise("/Opt1 arg");
+            _parser.Parse(args, _options, _positionals, _result);
+
+            Console.WriteLine(_result.Log);
+            Approvals.Verify(_result.Log);
+        }
+
+        [Test]
+        public void DisconnectedBoolParameterIsExtracted()
+        {
+            _options[0].IsBoolean = true;
+            _options[0].ParameterCount = 1;
+            var args = CommandLineTokeniser.Tokenise("/opt true");
+            _parser.Parse(args, _options, _positionals, _result);
+
+            Console.WriteLine(_result.Log);
+            Approvals.Verify(_result.Log);
+        }
+
+        [Test]
+        public void DisconnectedBoolOptionNonBoolParameterIsNotExtracted()
+        {
+            _options[0].IsBoolean = true;
+            _options[0].ParameterCount = 1;
+            var args = CommandLineTokeniser.Tokenise("/opt nottrue");
             _parser.Parse(args, _options, _positionals, _result);
 
             Console.WriteLine(_result.Log);
@@ -132,7 +162,6 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         [Test]
         public void MultipleOptionParametersAreExtracted()
         {
-            
             var args = CommandLineTokeniser.Tokenise("/Opt1:arg,45,arg3");
             _parser.Parse(args, _options, _positionals, _result);
 

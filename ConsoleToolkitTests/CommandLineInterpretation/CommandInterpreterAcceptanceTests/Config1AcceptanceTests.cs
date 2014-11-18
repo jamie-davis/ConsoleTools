@@ -1,7 +1,6 @@
 ﻿using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.CommandLineInterpretation;
-using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.TestingUtilities;
@@ -147,13 +146,17 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             {
                 @"c1 file",
                 @"c1 file /delete /A:location",
+                @"c1 file /delete /A location",
                 @"c1 file /D /archive:location",
+                @"c1 file /D /archive location",
                 @"c1",
                 @"c1 /D /A:loc",
                 @"c1 /A",
                 @"c1 /A:b,56",
                 @"c2 name 5 /M:5",
+                @"c2 name 5 /M 5",
                 @"c2 name 5 /M:5,",
+                @"c2 name 5 /M 5,",
                 @"c3 40 text 50",
                 @"c3 40 text"
             };

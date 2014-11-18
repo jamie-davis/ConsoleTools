@@ -7,12 +7,20 @@ namespace ConsoleToolkit.CommandLineInterpretation
     {
         public void Parse(string[] args, IEnumerable<IOption> options, IEnumerable<IPositionalArgument> positionalArguments, IParserResult result)
         {
-            var optionNames = options.Select(o => o.Name).ToList();
+            var optionList = options as IOption[] ?? options.ToArray();
+            var argQueue = new Queue<string>();
             foreach (var arg in args)
             {
+                argQueue.Enqueue(arg);
+            }
+
+            while (argQueue.Count > 0)
+            {
+                var arg = argQueue.Dequeue();
+
                 ParseOutcome outcome;
                 if (arg.StartsWith("/"))
-                    outcome = ProcessOption(optionNames, arg, result);
+                    outcome = ProcessOption(optionList, arg, argQueue, result);
                 else
                     outcome = result.PositionalArgument(arg);
 
@@ -21,21 +29,53 @@ namespace ConsoleToolkit.CommandLineInterpretation
             }
         }
 
-        private ParseOutcome ProcessOption(List<string> optionNames, string arg, IParserResult result)
+        private ParseOutcome ProcessOption(IEnumerable<IOption> options, string arg, Queue<string> argQueue, IParserResult result)
         {
+            string[] optionArgs = null;
+            var optionDetails = options as IList<IOption> ?? options.ToList();
+            var optionNames = optionDetails.Select(o => o.Name);
             var colonPos = arg.IndexOf(':');
             if (colonPos < 0)
             {
-                var optionName = arg.Substring(1);
-                return result.OptionExtracted(GetOptionName(optionNames, optionName), new string[] {});
+                var optionName = GetOptionName(optionNames, arg.Substring(1));
+                var optionDefinition = optionDetails.FirstOrDefault(o => System.String.Compare(o.Name, optionName, System.StringComparison.OrdinalIgnoreCase) == 0);
+                if (optionDefinition != null)
+                {
+                    optionName = optionDefinition.Name;
+                    optionArgs = ExtractOptionArgs(argQueue, optionDefinition);
+                }
+
+                return result.OptionExtracted(optionName, optionArgs ?? new string[] { });
             }
 
             var option = arg.Substring(1, colonPos - 1);
-            var optionArgs = arg.Substring(colonPos + 1).Split(',');
+            optionArgs = arg.Substring(colonPos + 1).Split(',');
             return result.OptionExtracted(GetOptionName(optionNames, option), optionArgs);
         }
 
-        private static string GetOptionName(List<string> optionNames, string optionName)
+        private string[] ExtractOptionArgs(Queue<string> argQueue, IOption option)
+        {
+            string[] arguments;
+            if (option != null && option.ParameterCount > 0 && argQueue.Count > 0 && !argQueue.Peek().StartsWith("/"))
+            {
+                if (option.IsBoolean && !IsBoolValue(argQueue.Peek()))
+                    arguments = new string[] {};
+                else
+                    arguments = argQueue.Dequeue().Split(',');
+            }
+            else
+                arguments = new string[] {};
+
+            return arguments;
+        }
+
+        private bool IsBoolValue(string value)
+        {
+            bool notUsed;
+            return bool.TryParse(value, out notUsed);
+        }
+
+        private static string GetOptionName(IEnumerable<string> optionNames, string optionName)
         {
             return optionNames.FirstOrDefault(n => System.String.Compare(optionName, n, System.StringComparison.OrdinalIgnoreCase) == 0) ?? optionName;
         }
