@@ -1,0 +1,3 @@
+﻿Text from handler class.                                    
+ConsoleToolkit: Error text                                  
+                                                            

@@ -41,6 +41,15 @@ namespace ConsoleToolkit.ApplicationStyles
         private static void ProcessCommandLine(ConsoleApplication app, string[] args)
         {
             var commandLineInterpreter = new CommandLineInterpreter(app.Config);
+            var optionNameHelpAdorner = commandLineInterpreter.GetOptionNameAdorner();
+
+            if (args.Length == 0 && AllowNoArgsHelpText(app))
+            {
+                app.DisplayHelp(optionNameHelpAdorner);
+                Environment.ExitCode = app.CommandLineErrorExitCode;
+                return;
+            }
+
             string[] errors;
             var command = commandLineInterpreter.Interpret(args, out errors);
             if (command == null)
@@ -53,8 +62,13 @@ namespace ConsoleToolkit.ApplicationStyles
                 return;
             }
 
-            var optionNameHelpAdorner = commandLineInterpreter.GetOptionNameAdorner();
             HandleCommand(app, command, optionNameHelpAdorner);
+        }
+
+        private static bool AllowNoArgsHelpText(ConsoleApplication app)
+        {
+            return app.Config.DefaultCommand != null
+                   && app.Config.DefaultCommand.Positionals.Any(p => !p.IsOptional);
         }
 
         private static void HandleCommand(ConsoleApplication app, object command, IOptionNameHelpAdorner optionNameAdorner)

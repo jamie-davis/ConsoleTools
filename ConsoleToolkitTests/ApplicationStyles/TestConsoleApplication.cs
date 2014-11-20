@@ -3,7 +3,6 @@ using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit;
 using ConsoleToolkit.ApplicationStyles;
-using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.ConsoleIO;
@@ -312,6 +311,40 @@ namespace ConsoleToolkitTests.ApplicationStyles
             }
         }
 
+        public class AutoHelpApp : ConsoleApplication
+        {
+            [Command]
+            public class Options
+            {
+                [Positional]
+                public string Pos { get; set; }
+            }
+
+            public class CustomObject
+            {
+                public string Message { get; set; }
+            }
+
+            [CommandHandler(typeof(Options))]
+            public class HandlerClass
+            {
+                public void Handle(IConsoleAdapter console, IErrorAdapter error, Options command)
+                {
+                    console.WriteLine("Parameter is \"{0}\"", command.Pos);
+                }
+            }
+
+            public static void Main(string[] args)
+            {
+                Toolkit.Execute<CustomInjectionApp>(args);
+            }
+
+            protected override void Initialise()
+            {
+                SetConfigTypeFilter(t => t.DeclaringType == GetType());
+            }
+        }
+
         #endregion
 
         [SetUp]
@@ -454,6 +487,27 @@ namespace ConsoleToolkitTests.ApplicationStyles
             UnitTestAppRunner.Run<TestApp>(new[] { "-Throw" }, _consoleOut);
             Console.WriteLine(_consoleOut.GetBuffer());
             Assert.That(TestApp.LastTestApp.LastException.Message, Is.EqualTo("TestApp exception."));
+        }
+
+        [Test]
+        public void NoParametersGivesHelpText()
+        {
+            UnitTestAppRunner.Run<AutoHelpApp>(new string[0], _consoleOut);
+            Approvals.Verify(_consoleOut.GetBuffer());
+        }
+
+        [Test]
+        public void NoParametersHelpSetsExitCode()
+        {
+            UnitTestAppRunner.Run<AutoHelpApp>(new string[0], _consoleOut);
+            Assert.That(Environment.ExitCode, Is.GreaterThan(0));
+        }
+
+        [Test]
+        public void NoHelpTextIfNoParametersIsValid()
+        {
+            UnitTestAppRunner.Run<HandlerClassApp>(new string[0], _consoleOut);
+            Approvals.Verify(_consoleOut.GetBuffer());
         }
 
     }
