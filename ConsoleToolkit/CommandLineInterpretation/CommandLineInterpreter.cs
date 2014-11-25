@@ -29,7 +29,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
             {
                 if (args == null || args.Length == 0)
                 {
-                    errors = new[] { "No command specified." };
+                    errors = null;
                     return null;
                 }
 

@@ -11,6 +11,7 @@ using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.ConsoleIO.UnitTestUtilities;
 using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace ConsoleToolkitTests.ConsoleIO
 {

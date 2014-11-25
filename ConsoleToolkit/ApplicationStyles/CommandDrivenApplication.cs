@@ -38,22 +38,36 @@ namespace ConsoleToolkit.ApplicationStyles
             app.PostInitialise();
 
             var commandLineInterpreter = new CommandLineInterpreter(app.Config);
+
+            ConfigureHelpHandler(app, commandLineInterpreter);
+
             string[] errors;
             var command = commandLineInterpreter.Interpret(args, out errors);
             if (command == null)
             {
-                foreach (var error in errors)
+                if (errors != null)
                 {
-                    app.Console.WrapLine(error);
+                    foreach (var error in errors)
+                    {
+                        app.Console.WrapLine(error);
+                    }
+                    Environment.ExitCode = app.CommandLineErrorExitCode;
+                    return;
                 }
-                Environment.ExitCode = app.CommandLineErrorExitCode;
+
+                app._helpHandler.Execute(app, null, app.Console, app.Injector.Value);
                 return;
             }
 
-            if (app._helpHandler != null)
-                app._helpHandler.Adorner = commandLineInterpreter.GetOptionNameAdorner();
-
             ExecuteCommand(app, command);
+        }
+
+        private static void ConfigureHelpHandler(CommandDrivenApplication app, CommandLineInterpreter commandLineInterpreter)
+        {
+            if (app._helpHandler == null)
+                app._helpHandler = new HelpHandler(null, null, app.Config);
+
+            app._helpHandler.Adorner = commandLineInterpreter.GetOptionNameAdorner();
         }
 
         private static void ExecuteCommand(CommandDrivenApplication app, object command)
@@ -61,6 +75,7 @@ namespace ConsoleToolkit.ApplicationStyles
             ICommandHandler handler;
             if (app.Handlers.TryGetValue(command.GetType(), out handler))
             {
+                app.OnCommandLineValid(command);
                 handler.Execute(app, command, app.Console, app.Injector.Value);
                 RunPostCommandMethod(app);
             }
@@ -133,7 +148,7 @@ namespace ConsoleToolkit.ApplicationStyles
 
             public void Execute(ConsoleApplicationBase app, object command, IConsoleAdapter console, MethodParameterInjector injector)
             {
-                var parameter = _parameterGetter(command);
+                var parameter = _parameterGetter == null || command == null ? string.Empty : _parameterGetter(command);
                 if (string.IsNullOrWhiteSpace(parameter))
                 {
                     CommandDescriber.Describe(_config, console, DefaultApplicationNameExtractor.Extract(app.GetType()), Adorner);

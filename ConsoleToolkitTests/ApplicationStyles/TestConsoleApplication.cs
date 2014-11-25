@@ -15,6 +15,7 @@ using NUnit.Framework;
 using DescriptionAttribute = ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.DescriptionAttribute;
 
 // ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace ConsoleToolkitTests.ApplicationStyles
 {
@@ -40,13 +41,13 @@ namespace ConsoleToolkitTests.ApplicationStyles
             public class Command
             {
                 [Option]
-                public bool TestOpt { get; [UsedImplicitly] set; }
+                public bool TestOpt { get; set; }
 
                 [Option]
-                public bool Fail { get; [UsedImplicitly] set; }
+                public bool Fail { get; set; }
 
                 [Option]
-                public bool Throw { get; [UsedImplicitly] set; }
+                public bool Throw { get; set; }
             }
 
             public TestApp()
@@ -179,7 +180,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
             {
                 [Option("h", ShortCircuit = true)]
                 [Description("Display this help text.")]
-                public bool Help { get; [UsedImplicitly] set; }
+                public bool Help { get; set; }
             }
 
             [CommandHandler(typeof(Command))]
@@ -212,7 +213,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
 
             public class Command
             {
-                public bool Help { get; [UsedImplicitly] set; }
+                public bool Help { get; set; }
             }
 
             public static void Main(string[] args)

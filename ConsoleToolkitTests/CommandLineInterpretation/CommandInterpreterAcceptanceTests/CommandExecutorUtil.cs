@@ -23,7 +23,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 var args = CommandLineTokeniser.Tokenise(command);
                 string[] errors;
                 var result = interpreter.Interpret(args, out errors);
-                if (errors.Any())
+                if (errors != null &&errors.Any())
                 {
                     foreach (var e in errors)
                     {
@@ -44,7 +44,9 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
 
         private static void DisplayType(StringBuilder sb, object result, string fieldName = null)
         {
-            if (result.GetType().GetInterfaces().Any(i => i.IsGenericType 
+            if (result == null)
+                sb.AppendLine("NULL");
+            else if (result.GetType().GetInterfaces().Any(i => i.IsGenericType 
                 && i.GetGenericTypeDefinition() == typeof(ICollection<>)))
                 DisplayCollection(sb, result, fieldName);
             else if (Type.GetTypeCode(result.GetType()) == TypeCode.Object)

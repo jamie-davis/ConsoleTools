@@ -123,6 +123,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
         {
             var commands = new[]
             {
+                @"",
                 @"c1 file",
                 @"c1 file --delete -Alocation",
                 @"c1 file -D --archive=location",
@@ -144,6 +145,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
         {
             var commands = new[]
             {
+                @"",
                 @"c1 file",
                 @"c1 file /delete /A:location",
                 @"c1 file /delete /A location",
@@ -169,6 +171,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
         {
             var commands = new[]
             {
+                @"",
                 @"c1 file",
                 @"c1 file -delete -A:location",
                 @"c1 file -delete -A location",

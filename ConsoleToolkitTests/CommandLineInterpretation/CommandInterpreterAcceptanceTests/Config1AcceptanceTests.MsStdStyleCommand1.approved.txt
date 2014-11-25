@@ -1,4 +1,9 @@
-﻿Test: c1 file
+﻿Test: 
+
+NULL
+
+
+Test: c1 file
 
 C1Data
 {

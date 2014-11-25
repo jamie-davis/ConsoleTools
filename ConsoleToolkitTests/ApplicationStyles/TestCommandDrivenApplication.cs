@@ -3,7 +3,6 @@ using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit;
 using ConsoleToolkit.ApplicationStyles;
-using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.ConsoleIO;
@@ -167,6 +166,13 @@ namespace ConsoleToolkitTests.ApplicationStyles
                 base.OnCommandFailure();
             }
 
+            protected override void OnCommandLineValid(object command)
+            {
+                LastCommandLineValidObject = command;
+                base.OnCommandLineValid(command);
+            }
+
+            public object LastCommandLineValidObject { get; set; }
             public bool PostSuccessCalled { get; set; }
             public bool PostFailureCalled { get; set; }
         }
@@ -474,6 +480,46 @@ namespace ConsoleToolkitTests.ApplicationStyles
             UnitTestAppRunner.Run<DefaultExceptionHandlerApp>(new[] { "X" }, _console);
 
             //Assert
+            Approvals.Verify(_console.GetBuffer());
+        }
+
+        [Test]
+        public void CommandLineValidHandlerCalledWithValidCommand()
+        {
+            //Act
+            UnitTestAppRunner.Run<TestApp>(new[] { "c" }, _console);
+
+            //Assert
+            Assert.That(TestApp.LastTestApp.LastCommandLineValidObject, Is.InstanceOf<TestApp.Command>());
+        }
+
+        [Test]
+        public void CommandLineValidHandlerNotCalledWhenCommandInvalid()
+        {
+            //Act
+            UnitTestAppRunner.Run<TestApp>(new[] { "c", "toomany" }, _console);
+
+            //Assert
+            Assert.That(TestApp.LastTestApp.LastCommandLineValidObject, Is.Null);
+        }
+
+        [Test]
+        public void HelpIsDisplayedWhenNoParametersAreSupplied()
+        {
+            //Act
+            UnitTestAppRunner.Run<TestApp>(new string[0], _console);
+
+            //Assert
+            Approvals.Verify(_console.GetBuffer());
+        }
+
+        [Test]
+        public void HelpIsDisplayedWhenNoParametersAreSuppliedAndHelpIsImplemented()
+        {
+            //Act
+            UnitTestAppRunner.Run<HelpCommandApp>(new string[0], _console);
+
+            //Assert    
             Approvals.Verify(_console.GetBuffer());
         }
     }
