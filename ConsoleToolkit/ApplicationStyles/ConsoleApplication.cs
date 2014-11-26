@@ -85,7 +85,8 @@ namespace ConsoleToolkit.ApplicationStyles
             if (handler != null)
             {
                 app.OnCommandLineValid(command);
-                handler.Execute(app, command, app.Console, app.Injector.Value);
+                if (Environment.ExitCode == 0)
+                    handler.Execute(app, command, app.Console, app.Injector.Value);
                 RunPostCommandMethod(app);
             }
             else

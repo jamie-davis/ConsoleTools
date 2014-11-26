@@ -29,6 +29,8 @@ namespace ConsoleToolkitTests.ApplicationStyles
 
         public class TestApp : ConsoleApplication
         {
+            private static bool _setExitCodeInCommandLineValid
+                ;
             public static TestApp LastTestApp { get; set; }
             public bool Initialised { get; set; }
             public bool TestOptValue { get; set; }
@@ -73,6 +75,9 @@ namespace ConsoleToolkitTests.ApplicationStyles
                 OnCommandLineValidCalled = true;
                 ValidatedCommandObject = command;
 
+                if (_setExitCodeInCommandLineValid)
+                    Environment.ExitCode = 1000;
+
                 base.OnCommandLineValid(command);
             }
 
@@ -107,6 +112,16 @@ namespace ConsoleToolkitTests.ApplicationStyles
 
             public bool CommandSuccessCalled { get; set; }
             public bool CommandFailureCalled { get; set; }
+
+            public static void SetExitCodeInCommandLineValid()
+            {
+                _setExitCodeInCommandLineValid = true;
+            }
+
+            public static void Reset()
+            {
+                _setExitCodeInCommandLineValid = false;
+            }
         }
 
         public class MultipleCommandHandlerApp : ConsoleApplication
@@ -359,6 +374,8 @@ namespace ConsoleToolkitTests.ApplicationStyles
         public void TearDown()
         {
             Toolkit.GlobalReset();
+            TestApp.Reset();
+            Environment.ExitCode = 0;
         }
 
         [Test]
@@ -380,6 +397,14 @@ namespace ConsoleToolkitTests.ApplicationStyles
         {
             UnitTestAppRunner.Run<TestApp>();
             Assert.That(TestApp.LastTestApp.ValidatedCommandObject, Is.SameAs(TestApp.LastTestApp.HandledCommandObject));
+        }
+
+        [Test]
+        public void CommandIsNotExecutedIfOnCommandLineValidSetsExitCode()
+        {
+            TestApp.SetExitCodeInCommandLineValid();
+            UnitTestAppRunner.Run<TestApp>();
+            Assert.That(TestApp.LastTestApp.HandledCommandObject, Is.Null);
         }
 
         [Test]

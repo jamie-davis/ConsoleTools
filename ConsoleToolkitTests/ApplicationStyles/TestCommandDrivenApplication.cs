@@ -28,6 +28,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
 
         public class TestApp : CommandDrivenApplication
         {
+            private static bool _setExitCodeInCommandLineValid;
             public static TestApp LastTestApp { get; set; }
             public Exception Exception { get; set; }
             public bool Initialised { get; set; }
@@ -169,12 +170,26 @@ namespace ConsoleToolkitTests.ApplicationStyles
             protected override void OnCommandLineValid(object command)
             {
                 LastCommandLineValidObject = command;
+
+                if (_setExitCodeInCommandLineValid)
+                    Environment.ExitCode = 1000;
+
                 base.OnCommandLineValid(command);
             }
 
             public object LastCommandLineValidObject { get; set; }
             public bool PostSuccessCalled { get; set; }
             public bool PostFailureCalled { get; set; }
+
+            public static void SetExitCodeInCommandLineValid()
+            {
+                _setExitCodeInCommandLineValid = true;
+            }
+
+            public static void Reset()
+            {
+                _setExitCodeInCommandLineValid = false;
+            }
         }
         
         public class DuplicateCommandHandlerApp : CommandDrivenApplication
@@ -316,6 +331,8 @@ namespace ConsoleToolkitTests.ApplicationStyles
         public void TearDown()
         {
             Toolkit.GlobalReset();
+            Environment.ExitCode = 0;
+            TestApp.Reset();
         }
 
         [Test]
@@ -491,6 +508,19 @@ namespace ConsoleToolkitTests.ApplicationStyles
 
             //Assert
             Assert.That(TestApp.LastTestApp.LastCommandLineValidObject, Is.InstanceOf<TestApp.Command>());
+        }
+
+        [Test]
+        public void CommandNotExecutedIfCommandLineValidHandlerSetsNonZeroExitCode()
+        {
+            //Arrange
+            TestApp.SetExitCodeInCommandLineValid();
+
+            //Act
+            UnitTestAppRunner.Run<TestApp>(new[] { "C", "-TestOpt" }, _console);
+
+            //Assert
+            Assert.That(TestApp.LastTestApp.TestOptValue, Is.False);
         }
 
         [Test]

@@ -76,7 +76,8 @@ namespace ConsoleToolkit.ApplicationStyles
             if (app.Handlers.TryGetValue(command.GetType(), out handler))
             {
                 app.OnCommandLineValid(command);
-                handler.Execute(app, command, app.Console, app.Injector.Value);
+                if (Environment.ExitCode == 0)
+                    handler.Execute(app, command, app.Console, app.Injector.Value);
                 RunPostCommandMethod(app);
             }
             else
