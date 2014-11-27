@@ -70,6 +70,11 @@ namespace ConsoleToolkit.Testing
         private TextReader _inputStream;
 
         /// <summary>
+        /// The maximum number of lines the buffer may contain. Zero or less means no limit.
+        /// </summary>
+        private int _lengthLimit;
+
+        /// <summary>
         /// The current foreground colour. This property keeps <see cref="_fgCode"/> aligned with the actual console colour.
         /// </summary>
         public ConsoleColor Foreground
@@ -231,6 +236,19 @@ namespace ConsoleToolkit.Testing
                 _foregroundColourMap.Add(new string(_initialFg, BufferWidth));
                 _backgroundColourMap.Add(new string(_initialBg, BufferWidth));
             }
+
+            if (_lengthLimit > 0)
+            {
+                while (_buffer.Count > _lengthLimit)
+                {
+                    _buffer.RemoveAt(0);
+                    _foregroundColourMap.RemoveAt(0);
+                    _backgroundColourMap.RemoveAt(0);
+                }
+
+                if (CursorTop >= _lengthLimit)
+                    CursorTop = _lengthLimit - 1;
+            }
         }
 
         /// <summary>
@@ -302,6 +320,11 @@ namespace ConsoleToolkit.Testing
 
         private class NoInputStreamSet : Exception
         {
+        }
+
+        public void LimitBuffer(int maxLines)
+        {
+            _lengthLimit = maxLines;
         }
     }
 }

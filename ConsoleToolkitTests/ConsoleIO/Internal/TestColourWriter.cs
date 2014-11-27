@@ -125,6 +125,27 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         }
 
         [Test]
+        public void NewLineIsCorreectlySuppressedIfTheBufferIsFull()
+        {
+            //fill the buffer
+            _consoleOut.LimitBuffer(5);
+            for(int x = 0; x < 5; ++x) _consoleOut.NewLine();
+
+            //move cursor to 4 from edge.
+            _writer.Write(new List<ColourControlItem> { new ColourControlItem(new string('z', _consoleOut.BufferWidth - 4)) });
+
+            var components = new List<ColourControlItem>
+            {
+                new ColourControlItem("text"),
+                new ColourControlItem(instructions: Instructions("newline")),
+                new ColourControlItem("more text"),
+            };
+            _writer.Write(components);    
+        
+            Approvals.Verify(_consoleOut.GetBuffer());
+        }
+
+        [Test]
         public void OnlyOneNewLineIsSuppressedIfThePrecedingLineEndedAtRightEdge()
         {
             //move cursor to 4 from edge.

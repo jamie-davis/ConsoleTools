@@ -104,7 +104,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             else
                 _consoleOutInterface.Write(colourControlItem.Text);
 
-            _lastWriteWasPassiveNewLine = (_consoleOutInterface.CursorTop == currentLine + 1 &&
+            _lastWriteWasPassiveNewLine = (colourControlItem.Text.Length > 0 &&
                                            _consoleOutInterface.CursorLeft == 0);
         }
 
