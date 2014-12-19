@@ -25,7 +25,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
         private static void AddCommandListText(IConsoleAdapter console, CommandLineInterpreterConfiguration config, IOptionNameHelpAdorner adorner)
         {
-            var commands = config.Commands.Where(c => c.Name != null).ToList();
+            var commands = config.Commands.Where(c => c.Name != null).OrderBy(c => c.Name).ToList();
             if (commands.Any())
             {
                 console.WriteLine("Available commands");

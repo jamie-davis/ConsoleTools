@@ -1,10 +1,10 @@
 ﻿Available commands                                          
                                                             
 c                                                           
-f                                                           
-t                                                           
-tself                                                       
-tclass                                                      
 d                                                           
 e                                                           
+f                                                           
+t                                                           
+tclass                                                      
+tself                                                       
                                                             

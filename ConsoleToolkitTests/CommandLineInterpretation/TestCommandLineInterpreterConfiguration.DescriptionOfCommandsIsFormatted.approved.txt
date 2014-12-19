@@ -1,17 +1,6 @@
 ﻿----+----|----+----|----+----|----+----|                    
 Available commands                                          
                                                             
-first   Description of the first                            
-        commmand.                                           
-second  The second command is a command                     
-        with a number of parameters.                        
-third   The third command has a number                      
-        of options but no parameters.                       
-fourth  The fourth command is really                        
-        complicated with a number of                        
-        parameters and also options.                        
-        This is the sort of command that                    
-        needs lots of text.                                 
 desc    Descriptions can contain                            
         embedded line breaks -->                            
         <-- like that one. These should                     
@@ -23,4 +12,15 @@ desc    Descriptions can contain
 exp     Command with a positional and                       
         options configured using a Linq                     
         Expression, not a lambda.                           
+first   Description of the first                            
+        commmand.                                           
+fourth  The fourth command is really                        
+        complicated with a number of                        
+        parameters and also options.                        
+        This is the sort of command that                    
+        needs lots of text.                                 
+second  The second command is a command                     
+        with a number of parameters.                        
+third   The third command has a number                      
+        of options but no parameters.                       
                                                             

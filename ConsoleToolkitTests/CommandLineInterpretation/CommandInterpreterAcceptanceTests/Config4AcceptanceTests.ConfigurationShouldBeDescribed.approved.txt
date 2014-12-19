@@ -1,8 +1,8 @@
 ﻿Available commands                                                                                                                   
                                                                                                                                      
-import  Import data from a file written previously by the export command.                                                            
 export  Export the data from a specified time range to a file.                                                                       
 help    Display this help text.                                                                                                      
+import  Import data from a file written previously by the export command.                                                            
                                                                                                                                      
 Description of import command:                                                                                                       
 Import data from a file written previously by the export command.                                                                    
