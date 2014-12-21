@@ -152,6 +152,20 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         }
 
         [Test]
+        public void StringContainingBracesButNoSubstitutionsIsRenderedCorrectly()
+        {
+            _consoleInterface.WindowWidth = _consoleInterface.BufferWidth;
+            _consoleInterface.Write(RulerFormatter.MakeRuler(_consoleInterface.WindowWidth));
+
+            var text = "{data}".Red();
+            
+            Action<ConsoleOperationsImpl> act = adapter => adapter.WrapLine(text);
+            Execute(act);
+
+            Approvals.Verify(_consoleInterface.GetBuffer(ConsoleBufferFormat.Interleaved));
+        }
+
+        [Test]
         public void PiecemealWritesAreWordWrappedToConsole()
         {
             Action<ConsoleOperationsImpl> act = adapter =>

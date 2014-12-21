@@ -104,7 +104,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
         private void WriteWrapped(bool lastLineIsWriteLine, string format, object[] arg)
         {
-            var formatted = string.Format(format, arg);
+            var formatted = FormatData(format, arg);
             var allowanceForCursorPosition = _consoleOutInterface.CursorLeft > 0 
                 ? _consoleOutInterface.CursorLeft - _prefixLength //discount the prefix as this will not be counted in the window width
                 : 0; //no data on the line, so no allowance required.
@@ -122,6 +122,13 @@ namespace ConsoleToolkit.ConsoleIO.Internal
                 WriteLine(lastLine);
             else
                 Write(lastLine);
+        }
+
+        private static string FormatData(string format, object[] arg)
+        {
+            if (arg.Length == 0) return format;
+
+            return string.Format(format, arg);
         }
 
         public void FormatTable<T>(IEnumerable<T> items, ReportFormattingOptions options = ReportFormattingOptions.Default, string columnSeperator = null)
