@@ -76,7 +76,6 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         [Test]
         public void NamedParametersAreExtractedAsOptions()
         {
-            
             var args = CommandLineTokeniser.Tokenise("-parameter2 parameter1 ");
             _parser.Parse(args, _options, _positionals, _result);
 

@@ -81,9 +81,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
 
         [Test]
         public void MsStdStyleCommand1()
-        {
+        { 
             var commands = new[]
             {
+                @"export -to 2014-08-26 -from 2014-08-22 file.dat",
                 @"export file.dat 2014-08-22 2014-08-26 -s . -database test -u admin -p adm1n",
                 @"export file.dat 2014-08-22 2014-08-26 -filter filter1 -f filter2",
                 @"import file.dat -server server2 -database test -u admin -p adm1n",

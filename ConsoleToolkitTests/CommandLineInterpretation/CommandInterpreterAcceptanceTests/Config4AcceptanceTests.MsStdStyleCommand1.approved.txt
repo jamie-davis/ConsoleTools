@@ -1,4 +1,24 @@
-﻿Test: export file.dat 2014-08-22 2014-08-26 -s . -database test -u admin -p adm1n
+﻿Test: export -to 2014-08-26 -from 2014-08-22 file.dat
+
+ExportCommand
+{
+    File = file.dat
+    From = 2014-08-22 00:00:00
+    To = 2014-08-26 00:00:00
+    DbOptions = DbOptions
+    {
+        Server = <null>
+        Database = <null>
+        User = <null>
+        Password = <null>
+        Filters = List`1
+        {
+        }
+    }
+}
+
+
+Test: export file.dat 2014-08-22 2014-08-26 -s . -database test -u admin -p adm1n
 
 ExportCommand
 {
