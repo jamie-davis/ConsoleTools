@@ -1,2 +1,1 @@
-﻿Option("parameter2", [])
-Positional("parameter1")
+﻿Option("parameter2", ["parameter1"])
