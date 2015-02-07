@@ -36,6 +36,36 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         }
 
         [Test]
+        public void CommaSeperatedValuesAreTheSameToken()
+        {
+            Approvals.Verify(Tokenise("a b c,d,e"));
+        }
+
+        [Test]
+        public void SpeechMarksAreRemovedFromCsvText()
+        {
+            Approvals.Verify(Tokenise("a b c,\"text\""));
+        }
+
+        [Test]
+        public void EmbeddedSpacesRemainInSpeechMarkTextInCsvToken()
+        {
+            Approvals.Verify(Tokenise("a b c,\"text with space\""));
+        }
+
+        [Test]
+        public void CommaInEmbeddedSpeechMarkDelimitedCsvTextIsAProblem()
+        {
+            Approvals.Verify(Tokenise("a b c,\"text with space, and a comma\""));
+        }
+
+        [Test]
+        public void EmbeddedSpeechMarksAreUsedToExtendTheTokenButDropped()
+        {
+            Approvals.Verify(Tokenise("a b c\"text with a space, and a comma\""));
+        }
+
+        [Test]
         public void EmptyTokensAreExtracted()
         {
             Approvals.Verify(Tokenise("\"\""));

@@ -1,0 +1,6 @@
+﻿Tokens extracted from:
+-->a b c,d,e<--
+
+0: [a]
+1: [b]
+2: [c,d,e]

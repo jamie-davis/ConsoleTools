@@ -22,6 +22,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
         {
             var output = new List<string>();
             var newItem = String.Empty;
+            var hasData = false;
             var delimited = false;
             var pos = 0;
             
@@ -30,13 +31,14 @@ namespace ConsoleToolkit.CommandLineInterpretation
                 output.Add(newItem);
                 newItem = string.Empty;
                 delimited = false;
+                hasData = false;
             };
 
             while (pos < testCommandLine.Length)
             {
                 var next = testCommandLine[pos++];
 
-                var noData = !delimited && newItem == String.Empty;
+                var noData = !delimited && !hasData;
 
                 var isSpace = next == ' ';
                 if (isSpace && noData)
@@ -50,9 +52,10 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
                 var isEscapedSpeechMark = next == '\\' &&  pos < testCommandLine.Length && testCommandLine[pos] == '\"';
                 var isSpeechMark = (next == '\"') || isEscapedSpeechMark;
-                if (isSpeechMark && noData)
+                if (isSpeechMark && !delimited)
                 {
                     delimited = true;
+                    hasData = true;
                 }
                 else if (isSpeechMark && delimited)
                 {
@@ -64,20 +67,18 @@ namespace ConsoleToolkit.CommandLineInterpretation
                     }
                     else
                     {
-                        commit();
+                        delimited = false;
+                        ++pos;
                     }
-                }
-                else if (isSpeechMark)
-                {
-                    commit();
                 }
                 else
                 {
+                    hasData = true;
                     newItem += next;
                 }
             }
 
-            if (newItem != String.Empty)
+            if (hasData)
                 commit();
 
             return output.ToArray();
