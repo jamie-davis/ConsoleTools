@@ -18,6 +18,8 @@ namespace ConsoleToolkit.Testing
         /// <param name="args">The arguments to pass.</param>
         public static void Run<T>(string[] args = null, IConsoleInterface consoleInterface = null) where T : class
         {
+            CleanEnvironment();
+
             var type = typeof (T);
             var toolkitBase = type.BaseType;
             Debug.Assert(toolkitBase != null);
@@ -45,6 +47,11 @@ namespace ConsoleToolkit.Testing
                     (instance as IDisposable).Dispose();
                 }
             }
+        }
+
+        private static void CleanEnvironment()
+        {
+            Environment.ExitCode = 0;
         }
     }
 }
