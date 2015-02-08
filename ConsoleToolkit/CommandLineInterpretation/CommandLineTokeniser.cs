@@ -68,7 +68,6 @@ namespace ConsoleToolkit.CommandLineInterpretation
                     else
                     {
                         delimited = false;
-                        ++pos;
                     }
                 }
                 else

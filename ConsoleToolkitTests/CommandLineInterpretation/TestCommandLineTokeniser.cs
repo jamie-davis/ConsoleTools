@@ -66,6 +66,12 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         }
 
         [Test]
+        public void EmbeddedSpeechMarksInMultipleArgsBehaveCorrectly()
+        {
+            Approvals.Verify(Tokenise("a b c\"text with a space, and a comma\" e\"more text with a space, and a comma\""));
+        }
+
+        [Test]
         public void EmptyTokensAreExtracted()
         {
             Approvals.Verify(Tokenise("\"\""));
