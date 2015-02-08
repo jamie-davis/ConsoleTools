@@ -8,5 +8,5 @@ if NOT EXIST "ConsoleToolkit %consoletoolsversion%" md "ConsoleToolkit %consolet
 copy ..\ConsoleToolKit\bin\release\*.dll "ConsoleToolkit %consoletoolsversion%"
 copy ..\ConsoleToolKit\bin\release\*.dll "ConsoleToolkit_current"
 
-git\git add .
+git\git add "ConsoleToolkit %consoletoolsversion%\*.dll" -f
 pause
