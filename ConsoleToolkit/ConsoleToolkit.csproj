@@ -24,6 +24,7 @@
     <DefineConstants Condition=" '$(TargetFrameworkVersion)' != 'v4.0' ">DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\ConsoleToolkit.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,6 +34,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DefineConstants Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">TARGET_FRAMEWORK_4</DefineConstants>
+    <DocumentationFile>bin\Release\ConsoleToolkit.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
