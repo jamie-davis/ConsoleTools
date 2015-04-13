@@ -2,7 +2,7 @@
 layout: page
 title: Command Line Parsing Conventions
 ---
-There are three main conventions for command line parsing common on Windows, as far as I can determine, and the toolikit contains support for each of them.
+There are three main conventions for command line parsing common on Windows, as far as I can determine. The toolikit contains support for each of them.
 
 To select the parsing conventions you wish to use in an application, set the ```ParsingConventions``` toolkit option before passing control to the toolkit. For example
 
@@ -18,7 +18,6 @@ The example selects the POSIX conventions. The available conventions are:
 + ```MicrosoftStandard```
 + ```PosixConventions```
 + ```MsDosConventions```
-+ ```CustomConventions```
 
 Below are descriptions of each set of conventions. The descriptions contain example command lines, which assume the following options definition:
 
@@ -78,3 +77,4 @@ The MS-DOS conventions are not formally documented, as far as I can tell. Howeve
 Options are one or more alphanumeric characters preceded by a forward slash. Plus and minus are also allowed (for an example of a '+' see the robocopy /A option). Some options require an argument which must be part of the same token separated from the option by a colon (e.g. /PERSISTENT:YES).
 
 ### ```CustomConventions```
+It is possible to define your own custom conventions, but it is needlessly complicated and the feature is not ready for prime time yet. If you do play with it, be aware that there is no guarantee that it will continue to work in future releases.
