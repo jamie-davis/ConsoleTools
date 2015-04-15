@@ -12,7 +12,7 @@ The Console Toolkit documentation covers the following areas:
 	2. [Console applications](consoleapps.html)
 	2. [Command driven applications](commandapps.html)
 	3. [Parsing conventions](parsingconventions.html)
-	4. [Ioc and passing services into handlers](ioc.html) 
+	4. [Dependency injection and command handlers](DependencyInjection.html) 
 * Defining commands and program options.
 	1. [Overview](commandoverview.html)
 	2. Positional Parameters
