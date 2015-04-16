@@ -1,7 +1,6 @@
 ---
 layout: page
 title: Command Overview
-group: navigation
 ---
 
 The definition of commands is central to the functionality of a console application.
@@ -58,3 +57,50 @@ For example, a program that defines "add", "delete" and "edit" commands would ha
 	}
 
 Once again, this example contains no help text and no help command, which is not good practice.
+
+#Defining Commands
+Commands are classes that have the ```[Command]``` attribute. The toolkit searches the assembly for classes with this attribute in order to build its command configuration.
+
+###Command naming
+By default, the class name will be used as the command name in a ```CommandDrivenApplication``` (in a ```ConsoleApplication```, there is only one command and its name is not important). By convention, if the command class name ends with "Command", the word "Command" will be dropped. For example:
+
+* ```class AddCommand``` would configure a command called "add"
+* ```class DeleteCommand``` would configure a command called "delete"
+* ```class GetHelp``` would configure a command called "gethelp"
+
+If you want to override the command name, you can specify a parameter to the ```[Command]``` attribute:
+
+	[Command("doit")]
+	class MyCommand
+	{
+	} 
+
+which would define a command called "doit". 
+
+###Command Help
+The toolkit provides automated help facilities, and you can provide help text for a command class by adding the ```[Description]``` attribute (this example assumes a ```CommandDrivenApplication```):
+
+	[Command]
+	[Description("Add a file to the archive.")]
+	class AddCommand
+	{
+		[Positional]
+		public string Filename {get;set;}
+	}
+
+	[Command]
+	[Description("Delete a file from the archive.")]
+	class DeleteCommand
+	{
+		[Positional]
+		public string Filename {get;set;}
+	}
+
+These commands define help text using the ```[Description]``` attribute. The resulting help text looks like this:
+~~~
+Available commands
+
+add     Add a file to the archive.
+delete  Delete a file from the archive.
+~~~
+
