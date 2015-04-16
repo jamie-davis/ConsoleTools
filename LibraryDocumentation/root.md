@@ -15,7 +15,7 @@ The Console Toolkit documentation covers the following areas:
 	4. [Dependency injection and command handlers](DependencyInjection.html) 
 * Defining commands and program options.
 	1. [Overview](commandoverview.html)
-	2. Positional Parameters
+	2. [Positional Parameters](positionalParameters.html)
 	3. Options
 	4. Reusing options through OptionSet
 	5. [Defining handlers](defininghandlers.html) 
