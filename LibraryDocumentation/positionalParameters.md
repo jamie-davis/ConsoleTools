@@ -77,7 +77,7 @@ Usually, you will define the parameter order by the order in which the parameter
 	    [Description("The path to the file to be added to the archive")]
         public string FileToAdd { get; set; }
 
-This will reposition the parameter if required:
+This will reposition the parameter:
 
 ~~~
 
@@ -89,3 +89,42 @@ category
 filetoadd  The path to the file to be added to the archive
 
 ~~~
+
+####Repeating parameters
+Sometimes, a parameter must be repeatable - for example, compilers commonly support listing any number of source files on the command line:
+
+```cl a.cpp b.cpp```
+
+Which would compile both ```a.cpp``` and ```b.cpp```.
+
+You can achieve the same behaviour by specifying a positional parameter as a collection type:
+
+        [Positional]
+        public List<string> Repeating { get; set; } 
+
+The fact that ```List<string>``` implements ```ICollection<string>``` allows the toolkit to accept multiple values for the parameter.
+
+There is only one repeating parameter possible for a command, and it must be the last parameter. The command line parser has no way to detect the end of the repetitions for a repeating parameter, so any subsequent parameters will never get values.
+
+You can have repeating parameters of types other than strings:
+
+        [Positional]
+        public List<int> Repeating { get; set; } 
+
+All of the parameters supplied for ```Repeating``` would be validated as integers.
+
+At least one value is expected in a repeating positional. Supplying zero instances will give an error message. However, you can still supply a default value:
+
+        [Positional(DefaultValue = "default")]
+        public List<int> Repeating { get; set; } 
+
+In this case, if no value is provided on the command line, it will not be an error and the handler will receive a collection containing a single string set to ```"default"```.
+
+####Validation
+The type of the property defining the positional parameter determines the validation that will be carried out on the command line input.
+
+Only simple types are supported for positional parameters, which excludes enumerations at this time. If an unsupported type is used for a positional parameter, a ```InvalidParameterType``` exception will be thrown by the toolkit.
+
+The validation of a parameter is essentially if .Net can parse the string as the datatype, it is valid.
+
+All of the type validation is carried out automatically, and command handlers will only be called when the parameters have acceptable values.
