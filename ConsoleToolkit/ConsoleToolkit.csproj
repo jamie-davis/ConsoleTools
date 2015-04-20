@@ -222,6 +222,7 @@
     <Compile Include="Utilities\MethodInvoker.cs" />
     <Compile Include="Utilities\PrefixLines.cs" />
     <Compile Include="Utilities\ReflectionExtensionMethods.cs" />
+    <Compile Include="Utilities\ReportAnalyser.cs" />
     <Compile Include="Utilities\RuntimeTypeBuilder.cs" />
     <Compile Include="Utilities\RuntimeTypeBuilderProperty.cs" />
   </ItemGroup>

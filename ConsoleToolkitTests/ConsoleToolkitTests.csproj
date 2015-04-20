@@ -155,6 +155,7 @@
     <Compile Include="TestToolkitOptions.cs" />
     <Compile Include="Utilities\MethodInvoker.cs" />
     <Compile Include="Utilities\TestPrefixLines.cs" />
+    <Compile Include="Utilities\TestReportAnalyser.cs" />
     <Compile Include="Utilities\TestRuntimeTypeBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
