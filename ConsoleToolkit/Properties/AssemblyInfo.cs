@@ -35,7 +35,7 @@ This package provides a framework for building console applications, improved ha
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.23")]
+[assembly: AssemblyFileVersion("1.0.0.24")]
 [assembly: AssemblyInformationalVersion("ConsoleToolkit v1.0")]
 
 [assembly: InternalsVisibleTo("ConsoleToolkitTests")]
