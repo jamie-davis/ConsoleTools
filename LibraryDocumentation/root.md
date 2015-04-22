@@ -16,7 +16,7 @@ The Console Toolkit documentation covers the following areas:
 * Defining commands and program options.
 	1. [Overview](commandoverview.html)
 	2. [Positional Parameters](positionalParameters.html)
-	3. Options
+	3. [Options](options.html)
 	4. Reusing options through OptionSet
 	5. [Defining handlers](defininghandlers.html) 
 * Formatting output on the console.
