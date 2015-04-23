@@ -17,7 +17,7 @@ The Console Toolkit documentation covers the following areas:
 	1. [Overview](commandoverview.html)
 	2. [Positional Parameters](positionalParameters.html)
 	3. [Options](options.html)
-	4. Reusing options through OptionSet
+	4. [Reusing options through OptionSet](optionsets.html)
 	5. [Defining handlers](defininghandlers.html) 
 * Formatting output on the console.
 	1. Word wrapping
