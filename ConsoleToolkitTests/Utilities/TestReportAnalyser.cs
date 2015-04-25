@@ -4,7 +4,6 @@ using System.Linq;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.ConsoleIO;
-using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.Testing;
 using ConsoleToolkit.Utilities;
 using ConsoleToolkitTests.TestingUtilities;

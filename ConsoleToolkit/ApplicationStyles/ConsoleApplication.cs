@@ -56,7 +56,7 @@ namespace ConsoleToolkit.ApplicationStyles
             {
                 foreach (var error in errors)
                 {
-                    app.Console.WrapLine(error);
+                    app.Error.WrapLine(error);
                 }
                 Environment.ExitCode = app.CommandLineErrorExitCode;
                 return;
