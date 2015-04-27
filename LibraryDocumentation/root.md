@@ -20,11 +20,11 @@ The Console Toolkit documentation covers the following areas:
 	4. [Reusing options through OptionSet](optionsets.html)
 	5. [Defining handlers](defininghandlers.html) 
 * Formatting output on the console.
-	1. Word wrapping
-	2. Colour
-	2. Simple table formatting
+	1. [Output Streams And Adapters](outputstreams.html)
+	1. [Basic Output Features](output.html)
 	3. More control through Report<T>
 * Accepting input from the user.
+    1. Overview
 	1. Simple confirmations
 	2. Prompting the user
 	3. Prompting for multiple values
