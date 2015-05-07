@@ -22,7 +22,7 @@ The Console Toolkit documentation covers the following areas:
 * Formatting output on the console.
 	1. [Output Streams And Adapters](outputstreams.html)
 	1. [Basic Output Features](output.html)
-	3. More control through Report<T>
+	3. [More control through Report&lt;T&gt;](asreport.html)
 * Accepting input from the user.
     1. Overview
 	1. Simple confirmations
