@@ -24,9 +24,7 @@ The Console Toolkit documentation covers the following areas:
 	1. [Basic Output Features](output.html)
 	3. [More control through Report&lt;T&gt;](asreport.html)
 * Accepting input from the user.
-    1. Overview
-	1. Simple confirmations
-	2. Prompting the user
-	3. Prompting for multiple values
+    1. [Overview](inputstream.html)
+    2. [Customising	data input](custominput.html)
 
 This documentation is under construction...
