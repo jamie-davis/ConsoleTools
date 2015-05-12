@@ -125,3 +125,4 @@ JB :
 
 #Additional modification config
 GITHUB_PATH : https://github.com/jamie-davis/ConsoleTools
+NUGET_PATH : https://www.nuget.org/packages/ConsoleToolkit

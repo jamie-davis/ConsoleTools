@@ -14,6 +14,7 @@
     {% endif %}
 
     {% assign GITHUB_PATH = site.GITHUB_PATH %}
+    {% assign NUGET_PATH = site.NUGET_PATH %}
 
     {% if site.JB.ASSET_PATH %}
       {% assign ASSET_PATH = site.JB.ASSET_PATH %}
