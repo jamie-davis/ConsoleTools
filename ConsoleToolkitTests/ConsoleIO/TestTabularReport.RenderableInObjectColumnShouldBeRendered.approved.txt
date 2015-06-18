@@ -1,0 +1,17 @@
+﻿----+----|----+----|----+----|----+----|----+----|
+Item   Value                                      
+------ -------------------------------------------
+Item 1 15                                         
+Item 2 string                                     
+Item 3 { X = 100, Y = 200 }                       
+Item 3 Wrapped text longer than allowed for by    
+       avalable space limitations. Should be      
+       wrapped in the column                      
+       Col1 Col2         Col3 Col4                
+       ---- ------------ ---- --------------------
+          1 Two          3.00 Four                
+          2 Three        3.10 One Two Three Four  
+                              Five                
+          3 Four point   3.20 One Two Three Four  
+            zero              Five Six Seven      
+                                                  

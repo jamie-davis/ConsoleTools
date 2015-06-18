@@ -430,6 +430,33 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(sb.ToString());
         }
 
+        [Test]
+        public void RenderableInObjectColumnShouldBeRendered()
+        {
+            var renderTableData = new[]
+            {
+                new {Col1 = 1, Col2 = "Two", Col3 = 3.0, Col4 = "Four"},
+                new {Col1 = 2, Col2 = "Three", Col3 = 3.1, Col4 = "One Two Three Four Five"},
+                new {Col1 = 3, Col2 = "Four point zero", Col3 = 3.2, Col4 = "One Two Three Four Five Six Seven"},
+            };
+            var renderable = new RecordingConsoleAdapter();
+            renderable.WrapLine("Wrapped text longer than allowed for by avalable space limitations. Should be wrapped in the column");
+            renderable.FormatTable(renderTableData);
+            var data = new[]
+            {
+                new {Item = "Item 1", Value = (object)15},
+                new {Item = "Item 2", Value = (object)"string"},
+                new {Item = "Item 3", Value = (object)new {X = 100, Y = 200}},
+                new {Item = "Item 3", Value = (object)renderable},
+            };
+
+            var sb = new StringBuilder();
+
+            sb.Append(Report(data, 50, 10));
+
+            Approvals.Verify(sb.ToString());
+        }
+
         private RecordingConsoleAdapter MakeRenderable(int number, bool narrow = false)
         {
             var output = new RecordingConsoleAdapter();

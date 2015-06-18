@@ -276,7 +276,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
         private static string[] RenderCol(int tabLength, FormattingIntermediate rowValue, PropertyColumnFormat c, out int wrappedLines)
         {
-            if (c.Format.Type != typeof(IConsoleRenderer) || rowValue.RenderableValue == null)
+            if (rowValue.RenderableValue == null)
             {
                 return ColumnWrapper.WrapAndMeasureValue(rowValue.TextValue, c.Format, c.Format.ActualWidth, tabLength, 0, out wrappedLines);
             }
