@@ -10,7 +10,7 @@
     <projectUrl>http://jamie-davis.github.io/ConsoleTools/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Initial release</releaseNotes>
+    <releaseNotes>Fixed a problem in which FormatTable would throw if an "Object" column contained an IRenderable.</releaseNotes>
     <copyright>Copyright 2014</copyright>
     <tags>Console Toolkit .NET</tags>
   </metadata>
