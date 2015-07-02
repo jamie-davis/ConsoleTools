@@ -120,6 +120,27 @@ namespace ConsoleToolkitTests.ConsoleIO
         }
 
         [Test]
+        public void TheReportCanBeIndented()
+        {
+            //Arrange
+            var data = Enumerable.Range(0, 4);
+            var indentReport = data.AsReport(rep => rep.AddColumn(n => string.Format("Test value {0}", n),
+                                                            col => col.RightAlign())
+                                                 .Indent(4)
+                                                 .StretchColumns());
+            var normalReport = data.AsReport(rep => rep.AddColumn(n => string.Format("Test value {0}", n),
+                                                            col => col.RightAlign())
+                                                 .StretchColumns());
+
+            //Act
+            _adapter.FormatTable(indentReport);
+            _adapter.FormatTable(normalReport);
+
+            //Assert
+            Approvals.Verify(_consoleInterface.GetBuffer());
+        }
+
+        [Test]
         public void AllOptionsCanBeSetAtOnce()
         {
             //Arrange
@@ -130,6 +151,7 @@ namespace ConsoleToolkitTests.ConsoleIO
                                                  .OmitHeadings()
                                                  .AddColumn(n => string.Format("Test value {0}", n),
                                                             col => col.RightAlign())
+                                                 .Indent(4)
                                                  );
 
             //Assert

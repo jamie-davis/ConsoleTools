@@ -42,6 +42,29 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal.ReportDefinitions
         }
 
         [Test]
+        public void IndentIsZeroByDefault()
+        {
+            //Act
+            var parameters = new ReportParameters<TestRec>();
+
+            //Assert
+            Assert.That(parameters.Details.IndentSpaces, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void RequestedIndentIsRecorded()
+        {
+            //Arrange
+            var parameters = new ReportParameters<TestRec>();
+
+            //Act
+            parameters.Indent(4);
+
+            //Assert
+            Assert.That(parameters.Details.IndentSpaces, Is.EqualTo(4));
+        }
+
+        [Test]
         public void ByDefaultNoColumnsAreDefined()
         {
             //Arrange

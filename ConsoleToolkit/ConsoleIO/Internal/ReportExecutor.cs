@@ -16,10 +16,18 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         /// </summary>
         /// <typeparam name="T">The type of the items that are input to the report.</typeparam>
         /// <param name="report">The report definition.</param>
-        /// <param name="width">The available width for formatting.</param>
+        /// <param name="availableWidth">The available width for formatting.</param>
         /// <returns>A set of report lines.</returns>
-        internal static IEnumerable<string> GetLines<T>(Report<T> report, int width)
+        internal static IEnumerable<string> GetLines<T>(Report<T> report, int availableWidth)
         {
+            int width;
+            var indent = string.Empty;
+            if (availableWidth > report.IndentSpaceCount)
+                width = availableWidth - report.IndentSpaceCount;
+            else
+                width = availableWidth;
+            var actualIndent = availableWidth - width;
+
             var formatMethod = MakeFormatMethodInfo(report);
             var parameters = new object[]
                              {
@@ -33,7 +41,15 @@ namespace ConsoleToolkit.ConsoleIO.Internal
                              };
 
             var tabular = MethodInvoker.Invoke(formatMethod, null, parameters) as IEnumerable<string>;
-            return tabular;
+            if (actualIndent > 0)
+                indent = new string(' ', actualIndent);
+            foreach (var line in tabular)
+            {
+                if (actualIndent > 0)
+                    yield return indent + line;
+                else
+                    yield return line;
+            }
         }
 
         private static MethodInfo MakeFormatMethodInfo<T>(Report<T> report)
