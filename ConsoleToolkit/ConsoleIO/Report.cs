@@ -26,6 +26,7 @@ namespace ConsoleToolkit.ConsoleIO
             ColumnDivider = reportParameters.Details.ColumnDivider;
             _children = reportParameters.Children;
             IndentSpaceCount = reportParameters.Details.IndentSpaces;
+            TitleText = reportParameters.Details.TitleText;
 
             Func<object, T> rowGetter;
             _query = ReportQueryBuilder.Build(items, reportParameters.ColumnConfigs.Select(c => c.ValueExpression), out _output, out rowGetter);
@@ -69,5 +70,10 @@ namespace ConsoleToolkit.ConsoleIO
         /// The number of spaces to indent the report.
         /// </summary>
         internal int IndentSpaceCount { get; private set; }
+
+        /// <summary>
+        /// Simple text to be shown as the report title.
+        /// </summary>
+        internal string TitleText { get; private set; }
     }
 }

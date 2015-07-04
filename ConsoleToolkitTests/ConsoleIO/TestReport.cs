@@ -141,6 +141,42 @@ namespace ConsoleToolkitTests.ConsoleIO
         }
 
         [Test]
+        public void ReportTitleIsPrinted()
+        {
+            //Arrange
+            var data = Enumerable.Range(0, 4);
+            var report = data.AsReport(rep => rep.AddColumn(n => string.Format("Test value {0}", n),
+                                                            col => col.RightAlign())
+                                                 .Indent(4)
+                                                 .StretchColumns()
+                                                 .Title("Test".Red() + " " + "Report".Green()));
+
+            //Act
+            _adapter.FormatTable(report);
+
+            //Assert
+            Approvals.Verify(_consoleInterface.GetBuffer());
+        }
+
+        [Test]
+        public void ReportTitleIsWrapped()
+        {
+            //Arrange
+            var data = Enumerable.Range(0, 4);
+            var report = data.AsReport(rep => rep.AddColumn(n => string.Format("Test value {0}", n),
+                                                            col => col.RightAlign())
+                                                 .Indent(4)
+                                                 .StretchColumns()
+                                                 .Title("ABCDEF GHIJKLM NOPQRST UVWXYZ ABCDEF GHIJKLM NOPQRST UVWXYZ ABCDEF GHIJKLM NOPQRST UVWXYZ ABCDEF GHIJKLM NOPQRST UVWXYZ ABCDEF GHIJKLM NOPQRST UVWXYZ ABCDEF GHIJKLM NOPQRST UVWXYZ"));
+
+            //Act
+            _adapter.FormatTable(report);
+
+            //Assert
+            Approvals.Verify(_consoleInterface.GetBuffer());
+        }
+
+        [Test]
         public void AllOptionsCanBeSetAtOnce()
         {
             //Arrange

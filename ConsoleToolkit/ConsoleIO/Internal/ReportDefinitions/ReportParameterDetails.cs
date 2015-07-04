@@ -51,6 +51,11 @@ namespace ConsoleToolkit.ConsoleIO.Internal.ReportDefinitions
         /// </summary>
         public int IndentSpaces { get; set; }
 
+        /// <summary>
+        /// A simple string to be shown as the report title.
+        /// </summary>
+        public string TitleText { get; set; }
+
         private void RebuildOptions()
         {
             var options = (ReportFormattingOptions)0;

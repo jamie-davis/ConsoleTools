@@ -145,6 +145,7 @@
     <Compile Include="ConsoleIO\TestRedirectedConsole.cs" />
     <Compile Include="ConsoleIO\TestReport.cs" />
     <Compile Include="ConsoleIO\TestTabularReport.cs" />
+    <Compile Include="ConsoleIO\TestUnderliner.cs" />
     <Compile Include="ConsoleIO\UnitTestUtilities\RulerFormatter.cs" />
     <Compile Include="ConsoleIO\UnitTestUtilities\TabularReportRenderTool.cs" />
     <Compile Include="SetUpTests.cs" />

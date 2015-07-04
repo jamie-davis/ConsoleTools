@@ -64,6 +64,18 @@ namespace ConsoleToolkit.ConsoleIO.ReportDefinitions
             Details.IndentSpaces = spaces;
             return this;
         }
+
+        /// <summary>
+        /// Adds a title string to the report.
+        /// </summary>
+        /// <param name="titleText"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public ReportParameters<T> Title(string titleText)
+        {
+            Details.TitleText = titleText;
+            return this;
+        }
     }
 
     internal abstract class BaseChildItem<T>

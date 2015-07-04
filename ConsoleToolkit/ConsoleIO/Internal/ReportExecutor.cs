@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,8 @@ namespace ConsoleToolkit.ConsoleIO.Internal
     /// </summary>
     internal static class ReportExecutor
     {
+        private static readonly ColumnFormat DefaultFormat = new ColumnFormat();
+
         /// <summary>
         /// Return the lines output by a report.
         /// </summary>
@@ -40,15 +43,29 @@ namespace ConsoleToolkit.ConsoleIO.Internal
                                  report.Children
                              };
 
+            
             var tabular = MethodInvoker.Invoke(formatMethod, null, parameters) as IEnumerable<string>;
             if (actualIndent > 0)
                 indent = new string(' ', actualIndent);
-            foreach (var line in tabular)
+            foreach (var line in ProduceTitle(report, availableWidth).Concat(tabular))
             {
                 if (actualIndent > 0)
                     yield return indent + line;
                 else
                     yield return line;
+            }
+        }
+
+        private static IEnumerable<string> ProduceTitle<T>(Report<T> report, int availableWidth)
+        {
+            if (string.IsNullOrEmpty(report.TitleText))
+                yield break;
+
+            var lines = ColumnWrapper.WrapValue(report.TitleText, DefaultFormat, availableWidth);
+            foreach (var line in lines)
+            {
+                yield return line + Environment.NewLine;
+                yield return Underliner.Generate(line) + Environment.NewLine;
             }
         }
 

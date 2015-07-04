@@ -165,6 +165,7 @@
     <Compile Include="ConsoleIO\Internal\ReportColumnAligner.cs" />
     <Compile Include="ConsoleIO\Internal\SplitWord.cs" />
     <Compile Include="ConsoleIO\Internal\TextStats.cs" />
+    <Compile Include="ConsoleIO\Internal\Underliner.cs" />
     <Compile Include="ConsoleIO\Internal\ValueFormatter.cs" />
     <Compile Include="ConsoleIO\Internal\WidthCalculators\BooleanWidthCalculator.cs" />
     <Compile Include="ConsoleIO\Internal\WidthCalculators\DateTimeWidthCalculator.cs" />
