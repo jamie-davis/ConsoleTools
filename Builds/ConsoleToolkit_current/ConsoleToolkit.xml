@@ -1831,6 +1831,16 @@
             The string that should be used to seperate columns in the report.
             </summary>
         </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.Internal.ReportDefinitions.ReportParameterDetails.IndentSpaces">
+            <summary>
+            The number of extra spaces to indent the report.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.Internal.ReportDefinitions.ReportParameterDetails.TitleText">
+            <summary>
+            A simple string to be shown as the report title.
+            </summary>
+        </member>
         <member name="T:ConsoleToolkit.ConsoleIO.Internal.ReportDefinitions.ReportQueryRowFunctionBuilder">
             <summary>
             Builds a function that will convert a consistent input type which is not directly specified (i.e. only the expressions contain it), to the 
@@ -1886,7 +1896,7 @@
             </summary>
             <typeparam name="T">The type of the items that are input to the report.</typeparam>
             <param name="report">The report definition.</param>
-            <param name="width">The available width for formatting.</param>
+            <param name="availableWidth">The available width for formatting.</param>
             <returns>A set of report lines.</returns>
         </member>
         <member name="T:ConsoleToolkit.ConsoleIO.Internal.TabularReport">
@@ -2171,6 +2181,13 @@
             This class is not thread safe.
             </summary>
         </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.Underliner.Generate(System.String,System.String)">
+            <summary>
+            Generate an underline for the supplied text
+            </summary>
+            <param name="line">The text to underline</param>
+            <returns>The string underlining the provided text</returns>
+        </member>
         <member name="T:ConsoleToolkit.ConsoleIO.Internal.WidthCalculators.BooleanWidthCalculator">
             <summary>
             Calculate the defaults for Boolean column widths.
@@ -2279,6 +2296,16 @@
             The divider to place between each column on the report.
             </summary>
         </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.Report`1.IndentSpaceCount">
+            <summary>
+            The number of spaces to indent the report.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.Report`1.TitleText">
+            <summary>
+            Simple text to be shown as the report title.
+            </summary>
+        </member>
         <member name="M:ConsoleToolkit.ConsoleIO.ReportDefinitions.ColumnConfig.RightAlign">
             <summary>
             Override the default column alignment for the column, and force the data to be right aligned.
@@ -2324,6 +2351,21 @@
             <summary>
             This is called after the column has been configured and will default any crucial settings that have not been configured.
             </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ReportDefinitions.ReportParameters`1.Indent(System.Int32)">
+            <summary>
+            Specify the number of extra spaces to indent the report.
+            </summary>
+            <param name="spaces">The extra indent spaces count.</param>
+            <returns>The parameter object.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ReportDefinitions.ReportParameters`1.Title(System.String)">
+            <summary>
+            Adds a title string to the report.
+            </summary>
+            <param name="titleText"></param>
+            <returns></returns>
+            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="T:ConsoleToolkit.ConsoleIO.ReportFormattingOptions">
             <summary>
