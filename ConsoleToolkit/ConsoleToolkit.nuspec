@@ -10,7 +10,7 @@
     <projectUrl>http://jamie-davis.github.io/ConsoleTools/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Added the ability for Report&lt;&gt; to have a title, and for the report to be indented.</releaseNotes>
+    <releaseNotes>Bugfixes to report indentation.</releaseNotes>
     <copyright>Copyright 2014</copyright>
     <tags>Console Toolkit .NET</tags>
   </metadata>
