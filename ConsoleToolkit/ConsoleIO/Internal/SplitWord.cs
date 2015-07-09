@@ -100,5 +100,29 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
             return sb.ToString();
         }
+
+        public static string ConcatenateWords(IEnumerable<SplitWord> words, bool allowTrailingSpaces = false)
+        {
+            var output = string.Empty;
+            var wordEnumerator = words.GetEnumerator();
+            var valid = wordEnumerator.MoveNext();
+            while (valid)
+            {
+                var current = wordEnumerator.Current;
+                output += current.GetWordValue();
+                valid = wordEnumerator.MoveNext();
+                if (valid || allowTrailingSpaces)
+                {
+                    int spaces;
+                    output += current.GetTrailingSpaces(int.MaxValue, out spaces);
+                }
+                else
+                    output += current.ReconstituteInstructions(false);
+                if (current.TerminatesLine())
+                    output += Environment.NewLine;
+            }
+
+            return output;
+        }
     }
 }

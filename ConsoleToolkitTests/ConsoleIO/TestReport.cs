@@ -15,10 +15,13 @@ namespace ConsoleToolkitTests.ConsoleIO
     {
         private ConsoleInterfaceForTesting _consoleInterface;
         private ConsoleAdapter _adapter;
+        private string _longText;
 
         [SetUp]
         public void SetUp()
         {
+            _longText = "ABCDEF GHIJKLM NOPQRST UVWXYZ ABCDEF GHIJKLM NOPQRST UVWXYZ ABCDEF GHIJKLM NOPQRST UVWXYZ ABCDEF GHIJKLM NOPQRST UVWXYZ ABCDEF GHIJKLM NOPQRST UVWXYZ ABCDEF GHIJKLM NOPQRST UVWXYZ";
+
             _consoleInterface = new ConsoleInterfaceForTesting();
             _consoleInterface.BufferWidth = 80;
             _consoleInterface.WindowWidth = 80;
@@ -141,6 +144,51 @@ namespace ConsoleToolkitTests.ConsoleIO
         }
 
         [Test]
+        public void ReportWithChildReportCanBeIndented()
+        {
+            //Arrange
+            var data = Enumerable.Range(0, 4);
+            var indentReport = data.AsReport(rep => rep.AddColumn(n => string.Format("Test value {0}", n),
+                                                            col => col.RightAlign())
+                                                 .AddChild(r => Enumerable.Range(0,2), innerRep => innerRep.AddColumn(n => n, cc => cc.Heading("Number")))
+                                                 .Indent(4)
+                                                 .StretchColumns());
+            var normalReport = data.AsReport(rep => rep.AddColumn(n => string.Format("Test value {0}", n),
+                                                            col => col.RightAlign())
+                                                 .AddChild(r => Enumerable.Range(0, 2), innerRep => innerRep.AddColumn(n => n, cc => cc.Heading("Number")))
+                                                 .StretchColumns());
+
+            //Act
+            _adapter.FormatTable(indentReport);
+            _adapter.FormatTable(normalReport);
+
+            //Assert
+            Approvals.Verify(_consoleInterface.GetBuffer());
+        }
+
+        [Test]
+        public void ColourChildReportCanBeIndented()
+        {
+            //Arrange
+            var data = Enumerable.Range(0, 4);
+            var indentReport = data.AsReport(rep => rep.AddColumn(n => string.Format("Test value {0}", n),
+                                                            col => col.RightAlign())
+                                                 .AddChild(r => Enumerable.Range(0,1), 
+                                                    innerRep => innerRep
+                                                        .AddColumn(n => "111 " + _longText.Red(), cc => cc.Heading("Text1"))
+                                                        .AddColumn(n => "22 " + _longText.Blue(), cc => cc.Heading("Text2"))
+                                                        )
+                                                 .Indent(4)
+                                                 .StretchColumns());
+
+            //Act
+            _adapter.FormatTable(indentReport);
+
+            //Assert
+            Approvals.Verify(_consoleInterface.GetBuffer(ConsoleBufferFormat.Interleaved));
+        }
+
+        [Test]
         public void ReportTitleIsPrinted()
         {
             //Arrange
@@ -167,7 +215,7 @@ namespace ConsoleToolkitTests.ConsoleIO
                                                             col => col.RightAlign())
                                                  .Indent(4)
                                                  .StretchColumns()
-                                                 .Title("ABCDEF GHIJKLM NOPQRST UVWXYZ ABCDEF GHIJKLM NOPQRST UVWXYZ ABCDEF GHIJKLM NOPQRST UVWXYZ ABCDEF GHIJKLM NOPQRST UVWXYZ ABCDEF GHIJKLM NOPQRST UVWXYZ ABCDEF GHIJKLM NOPQRST UVWXYZ"));
+                                                 .Title(_longText));
 
             //Act
             _adapter.FormatTable(report);

@@ -67,7 +67,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
             if (numWordsForFirstLine > 0)
             {
-                var firstLineWords = ConcatenateWords(words.Take(numWordsForFirstLine));
+                var firstLineWords = SplitWord.ConcatenateWords(words.Take(numWordsForFirstLine));
                 var spaceAvailable = columnWidth - lastHeadingLineLength;
                 if (firstLineWords.Length < spaceAvailable)
                     firstLineWords = new string(' ', spaceAvailable - firstLineWords.Length) + firstLineWords;
@@ -93,23 +93,6 @@ namespace ConsoleToolkit.ConsoleIO.Internal
                 var format = "{0," + columnWidth + "}";
                 return string.Format(format, l);
             }).ToArray();
-        }
-
-        private static string ConcatenateWords(IEnumerable<SplitWord> words)
-        {
-            var output = string.Empty;
-            var wordEnumerator = words.GetEnumerator();
-            var valid = wordEnumerator.MoveNext();
-            while (valid)
-            {
-                var current = wordEnumerator.Current;
-                output += current.GetWordValue();
-                valid = wordEnumerator.MoveNext();
-                if (valid)
-                    output += new string(' ', current.TrailingSpaces);
-            }
-
-            return output;
         }
 
         private static int CountWordsThatFitFirstLine(int headingLength, int columnWidth, IEnumerable<SplitWord> words)

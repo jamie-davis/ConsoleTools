@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using ConsoleToolkit.Utilities;
 
 namespace ConsoleToolkit.ConsoleIO.Internal
@@ -13,6 +14,8 @@ namespace ConsoleToolkit.ConsoleIO.Internal
     internal static class ReportExecutor
     {
         private static readonly ColumnFormat DefaultFormat = new ColumnFormat();
+
+        private const int DefaultTabLength = 4;
 
         /// <summary>
         /// Return the lines output by a report.
@@ -50,10 +53,34 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             foreach (var line in ProduceTitle(report, availableWidth).Concat(tabular))
             {
                 if (actualIndent > 0)
-                    yield return indent + line;
+                {
+                    var lines = new List<string>();
+                    foreach (var splitLine in SplitLines(line))
+                        lines.Add(SplitWord.ConcatenateWords(splitLine, true));
+                    foreach (var sealedLine in lines.ToArray())
+                        yield return indent + sealedLine;
+                }
                 else
                     yield return line;
             }
+        }
+
+        private static IEnumerable<IEnumerable<SplitWord>> SplitLines(string data)
+        {
+            var words = WordSplitter.SplitToList(data, DefaultTabLength);
+            var line = new List<SplitWord>();
+            foreach (var splitWord in words)
+            {
+                line.Add(splitWord);
+                if (splitWord.TerminatesLine())
+                {
+                    yield return line;
+                    line = new List<SplitWord>();
+                }
+            }
+
+            if (line.Any())
+                yield return line;
         }
 
         private static IEnumerable<string> ProduceTitle<T>(Report<T> report, int availableWidth)
