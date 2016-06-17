@@ -98,7 +98,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 @"",
                 @"/D /A:loc",
                 @"/A",
-                @"/A:b,56",
+                @"file /A:b,56",
                 @"name /M:5",
                 @"name /A:5,"
             };
@@ -123,8 +123,8 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 @"",
                 @"-D -A:loc",
                 @"-A",
-                @"-A:b,56",
-                @"-A b,56",
+                @"file -A:b,56",
+                @"file -A b,56",
                 @"-- -A",
                 @"name 4 -maxSize:5"
             };

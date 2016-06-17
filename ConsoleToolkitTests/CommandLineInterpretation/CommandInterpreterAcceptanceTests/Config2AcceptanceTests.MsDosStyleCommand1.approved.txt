@@ -43,9 +43,14 @@ Test: /A
 Not enough parameters for the archive option.
 
 
-Test: /A:b,56
+Test: file /A:b,56
 
-The archive option has too many parameters.
+Data
+{
+    FileName = file
+    Delete = False
+    Archive = b,56
+}
 
 
 Test: name /M:5
@@ -55,6 +60,11 @@ Test: name /M:5
 
 Test: name /A:5,
 
-The archive option has too many parameters.
+Data
+{
+    FileName = name
+    Delete = False
+    Archive = 5,
+}
 
 

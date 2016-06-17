@@ -141,7 +141,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         [Test]
         public void MultipleConjoinedOptionParametersAreExtracted()
         {
-            
+            _options.First(o => o.Name == "opt1").ParameterCount = 3;
             var args = CommandLineTokeniser.Tokenise("-Opt1:arg,45,arg3");
             _parser.Parse(args, _options, _positionals, _result);
 

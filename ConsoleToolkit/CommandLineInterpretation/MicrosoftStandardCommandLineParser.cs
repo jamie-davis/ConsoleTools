@@ -76,14 +76,17 @@ namespace ConsoleToolkit.CommandLineInterpretation
             {
                 string[] arguments;
                 if ((option == null || (option.ParameterCount > 0 && argQueue.Count > 0)) && (argQueue.Count > 0 && !argQueue.Peek().StartsWith("-")))
-                    arguments = argQueue.Dequeue().Split(',');
+                    arguments = option == null || option.ParameterCount > 1 ? argQueue.Dequeue().Split(',') : new []{ argQueue.Dequeue() };
                 else
                     arguments = new string[] {};
 
                 return arguments;
             }
 
-            return input.Substring(colonPos + 1).Split(',');
+            var optionText = input.Substring(colonPos + 1);
+            return option == null || option.ParameterCount > 1
+                ? optionText.Split(',')
+                : new [] { optionText };
         }
 
         /// <summary>

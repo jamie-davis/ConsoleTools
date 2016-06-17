@@ -136,7 +136,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 @"c1",
                 @"c1 /D /A:loc",
                 @"c1 /A",
-                @"c1 /A:b,56",
+                @"c1 file /A:b,56",
                 @"c2 name 5 /M:5",
                 @"c2 name 5 /M:5,"
             };
@@ -161,8 +161,8 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 @"c1",
                 @"c1 -D -A:loc",
                 @"c1 -A",
-                @"c1 -A:b,56",
-                @"c1 -A b,56",
+                @"c1 file -A:b,56",
+                @"c1 file -A b,56",
                 @"c1 -- -A",
                 @"c2 name 4 -maxSize:5",
                 @"c3",

@@ -96,10 +96,10 @@ namespace ConsoleToolkit.CommandLineInterpretation
             {
                 optionName = arg;
 
-                var option = longOptions.FirstOrDefault(o => o.Name == optionName);
-                if (option != null && option.ParameterCount > 0 && ParameterAvailable(argQueue))
+                var noEqualOption = longOptions.FirstOrDefault(o => o.Name == optionName);
+                if (noEqualOption != null && noEqualOption.ParameterCount > 0 && ParameterAvailable(argQueue))
                 {
-                    var args = argQueue.Dequeue().Split(',');
+                    var args = noEqualOption.ParameterCount == 1 ? new [] { argQueue.Dequeue() } : argQueue.Dequeue().Split(',');
                     return result.OptionExtracted(optionName, args);
                 }
 
@@ -107,7 +107,9 @@ namespace ConsoleToolkit.CommandLineInterpretation
             }
 
             optionName = arg.Substring(0, equalPos);
-            var optionArgs = arg.Substring(equalPos + 1).Split(',');
+            var option = longOptions.FirstOrDefault(o => o.Name == optionName);
+            var valuePart = arg.Substring(equalPos + 1);
+            var optionArgs = option != null && option.ParameterCount == 1 ? new []{ valuePart } : valuePart.Split(',');
             return result.OptionExtracted(optionName, optionArgs);
         }
 

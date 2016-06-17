@@ -43,9 +43,14 @@ Test: c1 /A
 Not enough parameters for the archive option.
 
 
-Test: c1 /A:b,56
+Test: c1 file /A:b,56
 
-The archive option has too many parameters.
+C1Data
+{
+    FileName = file
+    DeleteAfter = False
+    ArchiveLocation = b,56
+}
 
 
 Test: c2 name 5 /M:5
@@ -60,6 +65,6 @@ C2Data
 
 Test: c2 name 5 /M:5,
 
-The maxSize option has too many parameters.
+The parameter "5," of the maxSize option has an invalid value.
 
 

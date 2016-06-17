@@ -103,14 +103,24 @@ Test: -A
 Not enough parameters for the archive option.
 
 
-Test: -A:b,56
+Test: file -A:b,56
 
-The archive option has too many parameters.
+Data
+{
+    FileName = file
+    Delete = False
+    Archive = b,56
+}
 
 
-Test: -A b,56
+Test: file -A b,56
 
-The archive option has too many parameters.
+Data
+{
+    FileName = file
+    Delete = False
+    Archive = b,56
+}
 
 
 Test: -- -A

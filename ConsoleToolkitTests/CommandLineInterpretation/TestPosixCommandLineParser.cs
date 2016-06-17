@@ -151,6 +151,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         [Test]
         public void LongOptionWithEqualsAndMultiplePatametersIsExtracted()
         {
+            _options.First(o => o.Name == "opt1").ParameterCount = 2;
             var args = CommandLineTokeniser.Tokenise("--opt1=arg,56,more");
             _parser.Parse(args, _options, _positionals, _result);
 
@@ -161,6 +162,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         [Test]
         public void LongOptionWithMultipleParametersInNextTokenIsExtracted()
         {
+            _options.First(o => o.Name == "opt1").ParameterCount = 2;
             var args = CommandLineTokeniser.Tokenise("--opt1 arg,56,more");
             _parser.Parse(args, _options, _positionals, _result);
 

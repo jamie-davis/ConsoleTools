@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ConsoleToolkit.CommandLineInterpretation
@@ -37,19 +38,22 @@ namespace ConsoleToolkit.CommandLineInterpretation
             var colonPos = arg.IndexOf(':');
             if (colonPos < 0)
             {
-                var optionName = GetOptionName(optionNames, arg.Substring(1));
-                var optionDefinition = optionDetails.FirstOrDefault(o => System.String.Compare(o.Name, optionName, System.StringComparison.OrdinalIgnoreCase) == 0);
-                if (optionDefinition != null)
+                var colonOptionName = GetOptionName(optionNames, arg.Substring(1));
+                var colonOptionDefinition = optionDetails.FirstOrDefault(o => System.String.Compare(o.Name, colonOptionName, System.StringComparison.OrdinalIgnoreCase) == 0);
+                if (colonOptionDefinition != null)
                 {
-                    optionName = optionDefinition.Name;
-                    optionArgs = ExtractOptionArgs(argQueue, optionDefinition);
+                    colonOptionName = colonOptionDefinition.Name;
+                    optionArgs = ExtractOptionArgs(argQueue, colonOptionDefinition);
                 }
 
-                return result.OptionExtracted(optionName, optionArgs ?? new string[] { });
+                return result.OptionExtracted(colonOptionName, optionArgs ?? new string[] { });
             }
 
             var option = arg.Substring(1, colonPos - 1);
-            optionArgs = arg.Substring(colonPos + 1).Split(',');
+            var optionDefinition = optionDetails.FirstOrDefault(o => string.Compare(o.Name, option, StringComparison.OrdinalIgnoreCase) == 0);
+            optionArgs = optionDefinition == null || optionDefinition.ParameterCount > 1
+                ? arg.Substring(colonPos + 1).Split(',')
+                : new[] {arg.Substring(colonPos + 1)};
             return result.OptionExtracted(GetOptionName(optionNames, option), optionArgs);
         }
 
@@ -61,7 +65,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
                 if (option.IsBoolean && !IsBoolValue(argQueue.Peek()))
                     arguments = new string[] {};
                 else
-                    arguments = argQueue.Dequeue().Split(',');
+                    arguments = option.ParameterCount == 1 ? new[] { argQueue.Dequeue() } : argQueue.Dequeue().Split(',');
             }
             else
                 arguments = new string[] {};
