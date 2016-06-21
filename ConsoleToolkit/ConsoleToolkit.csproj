@@ -119,6 +119,7 @@
     <Compile Include="ConsoleIO\Internal\DefaultConsole.cs" />
     <Compile Include="ConsoleIO\Internal\ErrorAdapter.cs" />
     <Compile Include="ConsoleIO\Internal\FormattingIntermediate.cs" />
+    <Compile Include="ConsoleIO\Internal\HeadingManager.cs" />
     <Compile Include="ConsoleIO\Internal\InputItem.cs" />
     <Compile Include="ConsoleIO\Internal\InstanceConstructor.cs" />
     <Compile Include="ConsoleIO\Internal\IPropertySource.cs" />

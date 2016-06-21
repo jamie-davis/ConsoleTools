@@ -7,12 +7,16 @@ String value 0
     Char
     ----
 
+String One                  String Two            
+--------------------------- ----------------------
 String value 1              N                     
 
     Char
     ----
     N   
 
+String One                  String Two            
+--------------------------- ----------------------
 String value 2              NN                    
 
     Char
@@ -20,6 +24,8 @@ String value 2              NN
     N   
     N   
 
+String One                  String Two            
+--------------------------- ----------------------
 String value 3              NNN                   
 
     Char
@@ -28,6 +34,8 @@ String value 3              NNN
     N   
     N   
 
+String One                  String Two            
+--------------------------- ----------------------
 String value 4              NNNN                  
 
     Char
@@ -37,6 +45,8 @@ String value 4              NNNN
     N   
     N   
 
+String One                  String Two            
+--------------------------- ----------------------
 String value 5              NNNNN                 
 
     Char
@@ -47,6 +57,8 @@ String value 5              NNNNN
     N   
     N   
 
+String One                  String Two            
+--------------------------- ----------------------
 String value 6              NNNNNN                
 
     Char
@@ -58,6 +70,8 @@ String value 6              NNNNNN
     N   
     N   
 
+String One                  String Two            
+--------------------------- ----------------------
 String value 7              NNNNNNN               
 
     Char
@@ -70,6 +84,8 @@ String value 7              NNNNNNN
     N   
     N   
 
+String One                  String Two            
+--------------------------- ----------------------
 String value 8              NNNNNNNN              
 
     Char
@@ -83,6 +99,8 @@ String value 8              NNNNNNNN
     N   
     N   
 
+String One                  String Two            
+--------------------------- ----------------------
 String value 9              NNNNNNNNN             
 
     Char
