@@ -34,6 +34,19 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
         }
 
         [Test]
+        public void SuppressHeadingRepetitionSetsReportOptions()
+        {
+            //Arrange
+            var details = new ReportParameterDetails();
+
+            //Act
+            details.SuppressHeadingRepetition = true;
+
+            //Assert
+            Assert.That(details.Options, Is.EqualTo(ReportFormattingOptions.SuppressHeadingsAfterChildReport));
+        }
+
+        [Test]
         public void AllOptionsCanBeCombined()
         {
             //Arrange
@@ -42,9 +55,12 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
             //Act
             details.OmitHeadings = true;
             details.StretchColumns = true;
+            details.SuppressHeadingRepetition = true;
 
             //Assert
-            Assert.That(details.Options, Is.EqualTo(ReportFormattingOptions.StretchColumns | ReportFormattingOptions.OmitHeadings));
+            Assert.That(details.Options, Is.EqualTo(ReportFormattingOptions.StretchColumns 
+                                                    | ReportFormattingOptions.OmitHeadings 
+                                                    | ReportFormattingOptions.SuppressHeadingsAfterChildReport));
         }
     }
 }

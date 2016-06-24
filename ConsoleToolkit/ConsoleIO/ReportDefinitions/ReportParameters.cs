@@ -46,6 +46,12 @@ namespace ConsoleToolkit.ConsoleIO.ReportDefinitions
             return this;
         }
 
+        public ReportParameters<T> SuppressHeadingRepetition()
+        {
+            Details.SuppressHeadingRepetition = true;
+            return this;
+        }
+
         internal ColumnSource ColumnSource { get { return _columnSource; } }
 
         public ReportParameters<T> StretchColumns()

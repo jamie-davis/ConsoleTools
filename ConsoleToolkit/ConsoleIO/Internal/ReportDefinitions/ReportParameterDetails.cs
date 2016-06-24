@@ -36,6 +36,21 @@ namespace ConsoleToolkit.ConsoleIO.Internal.ReportDefinitions
             }
         }
 
+        private bool _suppressHeadingRepetition;
+
+        /// <summary>
+        /// Select option to not repeat headings when a row has a child report.
+        /// </summary>
+        public bool SuppressHeadingRepetition
+        {
+            get { return _suppressHeadingRepetition; }
+            set
+            {
+                _suppressHeadingRepetition = value;
+                RebuildOptions();
+            }
+        }
+
         /// <summary>
         /// The options that should be specified when the report is formatted. This is generated from the settings selected.
         /// </summary>
@@ -63,6 +78,8 @@ namespace ConsoleToolkit.ConsoleIO.Internal.ReportDefinitions
                 options |= ReportFormattingOptions.OmitHeadings;
             if (_stretchColumns)
                 options |= ReportFormattingOptions.StretchColumns;
+            if (_suppressHeadingRepetition)
+                options |= ReportFormattingOptions.SuppressHeadingsAfterChildReport;
 
             Options = options;
         }

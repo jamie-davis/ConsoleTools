@@ -23,6 +23,11 @@ namespace ConsoleToolkit.ConsoleIO
         /// </summary>
         IncludeAllColumns = 4,
 
-        Default = 0,
+        /// <summary>
+        /// If child reports are present, do not repeat the report headings. By default, the report headings will be displayed again when a row has a child report. Use this option to suppress the headings repetition.
+        /// </summary>
+        SuppressHeadingsAfterChildReport = 8,
+
+        Default = 16,
     }
 }

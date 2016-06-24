@@ -8,6 +8,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
     internal class HeadingManager
     {
         private readonly bool _headingsRequired;
+        private readonly bool _allowChildReportHeadingRepeats;
         private bool _showHeadings = true;
         private List<PropertyColumnFormat> _columns;
         private int _tabLength;
@@ -15,9 +16,10 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
         public bool ShowHeadings { get { return _headingsRequired && _showHeadings; } }
 
-        public HeadingManager(bool headingsRequired)
+        public HeadingManager(bool headingsRequired, bool allowChildReportHeadingRepeats)
         {
             _headingsRequired = headingsRequired;
+            _allowChildReportHeadingRepeats = allowChildReportHeadingRepeats;
         }
 
         public void HeadingsParameters(List<PropertyColumnFormat> columns, int tabLength, string columnDivider)
@@ -57,7 +59,8 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
         public void ChildGenerated()
         {
-            _showHeadings = true;
+            if (_allowChildReportHeadingRepeats)
+                _showHeadings = true;
         }
     }
 }

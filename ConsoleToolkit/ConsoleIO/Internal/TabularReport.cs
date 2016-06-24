@@ -154,7 +154,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
             var sizer = new ColumnWidthNegotiator(columns, columnDivider.Length);
 
-            var headingsControl = new HeadingManager((options & ReportFormattingOptions.OmitHeadings) == 0);
+            var headingsControl = new HeadingManager((options & ReportFormattingOptions.OmitHeadings) == 0, (options & ReportFormattingOptions.SuppressHeadingsAfterChildReport) == 0);
             if (headingsControl.ShowHeadings)
                 sizer.AddHeadings();
 

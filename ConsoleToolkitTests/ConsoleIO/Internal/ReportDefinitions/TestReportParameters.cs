@@ -102,5 +102,18 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal.ReportDefinitions
             var result = parameters.ColumnSource.Columns.Select(c => c.Type.Name).JoinWith(" ");
             Assert.That(result, Is.EqualTo("Int32 Double String"));
         }
+
+        [Test]
+        public void SuppressHeadingsSettingIsRecorded()
+        {
+            //Arrange
+            var parameters = new ReportParameters<TestRec>();
+
+            //Act
+            parameters.SuppressHeadingRepetition();
+
+            //Assert
+            Assert.That(parameters.Details.SuppressHeadingRepetition, Is.True);
+        }
     }
 }
