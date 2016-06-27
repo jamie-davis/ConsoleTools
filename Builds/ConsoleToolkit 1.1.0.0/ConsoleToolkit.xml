@@ -1,0 +1,3010 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ConsoleToolkit</name>
+    </assembly>
+    <members>
+        <member name="T:ConsoleToolkit.ApplicationStyles.CommandDrivenApplication">
+            <summary>
+            This is the base class that defines a command driven console application.<para/>
+            A command driven console application supports a number of different commands that
+            are identified with a keyword. Each command has it's own set of parameters and 
+            options:<para/>
+            <code>
+            commandName [options] [parameters]
+            </code>
+            <para/>
+            
+            Commands must be defined by an attribute based system. By default, the commands 
+            supported by the application will be determined by searching the assembly containing
+            the application for classes that have the <see cref="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.CommandAttribute"/>.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ApplicationStyles.CommandDrivenApplication.HelpCommand``1(System.Func{``0,System.String})">
+            <summary>
+            Call this method to supply the framework with the command type that should provide help to the user.
+            The specified command type will be handled automatically by the framework to display usage text,
+            and specified command help text.
+            </summary>
+            <typeparam name="T">The command type. This must be a type used only as the help command.</typeparam>
+            <param name="getCommandParam">Supply a lambda that returns the command on which help is required. Return null to indicate that program level help.</param>
+        </member>
+        <member name="T:ConsoleToolkit.ApplicationStyles.ConsoleApplication">
+            <summary>
+            This is the base class that defines a console application.<para/>
+            A console application has a single set of parameters and options defined by the
+            default command.<para/>
+            The application's assembly will be searched for a command class identified by the 
+            <see cref="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.CommandAttribute"/>.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ApplicationStyles.Internals.CommandAssemblyScanner">
+            <summary>
+            Scan an assembly for classes with the <see cref="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.CommandAttribute"/>.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase">
+            <summary>
+            This is the base class for all Console Application framework classes. It is an internal class 
+            and should not be used directly by console applications.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.Config">
+            <summary>
+            The command configuration for the application.<para/>
+            You can supply a value for this in <see cref="M:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.Initialise"/>, or allow
+            the default behaviour to locate classes with the <see cref="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.CommandAttribute"/>.
+            <para/>
+            It is an error to set this property outside of the <see cref="M:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.Initialise"/> method.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.Handlers">
+            <summary>
+            The available command handlers
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.CommandLineErrorExitCode">
+            <summary>
+            This is the error code returned by the console application framework when the command line is invalid.
+            <para/>
+            By default, the value is 1, but you can override this virtual property to return a different value.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.MissingCommandHandlerExitCode">
+            <summary>
+            This is the error code returned by the console application framework when no command handler can be located.
+            <para/>
+            By default, the value is 1000, but you can override this virtual property to return a different value.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.Console">
+            <summary>
+            This is the console adapter for the application.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.Error">
+            <summary>
+            This is the error adapter for the application.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.Initialise">
+            <summary>
+            This is an optional extension point. Override this method to carry out any initialisation 
+            you wish to perform before the command line parameters are interpreted.<para/>
+            
+            This method is the last opportunity you have to provide a command line configuration 
+            before the default behaviour scans the assembly for classes decorated with the 
+            <see cref="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.CommandAttribute"/>.<para/>
+            
+            You can also customise the automatic configuration detection. See <see cref="M:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.SetConfigTypeFilter(System.Func{System.Type,System.Boolean})"/>.<para/>
+            
+            It is also the last opportunity you have to select the interpreter that will be used to
+            parse the command arguments. By default, the console application will support the
+            current Microsoft standard for command line interpretation, but the older MS Dos style, 
+            and the GNU Unix style are also available.<para/>
+            
+            It is also the last place available to you to attach command handlers if you do not want 
+            the default behaviour of scanning the assembly for classes decorated with the 
+            <see cref="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.CommandHandlerAttribute"/>.<para/>
+            
+            If it makes sense in your application to set the above in your constructor, it is fine to
+            do that and you do not have to override this method.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.OnCommandLineValid(System.Object)">
+            <summary>
+            This method will be called by the framework after validation of the command line parameters.
+            </summary>
+            <param name="command">The command object derived from the command line parameters.</param>
+        </member>
+        <member name="M:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.OnCommandSuccess">
+            <summary>
+            This method will be called by the framework after execution of a command has succeeded. Success is defined
+            as Environment.ExitCode == 0.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.OnCommandFailure">
+            <summary>
+            This method will be called by the framework after execution of a command has failed. Failure is defined
+            as Environment.ExitCode != 0.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.RegisterInjectionInstance``1(``0)">
+            <summary>
+            Register an instance of a type or interface that should be passed to command handlers that require
+            the specified type.<para/>
+            <remarks>Handler methods may specify the specified type in their parameter list and the instance will be
+            provided.</remarks>
+            </summary>
+            <param name="instance">The instance to provide.</param>
+        </member>
+        <member name="M:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.PostInitialise">
+            <summary>
+            This method carries out funtionality that should follow <see cref="M:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.Initialise"/>.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.SetConfigTypeFilter(System.Func{System.Type,System.Boolean})">
+            <summary>
+            Sets a filter that can limit the types that will be searched for configuration. Supply a predicate filter 
+            that excludes any types you don't want considered when assemblies are searched for configuration.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.BaseCommandConfig">
+            <summary>
+            The base class for command configurations.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.BaseOption">
+            <summary>
+            The base class for optional paramters of command configurations.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.BasePositional">
+            <summary>
+            The base class for positional parameters of command configurations.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.CommandAttributeLoader">
+            <summary>
+            This class loads command configuration from a type.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.CommandAttributeLoader.AttributedMember`1">
+            <summary>
+            Internal class used to hold properties and fields from a type that have a specific attribute.
+            </summary>
+            <typeparam name="T">The attribute type sought.</typeparam>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandAttributeLoader.MakeDefaultName``1">
+            <summary>
+            The default name for a command is the class name. If the class name ends with the word 
+            "Command", this will be dropped automatically. e.g. HelpCommand would have the command
+            name "help".
+            </summary>
+            <typeparam name="T">The command type.</typeparam>
+            <returns>The default command name for the type.</returns>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.CommandConfig`1">
+            <summary>
+            The configuration for a command. This may be the unnamed command (i.e. the command line parameters for an application that does not support commands)
+            or a named "sub-command" of a program that supports that paradigm.
+            </summary>
+            <typeparam name="T">The type that will be populated with the command parameters extracted from the command line.</typeparam>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandConfig`1.Positional``1(System.String,System.Action{`0,``0})">
+            <summary>
+            Add a positional parameter.
+            </summary>
+            <typeparam name="T1">The data type of the paramter value.</typeparam>
+            <param name="parameterName">The name of the parameter</param>
+            <param name="positionalInitialiser">An expression that sets the value of the parameter in the command type.</param>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandConfig`1.Positional``1(System.String,System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            Add a positional parameter.
+            </summary>
+            <typeparam name="T1">The data type of the paramter value.</typeparam>
+            <param name="parameterName">The name of the parameter</param>
+            <param name="positionalVariableIdentifier">An expression that returns the property in the command type that should receive the value.</param>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandConfig`1.Positional(System.String)">
+            <summary>
+            Add a positional parameter.
+            </summary>
+            <param name="parameterName">The name of the parameter</param>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandConfig`1.Option(System.String,System.Action{`0,System.Boolean})">
+            <summary>
+            Specifies the simplest possible option type - there are no parameters, the option is simply present.
+            However, some parsing conventions allow for a boolean to be specified allowing a false to be supplied.
+            In order to support this, the option must accept a boolean and apply it appropriately.
+            </summary>
+            <param name="optionName">The name of the option.</param>
+            <param name="optionInitialiser">The lambda that applies the option to the command parameters type. Note that this must accept a boolean.</param>
+            <returns>The command config.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandConfig`1.Option(System.String,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            Specifies the simplest possible option type - there are no parameters, the option is simply present.
+            However, some parsing conventions allow for a boolean to be specified allowing a false to be supplied.
+            In order to support this, the option must accept a boolean and apply it appropriately.
+            </summary>
+            <param name="optionName">The name of the option.</param>
+            <param name="optionVariableIndicator">The expression that identifies the boolean that should be set in the command type.</param>
+            <returns>The command config.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandConfig`1.Option``1(System.String,System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            Specifies an option taking a single parameter. The property related to the option is identified using a Linq expression.
+            </summary>
+            <param name="optionName">The name of the option.</param>
+            <param name="optionVariableIndicator">The expression that identifies the member that should be set in the command type. The type of the member determines the data type of the option.</param>
+            <returns>The command config.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandConfig`1.Option``1(System.String,System.Action{`0,``0})">
+            <summary>
+            Specifies an option taking a single parameter. The option is set using a caller supplied lambda expression.
+            </summary>
+            <typeparam name="T1">The parameter.</typeparam>
+            <param name="optionName">The name of the option.</param>
+            <param name="optionInitialiser">The action that will be invoked when the option's parameters have been converted.</param>
+            <returns>The command config.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandConfig`1.Option(System.String)">
+            <summary>
+            Specifies an option taking a single parameter. The property related to the option is identified automatically using the option name.
+            </summary>
+            <param name="optionName">The name of the option.</param>
+            <returns>The command config.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandConfig`1.Option``2(System.String,System.Action{`0,``0,``1})">
+            <summary>
+            Specifies an option taking a two parameters.
+            </summary>
+            <typeparam name="T1">The first parameter.</typeparam>
+            <typeparam name="T2">The second parameter.</typeparam>
+            <param name="optionName">The name of the option.</param>
+            <param name="optionInitialiser">The action that will be invoked when the option's parameters have been converted.</param>
+            <returns>The command config.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandConfig`1.Option``3(System.String,System.Action{`0,``0,``1,``2})">
+            <summary>
+            Specifies an option taking a two parameters.
+            </summary>
+            <typeparam name="T1">The first parameter.</typeparam>
+            <typeparam name="T2">The second parameter.</typeparam>
+            <typeparam name="T3">The third parameter.</typeparam>
+            <param name="optionName">The name of the option.</param>
+            <param name="optionInitialiser">The action that will be invoked when the option's parameters have been converted.</param>
+            <returns>The command config.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandConfig`1.ShortCircuitOption">
+            <summary>
+            Short circuit the parsing process. This allows options to be specified that bypass the usual validation of
+            missing parameters. Options that display help text are a good example of where this could be useful.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandConfig`1.AllowMultiple">
+            <summary>
+            Allow this option or parameter to be specified multiple times.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandConfig`1.Description(System.String)">
+            <summary>
+            Use this method to provide descriptive text. The description is context sensitive and will be applied to the command, 
+            option or parameter that is currently being configured. Therefore, you must specify the appropriate description before 
+            configuring more detail.
+            </summary>
+            <param name="text">The descriptive test.</param>
+            <returns>The command config.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandConfig`1.Validator(System.Func{`0,System.Collections.Generic.IList{System.String},System.Boolean})">
+            <summary>
+            Supply a validation routine for the command or parameters. This will be called with the populated command instance and
+            a list into which error messages and warnings may be inserted. The validator should return true if the command is valid, 
+            or false if an error is found. If any messages are placed in the list, they are assyumed to be warnings if true is
+            returned, or errors if false is returned.
+            
+            Error messages returned by the validator will be printed to the error writer, warnings will be printed to the console.
+            </summary>
+            <param name="validationFunction"></param>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandConfig`1.Alias(System.String)">
+            <summary>
+            Supply an alternative name for the option. All of the alias names and the primary option name will refer to the same option.
+            This feature can be used to supply a short name for an option with a long name. This is common in Gnu command line applications.
+            </summary>
+            <param name="alias">The alternative name for the option.</param>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.CommandConstructionLambdaGenerator`1">
+            <summary>
+            Generate a lambda that constructs an instance of a command class.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandConstructionLambdaGenerator`1.Generate">
+            <summary>
+            Generate a function to create an instance of the specified type, in the context of command
+            types that may contain option sets and <see cref="T:System.Collections.Generic.ICollection`1"/> derived lists.
+            <seealso cref="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.OptionSetAttribute"/>
+            </summary>
+            <returns>A <see cref="T:System.Func`1"/> that creates an instance of the generic type.</returns>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreter">
+            <summary>
+            This class interprets a set of command line arguments.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreter.OptionAlias">
+            <summary>
+            An alias for an option. This references the original option by one of its alias names.
+            This is returned as part of an enumerable set of <see cref="T:ConsoleToolkit.CommandLineInterpretation.IOption"/> implementations.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreter.GetOptionsAndAliases(ConsoleToolkit.CommandLineInterpretation.BaseCommandConfig)">
+            <summary>
+            Get the full list of ways each option can be referenced. i.e. by its actual name, and all of its aliases.
+            </summary>
+            <param name="command">The command.</param>
+            <returns>A list of IOption implementations.</returns>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreterConfiguration">
+             <summary>
+             Fluent command configuration construction object.
+            
+             Either the default command, or at least one named command must be configured. 
+             See <see cref="M:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreterConfiguration.Parameters``1(System.Func{``0})"/>"/>, and <see cref="M:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreterConfiguration.Command``1(System.String)"/> overloads.
+             </summary>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreterConfiguration.Command``1(System.String,System.Func{System.String,``0})">
+            <summary>
+            Adds a command to the configuration.
+            </summary>
+            <typeparam name="T">The type of the command that is created.</typeparam>
+            <param name="command">The name of the command i.e. the string that the user will enter to identify the command.</param>
+            <param name="initialiser">A function that creates and initialises the command object.</param>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreterConfiguration.Command``1(System.String)">
+            <summary>
+            Adds a command to the configuration, with an auto generated initialiser. This is only possible where T has a parameterless constructor.
+            </summary>
+            <typeparam name="T">The type of the command that is created. Must have a parameterless constructor to be used with this overload.</typeparam>
+            <param name="command">The name of the command i.e. the string that the user will enter to identify the command.</param>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreterConfiguration.Parameters``1(System.Func{``0})">
+            <summary>
+            Specifies the default command (i.e. the command that gets all of the parameters if this is not a command oriented configuration).
+            
+            Use this when your interface has no commands. It allows all of the options of a command to be specified, but does not need a command
+            word to be specified. (i.e. the usual mode for console applications.)
+            </summary>
+            <typeparam name="T">The type that collects the parameters.</typeparam>
+            <param name="initialiser">A function that creates and initialises the command object (the <see cref="!:T"/> instance).</param>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreterConfiguration.Parameters``1">
+            <summary>
+            Specifies the default command (i.e. the command that gets all of the parameters if this is not a command oriented configuration).
+            
+            Use this when your interface has no commands. It allows all of the options of a command to be specified, but does not need a command
+            word to be specified. (i.e. the usual mode for console applications.)
+            </summary>
+            <typeparam name="T">The type that collects the parameters.</typeparam>
+        </member>
+        <member name="P:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreterConfiguration.DefaultCommand">
+            <summary>
+            The default command. If this is set, this will be used when no commands are configured. Either the default command,
+            or at least one named command must be configured. See <see cref="M:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreterConfiguration.Parameters``1(System.Func{``0})"/>"/>, and <see cref="M:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreterConfiguration.Command``1(System.String)"/> overloads.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreterConfiguration.Load(System.Type)">
+            <summary>
+            Load the configuration of a command from a type.
+            </summary>
+            <param name="type">The type to load.</param>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.CommandLineParserConventions">
+            <summary>
+            This enumeration allows parsing conventions to be specified.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.CommandLineTokeniser">
+            <summary>
+            Emulate the console application command line splitting behaviour.
+            This is an example:
+            
+            ShowArgs.exe a b c "d with space" "embed \"speech marks\"" "or ""force"" them"
+            
+              0: a
+              1: b
+              2: c
+              3: d with space
+              4: embed "speech marks"
+              5: or "force" them
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.CommandOption`1">
+            <summary>
+            A command option. The framework must be able to convert the user's input strings from the command 
+            line into the specific types that this option accepts.  The types are extracted from the 
+            specification of the provided action (<see cref="!:TAction"/>).
+            </summary>
+            <typeparam name="TAction">The action that will be executed when the option is supplied with parameters that can be converted.</typeparam>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.CommandPositional`2">
+            <summary>
+            A positional parameter. The framework must be able to convert the user's input string from the command line into 
+            the specific type that this parameter accepts (<see cref="!:TParameter"/>)
+            </summary>
+            <typeparam name="TParameter">The parameter type. The text supplied by the user will be converted 
+            to this type by the framework.</typeparam>
+            <typeparam name="T">The command object type, an instance of which will be passed to the update routine (see <see cref="F:ConsoleToolkit.CommandLineInterpretation.CommandPositional`2._positionalInitialiser"/>).</typeparam>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.CommandAttribute">
+            <summary>
+            This attribute decorates a class and indicates that it is a command.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.CommandHandlerAttribute">
+            <summary>
+            This attribute decorates a class or a method and indicates that it is a command handler.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.CommandValidatorAttribute">
+            <summary>
+            This attribute decorates a method and indicates that it is a command validator method. The framework will
+            call attrbuted method to validate a command once it has populated its properties.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.DescriptionAttribute">
+            <summary>
+            This attribute provides a literal description string for a command, positional parameter or option.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.OptionAttribute">
+            <summary>
+            This attribute decorates a property as an option parameter.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.OptionSetAttribute">
+            <summary>
+            This attribute decorates a property and indicates that it is a set of shared options that
+            should be added to the parent command.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.PositionalAttribute">
+            <summary>
+            This attribute decorates a property as a positional parameter.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.IOptionNameHelpAdorner">
+            <summary>
+            This interface defines a mechanism for translating option names for display in help text.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.IOptionNameHelpAdorner.Adorn(System.String)">
+            <summary>
+            Return the option name with the appropriate adornment for display in help text.
+            </summary>
+            <param name="name">The option name.</param>
+            <returns>The option name with the appropriate adornment.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.ConfigGenerator.PositionalByName``1(System.String)">
+            <summary>
+            Generate a <see cref="T:ConsoleToolkit.CommandLineInterpretation.CommandPositional`2"/> using a parameter name
+            string and the type of the command object. The parameter name will be matched to a property of
+            the command type <see cref="!:T"/> and this will be used to generate a typed positional parameter.
+            
+            An exact match between the parameter name and a property is preferred, but if there is no exact 
+            match, a case insensitive match will be acceptable.
+            </summary>
+            <typeparam name="T">The command type. The parameter name must match one of its properties.</typeparam>
+            <param name="parameterName">The name of the parameter.</param>
+            <returns>The instantiated positional paramter.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.ConfigGenerator.PositionalFromExpression``2(System.String,System.Linq.Expressions.Expression{System.Func{``0,``1}})">
+            <summary>
+            Generate a <see cref="T:ConsoleToolkit.CommandLineInterpretation.CommandPositional`2"/> using a linq expression to determine a field in the command object (<see cref="!:T"/>)
+            that will receive the parameter value. The field indicated will be used to generate an <see cref="T:System.Action"/> that applies the argument 
+            value to the parameter.
+            </summary>
+            <typeparam name="T">The command data type.</typeparam>
+            <typeparam name="TParameter">The type of the field.</typeparam>
+            <param name="parameterName">The name of the parameter.</param>
+            <param name="positionalVariableIdentifier">The expression that identifies the field that should receive the parameter value.</param>
+            <returns>The constructed <see cref="T:ConsoleToolkit.CommandLineInterpretation.CommandPositional`2"/>.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.ConfigGenerator.OptionByName``1(System.String)">
+            <summary>
+            Generate a <see cref="T:ConsoleToolkit.CommandLineInterpretation.CommandOption`1"/> using a parameter name
+            string and the type of the command object. The parameter name will be matched to a property of
+            the command type <see cref="!:T"/> and this will be used to generate a typed option.
+            
+            An exact match between the parameter name and a property is preferred, but if there is no exact 
+            match, a case insensitive match will be acceptable.
+            </summary>
+            <typeparam name="T">The command type. The option name must match one of its properties.</typeparam>
+            <param name="optionName">The name of the parameter.</param>
+            <returns>The instantiated positional paramter.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.ConfigGenerator.MatchProperty(System.Type,System.String)">
+            <summary>
+            Match the parameter to a property by name, exact match preferred, or throw an exception.
+            </summary>
+            <param name="type">The command type that must contain the matching property.</param>
+            <param name="parameterName">The name of the parameter.</param>
+            <returns>The matching property.</returns>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.ParameterAssignmentGenerator`1">
+            <summary>
+            This class generates Linq Expressions containing lambdas that assign properties of a command classes. 
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.ICommandLineParser">
+            <summary>
+            Implement this interface to supply a command line parser. The <see cref="M:ConsoleToolkit.CommandLineInterpretation.ICommandLineParser.Parse(System.String[],System.Collections.Generic.IEnumerable{ConsoleToolkit.CommandLineInterpretation.IOption},System.Collections.Generic.IEnumerable{ConsoleToolkit.CommandLineInterpretation.IPositionalArgument},ConsoleToolkit.CommandLineInterpretation.IParserResult)"/> method will be called with 
+            the command line arguments and lists of the options and positional parameters defined for the application.
+            
+            The positional parameter and option lists are supplied for reference purposes. It is not an error for the parser
+            to return parameters and options not in the list if they can be identified as such from the arguments array.
+            The framework will perform conversions from text to the configured types, and is responsible for the detection and 
+            reporting of format errors and parameter counts. The command line parser implementation is only responsible for 
+            extracting the text values.
+            
+            If command line convention allows positional parameters to be named and given out of order, the parser can add them
+            as if they were options. The framework will take this into account and will not attempt to match those parameters
+            from the positional arguments reported.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.ICommandLineParser.Parse(System.String[],System.Collections.Generic.IEnumerable{ConsoleToolkit.CommandLineInterpretation.IOption},System.Collections.Generic.IEnumerable{ConsoleToolkit.CommandLineInterpretation.IPositionalArgument},ConsoleToolkit.CommandLineInterpretation.IParserResult)">
+            <summary>
+            Parse an array of command line arguments. Use the supplied <see cref="T:ConsoleToolkit.CommandLineInterpretation.IParserResult"/> interface to report positional
+            arguments and options extracted from the command line arguments.
+            
+            The parse method is not required to validate that options are valid, invalid ones should be extracted so that the framework
+            can see them. The method is also not required to validate that all positional arguments have been supplied, it need only report
+            the arguments that were supplied and were not options. The framework will validate that all of the required arguments are present
+            and that all arguments are of the expected type.
+            </summary>
+            <param name="args">The array of arguments to be parsed.</param>
+            <param name="options">The configured options that may be specified.</param>
+            <param name="positionalArguments">The positional arguments that may be specified.</param>
+            <param name="result">An interface allowing parse results to be reported.</param>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.IOption">
+            <summary>
+            An option configured as valid. The information supplied here is meant to guide the parser, and depending on the 
+            conventions being implemented, may not be required.
+            
+            An example of when this information is useful is in the POSIX conventions, in which option arguments can be attached to 
+            the option itself. e.g. "program -nabc" in which the -n option has an argument of "abc". Equally, if the available options
+            listed options "n", "a", "b" and "c" as boolean (i.e. no parameters), "program -nabc" would be setting "n", "a", "b", and "c" 
+            on. Without a list of configured options it would not be possible for the parser to distinguish "stacked" boolean options from
+            an option plus its parameter.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.CommandLineInterpretation.IOption.Name">
+            <summary>
+            The name of the option.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.CommandLineInterpretation.IOption.IsBoolean">
+            <summary>
+            True if the option is a boolean flag - i.e. specifying the option sets it to TRUE.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.CommandLineInterpretation.IOption.ParameterCount">
+            <summary>
+            The number of parameters required by the option. If conventions allow the number of parameters specified by the
+            user to be determined, then this value can be ignored. It is not intended to support validation of option arguments,
+            as the framework has this responsibilty.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.IParserResult">
+            <summary>
+            This interface is passed to command line parser implementations to allow parsed arguments to be provided to the framework.
+            
+            Parser implementations are not responsible for validation of data types or alerting when arguments are missing as these functions
+            are carried out by the framework. 
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.IParserResult.OptionExtracted(System.String,System.String[])">
+            <summary>
+            Call this when a named option is extracted from the command line.
+            
+            Please also use this call for a positional parameter if the parsing conventions allow positional parameters to be identified by name.
+            </summary>
+            <param name="optionName">The name of the option from the supplied list of options.</param>
+            <param name="arguments">The arguments supplied for the option. This will be validated by the framework. 
+                If the command line conventions implemented by the parser do no allow precise identification of the number 
+                of parameters supplied by the user,  just accept what is present up to the maximum. If the conventions allow precise 
+                identification of the option parameters, please supply them all.</param>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.IParserResult.PositionalArgument(System.String)">
+            <summary>
+            This call should only be used if the parsing conventions do not allow identification of positional parameters by name. Call this
+            method with each positional parameter in turn.
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.IPositionalArgument">
+            <summary>
+            A positional argument. If positional arguments cannot be referenced by name, the command line parser may ignore this
+            interface.
+            
+            The Microsoft Command Line Standard guidelines allow this simply by referring to a positional parameter by name as
+            if it were an option. If the convention being implemented allows this, supply the positional argument as if it 
+            was actually an option. The framework will recognise that this has happened and will not attempt to extract a
+            value for the argument from the positional parameters parsed from the command line.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.CommandLineInterpretation.IPositionalArgument.ParameterName">
+            <summary>
+            The argument name. Useful only if conventions allow the user to specify values for positional parameters as if they 
+            were options.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.MicrosoftStandardCommandLineParser.ConsoleToolkit#CommandLineInterpretation#IOptionNameHelpAdorner#Adorn(System.String)">
+            <summary>
+            Add "-" to an option name.
+            </summary>
+            <param name="name">The option name.</param>
+            <returns>The adjusted name.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.MsDosCommandLineParser.ConsoleToolkit#CommandLineInterpretation#IOptionNameHelpAdorner#Adorn(System.String)">
+            <summary>
+            Add "/" to an option name.
+            </summary>
+            <param name="name">The option name.</param>
+            <returns>The adjusted name.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.PosixCommandLineParser.ConsoleToolkit#CommandLineInterpretation#IOptionNameHelpAdorner#Adorn(System.String)">
+            <summary>
+            Add either "-" or "--" to an option name.
+            </summary>
+            <param name="name">The option name.</param>
+            <returns>The adjusted name.</returns>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.ConsoleBufferFormat">
+            <summary>
+            This enumeration is used when retrieving the buffer from the <see cref="T:ConsoleToolkit.Testing.ConsoleInterfaceForTesting"/>
+            to specify what information should be retrieved.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions">
+            <summary>
+            Extension methods for customising text that will be output to the console.
+            
+            These methods allow display instructions to be imbedded into strings easily.
+            <example>
+            <code>
+                 var myText = "my text".Red();
+            </code>
+            
+            When <c>myText</c> is written out to the console, it will be rendered with a 
+            red foreground colour.
+            </example>
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.Black(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a black foreground colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.DarkBlue(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a dark blue colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.DarkGreen(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a dark green foreground colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.DarkCyan(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a dark cyan colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.DarkRed(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a dark red foreground colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.DarkMagenta(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a dark magenta foreground colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.DarkYellow(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a dark yellow foreground colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.Gray(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a grey foreground colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.DarkGray(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a dark grey foreground colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.Blue(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a blue foreground colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.Green(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a green foreground colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.Cyan(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a cyan foreground colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.Red(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a red foreground colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.Magenta(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a magenta foreground colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.Yellow(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a yellow foreground colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.White(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a white foreground colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.BGBlack(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a black background colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.BGDarkBlue(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a dark blue background colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.BGDarkGreen(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a dark green background colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.BGDarkCyan(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a dark cyan background colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.BGDarkRed(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a dark red background colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.BGDarkMagenta(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a dark magenta background colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.BGDarkYellow(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a dark yellow background colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.BGGray(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a grey background colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.BGDarkGray(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a dark grey background colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.BGBlue(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a blue background colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.BGGreen(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a green background colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.BGCyan(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a cyan background colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.BGRed(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a red background colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.BGMagenta(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a magenta background colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.BGYellow(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a yellow background colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ConsoleIOExtensions.BGWhite(System.String)">
+            <summary>
+            Add instructions to a string that will cause it to be rendered with a white background colour.
+            <remarks>
+            Note that the returned string will be extended with control characters that will be visible if
+            the string is displayed directly. After using this method, the string will only be suitable for
+            output using a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter"/> which can interpret the instructions.
+            </remarks><remarks>
+            The actual instruction codes used by the ConsoleToolkit are not documented, and are subject to change
+            in <em>any</em> release. You must ensure that all string manipulation has been done before the colour
+            instruction codes are added.
+            </remarks>
+            </summary>
+            <param name="s">The string to be altered.</param>
+            <returns>The string with added instruction codes.</returns>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.IConsoleOperations">
+            <summary>
+            The base set of operations supported for writing data to the console.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.IConsoleOperations.WriteLine(System.String,System.Object[])">
+            <summary>
+            Output a formatted string at the current cursor position, and move to the beginning of the next line.
+            </summary>
+            <param name="format">A format string.</param>
+            <param name="arg">Replacement args for the format string.</param>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.IConsoleOperations.Write(System.String,System.Object[])">
+            <summary>
+            Output a formatted string at the current cursor position.
+            </summary>
+            <param name="format">A format string.</param>
+            <param name="arg">Replacement args for the format string.</param>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.IConsoleOperations.WrapLine(System.String,System.Object[])">
+            <summary>
+            Output a formatted string at the current cursor position, using word wrapping. Then move to the beginning of the next line.
+            </summary>
+            <param name="format">A format string.</param>
+            <param name="arg">Replacement args for the format string.</param>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.IConsoleOperations.Wrap(System.String,System.Object[])">
+            <summary>
+            Output a formatted string at the current cursor position, but use word wrapping.
+            </summary>
+            <param name="format">A format string.</param>
+            <param name="arg">Replacement args for the format string.</param>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.IConsoleOperations.Write(ConsoleToolkit.ConsoleIO.IConsoleRenderer)">
+            <summary>
+            Render a renderable object to the console.
+            </summary>
+            <param name="renderableData">The object to render.</param>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.IConsoleOperations.WriteLine(ConsoleToolkit.ConsoleIO.IConsoleRenderer)">
+            <summary>
+            Render a renderable object to the console, add a newline.
+            </summary>
+            <param name="renderableData">The object to render.</param>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.IConsoleOperations.FormatTable``1(System.Collections.Generic.IEnumerable{``0},ConsoleToolkit.ConsoleIO.ReportFormattingOptions,System.String)">
+            <summary>
+            Format an enumerable set of rows as a tabular report.
+            </summary>
+            <typeparam name="T">The item type.</typeparam>
+            <param name="items">The items to be formatted.</param>
+            <param name="options">Options that effect the way in which the table is formatted.</param>
+            <param name="columnSeperator">The text to use to seperate columns.</param>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.IConsoleOperations.FormatTable``1(ConsoleToolkit.ConsoleIO.Report{``0})">
+            <summary>
+            Format an enumerable set of rows as a tabular report, using a report definition.
+            </summary>
+            <typeparam name="T">The item type.</typeparam>
+            <param name="report">The report definition.</param>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.IConsoleOperations.WriteLine">
+            <summary>
+            Output a new line.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.IConsoleInputOperations">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.IConsoleInputOperations.ReadLine">
+            <summary>
+            Read a string from the console.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.IConsoleInputOperations.ReadInput``1(``0)">
+            <summary>
+            Read data from the input stream. <para/>
+            Supply a type instance as a template that should be filled based on data read from the input stream. 
+            This overload allows the use of an anonymous type to receive the user input.
+            For example:<para/>
+            <code>
+            var inputData = console.ReadInput(new 
+            { 
+                SomeInt = 0, 
+                SomeString = string.Empty 
+            });
+            </code>
+            Would read two lines from the input stream. The first line would be converted to an integer, 
+            and the second would be converted to a string. An instance of the anonymous type would be returned,
+            initialised with the values returned from the input stream.
+            <para/>
+            <code>
+            var inputData = console.ReadInput(new Tuple&lt;int, string&gt;());
+            </code>
+            This would perform the same operations but the result will be stored in a Tuple instead.
+            <para/>
+            
+            <code>
+            var inputData = console.ReadInput(new MyType());
+            </code>
+            The type MyType will be examined for public members, which will be read from the input stream.
+            </summary>
+            <typeparam name="T">The type to be populated.</typeparam>
+            <param name="template">An instance of the type. Supplying an instance facilitates use of anonymous types.</param>
+            <returns>A new instance of T, or null.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.IConsoleInputOperations.ReadInput``1">
+            <summary>
+            Read data from the input stream. <para/>
+            Return an instance of the generic type supplied will be filled with data read from the input stream. 
+            For example:<para/>
+            <code>
+            var inputData = console.ReadInput&lt;Tuple&lt;int, string&gt;&gt;());
+            </code>
+            Would read two lines from the input stream. The first line would be converted to an integer, 
+            and the second would be converted to a string. An instance of the tuple type would be returned,
+            initialised with the values returned from the input stream.
+            <para/>
+            <code>
+            var inputData = console.ReadInput&lt;MyType&gt;();
+            </code>
+            The type MyType will be examined for public members, which will be read from the input stream.
+            An instance of MyType will be returned.
+            </summary>
+            <typeparam name="T">The type to be populated.</typeparam>
+            <returns>A populated instance of T, or null.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.IConsoleInputOperations.Confirm(System.String)">
+            <summary>
+            Get confirmation from the user. The user will be prompted to input a string value confirming
+            or not a piece of text supplied in the call.<para/>
+            The user will be prompted to choose between "true" text or "false" text. The actual text values
+            are specified globally and the defaults can be overridden.
+            <seealso cref="!:Toolkit."/>
+            </summary>
+            <param name="prompt">The message to display to the user.</param>
+            <returns>True if the user confirms the message, otherwise false.</returns>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.IConsoleAdapter">
+            <summary>
+            The interface of a console adapter.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.IConsoleAdapter.BufferWidth">
+            <summary>
+            The width of the console buffer in characters.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.IConsoleAdapter.WindowWidth">
+            <summary>
+            The width of the console window in characters.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.IErrorAdapter">
+            <summary>
+            The interface of an error adapter.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.IErrorAdapter.BufferWidth">
+            <summary>
+            The width of the error buffer in characters.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.IErrorAdapter.WindowWidth">
+            <summary>
+            The width of the error window in characters.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.IConsoleRenderer">
+            <summary>
+            This interface defines the functionality required to support rendering recorded console activity
+            in the various ways that a the data is used by the toolkit.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.IConsoleOutInterface">
+            <summary>
+            This interface describes a class that interacts with the system console from an output viewpoint i.e. the <see cref="T:System.Console"/> in <c>Console.WriteLine(...</c> calls.
+            
+            Implement this interface to intercept console calls in order to redirect output, for example, in a unit test.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.IConsoleOutInterface.Foreground">
+            <summary>
+            The current foreground colour for console output.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.IConsoleOutInterface.Background">
+            <summary>
+            The current background colour for console output.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.IConsoleOutInterface.WindowWidth">
+            <summary>
+            The width of the console window - i.e. the visible part of the buffer.
+            <seealso cref="P:ConsoleToolkit.ConsoleIO.IConsoleOutInterface.BufferWidth"/>
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.IConsoleOutInterface.BufferWidth">
+            <summary>
+            The width of the console buffer. This may be greater than the window width.
+            <seealso cref="P:ConsoleToolkit.ConsoleIO.IConsoleOutInterface.WindowWidth"/>
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.IConsoleOutInterface.Write(System.String)">
+            <summary>
+            Output a string to the console in the current cursor position.
+            </summary>
+            <param name="data">The text to output.</param>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.IConsoleOutInterface.NewLine">
+            <summary>
+            Output a new line to the console at the current cursor position. The cursor will move the beginning of the next line.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.IConsoleOutInterface.CursorLeft">
+            <summary>
+            The current cursor position.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.IConsoleOutInterface.CursorTop">
+            <summary>
+            The current cursor position.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.IConsoleOutInterface.Encoding">
+            <summary>
+            The encoding being used by the console.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.IConsoleInInterface">
+            <summary>
+            This interface describes a class that interacts with the system console from an input viewpoint i.e. the <see cref="T:System.Console"/> in <c>Console.ReadLine()</c> calls.
+            
+            Implement this interface to intercept console calls in order to redirect the input, for example, in a unit test.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.IConsoleInterface">
+            <summary>
+            A console interface implementing both input and output.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.ConsoleStream">
+            <summary>
+            Identifies one of the console streams.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.AdapterConfiguration">
+            <summary>
+            The global adapter configuration.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.Internal.AdapterConfiguration.ControlSequenceIntroducer">
+             <summary>
+             Defines the character that introduces a control sequence in console output.
+             </summary>
+             <remarks>
+             Only reset this if the default character interferes with your output.
+             This is unlikely.
+            </remarks>
+             <remarks>
+             The correct time to reset this value if before any other code runs.
+             
+             Do not reset this if output strings are being formatted in another thread.
+             Do not store strings containing control characters, and then reset this, as
+             the stored string will have been formatted with the old value and will not
+             render correctly.
+            </remarks>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.Internal.AdapterConfiguration.ControlSequenceTerminator">
+             <summary>
+             Defines the character that terminates a control sequence in console output.
+             </summary>
+             <remarks>
+             Only reset this if the default character interferes with your output.
+             This is unlikely.
+            </remarks>
+             <remarks>
+             The correct time to reset this value if before any other code runs.
+             
+             Do not reset this if output strings are being formatted in another thread.
+             Do not store strings containing control characters, and then reset this, as
+             the stored string will have been formatted with the old value and will not
+             render correctly.
+            </remarks>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.AdapterConfiguration.ConsoleColourFromCode(System.String)">
+            <summary>
+            Convert a colour code constant into the actual console colour value.
+            </summary>
+            <param name="code"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.AdapterConfiguration.ConsoleColourToCode(System.ConsoleColor)">
+            <summary>
+            Convert a console colour value into the corresponding colour code constant.
+            </summary>
+            <param name="colour"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.AdapterConfiguration.#cctor">
+            <summary>
+            Set the default cpnfiguration values.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.CachedRows`1">
+            <summary>
+            Data cached from an <see cref="T:System.Collections.Generic.IEnumerable`1"/> collection. This store can be used to repeatedly format
+            the data at different widths without having to enumerate the original collection multiple times.
+            <seealso cref="T:ConsoleToolkit.ConsoleIO.Internal.CachedRow`1"/>
+            <seealso cref="T:ConsoleToolkit.ConsoleIO.Internal.CachedColumn"/>
+            </summary>
+            <typeparam name="T">The original row type.</typeparam>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.CachedRowsFactory">
+            <summary>
+            Static class exposing a factory method that allows caches of anonymous types to be constructed.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.CachedRow`1">
+            <summary>
+            A cached row of data. Used in <see cref="T:ConsoleToolkit.ConsoleIO.Internal.CachedRows`1"/>.
+            <seealso cref="T:ConsoleToolkit.ConsoleIO.Internal.CachedColumn"/>
+            </summary>
+            <typeparam name="T">The original row's type.</typeparam>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.CachedColumn">
+            <summary>
+            A cached column value. Used in <see cref="T:ConsoleToolkit.ConsoleIO.Internal.CachedRow`1"/>.
+            <seealso cref="T:ConsoleToolkit.ConsoleIO.Internal.CachedRows`1"/>
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.ColourConverter">
+            <summary>
+            Translates console colours to and from the control sequence instruction equivalent.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.ColourSeal">
+            <summary>
+            This class "seals" a set of lines with colours, so that the colour changes cannot "leak" out if the
+            lines were used as a column. It also has the effect of covering up any excess colour Pushes that were 
+            never popped. It cannot help with excessive pops.
+            
+            Given valid input, each line in the result is effectively colour neutral, i.e. after displaying the line
+            the console colours are the same as they were before displaying the line. Behaviour is undefined if the 
+            input contains more pops than pushes (but most likely will not give the desired result). 
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.ColourWriter">
+            <summary>
+            This class performs write operations on a <see cref="T:ConsoleToolkit.ConsoleIO.IConsoleOutInterface"/>. It implements all of the colour 
+            instructions that control the display of output on the console.
+            <seealso cref="T:ConsoleToolkit.ConsoleIO.Internal.ColourControlItem"/>
+            <seealso cref="T:ConsoleToolkit.ConsoleIO.Internal.ColourControlItem.ControlCode"/>
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.ColumnFormat">
+            <summary>
+            This class is used to format values that are to be displayed in a column.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.ColumnFormat.#ctor(System.String,System.Type,ConsoleToolkit.ConsoleIO.Internal.ColumnAlign,System.Int32,System.String,System.String)">
+            <summary>
+            Constructor. All parameters other than heading are optional, and designed to be set by name. For example:
+            
+                var format = new ColumnFormat("My Col", alignment: ColumnAlign.Right);
+            </summary>
+            <param name="heading">The heading text for the column</param>
+            <param name="type">The type of the data expected for the column. When specified, this allows some parameters to be given sensible defaults.</param>
+            <param name="alignment">Whether the column is left or right aligned. If <see cref="F:ConsoleToolkit.ConsoleIO.Internal.ColumnAlign.Auto"/> is set, it will be right aligned for numeric types, or else left aligned. 
+            If no value is provided for <see cref="!:type"/>, left will be used.</param>
+            <param name="decimalPlaces">The number of decimal places to show. This will only apply to Decimal or Double values.</param>
+            <param name="format">A .NET format string that will be applied to the data. If this is specified, the decimal places setting will be ignored.</param>
+            <param name="width">A string describing the width required for this column. If a string containing a number is provided, this will be the columns fixed width, if an asterisk is provided, this column will be as wide as possible. If no value is provided, the column's actual width will be determined from its contents.</param>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter">
+            <summary>
+            This class wraps the actual console. Do not use the console directly, output text via the adapter instead. 
+            This allows the console output to be captured in a unit test without requiring code changes.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter.ReadLine">
+            <summary>
+            Read a string from the console.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapterStream">
+            <summary>
+            This class implements a text writer that writes text to a console adapter. This class is intended to be
+            attached to the default console as the Out stream.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.ConsoleOperationsImpl.WriteLine(System.String,System.Object[])">
+            <summary>
+            Output a formatted string at the current cursor position, and move to the beginning of the next line.
+            </summary>
+            <param name="format">A format string.</param>
+            <param name="arg">Replacement args for the format string.</param>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.ConsoleOperationsImpl.Write(System.String,System.Object[])">
+            <summary>
+            Output a formatted string at the current cursor position.
+            </summary>
+            <param name="format">A format string.</param>
+            <param name="arg">Replacement args for the format string.</param>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.ConsoleOperationsImpl.Write(ConsoleToolkit.ConsoleIO.IConsoleRenderer)">
+            <summary>
+            Render a renderable object to the console.
+            </summary>
+            <param name="renderableData">The object to render.</param>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.ConsoleOperationsImpl.WriteLine(ConsoleToolkit.ConsoleIO.IConsoleRenderer)">
+            <summary>
+            Render a renderable object to the console, add a newline.
+            </summary>
+            <param name="renderableData">The object to render.</param>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.ConsoleOperationsImpl.WriteLine">
+            <summary>
+            Output a new line.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.ConsoleRedirectTester.IsOutputRedirected">
+            <summary>
+            Determine whether the console's output stream is redirected.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.ConsoleRedirectTester.IsErrorRedirected">
+            <summary>
+            Determine whether the console's error stream is redirected.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.ConstructPromptText">
+            <summary>
+            Construct a prompt string.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.DefaultConsole">
+            <summary>
+            This implementation of the console interface is the default version, and interfaces with the actual console.
+            
+            It is a very simple wrapper around the system <see cref="T:System.Console"/> and by its nature has no testable methods.
+            </summary>
+        </member>
+        <member name="F:ConsoleToolkit.ConsoleIO.Internal.DefaultConsole._constructionForeground">
+            <summary>
+            The console colour as it was at construction time. This will be used to put the console back the way it started when
+            this class is finalized.
+            </summary>
+        </member>
+        <member name="F:ConsoleToolkit.ConsoleIO.Internal.DefaultConsole._constructionBackground">
+            <summary>
+            The console colour as it was at construction time. This will be used to put the console back the way it started when
+            this class is finalized.
+            </summary>
+        </member>
+        <member name="F:ConsoleToolkit.ConsoleIO.Internal.DefaultConsole._currentForeground">
+            <summary>
+            The console colour that was last set. This will be used to set the colour of the actual console just before output
+            is displayed.
+            </summary>
+        </member>
+        <member name="F:ConsoleToolkit.ConsoleIO.Internal.DefaultConsole._currentBackground">
+            <summary>
+            The console colour that was last set. This will be used to set the colour of the actual console just before output
+            is displayed.
+            </summary>
+        </member>
+        <member name="F:ConsoleToolkit.ConsoleIO.Internal.DefaultConsole._stream">
+            <summary>
+            The console stream to receive the output.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.Internal.DefaultConsole.Foreground">
+            <summary>
+            The current console foreground colour.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.Internal.DefaultConsole.Background">
+            <summary>
+            The current console background colour.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.ErrorAdapter">
+            <summary>
+            This class wraps the actual stderror stream. Do not use <see href="Console.Error"/> directly, output text via the adapter instead.
+            This allows the error output to be captured in a unit test without requiring code changes.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.FormattingIntermediate">
+            <summary>
+            A union of the types that can be format values. Most types will be strings by the time they are placed in this class, 
+            but more specialised types may also be specified as column values.
+            <seealso cref="T:ConsoleToolkit.ConsoleIO.IConsoleRenderer"/>
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.FormattingIntermediate.#ctor(System.String)">
+            <summary>
+            Construct from a string.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.FormattingIntermediate.#ctor(ConsoleToolkit.ConsoleIO.IConsoleRenderer)">
+            <summary>
+            Construct from an object derived from <see cref="T:ConsoleToolkit.ConsoleIO.IConsoleRenderer"/>.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.FormattingIntermediate.GetLongestWordLength(System.Int32)">
+            <summary>
+            Determine the length of the longest word in the value.
+            </summary>
+            <param name="tabLength"></param>
+            <returns>The length of the longest word.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.FormattingIntermediate.GetFirstWordLength(System.Int32,System.Int32)">
+            <summary>
+            Determine the length of the first word.
+            </summary>
+            <returns>The length of the first word.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.FormattingIntermediate.op_Implicit(System.String)~ConsoleToolkit.ConsoleIO.Internal.FormattingIntermediate">
+            <summary>
+            Implicitely convert strings into intermediates. This is only here to make 
+            construction of unit test data more succinct.
+            </summary>
+            <param name="text">The string the hold in the <see cref="T:ConsoleToolkit.ConsoleIO.Internal.FormattingIntermediate"/>.</param>
+            <returns>A new <see cref="T:ConsoleToolkit.ConsoleIO.Internal.FormattingIntermediate"/>.</returns>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.IPropertySource">
+            <summary>
+            Defines a property source
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.IReadInfo">
+            <summary>
+            Internal interface used to extract data required by the input process.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.OptionDefinition">
+            <summary>
+            The definitaion of an option for input purposes.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.ReadInputImpl`1">
+            <summary>
+            This class prompts the user for the properties of a type. The types processed should be custom
+            defined for use as input classes as there is no mechanism for skipping properties and not all
+            property types will be appropriate for user input.
+            <para/>
+            The handling of string conversion errors depends on whether the console input stream has been
+            redirected.<para/>
+            If the stream has not been redirected, an error message will be displayed and the
+            user will be prompted for the value again.
+            <para/>
+            If the input stream has been redirected, an error message will be displayed and the input process
+            will proceed with the next item. When all of the data items have been attempted in this way, a 
+            null will be returned.
+            <para/>
+            If all of the data items receive valid values, a populated instance of <see cref="!:T"/> will be returned.
+            </summary>
+            <typeparam name="T">The type being populated.</typeparam>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.ReadInputItem">
+            <summary>
+            Read a value from console in to an <see cref="T:ConsoleToolkit.ConsoleIO.Internal.InputItem"/>.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.ReadValue">
+            <summary>
+            Get input from the user and interpret it.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.RecordedCommands.FormatTableCommand`2">
+            <summary>
+            A recorded format table command.
+            </summary>
+            <remarks>A recorded format table command has slightly different rules to normal text. 
+            Since it cannot be wrapped correctly, it would be unhelpful to break it into words, therefore
+            questions like "What is the longest word?" or "How long is the first word?" are really
+            academic, and are therefore given the best answer available, which is, what is the narrowest
+            the table can be? This is not really a good answer, however, as of this writing, it can only
+            be asked as part of a <see cref="T:ConsoleToolkit.ConsoleIO.Internal.PropertyStackFormatter"/> related operation, in which case the
+            space available for the table will be minimal and the table will be rendered on a new line.
+            <p/>
+            The longest word will be used to set the stack column width, and therefore the table should
+            be able to render itself correctly. However, if it cannot and it must resort to stacking, then
+            the result will not be very readable. That is the consequence of having a lot of data but very 
+            little space.</remarks>
+            <typeparam name="T">The table row data type. In reports, this will be a generated type.</typeparam>
+            <typeparam name="TChild">The child report element type. This will be different to the row data type in reports, where it will be the original row type rather than the generated report type. See <see cref="T:ConsoleToolkit.ConsoleIO.Report`1"/>.</typeparam>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.Internal.RecordedCommands.ReplayBuffer.CursorLeft">
+            <summary>
+            The current cursor position.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.RecordedCommands.ReplayBuffer.RecordWrapLineBreaks(System.Int32)">
+            <summary>
+            Add additional wrapping line breaks.
+            </summary>
+            <param name="wrappedLineBreaks"></param>
+        </member>
+        <member name="F:ConsoleToolkit.ConsoleIO.Internal.RedirectedConsole._stream">
+            <summary>
+            The console stream to receive the output.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.ReportDefinitions.ReportParameterDetails">
+            <summary>
+            Detailed options that effect the whole report, as opposed to a specific column.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.Internal.ReportDefinitions.ReportParameterDetails.OmitHeadings">
+            <summary>
+            If true, this means the report should be rendered without headings.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.Internal.ReportDefinitions.ReportParameterDetails.StretchColumns">
+            <summary>
+            If true, this means the report should use all of the available space and columns should be widened, even
+            beyond the size required by the sizing data.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.Internal.ReportDefinitions.ReportParameterDetails.SuppressHeadingRepetition">
+            <summary>
+            Select option to not repeat headings when a row has a child report.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.Internal.ReportDefinitions.ReportParameterDetails.Options">
+            <summary>
+            The options that should be specified when the report is formatted. This is generated from the settings selected.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.Internal.ReportDefinitions.ReportParameterDetails.ColumnDivider">
+            <summary>
+            The string that should be used to seperate columns in the report.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.Internal.ReportDefinitions.ReportParameterDetails.IndentSpaces">
+            <summary>
+            The number of extra spaces to indent the report.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.Internal.ReportDefinitions.ReportParameterDetails.TitleText">
+            <summary>
+            A simple string to be shown as the report title.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.ReportDefinitions.ReportQueryRowFunctionBuilder">
+            <summary>
+            Builds a function that will convert a consistent input type which is not directly specified (i.e. only the expressions contain it), to the 
+            provided output type using a set of expressions that extract values from the input type. <para/>
+            
+            <remarks>
+            An important assumption made by this process is that the output type will provide sufficient properties that match the types returned by the expressions.<para/>
+            
+            Each expression will be tied to the "next" matching property by type alone. For example:<para/>
+            <code>
+            class ResultType
+            {
+                public double D1 {get;set;}
+                public double D2 {get;set;}
+                public int    I1 {get;set;}
+                public double D3 {get;set;}
+            }
+            </code>
+            <list type="table">
+                <listheader>
+                    <term>Expression Type</term>
+                    <description>Expression</description>
+                </listheader> 
+                <item><term>Int</term><description>a.Age</description></item>
+                <item><term>Double</term><description>a.HeightMetres</description></item>
+                <item><term>Double</term><description>a.WeightKg</description></item>
+                <item><term>Double</term><description>a.WeightKg/a.HeightMetres</description></item>
+            </list>
+            <list type="table">
+                <listheader>
+                    <term>Result Property</term>
+                    <description>Expression</description>
+                </listheader> 
+                <item><term>D1</term><description>a.HeightMetres</description></item>
+                <item><term>D2</term><description>a.WeightKg</description></item>
+                <item><term>I1</term><description>a.Age</description></item>
+                <item><term>D3</term><description>a.WeightKg/a.HeightMetres</description></item>
+            </list>
+            This is important, because callers must ensure that the result type has enough properties of each required type
+            to receive all of the expression results, and that the order of the properties in the result type matches the
+            order of the expressions within each distinct type.
+            </remarks>
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.ReportExecutor">
+            <summary>
+            Execute a <see cref="T:ConsoleToolkit.ConsoleIO.Report`1"/>.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.ReportExecutor.GetLines``1(ConsoleToolkit.ConsoleIO.Report{``0},System.Int32)">
+            <summary>
+            Return the lines output by a report.
+            </summary>
+            <typeparam name="T">The type of the items that are input to the report.</typeparam>
+            <param name="report">The report definition.</param>
+            <param name="availableWidth">The available width for formatting.</param>
+            <returns>A set of report lines.</returns>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.TabularReport">
+            <summary>
+            A formatter for tabular data.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.TabularReport.Format``2(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{ConsoleToolkit.ConsoleIO.Internal.ColumnFormat},System.Int32,System.Int32,ConsoleToolkit.ConsoleIO.ReportFormattingOptions,System.String,System.Collections.Generic.IEnumerable{ConsoleToolkit.ConsoleIO.ReportDefinitions.BaseChildItem{``1}})">
+            <summary>
+            Format a collection of rows as a tabular report.
+            </summary>
+            <typeparam name="T">The item type.</typeparam>
+            <typeparam name="TChild">The original row type for child reports.</typeparam>
+            <param name="data">The enumerable items.</param>
+            <param name="columns">Column formatting information. If this is not provided, default column formats will be used.</param>
+            <param name="width">The width that the report is allowed to occupy.</param>
+            <param name="numRowsToUseForSizing">The number of rows that should be used for automatically sizing columns.</param>
+            <param name="options">Options that control the formatting of the report.</param>
+            <param name="columnDivider">A string that will be used to divide columns.</param>
+            <param name="childReports">The nested reports that should be output for each table row.</param>
+            <returns>The formatted report lines.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.TabularReport.Format``2(ConsoleToolkit.ConsoleIO.Internal.CachedRows{``0},System.Collections.Generic.IEnumerable{ConsoleToolkit.ConsoleIO.Internal.ColumnFormat},System.Int32,ConsoleToolkit.ConsoleIO.Internal.TabularReport.Statistics,ConsoleToolkit.ConsoleIO.ReportFormattingOptions,System.String,System.Collections.Generic.IEnumerable{ConsoleToolkit.ConsoleIO.ReportDefinitions.BaseChildItem{``1}})">
+            <summary>
+            Format a collection of rows as a tabular report.
+            </summary>
+            <typeparam name="T">The item type.</typeparam>
+            <typeparam name="TChild">The original row type for child reports.</typeparam>
+            <param name="data">The cached row items.</param>
+            <param name="columns">Column formatting information. If this is not provided, default column formats will be used.</param>
+            <param name="width">The width that the report is allowed to occupy.</param>
+            <param name="statistics">An object that captures statistics about the formatting process.</param>
+            <param name="options">Options that control the formatting of the report.</param>
+            <param name="columnDivider">A string that will be used to divide columns.</param>
+            <param name="childReports">The nested reports that should be output for each table row.</param>
+            <returns>The formatted report lines.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.TabularReport.Format``1(ConsoleToolkit.ConsoleIO.Internal.CachedRows{``0},System.Collections.Generic.IEnumerable{ConsoleToolkit.ConsoleIO.Internal.ColumnFormat},System.Int32,ConsoleToolkit.ConsoleIO.ReportFormattingOptions,System.String,System.Collections.Generic.IEnumerable{ConsoleToolkit.ConsoleIO.ReportDefinitions.BaseChildItem{``0}})">
+            <summary>
+            Format a collection of cached rows as a tabular report. The culture in force at the start of the enumeration will be used for all
+            rows of the report. It is not possible to change the culture while the report is being enumerated.
+            </summary>
+            <typeparam name="T">The item type.</typeparam>
+            <param name="data">The cached row items.</param>
+            <param name="columns">Column formatting information. If this is not provided, default column formats will be used.</param>
+            <param name="width">The width that the report is allowed to occupy.</param>
+            <param name="options">Options that effect formatting.</param>
+            <param name="columnDivider">A string that will be used to divide the report columns.</param>
+            <param name="childReports">The nested reports that should be output for each table row.</param>
+            <returns>The formatted report lines.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.TabularReport.Format``1(ConsoleToolkit.ConsoleIO.Internal.CachedRows{``0},System.Collections.Generic.IEnumerable{ConsoleToolkit.ConsoleIO.Internal.ColumnFormat},System.Int32,ConsoleToolkit.ConsoleIO.Internal.TabularReport.Statistics,ConsoleToolkit.ConsoleIO.ReportFormattingOptions,System.String,System.Collections.Generic.IEnumerable{ConsoleToolkit.ConsoleIO.ReportDefinitions.BaseChildItem{``0}})">
+            <summary>
+            Format a collection of cached rows as a tabular report. The culture in force at the start of the enumeration will be used for all
+            rows of the report. It is not possible to change the culture while the report is being enumerated.
+            </summary>
+            <typeparam name="T">The item type.</typeparam>
+            <param name="data">The cached row items.</param>
+            <param name="columns">Column formatting information. If this is not provided, default column formats will be used.</param>
+            <param name="width">The width that the report is allowed to occupy.</param>
+            <param name="wrappingLineBreaks">The number of linebreaks added due to wrapping.</param>
+            <param name="options">Options that effect the formatting.</param>
+            <param name="columnDivider">The string to be used to divide columns.</param>
+            <param name="childReports">The nested reports that should be output for each table row.</param>
+            <returns>The formatted report lines.</returns>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.TempCulture">
+            <summary>
+            Temporarily impose a change of culture within a using block. On disposal, the original culture is restored.
+            Note that behaviour is undefined if the culture is manually changed within the using block.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.ColumnExpander">
+            <summary>
+            Stretch columns in a column sizer list to fill the available width.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.ColumnExpander.FillAvailableSpace(System.Int32,System.Int32,ConsoleToolkit.ConsoleIO.Internal.ColumnSizingParameters,System.Boolean)">
+            <summary>
+            Perform the stretch operation. This method takes any stacked columns into account.
+            </summary>
+            <param name="width">The available width.</param>
+            <param name="seperatorOverhead">The amount of space occupied by column seperators.</param>
+            <param name="parameters">The column sizing parameters for this operation.</param>
+            <param name="maximiseWidth">True to systematically use all of the available width when sizing the columns.</param>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.ColumnSizer.MinWidth(System.Int32)">
+            <summary>
+            Answers the question: how wide does the column have to be to format every value with no more than <see cref="!:maxLineBreaks"/>?
+            <para/>
+            This method needs to take the width restrictions into account, so for some columns, it may be that the width returned actually
+            results in a different number of linebreaks than expected.
+            </summary>
+            <param name="maxLineBreaks">The maximum desired number of line breaks. Zero means "no line breaks allowed".</param>
+            <returns>The number of characters the column needs to be to limit the line breaks to the specified count.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.ColumnSizer.GetIdealMinimumWidth">
+            <summary>
+            Returns the width the column needs to be to accomodate the longest word seen so far.
+            </summary>
+            <returns>The calculated width.</returns>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.ColumnWidthNegotiator">
+            <summary>
+            Caclulate a width for each column in a tablular report.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.ColumnWrapper">
+            <summary>
+            A static class responsible for wrapping values into a column.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.ColumnWrapper.WrapValue(System.Object,ConsoleToolkit.ConsoleIO.Internal.ColumnFormat,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Given a value for a column, wrap the value into as many lines as required.
+            </summary>
+            <param name="value">The value to be displayed in the column.</param>
+            <param name="format">The column's format specification.</param>
+            <param name="columnWidth">The width allowed for the column.</param>
+            <param name="tabLength">The number of spaces tabs should represent. Please note that actual tabstops are not supported.</param>
+            <param name="firstLineHangingIndent">Number of characters at the start of the first line that cannot be used for 
+            wrapping. This is required when the wrapped text begins part way along an existing line.</param>
+            <returns>An array of one or more lines.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.ColumnWrapper.CountWordwrapLineBreaks(System.Object,ConsoleToolkit.ConsoleIO.Internal.ColumnFormat,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Given a value for a column, calculate the number of line breaks that need to be added to wrap the value.
+            
+            Hard line breaks in the value are not counted because they are part of the data and cannot be avoided. The 
+            function calculates the effect of setting the column width to a specific value.
+            
+            The function will return zero  if no linebreaks need to be added. This will be the case if the value is small
+            enough that it does not need to be wrapped.
+            </summary>
+            <param name="value">The value to be processed.</param>
+            <param name="format">The column's format specification.</param>
+            <param name="columnWidth">The width allowed for the column.</param>
+            <param name="tabLength">The number of spaces tabs should represent. Please note that actual tabstops are not supported.</param>
+            <param name="firstLineHangingIndent">Number of characters at the start of the first line that cannot be used for 
+            wrapping. This is required when the wrapped text begins part way along an existing line.</param>
+            <returns>The number of added line breaks.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.ColumnWrapper.WrapAndMeasureValue(System.Object,ConsoleToolkit.ConsoleIO.Internal.ColumnFormat,System.Int32,System.Int32,System.Int32,System.Int32@)">
+            <summary>
+            Given a value for a column, wrap the value into as many lines as required and calculate the number of line breaks
+            that need to be added.
+            </summary>
+            <param name="value">The value to be displayed in the column.</param>
+            <param name="format">The column's format specification.</param>
+            <param name="columnWidth">The width allowed for the column.</param>
+            <param name="tabLength">The number of spaces tabs should represent. Please note that actual tabstops are not supported.</param>
+            <param name="firstLineHangingIndent">Number of characters at the start of the first line that cannot be used for 
+            wrapping. This is required when the wrapped text begins part way along an existing line.</param>
+            <param name="wrappedLines">The number of added line breaks.</param>
+            <returns>An array of one or more lines.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.ColumnWrapper.CountLineBreaks(System.Collections.Generic.IEnumerable{ConsoleToolkit.ConsoleIO.Internal.SplitWord},System.Int32,System.Int32)">
+            <summary>
+            Given a value for a column, calculate the number of line breaks that must be added (i.e. not counting 
+            line breaks intrinsically part of the value, just additional ones due to wrapping).
+            </summary>
+            <param name="words">The words to be displayed in the column.</param>
+            <param name="columnWidth">The width allowed for the column.</param>
+            <param name="firstLineHangingIndent">Number of characters at the start of the first line that cannot be used for 
+            wrapping. This is required when the wrapped text begins part way along an existing line.</param>
+            <returns>The number of added line breaks.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.ColumnWrapper.WrapAndMeasureWords(System.Collections.Generic.IEnumerable{ConsoleToolkit.ConsoleIO.Internal.SplitWord},ConsoleToolkit.ConsoleIO.Internal.ColumnFormat,System.Int32,System.Int32,System.Int32@)">
+            <summary>
+            Given a value for a column, wrap the value into as many lines as required and calculate the number of line breaks
+            that need to be added.
+            </summary>
+            <param name="words">The words to be displayed in the column.</param>
+            <param name="format">The column's format specification.</param>
+            <param name="columnWidth">The width allowed for the column.</param>
+            <param name="firstLineHangingIndent">Number of characters at the start of the first line that cannot be used for 
+            wrapping. This is required when the wrapped text begins part way along an existing line.</param>
+            <param name="wrappedLines">The number of added line breaks.</param>
+            <returns>An array of one or more lines.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.ColumnWrapper.BreakWord(ConsoleToolkit.ConsoleIO.Internal.SplitWord,System.Int32)">
+            <summary>
+            Break long words into chunks of one row width in length.
+            
+            <see cref="M:ConsoleToolkit.ConsoleIO.Internal.ColumnWrapper.BreakWord(ConsoleToolkit.ConsoleIO.Internal.SplitWord,System.Int32)"/> guarantees that there will never be a word that 
+            won't fit on a line, which simplifies <see cref="M:ConsoleToolkit.ConsoleIO.Internal.ColumnWrapper.WrapValue(System.Object,ConsoleToolkit.ConsoleIO.Internal.ColumnFormat,System.Int32,System.Int32,System.Int32)"/>. 
+            </summary>
+            <param name="splitWord">The word to be split.</param>
+            <param name="columnWidth">The width of the column.</param>
+            <returns>An enumerable set of word chunks, one <see cref="!:columnWidth"/> or less wide.</returns>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.DefaultWidthCalculator">
+            <summary>
+            Determines the ideal width for a column based purely on the format.
+            
+            This is the place for any logic that helps to make a sensible decision about how wide a column needs to be. For example, this could be 
+            determined more accurately by examining the <see cref="P:ConsoleToolkit.ConsoleIO.Internal.ColumnFormat.FormatTemplate"/>.
+            </summary>
+        </member>
+        <member name="F:ConsoleToolkit.ConsoleIO.Internal.DefaultWidthCalculator.DefaultMinWidth">
+            <summary>
+            Value to be used as the minimum width if all else fails.
+            </summary>
+        </member>
+        <member name="F:ConsoleToolkit.ConsoleIO.Internal.DefaultWidthCalculator.DefaultMaxWidth">
+            <summary>
+            Value to be used as the maximum width if all else fails.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.FormatAnalyser">
+            <summary>
+            Matches a set of column foramt definitions with the public properties of a type.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.FormatAnalyser.Analyse(System.Type,System.Collections.Generic.IEnumerable{ConsoleToolkit.ConsoleIO.Internal.ColumnFormat},System.Boolean)">
+            <summary>
+            Return a list of property formats for a type using the supplied column formats.<para/>
+            
+            Supplied formats are matched positionally, and default formats will be provided for
+            any properties for which no value is provided, inluding any properties for which the 
+            corresponding entry in <see cref="!:specifiedColumns"/> is null. Excess formats will be
+            ignored.
+            </summary>
+            <param name="type">The type from which the columns are drawn.</param>
+            <param name="specifiedColumns">The user provided column formats.</param>
+            <param name="includeAllColumns">If true, include all columns from the type.</param>
+            <returns>Matched <see cref="T:ConsoleToolkit.ConsoleIO.Internal.PropertyColumnFormat"/> instances.</returns>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.PropertyStackFormatter">
+            <summary>
+            This class is used to format values for display in a stack column. These are columns used to 
+            replace normal columns when there is insufficient horizontal space to show all of the data 
+            in a normal table.
+            
+            For example: 
+            <code>
+            A     B       C
+            ----- ------- -------
+            aaaaa bbbbbbb ccccccc DDDDD: dddddd
+            aa a  bbbbb           EEEE: eeee ee
+            a                     eee eee eee
+                                  FFFFFFF: ffff
+            </code>
+            The values for A, B, and C are displayed normally, but D, E and F have been "stacked".
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.PropertyStackFormatter.Format(ConsoleToolkit.ConsoleIO.Internal.ColumnFormat,System.Object,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Use the format information to return a wrapped and formatted value for a property stack.
+            </summary>
+            <param name="format">The format information that will be used to perform the formatting.</param>
+            <param name="valueObject">The value that will be combined with the heading specified in the <see cref="!:format"/>.</param>
+            <param name="columnWidth">The width to which the column should be formatted.</param>
+            <param name="tabLength">The number of spaces represented by tab characters.</param>
+            <param name="firstLineHangingIndent">Number of characters at the start of the first line that cannot be used for 
+            wrapping. This is required when the wrapped text begins part way along an existing line.</param>
+            <returns>An array of lines containing the formatted output.</returns>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.ReportColumnAligner">
+            <summary>
+            Aligns columns of data into a single string. The columns are padded such that all of the data occupies a consistent number of lines. 
+            Alignment can either be such that every column starts at the top of the row, or ends at the bottom of the row. 
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.ReportColumnAligner.AlignColumns(System.Int32[],System.String[][],ConsoleToolkit.ConsoleIO.Internal.ColVerticalAligment,System.String)">
+            <summary>
+            Format a row given an array of column widths, and an array of values.
+            </summary>
+            <param name="widths">An array containing the required width for each column.</param>
+            <param name="data">The data to be displayed in each column. This must be aligned with <see cref="!:widths"/>.</param>
+            <param name="alignment">Whether the data in each column should be aligned with the top of the column or the bottom.</param>
+            <param name="columnSeperator">A string to place between each column.</param>
+            <returns></returns>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.TextStats">
+            <summary>
+            This class maintains statistics about text values it has been passed.
+            
+            This class is not thread safe.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.Underliner.Generate(System.String,System.String)">
+            <summary>
+            Generate an underline for the supplied text
+            </summary>
+            <param name="line">The text to underline</param>
+            <returns>The string underlining the provided text</returns>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.WidthCalculators.BooleanWidthCalculator">
+            <summary>
+            Calculate the defaults for Boolean column widths.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.WidthCalculators.DateTimeWidthCalculator">
+            <summary>
+            Calculate the defaults for DateTime column widths.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.WidthCalculators.NumericWidthCalculator">
+            <summary>
+            Calculate defaults for numeric column widths.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.WidthCalculators.StringWidthCalculator">
+            <summary>
+            Calculate the defaults for String column widths.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.WidthCalculators.TimeSpanWidthCalculator">
+            <summary>
+            Calculate the defaults for TimeSpan column widths.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Read`1">
+            <summary>
+            Object that allows parameters to be specified that influence the way in which
+            data is captured from standard input.
+            </summary>
+            <typeparam name="T">The type to be read.</typeparam>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Read`1.Prompt(System.String)">
+            <summary>
+            Specify the prompt to display to the user.
+            </summary>
+            <param name="prompt">The prompt text.</param>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Read`1.Option(`0,System.String,System.String)">
+            <summary>
+            Specify an option 
+            </summary>
+            <param name="selectedValue"></param>
+            <param name="requiredValue"></param>
+            <param name="prompt"></param>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Read`1.AsMenu(System.String)">
+            <summary>
+            Display the options in menu format.
+            </summary>
+            <param name="heading">The heading for the menu. If null, no heading will be displayed.</param>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Read`1.Validate(System.Func{`0,System.Boolean},System.String)">
+            <summary>
+            Specifies a validation that input values must pass.<para/>
+            Multiple validations may be specified, each with an appropriate error message. All validations must
+            be passed for a value to be accepted.<para/>
+            Validations will be applied in the order in which they are specified.
+            </summary>
+            <param name="validator">The validation that must return true for the value to be acceptable.</param>
+            <param name="errorMessage">The error message to display if the validation fails.</param>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.Read`1.Value">
+            <summary>
+            The value received.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Read">
+            <summary>
+            Static class allowing creation of <see cref="T:ConsoleToolkit.ConsoleIO.Read`1"/> instances.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Report`1">
+            <summary>
+            A wrapper around an enumerable set of objects to be displayed as a report.
+            </summary>
+            <typeparam name="T">The item type of the input enumerable.</typeparam>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.Report`1.Query">
+            <summary>
+            The derived report query.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.Report`1.RowType">
+            <summary>
+            The type that is returned by the Query object.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.Report`1.Columns">
+            <summary>
+            The custom formatters for each column in the report.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.Report`1.Children">
+            <summary>
+            The defintions of this report's children.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.Report`1.Options">
+            <summary>
+            The report options to apply for this report.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.Report`1.ColumnDivider">
+            <summary>
+            The divider to place between each column on the report.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.Report`1.IndentSpaceCount">
+            <summary>
+            The number of spaces to indent the report.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.Report`1.TitleText">
+            <summary>
+            Simple text to be shown as the report title.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ReportDefinitions.ColumnConfig.RightAlign">
+            <summary>
+            Override the default column alignment for the column, and force the data to be right aligned.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ReportDefinitions.ColumnConfig.LeftAlign">
+            <summary>
+            Override the default column alignment for the column, and force the data to be left aligned.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ReportDefinitions.ColumnConfig.DecimalPlaces(System.Int32)">
+            <summary>
+            Sets the number of decimal places to show. This will only apply to Decimal or Double values.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ReportDefinitions.ColumnConfig.Width(System.Int32)">
+            <summary>
+            Indicates that the column must have a fixed width.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ReportDefinitions.ColumnConfig.MinWidth(System.Int32)">
+            <summary>
+            Indicates that the column has a minimum width.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ReportDefinitions.ColumnConfig.MaxWidth(System.Int32)">
+            <summary>
+            Indicates that the column has a maximum width.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ReportDefinitions.ColumnConfig.Heading(System.String)">
+            <summary>
+            Set the heading text for the column.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ReportDefinitions.ColumnConfig.FinalizeColumnSettings">
+            <summary>
+            This is called after the column has been configured and will default any crucial settings that have not been configured.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ReportDefinitions.ReportParameters`1.Indent(System.Int32)">
+            <summary>
+            Specify the number of extra spaces to indent the report.
+            </summary>
+            <param name="spaces">The extra indent spaces count.</param>
+            <returns>The parameter object.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.ReportDefinitions.ReportParameters`1.Title(System.String)">
+            <summary>
+            Adds a title string to the report.
+            </summary>
+            <param name="titleText"></param>
+            <returns></returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.ReportFormattingOptions">
+            <summary>
+            Options that control the formatting of a report.
+            </summary>
+        </member>
+        <member name="F:ConsoleToolkit.ConsoleIO.ReportFormattingOptions.OmitHeadings">
+            <summary>
+            Skip the headings when emitting the report. This will cause the field names or headings for each column to be disregarded.
+            </summary>
+        </member>
+        <member name="F:ConsoleToolkit.ConsoleIO.ReportFormattingOptions.StretchColumns">
+            <summary>
+            Fill the available width
+            </summary>
+        </member>
+        <member name="F:ConsoleToolkit.ConsoleIO.ReportFormattingOptions.IncludeAllColumns">
+            <summary>
+            If column definitions are used, include columns without a definition.
+            </summary>
+        </member>
+        <member name="F:ConsoleToolkit.ConsoleIO.ReportFormattingOptions.SuppressHeadingsAfterChildReport">
+            <summary>
+            If child reports are present, do not repeat the report headings. By default, the report headings will be displayed again when a row has a child report. Use this option to suppress the headings repetition.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.Exceptions.InvalidParameterType">
+            <summary>
+            This exception is thrown when a parameter is specified with an unsupported type.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.Exceptions.ReadPropertyInvalidWithoutTemplate">
+            <summary>
+            This exception can be thrown by console Read methods.<para/>
+            When an object contains properties that are <see cref="T:ConsoleToolkit.ConsoleIO.Read`1"/> instances, a
+            template instance must be constructable, or supplied. If no template instance
+            is available or creatable, this exception will be thrown.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.Exceptions.ReadPropertyMustBeInitialised">
+            <summary>
+            This exception can be thrown by console Read methods.<para/>
+            When an object contains properties that are <see cref="T:ConsoleToolkit.ConsoleIO.Read`1"/> instances, the
+            properties must have values in the template instance. 
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.Properties.CanBeNullAttribute">
+            <summary>
+            Indicates that the value of the marked element could be <c>null</c> sometimes,
+            so the check for <c>null</c> is necessary before its usage
+            </summary>
+            <example><code>
+            [CanBeNull] public object Test() { return null; }
+            public void UseTest() {
+              var p = Test();
+              var s = p.ToString(); // Warning: Possible 'System.NullReferenceException'
+            }
+            </code></example>
+        </member>
+        <member name="T:ConsoleToolkit.Properties.NotNullAttribute">
+            <summary>
+            Indicates that the value of the marked element could never be <c>null</c>
+            </summary>
+            <example><code>
+            [NotNull] public object Foo() {
+              return null; // Warning: Possible 'null' assignment
+            }
+            </code></example>
+        </member>
+        <member name="T:ConsoleToolkit.Properties.StringFormatMethodAttribute">
+            <summary>
+            Indicates that the marked method builds string by format pattern and (optional) arguments.
+            Parameter, which contains format string, should be given in constructor. The format string
+            should be in <see cref="M:System.String.Format(System.IFormatProvider,System.String,System.Object[])"/>-like form
+            </summary>
+            <example><code>
+            [StringFormatMethod("message")]
+            public void ShowError(string message, params object[] args) { /* do something */ }
+            public void Foo() {
+              ShowError("Failed: {0}"); // Warning: Non-existing argument in format string
+            }
+            </code></example>
+        </member>
+        <member name="M:ConsoleToolkit.Properties.StringFormatMethodAttribute.#ctor(System.String)">
+            <param name="formatParameterName">
+            Specifies which parameter of an annotated method should be treated as format-string
+            </param>
+        </member>
+        <member name="T:ConsoleToolkit.Properties.InvokerParameterNameAttribute">
+            <summary>
+            Indicates that the function argument should be string literal and match one
+            of the parameters of the caller function. For example, ReSharper annotates
+            the parameter of <see cref="T:System.ArgumentNullException"/>
+            </summary>
+            <example><code>
+            public void Foo(string param) {
+              if (param == null)
+                throw new ArgumentNullException("par"); // Warning: Cannot resolve symbol
+            }
+            </code></example>
+        </member>
+        <member name="T:ConsoleToolkit.Properties.NotifyPropertyChangedInvocatorAttribute">
+             <summary>
+             Indicates that the method is contained in a type that implements
+             <see cref="T:System.ComponentModel.INotifyPropertyChanged"/> interface
+             and this method is used to notify that some property value changed
+             </summary>
+             <remarks>
+             The method should be non-static and conform to one of the supported signatures:
+             <list>
+             <item><c>NotifyChanged(string)</c></item>
+             <item><c>NotifyChanged(params string[])</c></item>
+             <item><c>NotifyChanged{T}(Expression{Func{T}})</c></item>
+             <item><c>NotifyChanged{T,U}(Expression{Func{T,U}})</c></item>
+             <item><c>SetProperty{T}(ref T, T, string)</c></item>
+             </list>
+             </remarks>
+             <example><code>
+             public class Foo : INotifyPropertyChanged {
+               public event PropertyChangedEventHandler PropertyChanged;
+               [NotifyPropertyChangedInvocator]
+               protected virtual void NotifyChanged(string propertyName) { ... }
+            
+               private string _name;
+               public string Name {
+                 get { return _name; }
+                 set { _name = value; NotifyChanged("LastName"); /* Warning */ }
+               }
+             }
+             </code>
+             Examples of generated notifications:
+             <list>
+             <item><c>NotifyChanged("Property")</c></item>
+             <item><c>NotifyChanged(() =&gt; Property)</c></item>
+             <item><c>NotifyChanged((VM x) =&gt; x.Property)</c></item>
+             <item><c>SetProperty(ref myField, value, "Property")</c></item>
+             </list>
+             </example>
+        </member>
+        <member name="T:ConsoleToolkit.Properties.ContractAnnotationAttribute">
+            <summary>
+            Describes dependency between method input and output
+            </summary>
+            <syntax>
+            <p>Function Definition Table syntax:</p>
+            <list>
+            <item>FDT      ::= FDTRow [;FDTRow]*</item>
+            <item>FDTRow   ::= Input =&gt; Output | Output &lt;= Input</item>
+            <item>Input    ::= ParameterName: Value [, Input]*</item>
+            <item>Output   ::= [ParameterName: Value]* {halt|stop|void|nothing|Value}</item>
+            <item>Value    ::= true | false | null | notnull | canbenull</item>
+            </list>
+            If method has single input parameter, it's name could be omitted.<br/>
+            Using <c>halt</c> (or <c>void</c>/<c>nothing</c>, which is the same)
+            for method output means that the methos doesn't return normally.<br/>
+            <c>canbenull</c> annotation is only applicable for output parameters.<br/>
+            You can use multiple <c>[ContractAnnotation]</c> for each FDT row,
+            or use single attribute with rows separated by semicolon.<br/>
+            </syntax>
+            <examples><list>
+            <item><code>
+            [ContractAnnotation("=> halt")]
+            public void TerminationMethod()
+            </code></item>
+            <item><code>
+            [ContractAnnotation("halt &lt;= condition: false")]
+            public void Assert(bool condition, string text) // regular assertion method
+            </code></item>
+            <item><code>
+            [ContractAnnotation("s:null => true")]
+            public bool IsNullOrEmpty(string s) // string.IsNullOrEmpty()
+            </code></item>
+            <item><code>
+            // A method that returns null if the parameter is null, and not null if the parameter is not null
+            [ContractAnnotation("null => null; notnull => notnull")]
+            public object Transform(object data) 
+            </code></item>
+            <item><code>
+            [ContractAnnotation("s:null=>false; =>true,result:notnull; =>false, result:null")]
+            public bool TryParse(string s, out Person result)
+            </code></item>
+            </list></examples>
+        </member>
+        <member name="T:ConsoleToolkit.Properties.LocalizationRequiredAttribute">
+            <summary>
+            Indicates that marked element should be localized or not
+            </summary>
+            <example><code>
+            [LocalizationRequiredAttribute(true)]
+            public class Foo {
+              private string str = "my string"; // Warning: Localizable string
+            }
+            </code></example>
+        </member>
+        <member name="T:ConsoleToolkit.Properties.CannotApplyEqualityOperatorAttribute">
+            <summary>
+            Indicates that the value of the marked type (or its derivatives)
+            cannot be compared using '==' or '!=' operators and <c>Equals()</c>
+            should be used instead. However, using '==' or '!=' for comparison
+            with <c>null</c> is always permitted.
+            </summary>
+            <example><code>
+            [CannotApplyEqualityOperator]
+            class NoEquality { }
+            class UsesNoEquality {
+              public void Test() {
+                var ca1 = new NoEquality();
+                var ca2 = new NoEquality();
+                if (ca1 != null) { // OK
+                  bool condition = ca1 == ca2; // Warning
+                }
+              }
+            }
+            </code></example>
+        </member>
+        <member name="T:ConsoleToolkit.Properties.BaseTypeRequiredAttribute">
+            <summary>
+            When applied to a target attribute, specifies a requirement for any type marked
+            with the target attribute to implement or inherit specific type or types.
+            </summary>
+            <example><code>
+            [BaseTypeRequired(typeof(IComponent)] // Specify requirement
+            public class ComponentAttribute : Attribute { }
+            [Component] // ComponentAttribute requires implementing IComponent interface
+            public class MyComponent : IComponent { }
+            </code></example>
+        </member>
+        <member name="T:ConsoleToolkit.Properties.UsedImplicitlyAttribute">
+            <summary>
+            Indicates that the marked symbol is used implicitly
+            (e.g. via reflection, in external library), so this symbol
+            will not be marked as unused (as well as by other usage inspections)
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.Properties.MeansImplicitUseAttribute">
+            <summary>
+            Should be used on attributes and causes ReSharper
+            to not mark symbols marked with such attributes as unused
+            (as well as by other usage inspections)
+            </summary>
+        </member>
+        <member name="F:ConsoleToolkit.Properties.ImplicitUseKindFlags.Access">
+            <summary>Only entity marked with attribute considered used</summary>
+        </member>
+        <member name="F:ConsoleToolkit.Properties.ImplicitUseKindFlags.Assign">
+            <summary>Indicates implicit assignment to a member</summary>
+        </member>
+        <member name="F:ConsoleToolkit.Properties.ImplicitUseKindFlags.InstantiatedWithFixedConstructorSignature">
+            <summary>
+            Indicates implicit instantiation of a type with fixed constructor signature.
+            That means any unused constructor parameters won't be reported as such.
+            </summary>
+        </member>
+        <member name="F:ConsoleToolkit.Properties.ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature">
+            <summary>Indicates implicit instantiation of a type</summary>
+        </member>
+        <member name="T:ConsoleToolkit.Properties.ImplicitUseTargetFlags">
+            <summary>
+            Specify what is considered used implicitly
+            when marked with <see cref="T:ConsoleToolkit.Properties.MeansImplicitUseAttribute"/>
+            or <see cref="T:ConsoleToolkit.Properties.UsedImplicitlyAttribute"/>
+            </summary>
+        </member>
+        <member name="F:ConsoleToolkit.Properties.ImplicitUseTargetFlags.Members">
+            <summary>Members of entity marked with attribute are considered used</summary>
+        </member>
+        <member name="F:ConsoleToolkit.Properties.ImplicitUseTargetFlags.WithMembers">
+            <summary>Entity marked with attribute and all its members considered used</summary>
+        </member>
+        <member name="T:ConsoleToolkit.Properties.PublicAPIAttribute">
+            <summary>
+            This attribute is intended to mark publicly available API
+            which should not be removed and so is treated as used
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.Properties.InstantHandleAttribute">
+            <summary>
+            Tells code analysis engine if the parameter is completely handled
+            when the invoked method is on stack. If the parameter is a delegate,
+            indicates that delegate is executed while the method is executed.
+            If the parameter is an enumerable, indicates that it is enumerated
+            while the method is executed
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.Properties.PureAttribute">
+            <summary>
+            Indicates that a method does not make any observable state changes.
+            The same as <c>System.Diagnostics.Contracts.PureAttribute</c>
+            </summary>
+            <example><code>
+            [Pure] private int Multiply(int x, int y) { return x * y; }
+            public void Foo() {
+              const int a = 2, b = 2;
+              Multiply(a, b); // Waring: Return value of pure method is not used
+            }
+            </code></example>
+        </member>
+        <member name="T:ConsoleToolkit.Properties.PathReferenceAttribute">
+            <summary>
+            Indicates that a parameter is a path to a file or a folder
+            within a web project. Path can be relative or absolute,
+            starting from web root (~)
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.Properties.AspMvcActionAttribute">
+            <summary>
+            ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter
+            is an MVC action. If applied to a method, the MVC action name is calculated
+            implicitly from the context. Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String)</c>
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.Properties.AspMvcAreaAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC area.
+            Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String)</c>
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.Properties.AspMvcControllerAttribute">
+            <summary>
+            ASP.NET MVC attribute. If applied to a parameter, indicates that
+            the parameter is an MVC controller. If applied to a method,
+            the MVC controller name is calculated implicitly from the context.
+            Use this attribute for custom wrappers similar to 
+            <c>System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String, String)</c>
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.Properties.AspMvcMasterAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC Master.
+            Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Controller.View(String, String)</c>
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.Properties.AspMvcModelTypeAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC model type.
+            Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Controller.View(String, Object)</c>
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.Properties.AspMvcPartialViewAttribute">
+            <summary>
+            ASP.NET MVC attribute. If applied to a parameter, indicates that
+            the parameter is an MVC partial view. If applied to a method,
+            the MVC partial view name is calculated implicitly from the context.
+            Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Html.RenderPartialExtensions.RenderPartial(HtmlHelper, String)</c>
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.Properties.AspMvcSupressViewErrorAttribute">
+            <summary>
+            ASP.NET MVC attribute. Allows disabling all inspections
+            for MVC views within a class or a method.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.Properties.AspMvcDisplayTemplateAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC display template.
+            Use this attribute for custom wrappers similar to 
+            <c>System.Web.Mvc.Html.DisplayExtensions.DisplayForModel(HtmlHelper, String)</c>
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.Properties.AspMvcEditorTemplateAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC editor template.
+            Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Html.EditorExtensions.EditorForModel(HtmlHelper, String)</c>
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.Properties.AspMvcTemplateAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC template.
+            Use this attribute for custom wrappers similar to
+            <c>System.ComponentModel.DataAnnotations.UIHintAttribute(System.String)</c>
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.Properties.AspMvcViewAttribute">
+            <summary>
+            ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter
+            is an MVC view. If applied to a method, the MVC view name is calculated implicitly
+            from the context. Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Controller.View(Object)</c>
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.Properties.AspMvcActionSelectorAttribute">
+            <summary>
+            ASP.NET MVC attribute. When applied to a parameter of an attribute,
+            indicates that this parameter is an MVC action name
+            </summary>
+            <example><code>
+            [ActionName("Foo")]
+            public ActionResult Login(string returnUrl) {
+              ViewBag.ReturnUrl = Url.Action("Foo"); // OK
+              return RedirectToAction("Bar"); // Error: Cannot resolve action
+            }
+            </code></example>
+        </member>
+        <member name="T:ConsoleToolkit.Properties.RazorSectionAttribute">
+            <summary>
+            Razor attribute. Indicates that a parameter or a method is a Razor section.
+            Use this attribute for custom wrappers similar to 
+            <c>System.Web.WebPages.WebPageBase.RenderSection(String)</c>
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.Testing.ConsoleInterfaceForTesting">
+            <summary>
+            This class implements the <see cref="T:ConsoleToolkit.ConsoleIO.IConsoleOutInterface"/> and captures the console output in a format that facilitates
+            examination of console output in a unit test.
+            </summary>
+        </member>
+        <member name="F:ConsoleToolkit.Testing.ConsoleInterfaceForTesting._cursorTop">
+            <summary>
+            The current cursor position.
+            </summary>
+        </member>
+        <member name="F:ConsoleToolkit.Testing.ConsoleInterfaceForTesting._cursorLeft">
+            <summary>
+            The current cursor position.
+            </summary>
+        </member>
+        <member name="F:ConsoleToolkit.Testing.ConsoleInterfaceForTesting._foreground">
+            <summary>
+            The curent foreground colour.
+            </summary>
+        </member>
+        <member name="F:ConsoleToolkit.Testing.ConsoleInterfaceForTesting._background">
+            <summary>
+            The current background colour.
+            </summary>
+        </member>
+        <member name="F:ConsoleToolkit.Testing.ConsoleInterfaceForTesting._encoding">
+            <summary>
+            The console encoding.
+            </summary>
+        </member>
+        <member name="F:ConsoleToolkit.Testing.ConsoleInterfaceForTesting._fgCode">
+            <summary>
+            The colour code for the current foreground colour.
+            </summary>
+        </member>
+        <member name="F:ConsoleToolkit.Testing.ConsoleInterfaceForTesting._bgCode">
+            <summary>
+            The colour code for the current background colour.
+            </summary>
+        </member>
+        <member name="F:ConsoleToolkit.Testing.ConsoleInterfaceForTesting._initialBg">
+            <summary>
+            The original background colour to which all lines should be initialised.
+            </summary>
+        </member>
+        <member name="F:ConsoleToolkit.Testing.ConsoleInterfaceForTesting._initialFg">
+            <summary>
+            The original foreground colour to which all lines should be initialised.
+            </summary>
+        </member>
+        <member name="F:ConsoleToolkit.Testing.ConsoleInterfaceForTesting._inputStream">
+            <summary>
+            The input stream supplying input for the console.
+            </summary>
+        </member>
+        <member name="F:ConsoleToolkit.Testing.ConsoleInterfaceForTesting._lengthLimit">
+            <summary>
+            The maximum number of lines the buffer may contain. Zero or less means no limit.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.Foreground">
+            <summary>
+            The current foreground colour. This property keeps <see cref="F:ConsoleToolkit.Testing.ConsoleInterfaceForTesting._fgCode"/> aligned with the actual console colour.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.Background">
+            <summary>
+            The current background colour. This property keeps <see cref="F:ConsoleToolkit.Testing.ConsoleInterfaceForTesting._bgCode"/> aligned with the actual console colour.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.WindowWidth">
+            <summary>
+            The width of the window. This is the visible part of the display. It is possible for this to be less than the width of the buffer.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.BufferWidth">
+            <summary>
+            The width of the buffer. This is the width of the data in the console window and can be wider than the actual window itself.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.CursorLeft">
+            <summary>
+            The current cursor position.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.CursorTop">
+            <summary>
+            The current cursor position.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.#ctor(System.Text.Encoding)">
+            <summary>
+            The constructor sets default values for various console properties and allows an encoding to be specified.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.Write(System.String)">
+            <summary>
+            Write some text to the console buffer. Does not add a line feed.
+            </summary>
+            <param name="data">The text data to write. This must not contain colour instructions.</param>
+        </member>
+        <member name="M:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.OverWrite(System.Collections.Generic.IList{System.String},System.Int32,System.Int32,System.String)">
+            <summary>
+            Overlay some text in an existing buffer. The method will discard any data that would overflow the buffer width.
+            </summary>
+            <param name="buffer">The buffer line array.</param>
+            <param name="lineIndex">The index of the line to overwrite</param>
+            <param name="overwritePosition">The position within the line to overwrite.</param>
+            <param name="data">The text to place in the buffer at the specified position.</param>
+        </member>
+        <member name="M:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.CreateBufferTo(System.Int32)">
+            <summary>
+            Ensure that the buffer contains the specified line.
+            </summary>
+            <param name="ix">The zero based index of the line that must exist.</param>
+        </member>
+        <member name="M:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.NewLine">
+            <summary>
+            Write a newline to the buffer.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.GetBuffer(ConsoleToolkit.ConsoleIO.ConsoleBufferFormat)">
+            <summary>
+            Return the entire buffer for testing purposes. It is possible to get just the text, just the colour information or all of the data.
+            </summary>
+            <param name="format">Enumeration value that specifies what should be returned.</param>
+            <returns>A large string containing the requested data.</returns>
+        </member>
+        <member name="P:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.InputIsRedirected">
+            <summary>
+            Indicate whether console input is redirected or not. This will effect the handling of invalid
+            input on the stream.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.ReadLine">
+            <summary>
+            Read a line of text from the console. The data for this operation is provided using the <see cref="M:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.SetInputStream(System.IO.TextReader)"/> method.
+            </summary>
+            <returns>The next line of text.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.SetInputStream(System.IO.TextReader)">
+            <summary>
+            Provide a text stream to provide the data for the console input stream.
+            </summary>
+            <param name="stream">The stream to use.</param>
+        </member>
+        <member name="M:ConsoleToolkit.Testing.UnitTestAppRunner.Run``1(System.String[],ConsoleToolkit.ConsoleIO.IConsoleInterface)">
+            <summary>
+            Run an instance of a console application derived type.
+            </summary>
+            <typeparam name="T">The test type.</typeparam>
+            <param name="consoleInterface">The console interface to use for the test.</param>
+            <param name="args">The arguments to pass.</param>
+        </member>
+        <member name="T:ConsoleToolkit.Testing.UnitTestConsole">
+            <summary>
+            This class instantiates a console and an error adapter for use in testing command implementations. Both adapters write to the same
+            console interface.
+            <see cref="T:ConsoleToolkit.Testing.ConsoleInterfaceForTesting"/> 
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.Testing.UnitTestConsole.Console">
+            <summary>
+            The console adapter.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.Testing.UnitTestConsole.Error">
+            <summary>
+            The error adapter.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.Testing.UnitTestConsole.Interface">
+            <summary>
+            The test console interface that receives the output written to the adapters. Interrogate this to determine what output was written.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.Toolkit.GlobalReset">
+            <summary>
+            Reset the toolkit to its default state. Only useful to unit tests.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.Utilities.MethodInvoker">
+            <summary>
+            This class is able to generate a function to call the methods indicated by supplied MethodInfo instances.
+            The generated functions are retained so that if a method has been invoked before, the previously generated 
+            function can be reused.<para/>
+            
+            The purpose of the class is to allow exceptions to retain their call stack when they are thrown from methods 
+            invoked via reflection. If <see cref="T:System.Reflection.MethodInfo"/>'s Invoke(...) overloads are used, exceptions are wrapped in
+            a <see cref="T:System.Reflection.TargetInvocationException"/>, and throwing the <see cref="P:System.Exception.InnerException"/> rewrites
+            the call stack. Under .NET 4.5, exceptions can be rethrown with their original call stack, but there is no
+            way to do that under .NET 4.0. However, the Linq based solution works in both versions.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.Utilities.PrefixLines">
+            <summary>
+            Attach a prefix to each line in a set of lines contained in a string.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.Utilities.ReflectionExtensionMethods">
+            <summary>
+            This class defines some extension methods to mimic the .NET 4.5 reflection method changes.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.Utilities.ReportAnalyser">
+            <summary>
+            A utility for analysing and extracting data from a <see cref="T:ConsoleToolkit.ConsoleIO.Report`1"/>.
+            <para/>
+            Be aware that the report will be enumerated by this class and so it cannot also be formatted.
+            <remarks><para>Renderable column types are not supported. (For example, <see cref="T:ConsoleToolkit.ConsoleIO.Internal.RecordingConsoleAdapter"/>.)</para></remarks>
+            <remarks>Please note that this class is experimental and may change radically or be removed in a future version.</remarks>
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.Utilities.ReportAnalyser.Analyse``1(ConsoleToolkit.ConsoleIO.Report{``0})">
+            <summary>
+            Construct an analyser for a report. The report will be enumerated by this class.
+            </summary>
+            <param name="report">The report to analyse.</param>
+        </member>
+        <member name="T:ConsoleToolkit.Utilities.ReportAnalysis`1">
+            <summary>
+            The results of an analysis of a report.
+            <para/>
+            Be aware that the report will be enumerated by this class and so it cannot also be formatted.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.Utilities.RunTimeTypeBuilder">
+            <summary>
+            Build .NET types from property sets, derived at runtime.
+            </summary>
+        </member>
+    </members>
+</doc>

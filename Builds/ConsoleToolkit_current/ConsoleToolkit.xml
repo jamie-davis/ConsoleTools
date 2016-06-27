@@ -20,10 +20,71 @@
             the application for classes that have the <see cref="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.CommandAttribute"/>.
             </summary>
         </member>
+        <member name="M:ConsoleToolkit.ApplicationStyles.CommandDrivenApplication.HelpCommand``1(System.Func{``0,System.String})">
+            <summary>
+            Call this method to supply the framework with the command type that should provide help to the user.
+            The specified command type will be handled automatically by the framework to display usage text,
+            and specified command help text.
+            </summary>
+            <typeparam name="T">The command type. This must be a type used only as the help command.</typeparam>
+            <param name="getCommandParam">Supply a lambda that returns the command on which help is required. Return null to indicate that program level help.</param>
+        </member>
+        <member name="T:ConsoleToolkit.ApplicationStyles.ConsoleApplication">
+            <summary>
+            This is the base class that defines a console application.<para/>
+            A console application has a single set of parameters and options defined by the
+            default command.<para/>
+            The application's assembly will be searched for a command class identified by the 
+            <see cref="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.CommandAttribute"/>.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ApplicationStyles.Internals.CommandAssemblyScanner">
+            <summary>
+            Scan an assembly for classes with the <see cref="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.CommandAttribute"/>.
+            </summary>
+        </member>
         <member name="T:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase">
             <summary>
             This is the base class for all Console Application framework classes. It is an internal class 
             and should not be used directly by console applications.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.Config">
+            <summary>
+            The command configuration for the application.<para/>
+            You can supply a value for this in <see cref="M:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.Initialise"/>, or allow
+            the default behaviour to locate classes with the <see cref="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.CommandAttribute"/>.
+            <para/>
+            It is an error to set this property outside of the <see cref="M:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.Initialise"/> method.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.Handlers">
+            <summary>
+            The available command handlers
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.CommandLineErrorExitCode">
+            <summary>
+            This is the error code returned by the console application framework when the command line is invalid.
+            <para/>
+            By default, the value is 1, but you can override this virtual property to return a different value.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.MissingCommandHandlerExitCode">
+            <summary>
+            This is the error code returned by the console application framework when no command handler can be located.
+            <para/>
+            By default, the value is 1000, but you can override this virtual property to return a different value.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.Console">
+            <summary>
+            This is the console adapter for the application.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.Error">
+            <summary>
+            This is the error adapter for the application.
             </summary>
         </member>
         <member name="M:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.Initialise">
@@ -88,67 +149,6 @@
             that excludes any types you don't want considered when assemblies are searched for configuration.
             </summary>
         </member>
-        <member name="P:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.Config">
-            <summary>
-            The command configuration for the application.<para/>
-            You can supply a value for this in <see cref="M:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.Initialise"/>, or allow
-            the default behaviour to locate classes with the <see cref="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.CommandAttribute"/>.
-            <para/>
-            It is an error to set this property outside of the <see cref="M:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.Initialise"/> method.
-            </summary>
-        </member>
-        <member name="P:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.Handlers">
-            <summary>
-            The available command handlers
-            </summary>
-        </member>
-        <member name="P:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.CommandLineErrorExitCode">
-            <summary>
-            This is the error code returned by the console application framework when the command line is invalid.
-            <para/>
-            By default, the value is 1, but you can override this virtual property to return a different value.
-            </summary>
-        </member>
-        <member name="P:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.MissingCommandHandlerExitCode">
-            <summary>
-            This is the error code returned by the console application framework when no command handler can be located.
-            <para/>
-            By default, the value is 1000, but you can override this virtual property to return a different value.
-            </summary>
-        </member>
-        <member name="P:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.Console">
-            <summary>
-            This is the console adapter for the application.
-            </summary>
-        </member>
-        <member name="P:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.Error">
-            <summary>
-            This is the error adapter for the application.
-            </summary>
-        </member>
-        <member name="M:ConsoleToolkit.ApplicationStyles.CommandDrivenApplication.HelpCommand``1(System.Func{``0,System.String})">
-            <summary>
-            Call this method to supply the framework with the command type that should provide help to the user.
-            The specified command type will be handled automatically by the framework to display usage text,
-            and specified command help text.
-            </summary>
-            <typeparam name="T">The command type. This must be a type used only as the help command.</typeparam>
-            <param name="getCommandParam">Supply a lambda that returns the command on which help is required. Return null to indicate that program level help.</param>
-        </member>
-        <member name="T:ConsoleToolkit.ApplicationStyles.ConsoleApplication">
-            <summary>
-            This is the base class that defines a console application.<para/>
-            A console application has a single set of parameters and options defined by the
-            default command.<para/>
-            The application's assembly will be searched for a command class identified by the 
-            <see cref="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.CommandAttribute"/>.
-            </summary>
-        </member>
-        <member name="T:ConsoleToolkit.ApplicationStyles.Internals.CommandAssemblyScanner">
-            <summary>
-            Scan an assembly for classes with the <see cref="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.CommandAttribute"/>.
-            </summary>
-        </member>
         <member name="T:ConsoleToolkit.CommandLineInterpretation.BaseCommandConfig">
             <summary>
             The base class for command configurations.
@@ -159,61 +159,21 @@
             The base class for optional paramters of command configurations.
             </summary>
         </member>
-        <member name="T:ConsoleToolkit.CommandLineInterpretation.IOption">
-            <summary>
-            An option configured as valid. The information supplied here is meant to guide the parser, and depending on the 
-            conventions being implemented, may not be required.
-            
-            An example of when this information is useful is in the POSIX conventions, in which option arguments can be attached to 
-            the option itself. e.g. "program -nabc" in which the -n option has an argument of "abc". Equally, if the available options
-            listed options "n", "a", "b" and "c" as boolean (i.e. no parameters), "program -nabc" would be setting "n", "a", "b", and "c" 
-            on. Without a list of configured options it would not be possible for the parser to distinguish "stacked" boolean options from
-            an option plus its parameter.
-            </summary>
-        </member>
-        <member name="P:ConsoleToolkit.CommandLineInterpretation.IOption.Name">
-            <summary>
-            The name of the option.
-            </summary>
-        </member>
-        <member name="P:ConsoleToolkit.CommandLineInterpretation.IOption.IsBoolean">
-            <summary>
-            True if the option is a boolean flag - i.e. specifying the option sets it to TRUE.
-            </summary>
-        </member>
-        <member name="P:ConsoleToolkit.CommandLineInterpretation.IOption.ParameterCount">
-            <summary>
-            The number of parameters required by the option. If conventions allow the number of parameters specified by the
-            user to be determined, then this value can be ignored. It is not intended to support validation of option arguments,
-            as the framework has this responsibilty.
-            </summary>
-        </member>
         <member name="T:ConsoleToolkit.CommandLineInterpretation.BasePositional">
             <summary>
             The base class for positional parameters of command configurations.
-            </summary>
-        </member>
-        <member name="T:ConsoleToolkit.CommandLineInterpretation.IPositionalArgument">
-            <summary>
-            A positional argument. If positional arguments cannot be referenced by name, the command line parser may ignore this
-            interface.
-            
-            The Microsoft Command Line Standard guidelines allow this simply by referring to a positional parameter by name as
-            if it were an option. If the convention being implemented allows this, supply the positional argument as if it 
-            was actually an option. The framework will recognise that this has happened and will not attempt to extract a
-            value for the argument from the positional parameters parsed from the command line.
-            </summary>
-        </member>
-        <member name="P:ConsoleToolkit.CommandLineInterpretation.IPositionalArgument.ParameterName">
-            <summary>
-            The argument name. Useful only if conventions allow the user to specify values for positional parameters as if they 
-            were options.
             </summary>
         </member>
         <member name="T:ConsoleToolkit.CommandLineInterpretation.CommandAttributeLoader">
             <summary>
             This class loads command configuration from a type.
             </summary>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.CommandAttributeLoader.AttributedMember`1">
+            <summary>
+            Internal class used to hold properties and fields from a type that have a specific attribute.
+            </summary>
+            <typeparam name="T">The attribute type sought.</typeparam>
         </member>
         <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandAttributeLoader.MakeDefaultName``1">
             <summary>
@@ -223,12 +183,6 @@
             </summary>
             <typeparam name="T">The command type.</typeparam>
             <returns>The default command name for the type.</returns>
-        </member>
-        <member name="T:ConsoleToolkit.CommandLineInterpretation.CommandAttributeLoader.AttributedMember`1">
-            <summary>
-            Internal class used to hold properties and fields from a type that have a specific attribute.
-            </summary>
-            <typeparam name="T">The attribute type sought.</typeparam>
         </member>
         <member name="T:ConsoleToolkit.CommandLineInterpretation.CommandConfig`1">
             <summary>
@@ -380,6 +334,12 @@
             This class interprets a set of command line arguments.
             </summary>
         </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreter.OptionAlias">
+            <summary>
+            An alias for an option. This references the original option by one of its alias names.
+            This is returned as part of an enumerable set of <see cref="T:ConsoleToolkit.CommandLineInterpretation.IOption"/> implementations.
+            </summary>
+        </member>
         <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreter.GetOptionsAndAliases(ConsoleToolkit.CommandLineInterpretation.BaseCommandConfig)">
             <summary>
             Get the full list of ways each option can be referenced. i.e. by its actual name, and all of its aliases.
@@ -387,18 +347,12 @@
             <param name="command">The command.</param>
             <returns>A list of IOption implementations.</returns>
         </member>
-        <member name="T:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreter.OptionAlias">
-            <summary>
-            An alias for an option. This references the original option by one of its alias names.
-            This is returned as part of an enumerable set of <see cref="T:ConsoleToolkit.CommandLineInterpretation.IOption"/> implementations.
-            </summary>
-        </member>
         <member name="T:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreterConfiguration">
              <summary>
              Fluent command configuration construction object.
             
              Either the default command, or at least one named command must be configured. 
-             See <see cref="M:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreterConfiguration.Parameters``1(System.Func{``0})"/>"/&gt;, and <see cref="M:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreterConfiguration.Command``1(System.String)"/> overloads.
+             See <see cref="M:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreterConfiguration.Parameters``1(System.Func{``0})"/>"/>, and <see cref="M:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreterConfiguration.Command``1(System.String)"/> overloads.
              </summary>
         </member>
         <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreterConfiguration.Command``1(System.String,System.Func{System.String,``0})">
@@ -435,17 +389,17 @@
             </summary>
             <typeparam name="T">The type that collects the parameters.</typeparam>
         </member>
+        <member name="P:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreterConfiguration.DefaultCommand">
+            <summary>
+            The default command. If this is set, this will be used when no commands are configured. Either the default command,
+            or at least one named command must be configured. See <see cref="M:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreterConfiguration.Parameters``1(System.Func{``0})"/>"/>, and <see cref="M:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreterConfiguration.Command``1(System.String)"/> overloads.
+            </summary>
+        </member>
         <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreterConfiguration.Load(System.Type)">
             <summary>
             Load the configuration of a command from a type.
             </summary>
             <param name="type">The type to load.</param>
-        </member>
-        <member name="P:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreterConfiguration.DefaultCommand">
-            <summary>
-            The default command. If this is set, this will be used when no commands are configured. Either the default command,
-            or at least one named command must be configured. See <see cref="M:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreterConfiguration.Parameters``1(System.Func{``0})"/>"/&gt;, and <see cref="M:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreterConfiguration.Command``1(System.String)"/> overloads.
-            </summary>
         </member>
         <member name="T:ConsoleToolkit.CommandLineInterpretation.CommandLineParserConventions">
             <summary>
@@ -615,6 +569,35 @@
             <param name="positionalArguments">The positional arguments that may be specified.</param>
             <param name="result">An interface allowing parse results to be reported.</param>
         </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.IOption">
+            <summary>
+            An option configured as valid. The information supplied here is meant to guide the parser, and depending on the 
+            conventions being implemented, may not be required.
+            
+            An example of when this information is useful is in the POSIX conventions, in which option arguments can be attached to 
+            the option itself. e.g. "program -nabc" in which the -n option has an argument of "abc". Equally, if the available options
+            listed options "n", "a", "b" and "c" as boolean (i.e. no parameters), "program -nabc" would be setting "n", "a", "b", and "c" 
+            on. Without a list of configured options it would not be possible for the parser to distinguish "stacked" boolean options from
+            an option plus its parameter.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.CommandLineInterpretation.IOption.Name">
+            <summary>
+            The name of the option.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.CommandLineInterpretation.IOption.IsBoolean">
+            <summary>
+            True if the option is a boolean flag - i.e. specifying the option sets it to TRUE.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.CommandLineInterpretation.IOption.ParameterCount">
+            <summary>
+            The number of parameters required by the option. If conventions allow the number of parameters specified by the
+            user to be determined, then this value can be ignored. It is not intended to support validation of option arguments,
+            as the framework has this responsibilty.
+            </summary>
+        </member>
         <member name="T:ConsoleToolkit.CommandLineInterpretation.IParserResult">
             <summary>
             This interface is passed to command line parser implementations to allow parsed arguments to be provided to the framework.
@@ -641,6 +624,23 @@
             method with each positional parameter in turn.
             </summary>
             <param name="value"></param>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.IPositionalArgument">
+            <summary>
+            A positional argument. If positional arguments cannot be referenced by name, the command line parser may ignore this
+            interface.
+            
+            The Microsoft Command Line Standard guidelines allow this simply by referring to a positional parameter by name as
+            if it were an option. If the convention being implemented allows this, supply the positional argument as if it 
+            was actually an option. The framework will recognise that this has happened and will not attempt to extract a
+            value for the argument from the positional parameters parsed from the command line.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.CommandLineInterpretation.IPositionalArgument.ParameterName">
+            <summary>
+            The argument name. Useful only if conventions allow the user to specify values for positional parameters as if they 
+            were options.
+            </summary>
         </member>
         <member name="M:ConsoleToolkit.CommandLineInterpretation.MicrosoftStandardCommandLineParser.ConsoleToolkit#CommandLineInterpretation#IOptionNameHelpAdorner#Adorn(System.String)">
             <summary>
@@ -1379,17 +1379,6 @@
             Implement this interface to intercept console calls in order to redirect output, for example, in a unit test.
             </summary>
         </member>
-        <member name="M:ConsoleToolkit.ConsoleIO.IConsoleOutInterface.Write(System.String)">
-            <summary>
-            Output a string to the console in the current cursor position.
-            </summary>
-            <param name="data">The text to output.</param>
-        </member>
-        <member name="M:ConsoleToolkit.ConsoleIO.IConsoleOutInterface.NewLine">
-            <summary>
-            Output a new line to the console at the current cursor position. The cursor will move the beginning of the next line.
-            </summary>
-        </member>
         <member name="P:ConsoleToolkit.ConsoleIO.IConsoleOutInterface.Foreground">
             <summary>
             The current foreground colour for console output.
@@ -1410,6 +1399,17 @@
             <summary>
             The width of the console buffer. This may be greater than the window width.
             <seealso cref="P:ConsoleToolkit.ConsoleIO.IConsoleOutInterface.WindowWidth"/>
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.IConsoleOutInterface.Write(System.String)">
+            <summary>
+            Output a string to the console in the current cursor position.
+            </summary>
+            <param name="data">The text to output.</param>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.IConsoleOutInterface.NewLine">
+            <summary>
+            Output a new line to the console at the current cursor position. The cursor will move the beginning of the next line.
             </summary>
         </member>
         <member name="P:ConsoleToolkit.ConsoleIO.IConsoleOutInterface.CursorLeft">
@@ -1449,25 +1449,6 @@
             The global adapter configuration.
             </summary>
         </member>
-        <member name="M:ConsoleToolkit.ConsoleIO.Internal.AdapterConfiguration.ConsoleColourFromCode(System.String)">
-            <summary>
-            Convert a colour code constant into the actual console colour value.
-            </summary>
-            <param name="code"></param>
-            <returns></returns>
-        </member>
-        <member name="M:ConsoleToolkit.ConsoleIO.Internal.AdapterConfiguration.ConsoleColourToCode(System.ConsoleColor)">
-            <summary>
-            Convert a console colour value into the corresponding colour code constant.
-            </summary>
-            <param name="colour"></param>
-            <returns></returns>
-        </member>
-        <member name="M:ConsoleToolkit.ConsoleIO.Internal.AdapterConfiguration.#cctor">
-            <summary>
-            Set the default cpnfiguration values.
-            </summary>
-        </member>
         <member name="P:ConsoleToolkit.ConsoleIO.Internal.AdapterConfiguration.ControlSequenceIntroducer">
              <summary>
              Defines the character that introduces a control sequence in console output.
@@ -1501,6 +1482,25 @@
              the stored string will have been formatted with the old value and will not
              render correctly.
             </remarks>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.AdapterConfiguration.ConsoleColourFromCode(System.String)">
+            <summary>
+            Convert a colour code constant into the actual console colour value.
+            </summary>
+            <param name="code"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.AdapterConfiguration.ConsoleColourToCode(System.ConsoleColor)">
+            <summary>
+            Convert a console colour value into the corresponding colour code constant.
+            </summary>
+            <param name="colour"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.AdapterConfiguration.#cctor">
+            <summary>
+            Set the default cpnfiguration values.
+            </summary>
         </member>
         <member name="T:ConsoleToolkit.ConsoleIO.Internal.CachedRows`1">
             <summary>
@@ -1578,6 +1578,18 @@
             This allows the console output to be captured in a unit test without requiring code changes.
             </summary>
         </member>
+        <member name="M:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter.ReadLine">
+            <summary>
+            Read a string from the console.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapterStream">
+            <summary>
+            This class implements a text writer that writes text to a console adapter. This class is intended to be
+            attached to the default console as the Out stream.
+            </summary>
+        </member>
         <member name="M:ConsoleToolkit.ConsoleIO.Internal.ConsoleOperationsImpl.WriteLine(System.String,System.Object[])">
             <summary>
             Output a formatted string at the current cursor position, and move to the beginning of the next line.
@@ -1607,18 +1619,6 @@
         <member name="M:ConsoleToolkit.ConsoleIO.Internal.ConsoleOperationsImpl.WriteLine">
             <summary>
             Output a new line.
-            </summary>
-        </member>
-        <member name="M:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapter.ReadLine">
-            <summary>
-            Read a string from the console.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="T:ConsoleToolkit.ConsoleIO.Internal.ConsoleAdapterStream">
-            <summary>
-            This class implements a text writer that writes text to a console adapter. This class is intended to be
-            attached to the default console as the Out stream.
             </summary>
         </member>
         <member name="M:ConsoleToolkit.ConsoleIO.Internal.ConsoleRedirectTester.IsOutputRedirected">
@@ -1789,16 +1789,16 @@
             <typeparam name="T">The table row data type. In reports, this will be a generated type.</typeparam>
             <typeparam name="TChild">The child report element type. This will be different to the row data type in reports, where it will be the original row type rather than the generated report type. See <see cref="T:ConsoleToolkit.ConsoleIO.Report`1"/>.</typeparam>
         </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.Internal.RecordedCommands.ReplayBuffer.CursorLeft">
+            <summary>
+            The current cursor position.
+            </summary>
+        </member>
         <member name="M:ConsoleToolkit.ConsoleIO.Internal.RecordedCommands.ReplayBuffer.RecordWrapLineBreaks(System.Int32)">
             <summary>
             Add additional wrapping line breaks.
             </summary>
             <param name="wrappedLineBreaks"></param>
-        </member>
-        <member name="P:ConsoleToolkit.ConsoleIO.Internal.RecordedCommands.ReplayBuffer.CursorLeft">
-            <summary>
-            The current cursor position.
-            </summary>
         </member>
         <member name="F:ConsoleToolkit.ConsoleIO.Internal.RedirectedConsole._stream">
             <summary>
@@ -1819,6 +1819,11 @@
             <summary>
             If true, this means the report should use all of the available space and columns should be widened, even
             beyond the size required by the sizing data.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.ConsoleIO.Internal.ReportDefinitions.ReportParameterDetails.SuppressHeadingRepetition">
+            <summary>
+            Select option to not repeat headings when a row has a child report.
             </summary>
         </member>
         <member name="P:ConsoleToolkit.ConsoleIO.Internal.ReportDefinitions.ReportParameterDetails.Options">
@@ -2008,9 +2013,6 @@
             <summary>
             A static class responsible for wrapping values into a column.
             </summary>
-        </member>
-        <member name="F:ConsoleToolkit.ConsoleIO.Internal.ColumnWrapper._wrapAndMeasure">
-            
         </member>
         <member name="M:ConsoleToolkit.ConsoleIO.Internal.ColumnWrapper.WrapValue(System.Object,ConsoleToolkit.ConsoleIO.Internal.ColumnFormat,System.Int32,System.Int32,System.Int32)">
             <summary>
@@ -2385,6 +2387,11 @@
         <member name="F:ConsoleToolkit.ConsoleIO.ReportFormattingOptions.IncludeAllColumns">
             <summary>
             If column definitions are used, include columns without a definition.
+            </summary>
+        </member>
+        <member name="F:ConsoleToolkit.ConsoleIO.ReportFormattingOptions.SuppressHeadingsAfterChildReport">
+            <summary>
+            If child reports are present, do not repeat the report headings. By default, the report headings will be displayed again when a row has a child report. Use this option to suppress the headings repetition.
             </summary>
         </member>
         <member name="T:ConsoleToolkit.Exceptions.InvalidParameterType">
@@ -2828,6 +2835,36 @@
             The maximum number of lines the buffer may contain. Zero or less means no limit.
             </summary>
         </member>
+        <member name="P:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.Foreground">
+            <summary>
+            The current foreground colour. This property keeps <see cref="F:ConsoleToolkit.Testing.ConsoleInterfaceForTesting._fgCode"/> aligned with the actual console colour.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.Background">
+            <summary>
+            The current background colour. This property keeps <see cref="F:ConsoleToolkit.Testing.ConsoleInterfaceForTesting._bgCode"/> aligned with the actual console colour.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.WindowWidth">
+            <summary>
+            The width of the window. This is the visible part of the display. It is possible for this to be less than the width of the buffer.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.BufferWidth">
+            <summary>
+            The width of the buffer. This is the width of the data in the console window and can be wider than the actual window itself.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.CursorLeft">
+            <summary>
+            The current cursor position.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.CursorTop">
+            <summary>
+            The current cursor position.
+            </summary>
+        </member>
         <member name="M:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.#ctor(System.Text.Encoding)">
             <summary>
             The constructor sets default values for various console properties and allows an encoding to be specified.
@@ -2866,6 +2903,12 @@
             <param name="format">Enumeration value that specifies what should be returned.</param>
             <returns>A large string containing the requested data.</returns>
         </member>
+        <member name="P:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.InputIsRedirected">
+            <summary>
+            Indicate whether console input is redirected or not. This will effect the handling of invalid
+            input on the stream.
+            </summary>
+        </member>
         <member name="M:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.ReadLine">
             <summary>
             Read a line of text from the console. The data for this operation is provided using the <see cref="M:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.SetInputStream(System.IO.TextReader)"/> method.
@@ -2877,42 +2920,6 @@
             Provide a text stream to provide the data for the console input stream.
             </summary>
             <param name="stream">The stream to use.</param>
-        </member>
-        <member name="P:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.Foreground">
-            <summary>
-            The current foreground colour. This property keeps <see cref="F:ConsoleToolkit.Testing.ConsoleInterfaceForTesting._fgCode"/> aligned with the actual console colour.
-            </summary>
-        </member>
-        <member name="P:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.Background">
-            <summary>
-            The current background colour. This property keeps <see cref="F:ConsoleToolkit.Testing.ConsoleInterfaceForTesting._bgCode"/> aligned with the actual console colour.
-            </summary>
-        </member>
-        <member name="P:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.WindowWidth">
-            <summary>
-            The width of the window. This is the visible part of the display. It is possible for this to be less than the width of the buffer.
-            </summary>
-        </member>
-        <member name="P:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.BufferWidth">
-            <summary>
-            The width of the buffer. This is the width of the data in the console window and can be wider than the actual window itself.
-            </summary>
-        </member>
-        <member name="P:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.CursorLeft">
-            <summary>
-            The current cursor position.
-            </summary>
-        </member>
-        <member name="P:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.CursorTop">
-            <summary>
-            The current cursor position.
-            </summary>
-        </member>
-        <member name="P:ConsoleToolkit.Testing.ConsoleInterfaceForTesting.InputIsRedirected">
-            <summary>
-            Indicate whether console input is redirected or not. This will effect the handling of invalid
-            input on the stream.
-            </summary>
         </member>
         <member name="M:ConsoleToolkit.Testing.UnitTestAppRunner.Run``1(System.String[],ConsoleToolkit.ConsoleIO.IConsoleInterface)">
             <summary>

@@ -10,8 +10,8 @@
     <projectUrl>http://jamie-davis.github.io/ConsoleTools/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Bugfixes to report indentation.</releaseNotes>
-    <copyright>Copyright 2014</copyright>
+    <releaseNotes>New behaviour - parent report headings are repeated after nested reports.</releaseNotes>
+    <copyright>Copyright 2014-2016</copyright>
     <tags>Console Toolkit .NET</tags>
   </metadata>
 </package>
