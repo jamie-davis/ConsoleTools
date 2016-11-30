@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="ApplicationStyles\CommandDrivenApplication.cs" />
     <Compile Include="ApplicationStyles\ConsoleApplication.cs" />
+    <Compile Include="ApplicationStyles\HelpHandler.cs" />
     <Compile Include="ApplicationStyles\Internals\CommandAssemblyScanner.cs" />
     <Compile Include="ApplicationStyles\Internals\CommandHandler.cs" />
     <Compile Include="ApplicationStyles\Internals\CommandHandlerLoader.cs" />
@@ -215,6 +216,8 @@
     <Compile Include="Exceptions\ResultTypeCannotAcceptQuery.cs" />
     <Compile Include="Exceptions\ShortCircuitInvalid.cs" />
     <Compile Include="Exceptions\ShortCircuitInvalidOnPositionalParameter.cs" />
+    <Compile Include="InteractiveSession\IInteractiveSessionService.cs" />
+    <Compile Include="InteractiveSession\InteractiveSessionService.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Testing\ConsoleInterfaceForTesting.cs" />
@@ -228,7 +231,6 @@
     <Compile Include="Utilities\RuntimeTypeBuilder.cs" />
     <Compile Include="Utilities\RuntimeTypeBuilderProperty.cs" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

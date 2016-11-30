@@ -6,6 +6,7 @@ using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.Exceptions;
+using ConsoleToolkit.InteractiveSession;
 
 namespace ConsoleToolkit.ApplicationStyles.Internals
 {
@@ -38,7 +39,7 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
         /// <summary>
         /// The available command handlers
         /// </summary>
-        internal Dictionary<Type, ICommandHandler> Handlers { get; private set; }
+        internal Dictionary<Type, ICommandHandler> Handlers { get; set; }
 
         /// <summary>
         /// This is the error code returned by the console application framework when the command line is invalid.
@@ -64,35 +65,45 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
         /// </summary>
         protected IErrorAdapter Error { get; set; }
 
+        /// <summary>
+        /// This is the interactive session implementation for the application.
+        /// </summary>
+        private readonly Lazy<InteractiveSessionService> _interactiveSessionService;
+
         internal ConsoleApplicationBase()
         {
-            Injector = new Lazy<MethodParameterInjector>(() => new MethodParameterInjector(new object[] { this, Console, Error }));
+            _interactiveSessionService = new Lazy<InteractiveSessionService>(() => new InteractiveSessionService(Console, Error));
+            Injector = new Lazy<MethodParameterInjector>(() => new MethodParameterInjector(new object[] { this, Console, Error, _interactiveSessionService.Value}));
         }
 
         /// <summary>
         /// This is an optional extension point. Override this method to carry out any initialisation 
         /// you wish to perform before the command line parameters are interpreted.<para/>
-        /// 
+        /// <para/>
         /// This method is the last opportunity you have to provide a command line configuration 
         /// before the default behaviour scans the assembly for classes decorated with the 
         /// <see cref="CommandAttribute"/>.<para/>
-        /// 
+        /// <para/>
         /// You can also customise the automatic configuration detection. See <see cref="SetConfigTypeFilter"/>.<para/>
-        /// 
+        /// <para/>
         /// It is also the last opportunity you have to select the interpreter that will be used to
         /// parse the command arguments. By default, the console application will support the
         /// current Microsoft standard for command line interpretation, but the older MS Dos style, 
         /// and the GNU Unix style are also available.<para/>
-        /// 
-        /// It is also the last place available to you to attach command handlers if you do not want 
+        /// <para/>
+        /// It is also the last place available to you to attach command handlers if you do not want
         /// the default behaviour of scanning the assembly for classes decorated with the 
         /// <see cref="CommandHandlerAttribute"/>.<para/>
-        /// 
+        /// <para/>
         /// If it makes sense in your application to set the above in your constructor, it is fine to
         /// do that and you do not have to override this method.
+        /// <para/>
+        /// If you do override this method, it is important to call the base implementation.
         /// </summary>
         protected virtual void Initialise()
         {
+            if (Handlers == null)
+                Handlers = new Dictionary<Type, ICommandHandler>();
         }
 
         /// <summary>
@@ -169,7 +180,7 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
         }
 
         /// <summary>
-        /// This method carries out funtionality that should follow <see cref="Initialise"/>.
+        /// This method carries out functionality that should follow <see cref="Initialise"/>.
         /// </summary>
         protected virtual void PostInitialise()
         {
@@ -197,6 +208,8 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
                 LoadCommandHandlersFromAssembly(commandTypesArray, Injector.Value);
                 LoadHandlersFromClass(commandTypesArray, Injector.Value);
             }
+
+            _interactiveSessionService.Value.Initialise(this, Injector.Value, Config, Handlers);
         }
 
         /// <summary>
@@ -214,6 +227,32 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
             if (_typeFilter != null)
                 types = types.Where(_typeFilter);
             return types;
+        }
+
+        internal static void ExecuteCommand(ConsoleApplicationBase app, object command)
+        {
+            ICommandHandler handler;
+            if (app.Handlers.TryGetValue(command.GetType(), out handler))
+            {
+                app.OnCommandLineValid(command);
+                if (Environment.ExitCode == 0)
+                    handler.Execute(app, command, app.Console, app.Injector.Value);
+                RunPostCommandMethod(app);
+            }
+            else
+            {
+                app.Console.WrapLine("No command handler found.");
+                Environment.ExitCode = app.MissingCommandHandlerExitCode;
+            }
+        }
+
+        private static void RunPostCommandMethod(ConsoleApplicationBase app)
+        {
+            var success = Environment.ExitCode == 0;
+            if (success)
+                app.OnCommandSuccess();
+            else
+                app.OnCommandFailure();
         }
     }
 }

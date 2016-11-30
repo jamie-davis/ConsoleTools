@@ -76,7 +76,7 @@ namespace ConsoleToolkit.ApplicationStyles
             if (AutoHelpConfigured(app, command))
                 app.DisplayHelp(optionNameAdorner);
             else
-                ExecuteHandler(app, command);
+                ExecuteCommand(app, command);
         }
 
         private static void ExecuteHandler(ConsoleApplication app, object command)

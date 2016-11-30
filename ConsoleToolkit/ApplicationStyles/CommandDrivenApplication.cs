@@ -70,32 +70,6 @@ namespace ConsoleToolkit.ApplicationStyles
             app._helpHandler.Adorner = commandLineInterpreter.GetOptionNameAdorner();
         }
 
-        private static void ExecuteCommand(CommandDrivenApplication app, object command)
-        {
-            ICommandHandler handler;
-            if (app.Handlers.TryGetValue(command.GetType(), out handler))
-            {
-                app.OnCommandLineValid(command);
-                if (Environment.ExitCode == 0)
-                    handler.Execute(app, command, app.Console, app.Injector.Value);
-                RunPostCommandMethod(app);
-            }
-            else
-            {
-                app.Console.WrapLine("No command handler found.");
-                Environment.ExitCode = app.MissingCommandHandlerExitCode;
-            }
-        }
-
-        private static void RunPostCommandMethod(CommandDrivenApplication app)
-        {
-            var success = Environment.ExitCode == 0;
-            if (success)
-                app.OnCommandSuccess();
-            else
-                app.OnCommandFailure();
-        }
-
         internal override void LoadConfigFromAssembly()
         {
             var types = GetCommandTypes();
@@ -130,43 +104,6 @@ namespace ConsoleToolkit.ApplicationStyles
         {
             _helpCommandType = typeof (T);
             _helpCommandParameterGetter = o => getCommandParam((T)o);
-        }
-
-        private class HelpHandler : ICommandHandler
-        {
-            private Func<object, string> _parameterGetter;
-            private CommandLineInterpreterConfiguration _config;
-
-            public HelpHandler(Type helpCommandType, Func<object, string> helpCommandParameterGetter, CommandLineInterpreterConfiguration config)
-            {
-                CommandType = helpCommandType;
-                _parameterGetter = helpCommandParameterGetter;
-                _config = config;
-            }
-
-            public Type CommandType { get; private set; }
-            internal IOptionNameHelpAdorner Adorner { get; set; }
-
-            public void Execute(ConsoleApplicationBase app, object command, IConsoleAdapter console, MethodParameterInjector injector)
-            {
-                var parameter = _parameterGetter == null || command == null ? string.Empty : _parameterGetter(command);
-                if (string.IsNullOrWhiteSpace(parameter))
-                {
-                    CommandDescriber.Describe(_config, console, DefaultApplicationNameExtractor.Extract(app.GetType()), Adorner);
-                }
-                else
-                {
-                    var chosenCommand = _config.Commands.FirstOrDefault(c => string.CompareOrdinal(c.Name, parameter) == 0);
-                    if (chosenCommand == null)
-                    {
-                        console.WrapLine(@"The command ""{0}"" is not supported.");
-                    }
-                    else
-                    {
-                        CommandDescriber.Describe(chosenCommand, console, Adorner);
-                    }
-                }
-            }
         }
     }
 }
