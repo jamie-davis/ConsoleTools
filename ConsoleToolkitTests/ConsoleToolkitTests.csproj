@@ -148,6 +148,8 @@
     <Compile Include="ConsoleIO\TestUnderliner.cs" />
     <Compile Include="ConsoleIO\UnitTestUtilities\RulerFormatter.cs" />
     <Compile Include="ConsoleIO\UnitTestUtilities\TabularReportRenderTool.cs" />
+    <Compile Include="TestingUtilities\FakeApplication.cs" />
+    <Compile Include="TestingUtilities\FakeApplicationBase.cs" />
     <Compile Include="InteractiveSession\TestInteractiveSessionService.cs" />
     <Compile Include="SetUpTests.cs" />
     <Compile Include="TestingUtilities\CommandConfigDescriber.cs" />

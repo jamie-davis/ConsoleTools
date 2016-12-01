@@ -93,7 +93,7 @@ namespace ConsoleToolkit.InteractiveSession
                 {
                     foreach (var error in errors)
                         _error.WrapLine(error);
-                    return;
+                    continue;
                 }
 
                 HandleCommand(command);
