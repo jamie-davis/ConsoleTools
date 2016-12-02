@@ -8,5 +8,6 @@
     {
         void BeginSession();
         void EndSession();
+        void SetPrompt(string prompt);
     }
 }

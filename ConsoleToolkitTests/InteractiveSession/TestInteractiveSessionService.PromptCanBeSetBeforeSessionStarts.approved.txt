@@ -1,0 +1,13 @@
+﻿StartCommand                                                
+##>one                                                      
+Command1                                                    
+OnCommandSuccess called.                                    
+##>two                                                      
+Command2                                                    
+OnCommandSuccess called.                                    
+##>exit                                                     
+ExitCommand                                                 
+OnCommandSuccess called.                                    
+OnCommandSuccess called.                                    
+<Session exited>                                            
+                                                            

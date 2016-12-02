@@ -20,10 +20,15 @@ namespace ConsoleToolkitTests.InteractiveSession
         [Command("start")]
         public class StartCommand
         {
+            [Positional(DefaultValue = null)]
+            public string Prompt { get; set; }
+
             [CommandHandler]
             public void Handle(IInteractiveSessionService service, IConsoleAdapter console)
             {
                 console.WrapLine(GetType().Name);
+                if (Prompt != null)
+                    service.SetPrompt(Prompt);
                 service.BeginSession();
             }
         }
@@ -58,6 +63,19 @@ namespace ConsoleToolkitTests.InteractiveSession
             }
         }
 
+        [Command]
+        public class SetPromptCommand
+        {
+            [Positional]
+            public string Prompt { get; set; }
+
+            [CommandHandler]
+            public void Handle(IInteractiveSessionService service)
+            {
+                service.SetPrompt(Prompt);
+            }
+        }
+
         [Command("exit")]
         public class ExitCommand
         {
@@ -82,7 +100,7 @@ namespace ConsoleToolkitTests.InteractiveSession
             _testConsole = new ConsoleInterfaceForTesting();
             _console = new ConsoleAdapter(_testConsole);
             _error = new ErrorAdapter(_testConsole, "ERROR: ");
-            _app = FakeApplication.MakeFakeApplication(_console, _error, typeof(StartCommand), typeof(Command1), typeof(Command2), typeof(Command3), typeof(ExitCommand));
+            _app = FakeApplication.MakeFakeApplication(_console, _error, typeof(StartCommand), typeof(Command1), typeof(Command2), typeof(Command3), typeof(ExitCommand), typeof(SetPromptCommand));
         }
 
         [Test]
@@ -118,6 +136,46 @@ exit";
 
                 //Act
                 UnitTestAppRunner.Run(_app, new [] { "start" }, _testConsole);
+
+                //Assert
+                _console.WrapLine("<Session exited>");
+                Approvals.Verify(_testConsole.GetBuffer());
+            }
+        }
+
+        [Test]
+        public void PromptCanBeSetBeforeSessionStarts()
+        {
+            //Arrange
+            const string data = @"one
+two
+exit";
+            using (var s = new StringReader(data))
+            {
+                _testConsole.SetInputStream(s);
+
+                //Act
+                UnitTestAppRunner.Run(_app, new [] { "start", "##>" }, _testConsole);
+
+                //Assert
+                _console.WrapLine("<Session exited>");
+                Approvals.Verify(_testConsole.GetBuffer());
+            }
+        }
+
+        [Test]
+        public void PromptCanBeChangedDuringASession()
+        {
+            //Arrange
+            const string data = @"one
+setprompt ""NewPrompt:""
+exit";
+            using (var s = new StringReader(data))
+            {
+                _testConsole.SetInputStream(s);
+
+                //Act
+                UnitTestAppRunner.Run(_app, new [] { "start", ":" }, _testConsole);
 
                 //Assert
                 _console.WrapLine("<Session exited>");

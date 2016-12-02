@@ -1,0 +1,12 @@
+﻿StartCommand                                                
+:one                                                        
+Command1                                                    
+OnCommandSuccess called.                                    
+:setprompt "NewPrompt:"                                     
+OnCommandSuccess called.                                    
+NewPrompt:exit                                              
+ExitCommand                                                 
+OnCommandSuccess called.                                    
+OnCommandSuccess called.                                    
+<Session exited>                                            
+                                                            
