@@ -53,6 +53,7 @@
     <Compile Include="ApplicationStyles\Internals\CommandHandler.cs" />
     <Compile Include="ApplicationStyles\Internals\CommandHandlerLoader.cs" />
     <Compile Include="ApplicationStyles\Internals\CommandHandlerMethod.cs" />
+    <Compile Include="ApplicationStyles\Internals\CommandScanType.cs" />
     <Compile Include="ApplicationStyles\Internals\ConsoleApplicationBase.cs" />
     <Compile Include="ApplicationStyles\Internals\DefaultCommandExceptionHandler.cs" />
     <Compile Include="ApplicationStyles\Internals\ICommandHandler.cs" />
@@ -72,10 +73,13 @@
     <Compile Include="CommandLineInterpretation\CommandLineTokeniser.cs" />
     <Compile Include="CommandLineInterpretation\CommandOption.cs" />
     <Compile Include="CommandLineInterpretation\CommandPositional.cs" />
+    <Compile Include="CommandLineInterpretation\ConfigurationAttributes\BaseCommandAttribute.cs" />
     <Compile Include="CommandLineInterpretation\ConfigurationAttributes\CommandAttribute.cs" />
     <Compile Include="CommandLineInterpretation\ConfigurationAttributes\CommandHandlerAttribute.cs" />
     <Compile Include="CommandLineInterpretation\ConfigurationAttributes\CommandValidatorAttribute.cs" />
     <Compile Include="CommandLineInterpretation\ConfigurationAttributes\DescriptionAttribute.cs" />
+    <Compile Include="CommandLineInterpretation\ConfigurationAttributes\InteractiveCommandAttribute.cs" />
+    <Compile Include="CommandLineInterpretation\ConfigurationAttributes\NonInteractiveCommandAttribute.cs" />
     <Compile Include="CommandLineInterpretation\ConfigurationAttributes\OptionAttribute.cs" />
     <Compile Include="CommandLineInterpretation\ConfigurationAttributes\OptionSetAttribute.cs" />
     <Compile Include="CommandLineInterpretation\ConfigurationAttributes\PositionalAttribute.cs" />
@@ -217,6 +221,7 @@
     <Compile Include="Exceptions\ShortCircuitInvalid.cs" />
     <Compile Include="Exceptions\ShortCircuitInvalidOnPositionalParameter.cs" />
     <Compile Include="InteractiveSession\IInteractiveSessionService.cs" />
+    <Compile Include="InteractiveSession\InteractiveSession.cs" />
     <Compile Include="InteractiveSession\InteractiveSessionService.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

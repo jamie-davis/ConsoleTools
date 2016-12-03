@@ -12,19 +12,41 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
     /// </summary>
     internal static class CommandAssemblyScanner
     {
-        public static IEnumerable<Type> FindCommands(Assembly assembly)
+        public static IEnumerable<Type> FindCommands(Assembly assembly, CommandScanType scanType)
         {
-            return FindTypesWithAttribute<CommandAttribute>(assembly);
+            var allCommands = FindTypesWithAttribute<CommandAttribute>(assembly).Select(t => Tuple.Create(t.Item1 as BaseCommandAttribute, t.Item2))
+                .Concat(FindTypesWithAttribute<InteractiveCommandAttribute>(assembly).Select(t => Tuple.Create(t.Item1 as BaseCommandAttribute, t.Item2)))
+                .Concat(FindTypesWithAttribute<NonInteractiveCommandAttribute>(assembly).Select(t => Tuple.Create(t.Item1 as BaseCommandAttribute, t.Item2)));
+
+            switch (scanType)
+            {
+                case CommandScanType.InteractiveCommands:
+                    allCommands = allCommands.Where(t => t.Item1.ValidInInteractiveSession);
+                    break;
+
+                case CommandScanType.NonInteractiveCommands:
+                    allCommands = allCommands.Where(t => t.Item1.ValidInNonInteractiveSession);
+                    break;
+
+                case CommandScanType.AllCommands:
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(scanType), scanType, null);
+            }
+            return allCommands.Select(t => t.Item2);
         }
 
-        private static IEnumerable<Type> FindTypesWithAttribute<T>(Assembly assembly) where T : Attribute
+        private static IEnumerable<Tuple<T, Type>> FindTypesWithAttribute<T>(Assembly assembly) where T : Attribute
         {
-            return assembly.GetTypes().Where(t => t.GetCustomAttribute<T>() != null);
+            return assembly.GetTypes()
+                .Select(t => Tuple.Create(t.GetCustomAttribute<T>(), t))
+                .Where(t => t.Item1 != null);
         }
 
         public static IEnumerable<Type> FindCommandHandlers(Assembly assembly)
         {
-            return FindTypesWithAttribute<CommandHandlerAttribute>(assembly);
+            return FindTypesWithAttribute<CommandHandlerAttribute>(assembly).Select(t => t.Item2);
         }
     }
 }

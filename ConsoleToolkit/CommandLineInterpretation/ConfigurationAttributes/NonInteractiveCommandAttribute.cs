@@ -6,10 +6,10 @@ namespace ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes
     /// This attribute decorates a class and indicates that it is a command.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public class CommandAttribute : BaseCommandAttribute
+    public class NonInteractiveCommandAttribute : BaseCommandAttribute
     {
         /// <inheritdoc />
-        public override bool ValidInInteractiveSession => true;
+        public override bool ValidInInteractiveSession => false;
 
         /// <inheritdoc />
         public override bool ValidInNonInteractiveSession => true;
@@ -17,7 +17,7 @@ namespace ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes
         /// <summary>
         /// Constructor specifying a command name
         /// </summary>
-        public CommandAttribute(string name)
+        public NonInteractiveCommandAttribute(string name)
         {
             Name = name;
         }
@@ -25,7 +25,7 @@ namespace ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes
         /// <summary>
         /// Constructor specifying that the command name should be derived
         /// </summary>
-        public CommandAttribute()
+        public NonInteractiveCommandAttribute()
         {
             
         }

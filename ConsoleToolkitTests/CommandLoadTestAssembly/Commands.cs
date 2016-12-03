@@ -32,6 +32,30 @@ namespace CommandLoadTestAssembly
         {}
     }
 
+    [InteractiveCommand("ione")]
+    public class InteractiveCommand1
+    {
+
+    }
+
+    [InteractiveCommand("itwo")]
+    public class InteractiveCommand2
+    {
+
+    }
+
+    [NonInteractiveCommand("none")]
+    public class NonInteractiveCommand1
+    {
+
+    }
+
+    [NonInteractiveCommand("ntwo")]
+    public class NonInteractiveCommand2
+    {
+
+    }
+
     public class Program : CommandDrivenApplication
     {
         public static Program LastProgram { get; set; }

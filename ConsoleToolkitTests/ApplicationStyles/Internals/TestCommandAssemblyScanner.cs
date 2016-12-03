@@ -24,9 +24,25 @@ namespace ConsoleToolkitTests.ApplicationStyles.Internals
         [Test]
         public void AllOfTheCommandTypesAreExtracted()
         {
-            var commandTypes = CommandAssemblyScanner.FindCommands(_assembly);
+            var commandTypes = CommandAssemblyScanner.FindCommands(_assembly, CommandScanType.AllCommands);
             var result = commandTypes.Select(t => t.Name).JoinWith(",");
-            Assert.That(result, Is.EqualTo("Command1,Command2,Command3,Command4"));
+            Assert.That(result, Is.EqualTo("Command1,Command2,Command3,Command4,InteractiveCommand1,InteractiveCommand2,NonInteractiveCommand1,NonInteractiveCommand2"));
+        }
+
+        [Test]
+        public void TheInteractiveCommandTypesAreExtracted()
+        {
+            var commandTypes = CommandAssemblyScanner.FindCommands(_assembly, CommandScanType.InteractiveCommands);
+            var result = commandTypes.Select(t => t.Name).JoinWith(",");
+            Assert.That(result, Is.EqualTo("Command1,Command2,Command3,Command4,InteractiveCommand1,InteractiveCommand2"));
+        }
+
+        [Test]
+        public void TheNonInteractiveCommandTypesAreExtracted()
+        {
+            var commandTypes = CommandAssemblyScanner.FindCommands(_assembly, CommandScanType.NonInteractiveCommands);
+            var result = commandTypes.Select(t => t.Name).JoinWith(",");
+            Assert.That(result, Is.EqualTo("Command1,Command2,Command3,Command4,NonInteractiveCommand1,NonInteractiveCommand2"));
         }
 
         [Test]

@@ -397,7 +397,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
         {
             try
             {
-                var commandAttribute = commandClass.GetCustomAttribute<CommandAttribute>();
+                var commandAttribute = GetCommandA(commandClass);
                 if (commandAttribute == null)
                     throw new ArgumentException("Type does not have the Command attribute.", "commandClass");
 
@@ -412,6 +412,13 @@ namespace ConsoleToolkit.CommandLineInterpretation
                     throw e.InnerException;
                 throw;
             }
+        }
+
+        private static BaseCommandAttribute GetCommandA(Type commandClass)
+        {
+            return commandClass.GetCustomAttribute<CommandAttribute>()
+                ?? commandClass.GetCustomAttribute<InteractiveCommandAttribute>()
+                ?? commandClass.GetCustomAttribute<NonInteractiveCommandAttribute>() as BaseCommandAttribute ;
         }
     }
 }

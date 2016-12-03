@@ -59,7 +59,7 @@ namespace ConsoleToolkitTests.ApplicationStyles.Internals
         {
             Program.Main(new []{"one"});
             var commands = Program.LastProgram.GetConfig().Commands.Select(c => c.Name).JoinWith(",");
-            Assert.That(commands, Is.EqualTo("one,two,three,four"));
+            Assert.That(commands, Is.EqualTo("one,two,three,four,ione,itwo,none,ntwo"));
         }
 
         [Test]
