@@ -45,7 +45,7 @@ namespace ConsoleToolkit.InteractiveSession
                 var tokens = CommandLineTokeniser.Tokenise(commandText);
                 string[] errors;
 
-                var command = _interpreter.Interpret(tokens, out errors);
+                var command = _interpreter.Interpret(tokens, out errors, false, true);
                 if (command == null)
                 {
                     foreach (var error in errors)

@@ -22,7 +22,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
 
                 var args = CommandLineTokeniser.Tokenise(command);
                 string[] errors;
-                var result = interpreter.Interpret(args, out errors);
+                var result = interpreter.Interpret(args, out errors, false);
                 if (errors != null &&errors.Any())
                 {
                     foreach (var e in errors)

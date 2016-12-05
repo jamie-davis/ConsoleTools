@@ -3,7 +3,7 @@ using ConsoleToolkit.InteractiveSession;
 
 namespace InteractiveCommandSample.Commands
 {
-    [Command]
+    [InteractiveCommand]
     [Description("End the interactive session.")]
     public class ExitCommand
     {

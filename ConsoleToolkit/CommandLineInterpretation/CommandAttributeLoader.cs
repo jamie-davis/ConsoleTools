@@ -35,12 +35,15 @@ namespace ConsoleToolkit.CommandLineInterpretation
         }
 
         // ReSharper disable once UnusedMember.Local
-        private static CommandConfig<T> Create<T>(string name) where T : class, new()
+        //this is called dynamically
+        private static CommandConfig<T> Create<T>(string name, bool nonInteractiveOk, bool interactiveOk) where T : class, new()
         {
             var commandConfig = new CommandConfig<T>(CommandConstructionLambdaGenerator<T>.Generate())
             {
                 Name = (name ?? MakeDefaultName<T>()).ToLowerInvariant(),
-                CommandType = typeof (T)
+                CommandType = typeof(T),
+                ValidInNonInteractiveContext = nonInteractiveOk,
+                ValidInInteractiveContext = interactiveOk
             };
 
             AttachPropAndFieldElements(typeof(T), commandConfig);
@@ -397,14 +400,20 @@ namespace ConsoleToolkit.CommandLineInterpretation
         {
             try
             {
-                var commandAttribute = GetCommandA(commandClass);
+                var commandAttribute = GetCommandAttribute(commandClass);
                 if (commandAttribute == null)
                     throw new ArgumentException("Type does not have the Command attribute.", "commandClass");
 
                 var genericCreateMethod = typeof (CommandAttributeLoader).GetMethod("Create",
                     BindingFlags.Static | BindingFlags.NonPublic);
-                var createMethod = genericCreateMethod.MakeGenericMethod(new[] {commandClass});
-                return MethodInvoker.Invoke(createMethod, null, new object[]{ commandAttribute.Name }) as BaseCommandConfig;
+                var createMethod = genericCreateMethod.MakeGenericMethod(commandClass);
+                var callParameters = new object[]
+                {
+                    commandAttribute.Name,
+                    commandAttribute.ValidInNonInteractiveSession,
+                    commandAttribute.ValidInInteractiveSession
+                };
+                return MethodInvoker.Invoke(createMethod, null, callParameters) as BaseCommandConfig;
             }
             catch (TargetInvocationException e)
             {
@@ -414,7 +423,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
             }
         }
 
-        private static BaseCommandAttribute GetCommandA(Type commandClass)
+        private static BaseCommandAttribute GetCommandAttribute(Type commandClass)
         {
             return commandClass.GetCustomAttribute<CommandAttribute>()
                 ?? commandClass.GetCustomAttribute<InteractiveCommandAttribute>()

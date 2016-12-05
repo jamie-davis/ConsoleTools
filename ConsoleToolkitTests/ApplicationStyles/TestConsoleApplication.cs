@@ -8,7 +8,6 @@ using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.Exceptions;
-using ConsoleToolkit.Properties;
 using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
@@ -185,6 +184,36 @@ namespace ConsoleToolkitTests.ApplicationStyles
 
             public void Command2Handler(Command2 command)
             { }
+        }
+
+        public class InteractiveCommandApp : ConsoleApplication
+        {
+            [Command]
+            public class Command
+            {
+            }
+
+            [InteractiveCommand]
+            public class Command2
+            {
+            }
+
+            public static void Main(string[] args)
+            {
+                Toolkit.Execute<MultipleCommandApp>(args);
+            }
+
+            protected override void Initialise()
+            {
+                SetConfigTypeFilter(t => t.DeclaringType == GetType());
+            }
+
+            public void Handler(Command c)
+            {
+                TestOptValue = true;
+            }
+
+            public static bool TestOptValue { get; set; }
         }
 
         public class HelpApp : ConsoleApplication
@@ -412,6 +441,13 @@ namespace ConsoleToolkitTests.ApplicationStyles
         {
             UnitTestAppRunner.Run<TestApp>(new[] { "-TestOpt" }, new RedirectedConsole(ConsoleStream.Out));
             Assert.That(TestApp.LastTestApp.TestOptValue, Is.True);
+        }
+
+        [Test]
+        public void AppWithInteractiveCommandsCanBeExecuted()
+        {
+            UnitTestAppRunner.Run<InteractiveCommandApp>(new string[] {}, new RedirectedConsole(ConsoleStream.Out));
+            Assert.That(InteractiveCommandApp.TestOptValue, Is.True);
         }
 
         [Test]

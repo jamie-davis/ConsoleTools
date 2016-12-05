@@ -221,9 +221,9 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
             _typeFilter = typeFilter;
         }
 
-        protected IEnumerable<Type> GetCommandTypes()
+        protected IEnumerable<Type> GetCommandTypes(CommandScanType scanType = CommandScanType.AllCommands)
         {
-            var types = CommandAssemblyScanner.FindCommands(GetType().Assembly, CommandScanType.AllCommands);
+            var types = CommandAssemblyScanner.FindCommands(GetType().Assembly, scanType);
             if (_typeFilter != null)
                 types = types.Where(_typeFilter);
 

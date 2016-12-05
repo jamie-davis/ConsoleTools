@@ -16,16 +16,24 @@ namespace ConsoleToolkit.CommandLineInterpretation
             _config = config;
         }
 
-        public object Interpret(string[] args, out string[] errors)
+        public object Interpret(string[] args, out string[] errors, bool useDefault, bool isInteractive = false)
         {
             var interpreter = GetInterpreter();
 
             var messages = new List<string>();
 
-            BaseCommandConfig command;
+            BaseCommandConfig command = null;
             string commandName = null;
-            int firstArgumentIndex;
-            if (_config.Commands.Any())
+            int firstArgumentIndex = 0;
+
+            if (useDefault || !_config.Commands.Any())
+            {
+                if (_config.DefaultCommand == null)
+                    throw new CommandConfigurationInvalid();
+                command = _config.DefaultCommand;
+                firstArgumentIndex = 0;
+            }
+            else
             {
                 if (args == null || args.Length == 0)
                 {
@@ -35,20 +43,14 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
                 commandName = args[0].ToLower();
                 command = _config.Commands.FirstOrDefault(c => c.Name == commandName);
-                if (command == null)
-                {
-                    messages.Add("Command not recognised.");
-                    errors = messages.ToArray();
-                    return null;
-                }
                 firstArgumentIndex = 1;
             }
-            else
+
+            if (command == null)
             {
-                if (_config.DefaultCommand == null)
-                    throw new CommandConfigurationInvalid();
-                command = _config.DefaultCommand;
-                firstArgumentIndex = 0;
+                messages.Add("Command not recognised.");
+                errors = messages.ToArray();
+                return null;
             }
 
             var parserArgs = args.Skip(firstArgumentIndex).ToArray();

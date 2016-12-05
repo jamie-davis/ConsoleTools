@@ -159,7 +159,8 @@ namespace ConsoleToolkit.CommandLineInterpretation
         /// <param name="type">The type to load.</param>
         public void Load(Type type)
         {
-            _commands.Add(CommandAttributeLoader.Load(type));
+            var commandConfig = CommandAttributeLoader.Load(type);
+            _commands.Add(commandConfig);
         }
     }
 }

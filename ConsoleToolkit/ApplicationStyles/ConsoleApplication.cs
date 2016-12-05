@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Linq;
 using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.CommandLineInterpretation;
@@ -51,7 +52,7 @@ namespace ConsoleToolkit.ApplicationStyles
             }
 
             string[] errors;
-            var command = commandLineInterpreter.Interpret(args, out errors);
+            var command = commandLineInterpreter.Interpret(args, out errors, true);
             if (command == null)
             {
                 foreach (var error in errors)
@@ -129,7 +130,7 @@ namespace ConsoleToolkit.ApplicationStyles
 
         internal override void LoadConfigFromAssembly()
         {
-            var commandTypes = GetCommandTypes().ToList();
+            var commandTypes = GetCommandTypes(CommandScanType.NonInteractiveCommands).ToList();
             if (commandTypes.Count > 1) 
                 throw new MultipleCommandsInvalid();
 
@@ -140,6 +141,10 @@ namespace ConsoleToolkit.ApplicationStyles
                          {
                              DefaultCommand = CommandAttributeLoader.Load(commandTypes.Single())
                          };
+            foreach (var interactiveCommand in GetCommandTypes(CommandScanType.InteractiveCommands))
+            {
+                Config.Load(interactiveCommand);
+            }
         }
     }
 }

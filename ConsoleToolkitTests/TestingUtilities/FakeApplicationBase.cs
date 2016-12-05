@@ -31,7 +31,7 @@ namespace ConsoleToolkitTests.TestingUtilities
             ConfigureHelpHandler(app, commandLineInterpreter);
 
             string[] errors;
-            var command = commandLineInterpreter.Interpret(args, out errors);
+            var command = commandLineInterpreter.Interpret(args, out errors, false);
             if (command == null)
             {
                 if (errors != null)

@@ -16,5 +16,16 @@ namespace ConsoleToolkit.CommandLineInterpretation
         internal abstract object Create(string commandName);
         internal abstract bool Validate(object command, IList<string> messages);
         string IContext.Description { get; set; }
+
+        /// <summary>
+        /// True if this command is valid to invoke from command line parameters
+        /// </summary>
+        public bool ValidInNonInteractiveContext { get; set; }
+
+        /// <summary>
+        /// True if this command is valid to invoke from an interactive session
+        /// </summary>
+        public bool ValidInInteractiveContext { get; set; }
+
     }
 }

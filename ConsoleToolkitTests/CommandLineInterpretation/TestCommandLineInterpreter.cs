@@ -163,7 +163,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         {
             var args = CommandLineTokeniser.Tokenise("positionalTest parameter");
             string[] errors;
-            var command = _interpreter.Interpret(args, out errors);
+            var command = _interpreter.Interpret(args, out errors, false);
             Approvals.Verify(Describe(args, command, errors));
         }
 
@@ -172,7 +172,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         {
             var args = CommandLineTokeniser.Tokenise("positionalTest");
             string[] errors;
-            var command = _interpreter.Interpret(args, out errors);
+            var command = _interpreter.Interpret(args, out errors, false);
             Approvals.Verify(Describe(args, command, errors));
         }
 
@@ -181,7 +181,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         {
             var args = CommandLineTokeniser.Tokenise("positionalTest one two");
             string[] errors;
-            var command = _interpreter.Interpret(args, out errors);
+            var command = _interpreter.Interpret(args, out errors, false);
             Approvals.Verify(Describe(args, command, errors));
         }
 
@@ -190,7 +190,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         {
             var args = CommandLineTokeniser.Tokenise("positionalTest parameter -opt");
             string[] errors;
-            var command = _interpreter.Interpret(args, out errors);
+            var command = _interpreter.Interpret(args, out errors, false);
             Approvals.Verify(Describe(args, command, errors));
         }
 
@@ -199,7 +199,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         {
             var args = CommandLineTokeniser.Tokenise("positionalTest parameter -opt2 fish");
             string[] errors;
-            var command = _interpreter.Interpret(args, out errors);
+            var command = _interpreter.Interpret(args, out errors, false);
             Approvals.Verify(Describe(args, command, errors));
         }
 
@@ -208,7 +208,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         {
             var args = CommandLineTokeniser.Tokenise("positionalTest parameter -opt2 -opt");
             string[] errors;
-            var command = _interpreter.Interpret(args, out errors);
+            var command = _interpreter.Interpret(args, out errors, false);
             Approvals.Verify(Describe(args, command, errors));
         }
 
@@ -217,7 +217,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         {
             var args = CommandLineTokeniser.Tokenise("positionalTest parameter -opt2");
             string[] errors;
-            var command = _interpreter.Interpret(args, out errors);
+            var command = _interpreter.Interpret(args, out errors, false);
             Approvals.Verify(Describe(args, command, errors));
         }
 
@@ -226,7 +226,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         {
             var args = CommandLineTokeniser.Tokenise("nothing parameter -opt2");
             string[] errors;
-            var command = _interpreter.Interpret(args, out errors);
+            var command = _interpreter.Interpret(args, out errors, false);
             Approvals.Verify(Describe(args, command, errors));
         }
 
@@ -243,7 +243,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
 
             var interpreter = new CommandLineInterpreter(config);
             string[] errors;
-            var command = interpreter.Interpret(args, out errors);
+            var command = interpreter.Interpret(args, out errors, false);
             Approvals.Verify(Describe(args, command, errors));
         }
 
@@ -287,7 +287,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
                 var commandLine = string.Format("{0} -opt:{1}", type.Name, validValue);
                 var args = CommandLineTokeniser.Tokenise(commandLine);
                 string[] errors;
-                var command = _interpreter.Interpret(args, out errors);
+                var command = _interpreter.Interpret(args, out errors, false);
 
                 sb.AppendLine(string.Format("{0} : {1}", commandLine, command));
             }
@@ -307,7 +307,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
                 var commandLine = string.Format("P{0} {1}", type.Name, validValue);
                 var args = CommandLineTokeniser.Tokenise(commandLine);
                 string[] errors;
-                var command = _interpreter.Interpret(args, out errors);
+                var command = _interpreter.Interpret(args, out errors, false);
 
                 sb.AppendLine(string.Format("{0} : {1}", commandLine, command));
             }
@@ -327,7 +327,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
                 var commandLine = string.Format("{0} -opt:{1}", type.Name, invalidValue);
                 var args = CommandLineTokeniser.Tokenise(commandLine);
                 string[] errors;
-                var command = _interpreter.Interpret(args, out errors);
+                var command = _interpreter.Interpret(args, out errors, false);
 
                 sb.AppendLine(string.Format("{0} : {1}", commandLine, command == null ? "Command is null" : command.ToString()));
 
@@ -353,7 +353,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
                 var commandLine = string.Format("P{0} {1}", type.Name, invalidValue);
                 var args = CommandLineTokeniser.Tokenise(commandLine);
                 string[] errors;
-                var command = _interpreter.Interpret(args, out errors);
+                var command = _interpreter.Interpret(args, out errors, false);
 
                 sb.AppendLine(string.Format("{0} : {1}", commandLine, command == null ? "Command is null" : command.ToString()));
 
@@ -374,7 +374,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var commandLine = "PCustomParamType AOne";
             var args = CommandLineTokeniser.Tokenise(commandLine);
             string[] errors;
-            var command = _interpreter.Interpret(args, out errors);
+            var command = _interpreter.Interpret(args, out errors, false);
             Approvals.Verify(string.Format("{0} : {1}", commandLine, command));
         }
 
@@ -385,7 +385,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var commandLine = "PCustomParamType A";
             var args = CommandLineTokeniser.Tokenise(commandLine);
             string[] errors;
-            _interpreter.Interpret(args, out errors);
+            _interpreter.Interpret(args, out errors, false);
             Approvals.Verify(string.Format("{0} : {1}", commandLine, errors.Aggregate((t, i) => t + ", " + i)));
         }
 
@@ -396,7 +396,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var commandLine = "PCustomParamType AOne";
             var args = CommandLineTokeniser.Tokenise(commandLine);
             string[] errors;
-            var command = _interpreter.Interpret(args, out errors);
+            var command = _interpreter.Interpret(args, out errors, false);
             Approvals.Verify(string.Format("{0} : {1}", commandLine, command));
         }
 
@@ -409,7 +409,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var commandLine = "PCustomParamType AOne";
             var args = CommandLineTokeniser.Tokenise(commandLine);
             string[] errors;
-            var command = _interpreter.Interpret(args, out errors);
+            var command = _interpreter.Interpret(args, out errors, false);
             Approvals.Verify(Describe(args, command, errors));
         }
 
@@ -426,7 +426,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
 
             var interpreter = new CommandLineInterpreter(config);
             string[] errors;
-            interpreter.Interpret(new [] { "x" }, out errors);
+            interpreter.Interpret(new [] { "x" }, out errors, false);
 
             Assert.That(customParser.Options.Select(o => o.Name), Is.EqualTo(new [] { "opt", "opt2", "optInt"}));
         }
@@ -446,7 +446,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
 
             var interpreter = new CommandLineInterpreter(config);
             string[] errors;
-            interpreter.Interpret(new [] { "x" }, out errors);
+            interpreter.Interpret(new [] { "x" }, out errors, false);
 
             Assert.That(customParser.Options.Select(o => o.Name), Is.EqualTo(new [] { "opt", "opt2", "opt2Alias", "optInt", "optintalias"}));
         }
@@ -465,7 +465,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
 
             var interpreter = new CommandLineInterpreter(config);
             string[] errors;
-            interpreter.Interpret(new [] { "x", "y" }, out errors);
+            interpreter.Interpret(new [] { "x", "y" }, out errors, false);
 
             Assert.That(customParser.Positionals.Select(o => o.ParameterName), Is.EqualTo(new[] { "firstParam", "secondParam" }));
         }
@@ -483,7 +483,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var interpreter = new CommandLineInterpreter(config);
             string[] errors;
             var args = new [] { "x", "-h" };
-            var command = interpreter.Interpret(args, out errors);
+            var command = interpreter.Interpret(args, out errors, false);
 
             Approvals.Verify(Describe(args, command, errors));
         }
@@ -503,7 +503,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var interpreter = new CommandLineInterpreter(config);
             string[] errors;
             var args = new string[] { };
-            var result = interpreter.Interpret(args, out errors);
+            var result = interpreter.Interpret(args, out errors, false);
 
             Approvals.Verify(Describe(args, result, errors));
         }
@@ -520,7 +520,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var interpreter = new CommandLineInterpreter(config);
             string[] errors;
             var args = new [] { "1", "2a", "2b", "2c", "2d" };
-            var result = interpreter.Interpret(args, out errors);
+            var result = interpreter.Interpret(args, out errors, false);
 
             Approvals.Verify(Describe(args, result, errors));
         }
@@ -537,7 +537,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var interpreter = new CommandLineInterpreter(config);
             string[] errors;
             var args = new [] { "1" };
-            var result = interpreter.Interpret(args, out errors);
+            var result = interpreter.Interpret(args, out errors, false);
 
             Approvals.Verify(Describe(args, result, errors));
         }
@@ -554,7 +554,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var interpreter = new CommandLineInterpreter(config);
             string[] errors;
             var args = new[] { "1", "-opt2", "1", "-opt2", "2","-opt2", "3", };
-            var result = interpreter.Interpret(args, out errors);
+            var result = interpreter.Interpret(args, out errors, false);
 
             Approvals.Verify(Describe(args, result, errors));
         }
