@@ -32,7 +32,7 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
                     break;
 
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(scanType), scanType, null);
+                    throw new ArgumentOutOfRangeException("scanType", scanType, null);
             }
             return allCommands.Select(t => t.Item2);
         }
