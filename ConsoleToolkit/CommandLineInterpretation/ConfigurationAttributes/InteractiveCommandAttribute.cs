@@ -9,10 +9,10 @@ namespace ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes
     public class InteractiveCommandAttribute : BaseCommandAttribute
     {
         /// <inheritdoc />
-        public override bool ValidInInteractiveSession => true;
+        public override bool ValidInInteractiveSession { get { return true; } }
 
         /// <inheritdoc />
-        public override bool ValidInNonInteractiveSession => false;
+        public override bool ValidInNonInteractiveSession { get { return false; } }
 
         /// <summary>
         /// Constructor specifying a command name
