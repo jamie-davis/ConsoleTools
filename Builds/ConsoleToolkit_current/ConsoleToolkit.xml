@@ -156,9 +156,39 @@
             Scan an assembly for classes with the <see cref="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.CommandAttribute"/>.
             </summary>
         </member>
+        <member name="T:ConsoleToolkit.ApplicationStyles.Internals.CommandScanType">
+            <summary>
+            This enumeration describes the type of scan that the <see cref="T:ConsoleToolkit.ApplicationStyles.Internals.CommandAssemblyScanner"/> can perform.
+            </summary>
+        </member>
+        <member name="F:ConsoleToolkit.ApplicationStyles.Internals.CommandScanType.InteractiveCommands">
+            <summary>
+            Return only commands that can be run in an interactive session.
+            </summary>
+        </member>
+        <member name="F:ConsoleToolkit.ApplicationStyles.Internals.CommandScanType.NonInteractiveCommands">
+            <summary>
+            Return only commands that can be run in a command line only execution.
+            </summary>
+        </member>
+        <member name="F:ConsoleToolkit.ApplicationStyles.Internals.CommandScanType.AllCommands">
+            <summary>
+            Return all commands, regardless of their validity.
+            </summary>
+        </member>
         <member name="T:ConsoleToolkit.CommandLineInterpretation.BaseCommandConfig">
             <summary>
             The base class for command configurations.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.CommandLineInterpretation.BaseCommandConfig.ValidInNonInteractiveContext">
+            <summary>
+            True if this command is valid to invoke from command line parameters
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.CommandLineInterpretation.BaseCommandConfig.ValidInInteractiveContext">
+            <summary>
+            True if this command is valid to invoke from an interactive session
             </summary>
         </member>
         <member name="T:ConsoleToolkit.CommandLineInterpretation.BaseOption">
@@ -491,10 +521,46 @@
             to this type by the framework.</typeparam>
             <typeparam name="T">The command object type, an instance of which will be passed to the update routine (see <see cref="F:ConsoleToolkit.CommandLineInterpretation.CommandPositional`2._positionalInitialiser"/>).</typeparam>
         </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.BaseCommandAttribute">
+            <summary>
+            The base class for command attributes. This defines the properties that all command attributes must provide.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.BaseCommandAttribute.Name">
+            <summary>
+            The name of the command. If this is not provided, the command name will be derived from the annotated class name.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.BaseCommandAttribute.ValidInInteractiveSession">
+            <summary>
+            This must return true if the command is valid within an interactive session.
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.BaseCommandAttribute.ValidInNonInteractiveSession">
+            <summary>
+            This must return true if the command is valid in a non-interactive session.
+            </summary>
+        </member>
         <member name="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.CommandAttribute">
             <summary>
             This attribute decorates a class and indicates that it is a command.
             </summary>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.CommandAttribute.#ctor(System.String)">
+            <summary>
+            Constructor specifying a command name
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.CommandAttribute.#ctor">
+            <summary>
+            Constructor specifying that the command name should be derived
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.CommandAttribute.ValidInInteractiveSession">
+            <inheritdoc />
+        </member>
+        <member name="P:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.CommandAttribute.ValidInNonInteractiveSession">
+            <inheritdoc />
         </member>
         <member name="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.CommandHandlerAttribute">
             <summary>
@@ -511,6 +577,48 @@
             <summary>
             This attribute provides a literal description string for a command, positional parameter or option.
             </summary>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.InteractiveCommandAttribute">
+            <summary>
+            This attribute decorates a class and indicates that it is a command.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.InteractiveCommandAttribute.#ctor(System.String)">
+            <summary>
+            Constructor specifying a command name
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.InteractiveCommandAttribute.#ctor">
+            <summary>
+            Constructor specifying that the command name should be derived
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.InteractiveCommandAttribute.ValidInInteractiveSession">
+            <inheritdoc />
+        </member>
+        <member name="P:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.InteractiveCommandAttribute.ValidInNonInteractiveSession">
+            <inheritdoc />
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.NonInteractiveCommandAttribute">
+            <summary>
+            This attribute decorates a class and indicates that it is a command.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.NonInteractiveCommandAttribute.#ctor(System.String)">
+            <summary>
+            Constructor specifying a command name
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.NonInteractiveCommandAttribute.#ctor">
+            <summary>
+            Constructor specifying that the command name should be derived
+            </summary>
+        </member>
+        <member name="P:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.NonInteractiveCommandAttribute.ValidInInteractiveSession">
+            <inheritdoc />
+        </member>
+        <member name="P:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.NonInteractiveCommandAttribute.ValidInNonInteractiveSession">
+            <inheritdoc />
         </member>
         <member name="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.OptionAttribute">
             <summary>
