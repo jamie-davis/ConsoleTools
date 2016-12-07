@@ -59,7 +59,7 @@ namespace ConsoleToolkit.InteractiveSession
 
         private void HandleCommand(object command)
         {
-            ConsoleApplicationBase.ExecuteCommand(_app, command);
+            ConsoleApplicationBase.ExecuteCommand(_app, command, CommandExecutionMode.Interactive);
         }
 
         public void Stop()

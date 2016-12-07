@@ -55,11 +55,11 @@ namespace ConsoleToolkit.ApplicationStyles
                     return;
                 }
 
-                app._helpHandler.Execute(app, null, app.Console, app.Injector.Value);
+                app._helpHandler.Execute(app, null, app.Console, app.Injector.Value, CommandExecutionMode.CommandLine);
                 return;
             }
 
-            ExecuteCommand(app, command);
+            ExecuteCommand(app, command, CommandExecutionMode.CommandLine);
         }
 
         private static void ConfigureHelpHandler(CommandDrivenApplication app, CommandLineInterpreter commandLineInterpreter)

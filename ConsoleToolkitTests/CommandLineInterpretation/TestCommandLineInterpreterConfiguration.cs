@@ -4,6 +4,7 @@ using System.Linq;
 using System.Xml.Linq;
 using ApprovalTests;
 using ApprovalTests.Reporters;
+using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
@@ -239,7 +240,7 @@ a line break.")
         [Test]
         public void DescriptionOfCommandsIsFormatted()
         {
-            CommandDescriber.Describe(_config, _console, _applicationName);
+            CommandDescriber.Describe(_config, _console, _applicationName, CommandExecutionMode.CommandLine);
             var description = _consoleOutInterface.GetBuffer();
             Console.WriteLine(description);
             Approvals.Verify(description);
@@ -255,7 +256,7 @@ a line break.")
                 .Positional<string>("pos", (command, s) => { })
                     .Description("A positional parameter.");
 
-            CommandDescriber.Describe(config, _console, _applicationName);
+            CommandDescriber.Describe(config, _console, _applicationName, CommandExecutionMode.CommandLine);
             var description = _consoleOutInterface.GetBuffer();
             Console.WriteLine(description);
             Approvals.Verify(description);
@@ -272,7 +273,7 @@ a line break.")
                 .Positional<CustomParamType>("pos", (command, s) => { })
                     .Description("A positional parameter.");
 
-            CommandDescriber.Describe(config, _console, _applicationName);
+            CommandDescriber.Describe(config, _console, _applicationName, CommandExecutionMode.CommandLine);
             var description = _consoleOutInterface.GetBuffer();
             Console.WriteLine(description);
             Approvals.Verify(description);
@@ -290,7 +291,7 @@ a line break.")
                     .Description("A positional parameter.")
                 .Validator((t, m) => true);
 
-            CommandDescriber.Describe(config, _console, _applicationName);
+            CommandDescriber.Describe(config, _console, _applicationName, CommandExecutionMode.CommandLine);
             var description = _consoleOutInterface.GetBuffer();
             Console.WriteLine(description);
             Approvals.Verify(description);

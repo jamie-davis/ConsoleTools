@@ -7,6 +7,7 @@ using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.Exceptions;
 using ConsoleToolkit.InteractiveSession;
+using ConsoleToolkit.Utilities;
 
 namespace ConsoleToolkit.ApplicationStyles.Internals
 {
@@ -24,6 +25,10 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
 
         private InitPhase _initPhase = InitPhase.PreInit;
         private Func<Type, bool> _typeFilter;
+
+        private Func<object, string> _interactiveHelpCommandParameterGetter;
+        private Type _interactiveHelpCommandType;
+        private HelpHandler _interactiveHelpHandler;
 
         internal Lazy<MethodParameterInjector> Injector { get; set; }
 
@@ -209,6 +214,13 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
                 LoadHandlersFromClass(commandTypesArray, Injector.Value);
             }
 
+            if (_interactiveHelpCommandType != null)
+            {
+                _interactiveHelpHandler = new HelpHandler(_interactiveHelpCommandType,
+                    _interactiveHelpCommandParameterGetter, Config);
+                Handlers.Add(_interactiveHelpCommandType, _interactiveHelpHandler);
+            }
+
             _interactiveSessionService.Value.Initialise(this, Injector.Value, Config, Handlers);
         }
 
@@ -230,14 +242,14 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
             return types;
         }
 
-        internal static void ExecuteCommand(ConsoleApplicationBase app, object command)
+        internal static void ExecuteCommand(ConsoleApplicationBase app, object command, CommandExecutionMode executionMode)
         {
             ICommandHandler handler;
             if (app.Handlers.TryGetValue(command.GetType(), out handler))
             {
                 app.OnCommandLineValid(command);
                 if (Environment.ExitCode == 0)
-                    handler.Execute(app, command, app.Console, app.Injector.Value);
+                    handler.Execute(app, command, app.Console, app.Injector.Value, executionMode);
                 RunPostCommandMethod(app);
             }
             else
@@ -254,6 +266,23 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
                 app.OnCommandSuccess();
             else
                 app.OnCommandFailure();
+        }
+
+
+        /// <summary>
+        /// Call this method to supply the framework with the command type that should provide help to the user.
+        /// The specified command type will be handled automatically by the framework to display usage text,
+        /// and specified command help text.
+        /// </summary>
+        /// <typeparam name="T">The command type. This must be a type used only as the help command.</typeparam>
+        /// <param name="getCommandParam">Supply a lambda that returns the command on which help is required. Return null to indicate that program level help.</param>
+        protected void InteractiveHelpCommand<T>(Func<T, string> getCommandParam)
+        {
+            if (typeof(T).GetCustomAttribute<InteractiveCommandAttribute>() == null)
+                throw new InvalidInteractiveHelpCommand("Interactive help command must have the InteractiveCommand attribute.");
+
+            _interactiveHelpCommandType = typeof(T);
+            _interactiveHelpCommandParameterGetter = o => getCommandParam((T)o);
         }
     }
 }

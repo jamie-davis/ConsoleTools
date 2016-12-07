@@ -21,12 +21,12 @@ namespace ConsoleToolkit.ApplicationStyles
         public Type CommandType { get; private set; }
         internal IOptionNameHelpAdorner Adorner { get; set; }
 
-        public void Execute(ConsoleApplicationBase app, object command, IConsoleAdapter console, MethodParameterInjector injector)
+        public void Execute(ConsoleApplicationBase app, object command, IConsoleAdapter console, MethodParameterInjector injector, CommandExecutionMode executionMode)
         {
             var parameter = _parameterGetter == null || command == null ? String.Empty : _parameterGetter(command);
             if (String.IsNullOrWhiteSpace(parameter))
             {
-                CommandDescriber.Describe(_config, console, DefaultApplicationNameExtractor.Extract(app.GetType()), Adorner);
+                CommandDescriber.Describe(_config, console, DefaultApplicationNameExtractor.Extract(app.GetType()), executionMode, Adorner);
             }
             else
             {
@@ -37,7 +37,7 @@ namespace ConsoleToolkit.ApplicationStyles
                 }
                 else
                 {
-                    CommandDescriber.Describe(chosenCommand, console, Adorner);
+                    CommandDescriber.Describe(chosenCommand, console, executionMode, Adorner);
                 }
             }
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 
@@ -10,9 +11,9 @@ namespace ConsoleToolkit.CommandLineInterpretation
         private const string ColumnSeperator = "  ";
         private const ReportFormattingOptions FormattingOptions = ReportFormattingOptions.OmitHeadings;
 
-        public static void Describe(CommandLineInterpreterConfiguration config, IConsoleAdapter console, string applicationName, IOptionNameHelpAdorner adorner = null)
+        public static void Describe(CommandLineInterpreterConfiguration config, IConsoleAdapter console, string applicationName, CommandExecutionMode executionMode, IOptionNameHelpAdorner adorner = null)
         {
-            if (config.DefaultCommand != null)
+            if (config.DefaultCommand != null && executionMode == CommandExecutionMode.CommandLine)
                 AddDefaultCommandText(console, config.DefaultCommand, applicationName, adorner);
             else
                 AddCommandListText(console, config, adorner);
@@ -103,7 +104,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
             return p.IsOptional ? string.Format("[{0}]", entry) : entry;
         }
 
-        public static void Describe(BaseCommandConfig command, IConsoleAdapter console, IOptionNameHelpAdorner adorner)
+        public static void Describe(BaseCommandConfig command, IConsoleAdapter console, CommandExecutionMode executionMode, IOptionNameHelpAdorner adorner)
         {
             console.Write(FormatFullCommandDescription(command, adorner: adorner));
         }

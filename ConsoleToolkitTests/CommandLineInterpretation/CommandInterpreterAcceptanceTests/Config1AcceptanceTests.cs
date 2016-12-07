@@ -1,5 +1,6 @@
 ﻿using ApprovalTests;
 using ApprovalTests.Reporters;
+using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.Testing;
@@ -104,14 +105,14 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
         [Test]
         public void ConfigurationShouldBeDescribed()
         {
-            CommandDescriber.Describe(_posix, _console,  "POSIX");
+            CommandDescriber.Describe(_posix, _console,  "POSIX", CommandExecutionMode.CommandLine);
 
             var adorner = new PosixCommandLineParser();
             foreach (var baseCommandConfig in _posix.Commands)
             {
                 _console.WriteLine();
                 _console.WriteLine("Description of {0} command:", baseCommandConfig.Name);
-                CommandDescriber.Describe(baseCommandConfig, _console, adorner);
+                CommandDescriber.Describe(baseCommandConfig, _console, CommandExecutionMode.CommandLine, adorner);
             }
 
             var description = _consoleOutInterface.GetBuffer();

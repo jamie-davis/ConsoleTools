@@ -2,6 +2,7 @@
 using System.Linq;
 using ApprovalTests;
 using ApprovalTests.Reporters;
+using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
@@ -98,7 +99,7 @@ a line break.")
         public void DescriptionOfCommandsIsFormatted()
         {
             _console.WriteLine(RulerFormatter.MakeRuler(_console.WindowWidth));
-            CommandDescriber.Describe(_config, _console, "", new Adorner());
+            CommandDescriber.Describe(_config, _console, "", CommandExecutionMode.CommandLine, new Adorner());
             Approvals.Verify(_consoleOutInterface.GetBuffer() );
         }
 
@@ -106,7 +107,7 @@ a line break.")
         public void SelectedCommandDescriptionIsFormatted()
         {
             _console.WriteLine(RulerFormatter.MakeRuler(_console.WindowWidth));
-            CommandDescriber.Describe(_config.Commands.First(c => c.Name == "exp"), _console, new Adorner());
+            CommandDescriber.Describe(_config.Commands.First(c => c.Name == "exp"), _console, CommandExecutionMode.CommandLine, new Adorner());
             Approvals.Verify(_consoleOutInterface.GetBuffer());
         }
 
@@ -123,7 +124,7 @@ a line break.")
             config.DefaultCommand.Name = "shouldnotbedisplayed";
 
             _console.WriteLine(RulerFormatter.MakeRuler(_console.WindowWidth));
-            CommandDescriber.Describe(config, _console, "Test");
+            CommandDescriber.Describe(config, _console, "Test", CommandExecutionMode.CommandLine);
             var buffer = _consoleOutInterface.GetBuffer();
             Console.WriteLine(buffer);
             Approvals.Verify(buffer);

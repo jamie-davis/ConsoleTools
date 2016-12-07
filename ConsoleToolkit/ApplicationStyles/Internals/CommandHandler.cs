@@ -21,7 +21,7 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
             _commandType = commandType;
         }
 
-        public void Execute(ConsoleApplicationBase app, object command, IConsoleAdapter console, MethodParameterInjector injector)
+        public void Execute(ConsoleApplicationBase app, object command, IConsoleAdapter console, MethodParameterInjector injector, CommandExecutionMode executionMode)
         {
             Execute(command, injector);
         }

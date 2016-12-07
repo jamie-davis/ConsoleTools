@@ -50,6 +50,7 @@
     <Compile Include="ApplicationStyles\ConsoleApplication.cs" />
     <Compile Include="ApplicationStyles\HelpHandler.cs" />
     <Compile Include="ApplicationStyles\Internals\CommandAssemblyScanner.cs" />
+    <Compile Include="ApplicationStyles\Internals\CommandExecutionMode.cs" />
     <Compile Include="ApplicationStyles\Internals\CommandHandler.cs" />
     <Compile Include="ApplicationStyles\Internals\CommandHandlerLoader.cs" />
     <Compile Include="ApplicationStyles\Internals\CommandHandlerMethod.cs" />
@@ -202,6 +203,7 @@
     <Compile Include="Exceptions\DefaultValueMayOnlyBeSpecifiedForPositionalParameters.cs" />
     <Compile Include="Exceptions\DuplicateOptionName.cs" />
     <Compile Include="Exceptions\HelpCommandMustBePartOfConfiguration.cs" />
+    <Compile Include="Exceptions\InvalidInteractiveHelpCommand.cs" />
     <Compile Include="Exceptions\InvalidOperationForRedirectedConsole.cs" />
     <Compile Include="Exceptions\InvalidParameterType.cs" />
     <Compile Include="Exceptions\MemberReferenceExpected.cs" />

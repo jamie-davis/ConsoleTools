@@ -24,6 +24,7 @@ namespace InteractiveOnlyConsoleApplication
         protected override void Initialise()
         {
             HelpOption<Options>(o => o.Help);
+            InteractiveHelpCommand<HelpCommand>(h => h.Command);
             base.Initialise();
         }
 
@@ -71,5 +72,14 @@ namespace InteractiveOnlyConsoleApplication
         {
             service.EndSession();
         }
+    }
+
+    [InteractiveCommand]
+    [Description("Display command help")]
+    public class HelpCommand
+    {
+        [Positional(DefaultValue = null)]
+        [Description("The command for which to display help")]
+        public string Command { get; set; }
     }
 }

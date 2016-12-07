@@ -77,7 +77,7 @@ namespace ConsoleToolkit.ApplicationStyles
             if (AutoHelpConfigured(app, command))
                 app.DisplayHelp(optionNameAdorner);
             else
-                ExecuteCommand(app, command);
+                ExecuteCommand(app, command, CommandExecutionMode.CommandLine);
         }
 
         private static void ExecuteHandler(ConsoleApplication app, object command)
@@ -87,7 +87,7 @@ namespace ConsoleToolkit.ApplicationStyles
             {
                 app.OnCommandLineValid(command);
                 if (Environment.ExitCode == 0)
-                    handler.Execute(app, command, app.Console, app.Injector.Value);
+                    handler.Execute(app, command, app.Console, app.Injector.Value, CommandExecutionMode.CommandLine);
                 RunPostCommandMethod(app);
             }
             else
@@ -114,7 +114,7 @@ namespace ConsoleToolkit.ApplicationStyles
         private void DisplayHelp(IOptionNameHelpAdorner optionNameAdorner)
         {
             var appName = DefaultApplicationNameExtractor.Extract(GetType());
-            CommandDescriber.Describe(Config, Console, appName, optionNameAdorner);
+            CommandDescriber.Describe(Config, Console, appName, CommandExecutionMode.CommandLine, optionNameAdorner);
         }
 
         protected void HelpOption<T>(Func<T, bool> isHelp)

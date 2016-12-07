@@ -8,7 +8,7 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
     internal class CommandHandlerMethod : ICommandHandler
     {
         public Type CommandType { get { return _commandType; } }
-        public void Execute(ConsoleApplicationBase app, object command, IConsoleAdapter console, MethodParameterInjector injector)
+        public void Execute(ConsoleApplicationBase app, object command, IConsoleAdapter console, MethodParameterInjector injector, CommandExecutionMode executionMode)
         {
             Execute(app, command, injector);
         }
@@ -47,7 +47,7 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
         }
 
         public Type CommandType { get; private set; }
-        public void Execute(ConsoleApplicationBase app, object command, IConsoleAdapter console, MethodParameterInjector injector)
+        public void Execute(ConsoleApplicationBase app, object command, IConsoleAdapter console, MethodParameterInjector injector, CommandExecutionMode executionMode)
         {
             try
             {

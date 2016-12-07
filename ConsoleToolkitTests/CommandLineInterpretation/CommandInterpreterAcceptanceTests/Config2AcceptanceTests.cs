@@ -1,6 +1,7 @@
 using System;
 using ApprovalTests;
 using ApprovalTests.Reporters;
+using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
@@ -62,7 +63,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
         public void ConfigurationShouldBeDescribed()
         {
             var interpreter = new CommandLineInterpreter(_posix);
-            CommandDescriber.Describe(_posix, _console, _applicationName, interpreter.GetOptionNameAdorner());
+            CommandDescriber.Describe(_posix, _console, _applicationName, CommandExecutionMode.CommandLine, interpreter.GetOptionNameAdorner());
             var description = _consoleOutInterface.GetBuffer();
             Console.WriteLine(description);
             Approvals.Verify(description);

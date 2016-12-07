@@ -6,6 +6,6 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
     interface ICommandHandler
     {
         Type CommandType { get; }
-        void Execute(ConsoleApplicationBase app, object command, IConsoleAdapter console, MethodParameterInjector injector);
+        void Execute(ConsoleApplicationBase app, object command, IConsoleAdapter console, MethodParameterInjector injector, CommandExecutionMode executionMode);
     }
 }
