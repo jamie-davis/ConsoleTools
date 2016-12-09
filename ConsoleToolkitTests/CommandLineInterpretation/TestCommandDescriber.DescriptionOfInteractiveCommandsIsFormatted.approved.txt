@@ -19,8 +19,8 @@ fourth  The fourth command is really
         parameters and also options.                        
         This is the sort of command that                    
         needs lots of text.                                 
-non     Command valid only in a                             
-        non-interactive mode.                               
+int     Command valid only in an                            
+        interactive session.                                
 second  The second command is a command                     
         with a number of parameters.                        
 third   The third command has a number                      

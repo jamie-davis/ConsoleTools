@@ -31,7 +31,7 @@ namespace InteractiveOnlyConsoleApplication
         #endregion
     }
 
-    [Command]
+    [NonInteractiveCommand]
     [Description("A demo of an interactive only console application.")]
     public class Options
     {

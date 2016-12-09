@@ -91,6 +91,16 @@ a line break.")
                 .Option("I", command => command.IntProp)
                     .Description("A boolean option configured with an expression.");
 
+            _config
+                .Command("int", s => new TestCommand())
+                .Description(@"Command valid only in an interactive session.")
+                .Interactive();
+
+            _config
+                .Command("non", s => new TestCommand())
+                .Description(@"Command valid only in a non-interactive mode.")
+                .NonInteractive();
+
             _consoleOutInterface = new ConsoleInterfaceForTesting();
             _console = new ConsoleAdapter(_consoleOutInterface);
         }
@@ -100,6 +110,14 @@ a line break.")
         {
             _console.WriteLine(RulerFormatter.MakeRuler(_console.WindowWidth));
             CommandDescriber.Describe(_config, _console, "", CommandExecutionMode.CommandLine, new Adorner());
+            Approvals.Verify(_consoleOutInterface.GetBuffer() );
+        }
+
+        [Test]
+        public void DescriptionOfInteractiveCommandsIsFormatted()
+        {
+            _console.WriteLine(RulerFormatter.MakeRuler(_console.WindowWidth));
+            CommandDescriber.Describe(_config, _console, "", CommandExecutionMode.Interactive, new Adorner());
             Approvals.Verify(_consoleOutInterface.GetBuffer() );
         }
 

@@ -95,7 +95,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
             if (_commands.Any(c => string.Compare(c.Name, command, true, CultureInfo.CurrentCulture) == 0))
                 throw new CommandAlreadySpecified(command);
-            var commandConfig = new CommandConfig<T>(initialiser) { Name = command.ToLower() };
+            var commandConfig = new CommandConfig<T>(initialiser) { Name = command.ToLower(), ValidInNonInteractiveContext = true, ValidInInteractiveContext = true};
             _commands.Add(commandConfig);
             return commandConfig;
         }

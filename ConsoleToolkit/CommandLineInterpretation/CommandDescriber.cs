@@ -16,7 +16,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
             if (config.DefaultCommand != null && executionMode == CommandExecutionMode.CommandLine)
                 AddDefaultCommandText(console, config.DefaultCommand, applicationName, adorner);
             else
-                AddCommandListText(console, config, adorner);
+                AddCommandListText(console, config, adorner, executionMode);
         }
 
         private static void AddDefaultCommandText(IConsoleAdapter console, BaseCommandConfig defaultCommand, string applicationName, IOptionNameHelpAdorner adorner)
@@ -24,9 +24,9 @@ namespace ConsoleToolkit.CommandLineInterpretation
             console.Write(FormatFullCommandDescription(defaultCommand, string.Format("Usage: {0}", applicationName), adorner, false));
         }
 
-        private static void AddCommandListText(IConsoleAdapter console, CommandLineInterpreterConfiguration config, IOptionNameHelpAdorner adorner)
+        private static void AddCommandListText(IConsoleAdapter console, CommandLineInterpreterConfiguration config, IOptionNameHelpAdorner adorner, CommandExecutionMode executionMode)
         {
-            var commands = config.Commands.Where(c => c.Name != null).OrderBy(c => c.Name).ToList();
+            var commands = config.Commands.Where(c => c.Name != null && CommandModeFilter(executionMode, c)).OrderBy(c => c.Name).ToList();
             if (commands.Any())
             {
                 console.WriteLine("Available commands");
@@ -34,6 +34,17 @@ namespace ConsoleToolkit.CommandLineInterpretation
                 var commandItems = commands.Select(c => new { Command = c.Name, Text = FormatShortCommandDescription(c) });
                 console.FormatTable(commandItems, FormattingOptions, ColumnSeperator);
             }
+        }
+
+        private static bool CommandModeFilter(CommandExecutionMode executionMode, BaseCommandConfig baseCommandConfig)
+        {
+            if (executionMode == CommandExecutionMode.CommandLine)
+                return baseCommandConfig.ValidInNonInteractiveContext;
+
+            if (executionMode == CommandExecutionMode.Interactive)
+                return baseCommandConfig.ValidInInteractiveContext;
+
+            return false;
         }
 
         private static IConsoleRenderer FormatFullCommandDescription(BaseCommandConfig command, string prefixText = null, IOptionNameHelpAdorner adorner = null, bool displayCommandName = true)

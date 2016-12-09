@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.Exceptions;
 
 namespace ConsoleToolkit.CommandLineInterpretation
@@ -287,6 +288,28 @@ namespace ConsoleToolkit.CommandLineInterpretation
             }
 
             throw new AliasNotSupported();
+        }
+
+        /// <summary>
+        /// Allow the command in an interactive session, but do not allow the command from command line parameters. If you do not specify this option or <see cref="NonInteractive"/>
+        /// the command will be valid in both interactive sessions and from command line parameters.
+        /// </summary>
+        public CommandConfig<T> Interactive()
+        {
+            ValidInInteractiveContext = true;
+            ValidInNonInteractiveContext = false;
+            return this;
+        }
+
+        /// <summary>
+        /// Allow the command from command line parameters, but do not allow the command in an interactive session. If you do not specify this option or <see cref="Interactive"/>
+        /// the command will be valid in both interactive sessions and from command line parameters.
+        /// </summary>
+        public CommandConfig<T> NonInteractive()
+        {
+            ValidInInteractiveContext = false;
+            ValidInNonInteractiveContext = true;
+            return this;
         }
 
         private bool ContextIsPositional()
