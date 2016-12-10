@@ -95,6 +95,15 @@
             that excludes any types you don't want considered when assemblies are searched for configuration.
             </summary>
         </member>
+        <member name="M:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.InteractiveHelpCommand``1(System.Func{``0,System.String})">
+            <summary>
+            Call this method to supply the framework with the command type that should provide help to the user.
+            The specified command type will be handled automatically by the framework to display usage text,
+            and specified command help text.
+            </summary>
+            <typeparam name="T">The command type. This must be a type used only as the help command.</typeparam>
+            <param name="getCommandParam">Supply a lambda that returns the command on which help is required. Return null to indicate that program level help.</param>
+        </member>
         <member name="P:ConsoleToolkit.ApplicationStyles.Internals.ConsoleApplicationBase.Config">
             <summary>
             The command configuration for the application.<para/>
@@ -154,6 +163,21 @@
         <member name="T:ConsoleToolkit.ApplicationStyles.Internals.CommandAssemblyScanner">
             <summary>
             Scan an assembly for classes with the <see cref="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.CommandAttribute"/>.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.ApplicationStyles.Internals.CommandExecutionMode">
+            <summary>
+            The mode in which command execution is taking place.
+            </summary>
+        </member>
+        <member name="F:ConsoleToolkit.ApplicationStyles.Internals.CommandExecutionMode.CommandLine">
+            <summary>
+            Normal, based on command line parameters
+            </summary>
+        </member>
+        <member name="F:ConsoleToolkit.ApplicationStyles.Internals.CommandExecutionMode.Interactive">
+            <summary>
+            Inside an interactive session
             </summary>
         </member>
         <member name="T:ConsoleToolkit.ApplicationStyles.Internals.CommandScanType">
@@ -398,6 +422,18 @@
             This feature can be used to supply a short name for an option with a long name. This is common in Gnu command line applications.
             </summary>
             <param name="alias">The alternative name for the option.</param>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandConfig`1.Interactive">
+            <summary>
+            Allow the command in an interactive session, but do not allow the command from command line parameters. If you do not specify this option or <see cref="M:ConsoleToolkit.CommandLineInterpretation.CommandConfig`1.NonInteractive"/>
+            the command will be valid in both interactive sessions and from command line parameters.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandConfig`1.NonInteractive">
+            <summary>
+            Allow the command from command line parameters, but do not allow the command in an interactive session. If you do not specify this option or <see cref="M:ConsoleToolkit.CommandLineInterpretation.CommandConfig`1.Interactive"/>
+            the command will be valid in both interactive sessions and from command line parameters.
+            </summary>
         </member>
         <member name="T:ConsoleToolkit.CommandLineInterpretation.CommandConstructionLambdaGenerator`1">
             <summary>
@@ -2510,6 +2546,12 @@
         <member name="F:ConsoleToolkit.ConsoleIO.ReportFormattingOptions.SuppressHeadingsAfterChildReport">
             <summary>
             If child reports are present, do not repeat the report headings. By default, the report headings will be displayed again when a row has a child report. Use this option to suppress the headings repetition.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.Exceptions.InvalidInteractiveHelpCommand">
+            <summary>
+            This error is thrown when an interactive help command type is nominated, but the type does not have the
+            <see cref="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.InteractiveCommandAttribute"/>.
             </summary>
         </member>
         <member name="T:ConsoleToolkit.Exceptions.InvalidParameterType">
