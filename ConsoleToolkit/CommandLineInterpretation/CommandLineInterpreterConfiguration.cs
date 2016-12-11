@@ -112,7 +112,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
             if (_commands.Any(c => string.Compare(c.Name, command, true, CultureInfo.CurrentCulture) == 0))
                 throw new CommandAlreadySpecified(command);
-            var commandConfig = new CommandConfig<T>(w => new T()) { Name = command.ToLower(), CommandType = typeof(T)};
+            var commandConfig = new CommandConfig<T>(w => new T()) { Name = command.ToLower(), CommandType = typeof(T), ValidInNonInteractiveContext = true, ValidInInteractiveContext = true};
             _commands.Add(commandConfig);
             return commandConfig;
         }
