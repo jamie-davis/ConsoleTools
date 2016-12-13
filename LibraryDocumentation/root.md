@@ -26,4 +26,7 @@ The Console Toolkit documentation covers the following areas:
 * Accepting input from the user.
     1. [Overview](inputstream.html)
     2. [Customising	data input](custominput.html)
+* Interactive sessions
+	1. [Overview](interactiveoverview.html)
+	2. [The Interactive Session Service](interactivesessionservice.html)
 * [Future Development](future.html)
