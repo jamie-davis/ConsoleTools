@@ -276,6 +276,20 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             }
         }
 
+        [Command]
+        [Keyword("keyword")]
+        class CommandWithKeyword
+        {
+            
+        }
+
+        [Command]
+        [Keyword("keyword1 keyword-2 keyword3")]
+        class CommandWithMultipleKeywords
+        {
+            
+        }
+
         // ReSharper restore UnusedField.Compiler
         // ReSharper restore UnusedMember.Local
 #pragma warning restore 649
@@ -311,6 +325,20 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         {
             var over = CommandAttributeLoader.Load(typeof (CommandWithNameOverride)) as CommandConfig<CommandWithNameOverride>;
             Assert.That(over.Name, Is.EqualTo("over"));
+        }
+
+        [Test]
+        public void CommandKeywordIsLoaded()
+        {
+            var keywordCommand = CommandAttributeLoader.Load(typeof (CommandWithKeyword)) as CommandConfig<CommandWithKeyword>;
+            Assert.That(keywordCommand.Keywords, Is.EqualTo(new [] {"keyword"}));
+        }
+
+        [Test]
+        public void MultipleCommandKeywordIsLoaded()
+        {
+            var keywordCommand = CommandAttributeLoader.Load(typeof (CommandWithMultipleKeywords)) as CommandConfig<CommandWithMultipleKeywords>;
+            Assert.That(keywordCommand.Keywords, Is.EqualTo(new [] {"keyword1", "keyword-2", "keyword3"}));
         }
 
         [Test]
@@ -433,7 +461,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         }
 
         [Test]
-        public void PositionalWithDefaultSetHasNoDefaultValue()
+        public void PositionalWithoutDefaultSetHasNoDefaultValue()
         {
             var deffo = CommandAttributeLoader.Load(typeof(CommandWithDefaultedPositional)) as CommandConfig<CommandWithDefaultedPositional>;
             var nonDefPositional = deffo.Positionals[0];

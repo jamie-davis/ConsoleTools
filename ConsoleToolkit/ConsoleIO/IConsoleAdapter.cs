@@ -138,7 +138,6 @@ namespace ConsoleToolkit.ConsoleIO
         /// or not a piece of text supplied in the call.<para/>
         /// The user will be prompted to choose between "true" text or "false" text. The actual text values
         /// are specified globally and the defaults can be overridden.
-        /// <seealso cref="Toolkit."/>
         /// </summary>
         /// <param name="prompt">The message to display to the user.</param>
         /// <returns>True if the user confirms the message, otherwise false.</returns>

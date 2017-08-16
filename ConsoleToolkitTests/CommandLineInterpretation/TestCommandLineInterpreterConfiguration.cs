@@ -121,6 +121,13 @@ a line break.")
                 .Option("I", command => command.IntProp)
                     .Description("A boolean option configured with an expression.");
 
+            _config
+                .Command("go", s => new TestCommand())
+                .Keyword("keyword", "Help text for the keyword(s). This text will be presented next to all of the keywords on which it it defined.")
+                .Description(@"Command with a keyword.")
+                .Positional("pos", command => command.StringProp)
+                    .Description(@"A positional configured with an expression.");
+
             _customParser = new CustomParser();
 
             _consoleOutInterface = new ConsoleInterfaceForTesting();

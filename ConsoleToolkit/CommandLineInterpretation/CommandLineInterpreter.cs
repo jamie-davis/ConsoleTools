@@ -24,7 +24,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
             BaseCommandConfig command = null;
             string commandName = null;
-            int firstArgumentIndex = 0;
+            var firstArgumentIndex = 0;
 
             if (useDefault || !_config.Commands.Any())
             {
@@ -41,9 +41,16 @@ namespace ConsoleToolkit.CommandLineInterpretation
                     return null;
                 }
 
-                commandName = args[0].ToLower();
-                command = _config.Commands.FirstOrDefault(c => c.Name == commandName);
-                firstArgumentIndex = 1;
+                var selection = CommandSelector.Select(args, _config.Commands.Cast<ICommandKeys>().ToList());
+                if (!selection.Matched)
+                {
+                    errors = new[] {selection.Error};
+                    return null;
+                }
+
+                command = (BaseCommandConfig)selection.Command;
+                commandName = command.Name.ToLower();
+                firstArgumentIndex = selection.UsedArgumentCount;
             }
 
             if (command == null)

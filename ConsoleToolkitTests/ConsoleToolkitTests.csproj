@@ -78,6 +78,7 @@
     <Compile Include="CommandLineInterpretation\TestCommandLineInterpreter.cs" />
     <Compile Include="CommandLineInterpretation\TestCommandLineInterpreterConfiguration.cs" />
     <Compile Include="CommandLineInterpretation\TestCommandLineTokeniser.cs" />
+    <Compile Include="CommandLineInterpretation\TestCommandSelector.cs" />
     <Compile Include="CommandLineInterpretation\TestMicrosoftStandardCommandLineParser.cs" />
     <Compile Include="CommandLineInterpretation\TestMsDosCommandLineParser.cs" />
     <Compile Include="CommandLineInterpretation\TestParameterAssignmentGenerator.cs" />

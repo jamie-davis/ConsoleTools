@@ -1,0 +1,11 @@
+﻿GenericCommand`1
+
+Argument list:
+  0: key
+  1: add
+
+
+
+Command type: GenericCommand`1
+
+CMD[add] Option[]

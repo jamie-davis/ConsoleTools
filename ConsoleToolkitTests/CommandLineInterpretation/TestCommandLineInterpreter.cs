@@ -559,6 +559,21 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(Describe(args, result, errors));
         }
 
+        [Test]
+        public void CommandsWithKeywordsAreRecognised()
+        {
+            var config = new CommandLineInterpreterConfiguration();
+            config.Command("add", s => new GenericCommand<string> {Name = s})
+                .Keyword("key");
+
+            var interpreter = new CommandLineInterpreter(config);
+            string[] errors;
+            var args = new[] { "key", "add" };
+            var result = interpreter.Interpret(args, out errors, false);
+
+            Approvals.Verify(Describe(args, result, errors));
+        }
+
         private void FailValidation(string failureMessage)
         {
             _failureMessage = failureMessage;

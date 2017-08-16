@@ -36,14 +36,14 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
         // ReSharper disable once UnusedMember.Local
         //this is called dynamically
-        private static CommandConfig<T> Create<T>(string name, bool nonInteractiveOk, bool interactiveOk) where T : class, new()
+        private static CommandConfig<T> Create<T>(string name, bool nonInteractiveOk, bool interactiveOk, string keyword) where T : class, new()
         {
             var commandConfig = new CommandConfig<T>(CommandConstructionLambdaGenerator<T>.Generate())
             {
                 Name = (name ?? MakeDefaultName<T>()).ToLowerInvariant(),
                 CommandType = typeof(T),
                 ValidInNonInteractiveContext = nonInteractiveOk,
-                ValidInInteractiveContext = interactiveOk
+                ValidInInteractiveContext = interactiveOk,
             };
 
             AttachPropAndFieldElements(typeof(T), commandConfig);
@@ -54,6 +54,8 @@ namespace ConsoleToolkit.CommandLineInterpretation
             if (desc != null)
                 (commandConfig as IContext).Description = desc;
 
+            if (keyword != null)
+                commandConfig.Keyword(keyword);
 
             return commandConfig;
         }
@@ -404,6 +406,8 @@ namespace ConsoleToolkit.CommandLineInterpretation
                 if (commandAttribute == null)
                     throw new ArgumentException("Type does not have the Command attribute.", "commandClass");
 
+                var keywordAttribute = commandClass.GetCustomAttribute<KeywordAttribute>();
+
                 var genericCreateMethod = typeof (CommandAttributeLoader).GetMethod("Create",
                     BindingFlags.Static | BindingFlags.NonPublic);
                 var createMethod = genericCreateMethod.MakeGenericMethod(commandClass);
@@ -411,7 +415,8 @@ namespace ConsoleToolkit.CommandLineInterpretation
                 {
                     commandAttribute.Name,
                     commandAttribute.ValidInNonInteractiveSession,
-                    commandAttribute.ValidInInteractiveSession
+                    commandAttribute.ValidInInteractiveSession,
+                    keywordAttribute == null ? null : keywordAttribute.Keyword
                 };
                 return MethodInvoker.Invoke(createMethod, null, callParameters) as BaseCommandConfig;
             }

@@ -260,6 +260,51 @@ namespace ConsoleToolkit.CommandLineInterpretation
         }
 
         /// <summary>
+        /// Use this method to add a keyword to the command. Keywords are words that precede the actual command. For example, "config add ..."
+        /// where the command is "add" and the keyword is "config". This allows applications to support sets of commands related by the same
+        /// keyword. e.g.:
+        /// <para/>
+        /// <list type = "table" >
+        ///     <item>
+        ///         <description>config update ...</description>
+        ///     </item>
+        ///     <item>
+        ///         <description>config add ...</description>
+        ///     </item>
+        ///     <item>
+        ///         <description>config delete ...</description>
+        ///     </item>
+        ///     <item>
+        ///         <description>user add ...</description>
+        ///     </item>
+        ///     <item>
+        ///         <description>user update ...</description>
+        ///     </item>
+        ///     <item>
+        ///         <description>user delete ...</description>
+        ///     </item>
+        /// </list>
+        /// Here, two keywords have been used - "config" and "user", each of which has been associated with commands. In all, six commands
+        /// have been defined - there is no mechanism to share commands between prefixes i.e. "config add" is a different command to "user add" 
+        /// and they <i>cannot</i> be implemented by the same command.
+        /// </summary>
+        public CommandConfig<T> Keyword(string keyword, string helpText = null)
+        {
+            if (!ReferenceEquals(_currentContext, this))
+            {
+                throw new KeywordCanOnlyBeSpecifiedOnCommand();
+            }
+
+            var tokens = CommandLineTokeniser.Tokenise(keyword).ToList();
+            foreach (var token in tokens)
+                Keywords.Add(token);
+
+            KeywordsDocs.Add(new KeywordsDesc(helpText, tokens));
+
+            return this;
+        }
+
+        /// <summary>
         /// Supply a validation routine for the command or parameters. This will be called with the populated command instance and
         /// a list into which error messages and warnings may be inserted. The validator should return true if the command is valid, 
         /// or false if an error is found. If any messages are placed in the list, they are assyumed to be warnings if true is
