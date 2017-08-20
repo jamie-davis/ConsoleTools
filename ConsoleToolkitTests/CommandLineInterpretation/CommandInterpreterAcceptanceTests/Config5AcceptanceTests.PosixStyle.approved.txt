@@ -1,0 +1,74 @@
+﻿Test: account
+
+account must be followed by clear, list or show.
+
+
+Test: account clear
+
+AccountClearCommand
+{
+}
+
+
+Test: account not
+
+account must be followed by clear, list or show.
+
+
+Test: account list
+
+AccountListCommand
+{
+}
+
+
+Test: account show unexpected
+
+Unexpected argument "unexpected"
+
+
+Test: monitor
+
+monitor must be followed by alert or log-profiles.
+
+
+Test: monitor log-profiles
+
+MonitorLogProfilesCommand
+{
+}
+
+
+Test: monitor alert
+
+MonitorAlertCommand
+{
+}
+
+
+Test: storage
+
+storage must be followed by blob, queue or table.
+
+
+Test: storage blob
+
+StorageBlobCommand
+{
+}
+
+
+Test: storage queue
+
+StorageQueueCommand
+{
+}
+
+
+Test: storage table
+
+StorageTableCommand
+{
+}
+
+

@@ -1,0 +1,30 @@
+﻿Available commands                                                                                                                   
+                                                                                                                                     
+account  Manage subscriptions.                                                                                                       
+monitor  Commands to manage Azure Monitor service.                                                                                   
+storage  Durable, highly available, and massively scalable cloud storage.                                                            
+                                                                                                                                     
+Description of account clear command:                                                                                                
+Clear all subscriptions from the CLI's local cache.                                                                                  
+                                                                                                                                     
+Description of account list command:                                                                                                 
+Get a list of subscriptions for the account.                                                                                         
+                                                                                                                                     
+Description of account show command:                                                                                                 
+Show the details of a subscription.                                                                                                  
+                                                                                                                                     
+Description of monitor alert command:                                                                                                
+Commands to manage metric-based alert rules.                                                                                         
+                                                                                                                                     
+Description of monitor log-profiles command:                                                                                         
+Commands to manage the log profiles assigned to Azure subscription.                                                                  
+                                                                                                                                     
+Description of storage blob command:                                                                                                 
+Object storage for unstructured data.                                                                                                
+                                                                                                                                     
+Description of storage queue command:                                                                                                
+Use queues to effectively scale applications according to traffic.                                                                   
+                                                                                                                                     
+Description of storage table command:                                                                                                
+NoSQL key-value storage using semi-structured datasets.                                                                              
+                                                                                                                                     

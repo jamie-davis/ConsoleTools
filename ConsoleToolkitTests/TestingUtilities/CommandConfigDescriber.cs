@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.ConsoleIO;
@@ -16,9 +17,14 @@ namespace ConsoleToolkitTests.TestingUtilities
             foreach (var baseCommandConfig in config.Commands)
             {
                 console.WriteLine();
-                console.WriteLine("Description of {0} command:", baseCommandConfig.Name);
+                console.WriteLine("Description of {0} command:", string.Join(" ", baseCommandConfig.Keywords.Concat(new [] { baseCommandConfig.Name })));
                 CommandDescriber.Describe(baseCommandConfig, console, CommandExecutionMode.CommandLine, adorner);
             }
+        }
+
+        public static void DescribeKeywords(string keyword, CommandLineInterpreterConfiguration config, ConsoleAdapter console)
+        {
+            CommandDescriber.DescribeKeywords(config.Commands, new [] {keyword}, console);
         }
 
         private static IOptionNameHelpAdorner MakeAdorner(CommandLineParserConventions conventions)

@@ -1,0 +1,21 @@
+﻿Description of account:                                                                                                              
+Manage subscriptions.                                                                                                                
+                                                                                                                                     
+account clear - Clear all subscriptions from the CLI's local cache.                                                                  
+account list  - Get a list of subscriptions for the account.                                                                         
+account show  - Show the details of a subscription.                                                                                  
+                                                                                                                                     
+Description of monitor:                                                                                                              
+Commands to manage Azure Monitor service.                                                                                            
+                                                                                                                                     
+monitor alert        - Commands to manage metric-based alert rules.                                                                  
+monitor log-profiles - Commands to manage the log profiles assigned to Azure subscription.                                           
+                                                                                                                                     
+Description of storage:                                                                                                              
+Durable, highly available, and massively scalable cloud storage.                                                                     
+                                                                                                                                     
+storage blob  - Object storage for unstructured data.                                                                                
+storage queue - Use queues to effectively scale applications according to traffic.                                                   
+storage table - NoSQL key-value storage using semi-structured datasets.                                                              
+                                                                                                                                     
+                                                                                                                                     

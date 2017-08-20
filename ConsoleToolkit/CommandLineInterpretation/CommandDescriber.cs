@@ -138,7 +138,13 @@ namespace ConsoleToolkit.CommandLineInterpretation
                 console.WriteLine();
             }
 
-            var nextWords = commands
+            var matchedCommands = commands
+                .Select(c => new { Words = c.Keywords.Concat(new[] { c.Name }).ToList(), Command = c })
+                .Where(d => d.Words.Count > parameters.Count)
+                .Where(d => d.Words.Zip(parameters, (k, p) => string.Compare(k, p, StringComparison.InvariantCultureIgnoreCase) == 0).All(c => c))
+                .Select(d => d.Command);
+
+            var nextWords = matchedCommands
                 .Select(c => c.Keywords.Concat(new [] { c.Name }).ToList())
                 .Where(c => c.Count > parameters.Count)
                 .Select(c => c[parameters.Count])
