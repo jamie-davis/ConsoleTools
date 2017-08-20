@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.CommandLineInterpretation;
+using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
 
@@ -238,6 +240,42 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
 
             //Assert
             Assert.That(result.Error, Is.EqualTo("config must be followed by add."));
+        }
+
+        [Test]
+        public void FindPartialMatchesContainsAllPartialMatches()
+        {
+            //Arrange
+            var output = new UnitTestConsole();
+            var commands = new List<ICommandKeys> { new FakeCommand("config", "add"), new FakeCommand("get"), new FakeCommand("config", "delete"), new FakeCommand("config", "get") };
+            var args = new[] { "config" };
+
+            //Act
+            var result = CommandSelector.FindPartialMatches(args, commands);
+
+            //Assert
+            output.Console.WrapLine($"Args = {string.Join(" ", args)}");
+            output.Console.WriteLine();
+            output.Console.WrapLine(string.Join(Environment.NewLine, result.Select(r => string.Join(" ", r.Keywords.Concat(new [] { r.Name })))));
+            Approvals.Verify(output.Interface.GetBuffer());
+        }
+
+        [Test]
+        public void FindPartialMatchesReturnsExactMatchAlone()
+        {
+            //Arrange
+            var output = new UnitTestConsole();
+            var commands = new List<ICommandKeys> { new FakeCommand("config", "add"), new FakeCommand("get"), new FakeCommand("config", "get", "extra"), new FakeCommand("config", "get") };
+            var args = new[] { "config", "get" };
+
+            //Act
+            var result = CommandSelector.FindPartialMatches(args, commands);
+
+            //Assert
+            output.Console.WrapLine($"Args = {string.Join(" ", args)}");
+            output.Console.WriteLine();
+            output.Console.WrapLine(string.Join(Environment.NewLine, result.Select(r => string.Join(" ", r.Keywords.Concat(new [] { r.Name })))));
+            Approvals.Verify(output.Interface.GetBuffer());
         }
     }
 }

@@ -1,0 +1,4 @@
+﻿Args = config get                                           
+                                                            
+config get                                                  
+                                                            

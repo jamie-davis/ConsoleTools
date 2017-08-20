@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.CommandLineInterpretation;
@@ -25,7 +26,8 @@ namespace ConsoleToolkit.ApplicationStyles
     /// </summary>
     public abstract class CommandDrivenApplication : ConsoleApplicationBase
     {
-        private Func<object, string> _helpCommandParameterGetter;
+        private Func<object, object> _helpCommandParameterGetter;
+        private Func<object, ICollection<string>> _helpCommandParametersGetter;
         private Type _helpCommandType;
         private HelpHandler _helpHandler;
 
@@ -99,8 +101,8 @@ namespace ConsoleToolkit.ApplicationStyles
         /// and specified command help text.
         /// </summary>
         /// <typeparam name="T">The command type. This must be a type used only as the help command.</typeparam>
-        /// <param name="getCommandParam">Supply a lambda that returns the command on which help is required. Return null to indicate that program level help.</param>
-        protected void HelpCommand<T>(Func<T, string> getCommandParam)
+        /// <param name="getCommandParam">Supply a lambda that returns the command on which help is required. Return null to indicate that only program level help is required.</param>
+        protected void HelpCommand<T>(Func<T, object> getCommandParam)
         {
             _helpCommandType = typeof (T);
             _helpCommandParameterGetter = o => getCommandParam((T)o);

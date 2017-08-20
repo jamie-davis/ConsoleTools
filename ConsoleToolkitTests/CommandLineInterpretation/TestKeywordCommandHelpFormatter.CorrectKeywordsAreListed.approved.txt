@@ -1,0 +1,6 @@
+﻿Command       Text                                          
+------------- -------------------------                     
+config        Config related operations                     
+archive       Archive related operation                     
+file settings File settings operations                      
+                                                            

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.CommandLineInterpretation;
@@ -8,14 +9,27 @@ namespace ConsoleToolkit.ApplicationStyles
 {
     internal class HelpHandler : ICommandHandler
     {
-        private Func<object, string> _parameterGetter;
         private CommandLineInterpreterConfiguration _config;
+        private Type _helpCommandType;
+        private Func<object, ICollection<string>> _parametersGetter;
+        private CommandLineInterpreterConfiguration config;
 
-        public HelpHandler(Type helpCommandType, Func<object, string> helpCommandParameterGetter, CommandLineInterpreterConfiguration config)
+        public HelpHandler(Type helpCommandType, Func<object, object> helpCommandParameterGetter, CommandLineInterpreterConfiguration config)
         {
             CommandType = helpCommandType;
-            _parameterGetter = helpCommandParameterGetter;
+            _parametersGetter = o => MakeParameters(helpCommandParameterGetter(o));
             _config = config;
+        }
+
+        private ICollection<string> MakeParameters(object parameters)
+        {
+            if (parameters is ICollection<string>)
+                return (ICollection<string>) parameters;
+
+            if (parameters is string)
+                return new List<string> { (string)parameters };
+
+            return new List<string> { parameters.ToString() };
         }
 
         public Type CommandType { get; private set; }
@@ -23,21 +37,26 @@ namespace ConsoleToolkit.ApplicationStyles
 
         public void Execute(ConsoleApplicationBase app, object command, IConsoleAdapter console, MethodParameterInjector injector, CommandExecutionMode executionMode)
         {
-            var parameter = _parameterGetter == null || command == null ? String.Empty : _parameterGetter(command);
-            if (String.IsNullOrWhiteSpace(parameter))
+            var parameters = _parametersGetter == null || command == null ? null : _parametersGetter(command);
+
+            if (parameters == null || parameters.Count == 0 || (parameters.Count == 1 && string.IsNullOrEmpty(parameters.First())))
             {
                 CommandDescriber.Describe(_config, console, DefaultApplicationNameExtractor.Extract(app.GetType()), executionMode, Adorner);
             }
             else
             {
-                var chosenCommand = _config.Commands.FirstOrDefault(c => String.CompareOrdinal(c.Name, parameter) == 0);
-                if (chosenCommand == null)
+                var partialMatches = CommandSelector.FindPartialMatches(parameters, _config.Commands.Cast<ICommandKeys>().ToList());
+                if (partialMatches.Count == 0)
                 {
-                    console.WrapLine(@"The command ""{0}"" is not supported.");
+                    console.WrapLine($@"The command ""{string.Join(" ", parameters)}"" is not supported.");
+                }
+                else if (partialMatches.Count == 1)
+                {
+                    CommandDescriber.Describe((BaseCommandConfig) partialMatches[0], console, executionMode, Adorner);
                 }
                 else
                 {
-                    CommandDescriber.Describe(chosenCommand, console, executionMode, Adorner);
+                    CommandDescriber.DescribeKeywords(partialMatches.Cast<BaseCommandConfig>(), parameters, console);
                 }
             }
         }

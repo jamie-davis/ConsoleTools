@@ -1,6 +1,8 @@
 ﻿----+----|----+----|----+----|----+----|                    
 Available commands                                          
                                                             
+config  Configuration related                               
+        operations.                                         
 desc    Descriptions can contain                            
         embedded line breaks -->                            
         <-- like that one. These should                     

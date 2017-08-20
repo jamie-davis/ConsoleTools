@@ -101,6 +101,30 @@ a line break.")
                 .Description(@"Command valid only in a non-interactive mode.")
                 .NonInteractive();
 
+            _config
+                .Command("copy", s => new TestCommand())
+                .Keyword("config", "Configuration related operations.")
+                .Keyword("file", "Configuration file related operations.")
+                .Description(@"Make a copy of the configuration file.");
+
+            _config
+                .Command("delete", s => new TestCommand())
+                .Keyword("config", "Configuration related operations.")
+                .Keyword("file", "Configuration file related operations.")
+                .Description(@"Delete the configuration file.");
+
+            _config
+                .Command("export", s => new TestCommand())
+                .Keyword("config", "Configuration related operations.")
+                .Keyword("data", "Configuration data related operations.")
+                .Description(@"Export the config data.");
+
+            _config
+                .Command("import", s => new TestCommand())
+                .Keyword("config", "Configuration related operations.")
+                .Keyword("data", "Configuration data related operations.")
+                .Description(@"Import config data.");
+
             _consoleOutInterface = new ConsoleInterfaceForTesting();
             _console = new ConsoleAdapter(_consoleOutInterface);
         }
@@ -146,6 +170,51 @@ a line break.")
             var buffer = _consoleOutInterface.GetBuffer();
             Console.WriteLine(buffer);
             Approvals.Verify(buffer);
+        }
+
+        [Test]
+        public void KeywordQueryResultIsFormatted()
+        {
+            var config = new CommandLineInterpreterConfiguration();
+            config
+                .Command("add", t => new TestCommand())
+                .Description("Add to config")
+                .Keyword("config");
+            config
+                .Command("update", t => new TestCommand())
+                .Description("Update config")
+                .Keyword("config", "configuration operations");
+            config
+                .Command("delete", t => new TestCommand())
+                .Description("Delete from config")
+                .Keyword("config");
+ 
+            _console.WriteLine(RulerFormatter.MakeRuler(_console.WindowWidth));
+            CommandDescriber.DescribeKeywords(config.Commands, new [] {"config"}, _console);
+            Approvals.Verify(_consoleOutInterface.GetBuffer());
+        }
+
+        [Test]
+        public void PartialKeywordQueryResultIsFormatted()
+        {
+            var config = new CommandLineInterpreterConfiguration();
+            config
+                .Command("add", t => new TestCommand())
+                .Description("Add to config")
+                .Keyword("config file", "Config file operations");
+            config
+                .Command("update", t => new TestCommand())
+                .Description("Update config")
+                .Keyword("config", "configuration commands")
+                .Keyword("memory", "memory configuration operations");
+            config
+                .Command("delete", t => new TestCommand())
+                .Description("Delete from config")
+                .Keyword("config file");
+ 
+            _console.WriteLine(RulerFormatter.MakeRuler(_console.WindowWidth));
+            CommandDescriber.DescribeKeywords(config.Commands, new [] {"config"}, _console);
+            Approvals.Verify(_consoleOutInterface.GetBuffer());
         }
     }
 }

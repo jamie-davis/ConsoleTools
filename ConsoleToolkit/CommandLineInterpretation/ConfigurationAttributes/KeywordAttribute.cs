@@ -8,18 +8,26 @@ namespace ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public class KeywordAttribute : Attribute
     {
+        private string _description;
+
         /// <summary>
-        /// The keyword.
+        /// The keyword(s).
         /// </summary>
         public string Keyword { get; }
 
         /// <summary>
-        /// Constructor specifying the keyword for the command.
+        /// The help description to attach to the keyword or keywords.
+        /// </summary>
+        public string Description { get; }
+
+        /// <summary>
+        /// Constructor specifying keyword(s) and help text for the command.
         /// </summary>
         /// <param name="keyword"></param>
-        public KeywordAttribute(string keyword)
+        public KeywordAttribute(string keyword, string description = null)
         {
             Keyword = keyword;
+            Description = description;
         }
     }
 }

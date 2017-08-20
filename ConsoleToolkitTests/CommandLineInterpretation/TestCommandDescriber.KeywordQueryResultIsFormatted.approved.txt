@@ -1,0 +1,7 @@
+﻿----+----|----+----|----+----|----+----|                    
+configuration operations                                    
+                                                            
+config add    - Add to config                               
+config delete - Delete from config                          
+config update - Update config                               
+                                                            

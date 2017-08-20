@@ -299,7 +299,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
             foreach (var token in tokens)
                 Keywords.Add(token);
 
-            KeywordsDocs.Add(new KeywordsDesc(helpText, tokens));
+            KeywordsDocs.Add(new KeywordsDesc(helpText, Keywords.ToList()));
 
             return this;
         }

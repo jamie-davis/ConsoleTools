@@ -1,0 +1,7 @@
+﻿----+----|----+----|----+----|----+----|                    
+configuration commands                                      
+                                                            
+config file  - Config file operations                       
+config       - memory configuration                         
+memory         operations                                   
+                                                            

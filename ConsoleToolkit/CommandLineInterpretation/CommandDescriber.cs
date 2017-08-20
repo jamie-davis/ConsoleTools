@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.ConsoleIO;
@@ -26,12 +27,20 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
         private static void AddCommandListText(IConsoleAdapter console, CommandLineInterpreterConfiguration config, IOptionNameHelpAdorner adorner, CommandExecutionMode executionMode)
         {
-            var commands = config.Commands.Where(c => c.Name != null && CommandModeFilter(executionMode, c)).OrderBy(c => c.Name).ToList();
-            if (commands.Any())
+            var relevantCommands = config.Commands.Where(c => c.Name != null && CommandModeFilter(executionMode, c)).ToList();
+            var keywordCommands = relevantCommands
+                .Where(c => c.Keywords.Count > 0)
+                .Select(c => new KeywordCommand(c.Keywords, c.Name, c.KeywordsDocs))
+                .ToList();
+            var keywordHelpText = KeywordCommandHelpFormatter.FormatKeywordList(keywordCommands);
+            var commands = relevantCommands.Where(c => c.Keywords.Count == 0).ToList();
+            if (commands.Any() || keywordHelpText.Any())
             {
                 console.WriteLine("Available commands");
                 console.WriteLine();
-                var commandItems = commands.Select(c => new { Command = c.Name, Text = FormatShortCommandDescription(c) });
+                var commandItems = commands.Select(c => new CommandDescription { Command = c.Name, Text = FormatShortCommandDescription(c) })
+                    .Concat(keywordHelpText)
+                    .OrderBy(c => c.Command);
                 console.FormatTable(commandItems, FormattingOptions, ColumnSeperator);
             }
         }
@@ -118,6 +127,56 @@ namespace ConsoleToolkit.CommandLineInterpretation
         public static void Describe(BaseCommandConfig command, IConsoleAdapter console, CommandExecutionMode executionMode, IOptionNameHelpAdorner adorner)
         {
             console.Write(FormatFullCommandDescription(command, adorner: adorner));
+        }
+
+        public static void DescribeKeywords(IEnumerable<BaseCommandConfig> commands, ICollection<string> parameters, IConsoleAdapter console)
+        {
+            var doc = GetKeywordsDocs(commands, parameters);
+            if (doc != null)
+            {
+                console.WrapLine(doc.Description);
+                console.WriteLine();
+            }
+
+            var nextWords = commands
+                .Select(c => c.Keywords.Concat(new [] { c.Name }).ToList())
+                .Where(c => c.Count > parameters.Count)
+                .Select(c => c[parameters.Count])
+                .Distinct()
+                .OrderBy(c => c);
+
+            var validContinuations = nextWords
+                .Select(w => parameters.Concat(new[] {w}).ToList())
+                .Select(w => new {Command = string.Join(" ", w), Desc = GetKeywordsDocs(commands, w)})
+                .Select(d => new { d.Command, Desc = d.Desc == null ? string.Empty : d.Desc.Description ?? string.Empty});
+
+            var report = validContinuations
+                .AsReport(rep => rep.OmitHeadings()
+                    .AddColumn(c => c.Command, cc => { })
+                    .AddColumn(c => '-', cc => { })
+                    .AddColumn(c => c.Desc, cc => { }));
+
+            console.FormatTable(report);
+
+        }
+
+        private static KeywordsDesc GetKeywordsDocs(IEnumerable<BaseCommandConfig> commands, ICollection<string> parameters)
+        {
+            var keywordsDoc = commands.SelectMany(c => c.KeywordsDocs)
+                .Where(d => d.Keywords.Count == parameters.Count && !string.IsNullOrWhiteSpace(d.Description))
+                .FirstOrDefault(d => d.Keywords.Zip(parameters, (k, p) => string.Compare(k, p, StringComparison.InvariantCultureIgnoreCase) == 0).All(c => c));
+
+            if (keywordsDoc == null)
+            {
+                var commandDoc = commands
+                    .Select(c => new { AllWords = c.Keywords.Concat(new [] {c.Name}).ToList(), Desc = ((IContext)c).Description })
+                    .Where(d => d.AllWords.Count == parameters.Count && !string.IsNullOrWhiteSpace(d.Desc))
+                    .FirstOrDefault(d => d.AllWords.Zip(parameters, (k, p) => string.Compare(k, p, StringComparison.InvariantCultureIgnoreCase) == 0).All(c => c));
+                if (commandDoc != null)
+                    return new KeywordsDesc(commandDoc.Desc, commandDoc.AllWords);
+            }
+
+            return keywordsDoc;
         }
     }
 }

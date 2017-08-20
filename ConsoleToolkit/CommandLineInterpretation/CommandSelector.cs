@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using ConsoleToolkit.Exceptions;
 
 namespace ConsoleToolkit.CommandLineInterpretation
 {
@@ -81,6 +82,28 @@ namespace ConsoleToolkit.CommandLineInterpretation
             public int UsedArgumentCount { get; set; }
         }
 
+        public static List<ICommandKeys> FindPartialMatches(ICollection<string> parameters, List<ICommandKeys> commands)
+        {
+            var result = new List<ICommandKeys>();
+            foreach (var command in commands)
+            {
+
+                var commandWords = command.Keywords.Concat(new[] {command.Name}).ToList();
+                if (commandWords.Count < parameters.Count)
+                    continue;
+
+                var matches = commandWords.Take(parameters.Count).Zip(parameters, (a, k) => string.Compare(a, k, StringComparison.InvariantCultureIgnoreCase) == 0).ToList();
+                if (!matches.All(m => m))
+                    continue;
+
+                if (matches.Count == parameters.Count && matches.Count == commandWords.Count)
+                    return new List<ICommandKeys> { command };
+
+                result.Add(command);
+            }
+
+            return result;
+        }
     }
 }
  

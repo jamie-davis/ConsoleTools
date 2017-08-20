@@ -1,26 +1,30 @@
 ﻿----+----|----+----|----+----|----+----|                    
 Available commands                                          
                                                             
-desc    Descriptions can contain                            
-        embedded line breaks -->                            
-        <-- like that one. These should                     
-        be respected in the formatting.                     
-        (This is meant to look a bit                        
-        odd. Also, you should be aware                      
-        that the deliberate line break                      
-        is the only one in this text.)                      
-exp     Command with a positional and                       
-        options configured using a Linq                     
-        Expression, not a lambda.                           
-first   Description of the first                            
-        commmand.                                           
-fourth  The fourth command is really                        
-        complicated with a number of                        
-        parameters and also options.                        
-        This is the sort of command that                    
-        needs lots of text.                                 
-second  The second command is a command                     
-        with a number of parameters.                        
-third   The third command has a number                      
-        of options but no parameters.                       
+desc     Descriptions can contain                           
+         embedded line breaks -->                           
+         <-- like that one. These should                    
+         be respected in the formatting.                    
+         (This is meant to look a bit                       
+         odd. Also, you should be aware                     
+         that the deliberate line break                     
+         is the only one in this text.)                     
+exp      Command with a positional and                      
+         options configured using a Linq                    
+         Expression, not a lambda.                          
+first    Description of the first                           
+         commmand.                                          
+fourth   The fourth command is really                       
+         complicated with a number of                       
+         parameters and also options.                       
+         This is the sort of command                        
+         that needs lots of text.                           
+keyword  Help text for the keyword(s).                      
+         This text will be presented                        
+         next to all of the keywords on                     
+         which it it defined.                               
+second   The second command is a command                    
+         with a number of parameters.                       
+third    The third command has a number                     
+         of options but no parameters.                      
                                                             
