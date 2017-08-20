@@ -1,4 +1,5 @@
-﻿using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
+﻿using System.Collections.Generic;
+using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 
 namespace InteractiveCommandSample.Commands
 {
@@ -8,6 +9,6 @@ namespace InteractiveCommandSample.Commands
     {
         [Positional]
         [Description("The command on which help is required.")]
-        public string Topic { get; set; }
+        public List<string> Topic { get; set; }
     }
 }

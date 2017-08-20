@@ -46,6 +46,11 @@ namespace ConsoleToolkit.CommandLineInterpretation
                 ValidInInteractiveContext = interactiveOk,
             };
 
+            foreach (var keywordAttribute in keywords)
+            {
+                commandConfig.Keyword(keywordAttribute.Keyword, keywordAttribute.Description);
+            }
+
             AttachPropAndFieldElements(typeof(T), commandConfig);
             AttachOptionSets(commandConfig);
             AttachValidator(commandConfig);
@@ -53,11 +58,6 @@ namespace ConsoleToolkit.CommandLineInterpretation
             var desc = GetDescription(typeof (T));
             if (desc != null)
                 (commandConfig as IContext).Description = desc;
-
-            foreach (var keywordAttribute in keywords)
-            {
-                commandConfig.Keyword(keywordAttribute.Keyword, keywordAttribute.Description);
-            }
 
             return commandConfig;
         }

@@ -9,7 +9,7 @@ namespace InteractiveCommandSample.Commands
     [Description("List directories")]
     public class DirCommand
     {
-        [Positional(".")]
+        [Positional]
         [Description("Optional path to list.")]
         public string Path { get; set; }
 
@@ -17,7 +17,7 @@ namespace InteractiveCommandSample.Commands
         public void Handle(IConsoleAdapter console, IErrorAdapter error)
         {
 
-            console.FormatTable(Directory.EnumerateDirectories(Path).Select(d => new { Directory = d }));
+            console.FormatTable(Directory.EnumerateFileSystemEntries(Path).Select(d => new { Directory = d }));
         }
     }
 }
