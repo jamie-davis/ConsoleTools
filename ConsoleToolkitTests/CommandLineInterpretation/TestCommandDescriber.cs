@@ -216,5 +216,23 @@ a line break.")
             CommandDescriber.DescribeKeywords(config.Commands, new [] {"config"}, _console);
             Approvals.Verify(_consoleOutInterface.GetBuffer());
         }
+
+        [Test]
+        public void KeywordsAreDisplayedInCommandHelp()
+        {
+            var config = new CommandLineInterpreterConfiguration();
+            config
+                .Command("add", t => new TestCommand())
+                .Description("Add to config")
+                .Keyword("config file", "Config file operations")
+                .Positional<string>("item", (command, s) => { })
+                .Description("Item to add to config.")
+                .Option("d", command => command.IntProp)
+                .Description("Diagnostics level");
+
+            _console.WriteLine(RulerFormatter.MakeRuler(_console.WindowWidth));
+            CommandDescriber.Describe(config.Commands.First(), _console, CommandExecutionMode.CommandLine, new Adorner());
+            Approvals.Verify(_consoleOutInterface.GetBuffer());
+        }
     }
 }

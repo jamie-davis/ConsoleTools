@@ -71,7 +71,8 @@ namespace ConsoleToolkit.CommandLineInterpretation
                     " " + command.Positionals.Select(FormatParameterListEntry)
                         .Aggregate((t, i) => t + " " + i);
                 var options = !optionsPresent ? String.Empty : " [options]";
-                formatter.WrapLine(string.Format("{0}{1}{2}{3}", prefixText ?? String.Empty, displayCommandName ? command.Name : null, paramList, options));
+                var commandName = displayCommandName ? string.Join(" ", command.Keywords.Concat(new [] { command.Name })) : null;
+                formatter.WrapLine(string.Format("{0}{1}{2}{3}", prefixText ?? String.Empty, commandName, paramList, options));
             }
 
             if (positionalsPresent)

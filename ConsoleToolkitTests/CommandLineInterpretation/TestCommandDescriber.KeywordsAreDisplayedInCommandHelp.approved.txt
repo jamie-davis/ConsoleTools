@@ -1,0 +1,13 @@
+﻿----+----|----+----|----+----|----+----|                    
+Add to config                                               
+                                                            
+config file add <item> [options]                            
+                                                            
+Parameters:                                                 
+                                                            
+item  Item to add to config.                                
+                                                            
+Options:                                                    
+                                                            
+**d  Diagnostics level                                      
+                                                            
