@@ -1,4 +1,4 @@
-call "c:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\Tools\VSVARS32.bat"
+call "c:\Program Files (x86)\Microsoft Visual Studio 15.0\Common7\Tools\VSVARS32.bat"
 
 msbuild ..\ConsoleToolkit.sln /t:clean
 msbuild ..\ConsoleToolkit.sln /t:Rebuild /p:Configuration=Release
