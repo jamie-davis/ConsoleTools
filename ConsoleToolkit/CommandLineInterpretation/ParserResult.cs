@@ -122,7 +122,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
                 return;
             }
 
-            foreach (var source in _positionals.Where(p => p.IsOptional).ToList())
+            foreach (var source in _positionals.Where(p => p.IsOptional && !_usedPositionals.Contains(p.ParameterName)).ToList())
             {
                 var value = source.DefaultValue ?? String.Empty;
                 if (!AcceptPositional(value, source))

@@ -1,0 +1,11 @@
+﻿RepeatPosCommandType
+
+Argument list:
+  0: 1
+  1: 2
+
+
+
+Command type: RepeatPosCommandType
+
+Param1[1, 2]

@@ -106,6 +106,21 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             }
         }
 
+        public class RepeatPosCommandType
+        {
+            public List<string> Param1 { get; set; }
+
+            public RepeatPosCommandType()
+            {
+                Param1 = new List<string>();
+            }
+
+            public override string ToString()
+            {
+                return string.Format("Param1[{0}]", string.Join(", ", Param1));
+            }
+        }
+
         class MockParser : ICommandLineParser
         {
             public string[] Args;
@@ -537,6 +552,40 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var interpreter = new CommandLineInterpreter(config);
             string[] errors;
             var args = new [] { "1" };
+            var result = interpreter.Interpret(args, out errors, false);
+
+            Approvals.Verify(Describe(args, result, errors));
+        }
+
+        [Test]
+        public void OptionalRepeatablePositionalsGetDefaultValue()
+        {
+            var config = new CommandLineInterpreterConfiguration();
+            config.Parameters(() => new RepeatPosCommandType())
+                .Positional<string>("param1", (p, s) => p.Param1.Add(s))
+                .AllowMultiple()
+                .DefaultValue("defaultvalue");
+            
+            var interpreter = new CommandLineInterpreter(config);
+            string[] errors;
+            var args = new string[]{};
+            var result = interpreter.Interpret(args, out errors, false);
+
+            Approvals.Verify(Describe(args, result, errors));
+        }
+
+        [Test]
+        public void OptionalRepeatablePositionalsGetSpecifiedValues()
+        {
+            var config = new CommandLineInterpreterConfiguration();
+            config.Parameters(() => new RepeatPosCommandType())
+                .Positional<string>("param1", (p, s) => p.Param1.Add(s))
+                .AllowMultiple()
+                .DefaultValue("defaultvalue");
+            
+            var interpreter = new CommandLineInterpreter(config);
+            string[] errors;
+            var args = new[]{ "1", "2"};
             var result = interpreter.Interpret(args, out errors, false);
 
             Approvals.Verify(Describe(args, result, errors));
