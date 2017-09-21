@@ -8,21 +8,21 @@ group: navigation
 Lets start a new console project. I'm going to walk you through a simple set of steps to create a basic console application using the Console Toolkit. It'll reflect how I like to set up my apps, which isn't the only way, and you will find alternatives in the main documentation.
                             
 
-####Step 1
+#### Step 1
 
 Power up Visual Studio, and create a new Console Application.
 
 <img src="assets/images/newconsoleapp.png" />
 
 
-####Step 2
+#### Step 2
 
 Add the Console Toolkit reference.
 
 <img src="assets/images/consoletoolkitref.png" />
 
 
-####Step 3
+#### Step 3
 
 Your Program.cs should look something like this...
 {% highlight csharp %}
@@ -37,7 +37,7 @@ namespace SampleConsoleApp
 }
 {% endhighlight %}
   
-####Step 4
+#### Step 4
 
 Where we go from here depends on what style of application you are building. The differences have a minor impact on the code, but in the interests of simplicity, I'll cover them separately. So, to continue, choose from...  
 
