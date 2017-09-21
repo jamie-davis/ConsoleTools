@@ -3,7 +3,7 @@ layout: page
 title: Framework Overview
 ---
 
-##Toolkit Applications
+## Toolkit Applications
 A Console Toolkit application is a normal console application, which hands the command line arguments into a static `Toolkit` method called `Execute`. The simplest approach is for the call to be made from the console application's static `Main` function:  
 
 
@@ -36,10 +36,10 @@ The Toolkit is taking responsibility for everything to do with the command line 
 
 The goal of the Toolkit is to allow the developer to start working on the core functionality of the application without having to expend much effort on features that are only needed to enable the program to run in a command prompt.
 
-##Toolkit Features
+## Toolkit Features
 Here's a quick overview of the main features available from the toolkit:
 
-###Command Line Parameters
+### Command Line Parameters
 A flexible attribute based mechanism is provided, which is described [here](commandoverview.html). There is also a fluent interface, but I am not entirely happy with it and would not recommend relying on it to retain its current form, and it will not be documented. I will revisit this at some stage and hope to offer an officially sanctioned fluent mechanism some time in the future. 
 
 However, the definition of command line parameters does lend itself very well to an attribute based mechanism, and this has proven very easy to use. Here is an example:
@@ -61,7 +61,7 @@ namespace SampleConsoleApp
 }
 {% endhighlight %}
 
-###Parsing Conventions
+### Parsing Conventions
 The Toolkit suppors three distinct conventions for parsing the command line:
 
 1. The current Microsoft standard. For example:  
@@ -86,7 +86,7 @@ You can select which convention you would like to use by adding a line before yo
 
 The default convention is the current Microsoft standard.
 
-###Command Handler Dependency Injection
+### Command Handler Dependency Injection
 Depending on the type of application being built, you will have one or more handlers that the toolkit can call when it has parsed and validated the command line parameters. Handlers are functions that can be created in any of several places, and can accept any parameter list you wish. There is a simple dependency injection mechanism built into the toolkit that allows you to define the services that should be available to your handlers, in order to simplify automated unit testing.
 
 Services can be defined by overriding the `Initialise` method in your `Program` class. For example:
@@ -101,7 +101,7 @@ Services can be defined by overriding the `Initialise` method in your `Program` 
 
 After the `RegisterInjectionInstance` call, the toolkit can pass the `MyServiceImpl` instance to any handler that has a parameter of type `IMyService`.
 
-###Output Formatting
+### Output Formatting
 The traditional `Console.Write` and `Console.Error.Write` mechanisms are still available and will work as expected, but the Toolkit also offers an alternative mechanism that supports features such as word wrapping to the console window size, the automatic formatting of data in tables, and a much more flexible approach to colour. This is offered through the Toolkit `IConsoleAdapter` and `IErrorAdapter` interfaces, and extension methods defined for the `string` type. To access these interfaces, simply define parameters with the appropriate type on your handlers. For example:
 
 {% highlight csharp %}
@@ -112,7 +112,7 @@ The traditional `Console.Write` and `Console.Error.Write` mechanisms are still a
         }
 {% endhighlight %}
 
-###Capturing input from the user
+### Capturing input from the user
 The Toolkit also allows you to support user input through the `IConsoleAdapter` interface. You can prompt the user for a simple confirmation:
 
 {% highlight csharp %}
@@ -141,10 +141,10 @@ Or you can prompt for more complex data:
 
 
 
-###Application Types
+### Application Types
 The Console Toolkit supports two types of application:
 
-####Console Applications
+#### Console Applications
 This is the most common style of application. It's an application that basically does a single job with options to control how it does it. For example:  
 
 <img src="assets/images/diruserscommand.png" />  
@@ -153,7 +153,7 @@ The "dir" command's job is to list the contents of the file system. Its paramete
 
 The Console Toolkit supports this type of application through a base class called `ConsoleApplication`. See [the Console application](consoleapps.html) documentation for details.
 
-####Command Driven Applications
+#### Command Driven Applications
 This is a less common style, but it is the style adopted by some of the more sophisticated command line applications. The command line interface of most source control systems I've used have had a command driven style. There is also a built in Windows command that uses it:  
 
 <img src="assets/images/nethelpcommand.png" />  
