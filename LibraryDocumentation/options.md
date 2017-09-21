@@ -67,7 +67,7 @@ Options:
 
 This example assumes a console application.
 
-####Help Text
+#### Help Text
 Options can have help text associated with them using the ```[Description]``` attribute:
 
         [Option("category", "c")]
@@ -90,7 +90,7 @@ Options:
 -category, -c  The category for the results.
 ~~~
 
-####Repeating Options
+#### Repeating Options
 Sometimes, an option must be repeatable - for example, Microsoft's C++ compiler accepts any number of ```-D``` parameters:
 ```cl a.cpp /D WIN32 /D NDEBUG /D _CONSOLE /D _MBCS```
 
@@ -112,7 +112,7 @@ All of the options supplied for ```Numbers``` would be validated as integers.
 
 The fact that an option can be repeated is not automatically reported by the help text, so you should mention it in your ```[Description]``` text.
 
-####Options with multiple parameters
+#### Options with multiple parameters
 It is possible to define an option that takes multiple parameters by defining a simple type with multiple properties:
 
     [Command]
@@ -150,7 +150,7 @@ It is also valid for this type of option to be repeatable:
         [Option("complex", "c")]
         public List<MyType> ComplexOption { get; set; }
 
-####Validation
+#### Validation
 The type of the property defining the option determines the validation that will be carried out on the input.
 
 Enumerations are not supported for options at ?the time of writing. If an unsupported type is used for an option, an ```InvalidParameterType``` exception will be thrown by the toolkit.
@@ -159,7 +159,7 @@ All of the type validation is carried out automatically, and command handlers wi
 
 Options that are not specified on the command line will have the default value for their property type. The only exception to this is that repeatable options will be set to an empty collection.
 
-####Short Circuit Options
+#### Short Circuit Options
 The toolkit will validate the command line and only call handlers where the user hsa specified all of the required information. However, sometimes you need to be able to side-step the validation. For example, this is common with the help option in a standard console application. The command line might usually have mandatory parameters, but the user needs to be able to access the help information because they don't know what's valid and what isn't:
 
 ```MyProgram -h```

@@ -14,17 +14,17 @@ The enhanced features are delivered through two interfaces:
 
 Both of these interfaces derive from ```IConsoleOperations``` which defines the supported output methods. This means that you can use the same formatting and colouring facilities for both standard output and error output, and in fact, if you rely on ```IConsoleOperation``` directly, you can write code that doesn't care which is being used.
 
-###IConsoleAdapter vs. IErrorAdapter
+### IConsoleAdapter vs. IErrorAdapter
 Console applications can output to two standard streams:
 
 * StdOut - The stream for normal console output. The static Console methods such as ```Console.WriteLine``` write to this stream.
-* StdErr - The stream for error information. The static Console object provides access to this through its ```Error``` property. To write to is you might use calls such as ```Console.Error.WriteLine()```. Many console applications don't bother with the error stream and output everything to StdOut.
+* StdErr - The stream for error information. The static Console object provides access to this through its ```Error``` property. To write to this you might use calls such as ```Console.Error.WriteLine()```. Many console applications don't bother with the error stream and output everything to StdOut.
 
-The Toolkit's approach is to treat these two streams a little more equitably, by giving both adapters offering identical output facilities.
+The Toolkit's approach is to treat these two streams a little more equitably, by giving both adapters that offer identical output facilities.
 
 To access the streams, specify parameters on your ```[CommandHandler]``` with IConsoleAdapter and IErrorAdapter types.
 
-###Redirection
+### Redirection
 Console output can be redirected to files. For example:
 
 ```dir > dir.txt```
@@ -39,7 +39,7 @@ Here, ```2>``` indicates that it's the error output that should be redirected. I
 
 If a Console Toolkit based application has its output redirected, the Toolkit will detect it and will ignore colour directives. Formatting that relies on the window size will still use the window size to perform word wrapping or format tables.
 
-###When to write to StdErr
+### When to write to StdErr
 StdErr has a specific purpose. After all, it would be easier just to have one output stream for everything, right?
 
 The reason for StdErr is to display diagnostic information about problems that you need to see, even if StdOut is redirected. Consider this example:

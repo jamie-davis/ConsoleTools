@@ -40,7 +40,7 @@ category
 
 This example assumes a console application.
 
-####Help Text
+#### Help Text
 Positional parameters can have help text associated with them using the ```[Description]``` attribute:
 
         [Positional]
@@ -60,7 +60,7 @@ category
 
 ~~~
 
-####Default value
+#### Default value
 If a positional parameter is optional, it must be given a default value:
 
         [Positional(DefaultValue = "DefaultCategory")]
@@ -70,7 +70,7 @@ If no value is specified for the parameter, rather than giving an error message,
 
 This only works if all of the optional positional parameters are at the end of the parameter list. If an optional parameter is followed by a non-optional parameter, the default value will be ignored and the user will be required to provide a valid value.
 
-####Parameter Order
+#### Parameter Order
 Usually, you will define the parameter order by the order in which the parameters are specified in the class. If you wish to override the order, you can specify a parameter index:
 
         [Positional(1)]
@@ -90,7 +90,7 @@ filetoadd  The path to the file to be added to the archive
 
 ~~~
 
-####Repeating parameters
+#### Repeating parameters
 Sometimes, a parameter must be repeatable - for example, compilers commonly support listing any number of source files on the command line:
 
 ```cl a.cpp b.cpp```
@@ -120,7 +120,7 @@ At least one value is expected in a repeating positional. Supplying zero instanc
 
 In this case, if no value is provided on the command line, it will not be an error and the handler will receive a collection containing a single string set to ```"default"```.
 
-####Validation
+#### Validation
 The type of the property defining the positional parameter determines the validation that will be carried out on the command line input.
 
 Only simple types are supported for positional parameters, which excludes enumerations at this time. If an unsupported type is used for a positional parameter, a ```InvalidParameterType``` exception will be thrown by the toolkit.

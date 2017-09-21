@@ -8,7 +8,7 @@ The steps required to create a Toolkit console application from the default Cons
 
 Here we will take a more detailed look at the specifics of a Toolkit application derived from the `ConsoleApplication` base class in `ConsoleToolkit.ApplicationStyles`.
 
-##Deriving from `ConsoleApplication`
+## Deriving from `ConsoleApplication`
 {% highlight csharp %}
 using ConsoleToolkit;
 using ConsoleToolkit.ApplicationStyles;
@@ -70,7 +70,7 @@ class Options
 
 In this case the command handler is part of the command class itself. There are several options for the location of command handlers ([see here](defininghandlers.html)).
 
-###Initialisation
+### Initialisation
 Initialisation can be performed in a number of places, and the selection of the correct alternative depends on when you want the initialisation to take place.
 
 * If you want the initialisation to run unconditionally, prior to handover to any Toolkit code running, you can call it before you call `Toolkit.Execute<Program>(args);` This is the earliest possible initialisation point and is totally outside of the Toolkit's control.
@@ -127,7 +127,7 @@ class Program : ConsoleApplication
 }
 {% endhighlight %}
 
-###Help Text
+### Help Text
 The `ConsoleApplication` supports the automatic generation of help text.
 
 By default, a help message will be displayed if the application is run without command line parameters. This text will be built using the command line configuration loaded from the application's `[Command]` class. The `[Description("...")]` attribute can be used to supply descriptive text. See [the documentation on command definitions](commandoverview.html) for details.
@@ -165,10 +165,10 @@ This was taken from the options definition above which has a mandatory parameter
 
 However, because the "h" option short circuits the command line validation, it allows help to be displayed. 
 
-###Post command triggers
+### Post command triggers
 You can write code that is triggered by the success or failure of the command handler.
 
-####OnCommandSuccess
+#### OnCommandSuccess
 Override `OnCommandSuccess` to carry out processing that should only execute if the command executed correctly. If the handler throws an exception, or sets the process exit code (`Environment.ExitCode`) to a non-zero value, this will not be called. An example of where I have used this is for saving user settings. If the command failed, I didn't want the settings to change.
 
 {% highlight csharp %}  
@@ -179,7 +179,7 @@ protected override void OnCommandSuccess()
 }
 {% endhighlight %}
 
-####OnCommandFailure
+#### OnCommandFailure
 Override `OnCommandFailure` to carry out processing that should only execute if the command did not execute correctly. If the handler throws an exception, or sets the process exit code (`Environment.ExitCode`) to a non-zero value, this *will* be called. 
 
 {% highlight csharp %}  
@@ -190,7 +190,7 @@ protected override void OnCommandFailure()
 }
 {% endhighlight %}
 
-###Exceptions
+### Exceptions
 If the command handler throws an exception, it will, by default, be caught by the toolkit:
 
  <img src="assets/images/consoleapplicationexception.png" />

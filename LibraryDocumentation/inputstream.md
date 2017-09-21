@@ -17,14 +17,14 @@ Sometimes applications support piping data directly in. This is a very specific 
 
 It is reasonably rare to find a console application that asks you to enter information at the command line. However, this may be due to the fact that it is not quick and easy to do. You will typically have data conversions and validation to do, and usually have to put a loop around every prompt. One of the goals of the Toolkit is to make this easier, and that's what we are going to talk about in this section.
 
-###IConsoleAdapter
+### IConsoleAdapter
 As with output, the console input operations are accessed through ```IConsoleAdapter```. This offers the following input commands:
 
 * ```ReadLine``` which reads a string from the input stream.
 * ```ReadInput``` which reads and validates input. This can return data of a specified type, and will block invalid input.
 * ```Confirm``` which is a very simple way to get a yes or no decision from the user.
 
-####Confirming operations
+#### Confirming operations
 ```IConsoleAdapter``` allows you to prompt the user for confirmation in a single statement. For example:
 
     if (console.Confirm("Really delete?"))
@@ -45,7 +45,7 @@ The user is required to give valid input:
 
 The method returns a boolean indicating the user's decision.
 
-###Reading validated data
+### Reading validated data
 The Toolkit also offers a simple facility to read a number of data types from the user. For example, you can read an integer like this:
 
     var age = console.ReadInput(Read.Int().Prompt("Age")).Value;
@@ -72,7 +72,7 @@ As you can see, the toolkit will only accept a valid integer.
 
 There are other things you can do with the configuration object, which is described in more detail in the  [Customising	data input](custominput.html) section.
 
-###Filling a data structure
+### Filling a data structure
 The toolkit is able to make gathering multiple input items relatively trivial:
 
         var point = console.ReadInput(new {X = 0, Y = 0});

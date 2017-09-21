@@ -5,7 +5,7 @@ title: Basic Output Features
 
 The Console Toolkit defines a common interface, called ```IConsoleOperations``` which is implemented for both program output - via ```IConsoleAdapter``` - and diagnostic output - via ```IErrorAdapter```.
 
-####Displaying Text
+#### Displaying Text
 The adapters support the static ```Console``` object's ```Write``` and ```WriteLine``` functionality. In addition, the Toolkit also adds word wrapping based on the window width through ```Wrap``` and ```WrapLine```.
 
 The Word wrapping functionality uses the Console Window width to determine where to put extra line breaks to ensure that individual words are not broken at the end of a line.
@@ -14,7 +14,7 @@ In use, the calls are exactly as you would expect:
 
 	adapter.WrapLine("My int is {0}", myInt);
 
-####Colour
+#### Colour
 The colour handling features of the default ```Console``` are fairly limited. If you wanted to print one word in red, for example, you might use something like the following:
 
     Console.Write("Normal bit - ");
@@ -75,7 +75,7 @@ Which looks like this:
 
  <img src="assets/images/colourtext2.png" />
 
-####Tabular data
+#### Tabular data
 The Console Toolkit is able to automatically format data in columns. For example:
 
     var data = Enumerable.Range(0, 10)

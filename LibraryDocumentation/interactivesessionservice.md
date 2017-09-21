@@ -19,14 +19,14 @@ The ```IInteractiveSessionService``` is available for injection into any command
 
 The example command is requesting an interactive session after setting the prompt to be displayed to the user.
 
-###BeginSession()
+### BeginSession()
 
 The ```BeginSession()``` call runs the interactive session. The user will be prompted for a command string and 
 this will be interpreted by the interactive session service and if it is valid, the appropriate command will be
 invoked. From the point of view of the command handlers, there is no difference between being invoked from the 
 command line directly and via the interactive session service.
 
-###EndSession()
+### EndSession()
 
 The ```EndSession()``` call should be executed from a command that wishes to terminate the interactive session.
 This will generally be some sort of "exit" or "quit" command (whatever makes sense in your application). For example:
@@ -42,27 +42,27 @@ This will generally be some sort of "exit" or "quit" command (whatever makes sen
         }
     }
 
-##Special command types
+## Special command types
 
-###HidingcCommands from the interactive session
+### HidingcCommands from the interactive session
 
 It often makes sense to have commands that are available from the command line but not via an interactive session.
 The command that starts the session is a good example - you should not allow that command to be invoked from within
 a session, so it will normally be declared as a ```[NonInteractiveCommand]``` instead of a ```[Command]```. This will make the command invalid 
 in the interactive session, which will not acknowledge its existence in help or during command parsing.
 
-###Commands that are only valid within an interactive session
+### Commands that are only valid within an interactive session
 
 In that same way as commands may not make sense in an interactive session, it is also likely that you will define
 commands that only make sense inside an interactive session. The "exit" command is a good example of this, in that 
 it makes no sense to ask to exit an interactive session from the command line parameters. To declare a command that
 is not valid outside of an interactive session, use ```[InteractiveCommand]``` in place of ```[Command]```.
  
-###Commands valid in both interactive and non-interactive contexts
+### Commands valid in both interactive and non-interactive contexts
 
 Any command defined with the usual ```[Command]``` attribute is valid in both contexts. No special consideration is required. 
 
-###Effect on help text
+### Effect on help text
 
 The command help formatting handlers are aware of the difference between interactive an non-interactive commands, and are
 sensitive to the context in which help is being invoked. Therefore, a ```CommandDrivenApplication``` will only need one 

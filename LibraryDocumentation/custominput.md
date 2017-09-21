@@ -15,7 +15,7 @@ And:
 
 However, this can be customised further, and that's what this section is about.
 
-###The Read object
+### The Read object
 In the example above, the ```Read``` object is being used to capture an integer from the user:
 
 	Read.Int().Prompt("Age")
@@ -36,7 +36,7 @@ This is using one of ```Read```'s static methods - ```Int()``` - to get a config
 
 This basic set represents the data types you can prompt for.
 
-###Combining Read Objects
+### Combining Read Objects
 We have previously seen how multiple data items can be collected in one instruction:
 
         var point = console.ReadInput(new {X = 0, Y = 0});
@@ -66,7 +66,7 @@ This is slightly cumbersome, but the mechanism does allow you to group a set of 
 
 Ideally, the ```Read``` objects would be dropped and only the values would be returned, but the compiler needs to be able to infer the type of the object returned by ```ReadInput```, and that can only happen if it is the same type as the parameter.
 
-###Giving the user choices
+### Giving the user choices
 We have seen how you can set the prompt for a ```Read``` object. However, you can also capture user selections using the ```Option``` method:
 
         var selection = Read.String()
@@ -116,7 +116,7 @@ The exmaple results in this:
 	Choose one: t
 	tea
 
-###Custom validation
+### Custom validation
 You can also specify custom validations for input data items:
 
     var bufferLengthSpec = Read.Int()

@@ -157,7 +157,7 @@ In this case, we are setting the column heading, as before - ```.Heading("Length
 	PFRO.log                 C:\Windows     21.6
 	Professional.xml         C:\Windows     35.4
 
-###ColumnConfig
+### ColumnConfig
 This is the object that allows column formatting parameters to be specified. You can see in the example above that columns are configured using a fluent interface:
 
 	cc.Heading("Length (KiB)")
@@ -178,7 +178,7 @@ The following configuration options are available:
 
 There are no colour configuration options available, but the colour extension methods are supported, so you can have coloured column contents by using them in the data. This will correctly apply colour to multi-line column values. (Colours will not bleed into adjacent columns.)
 
-###Nested Reports
+### Nested Reports
 It is possible to nest reports. For example:
 
     var dirs = Directory.EnumerateDirectories("C:\\Dev")
