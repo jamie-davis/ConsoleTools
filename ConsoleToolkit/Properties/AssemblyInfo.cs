@@ -34,8 +34,8 @@ This package provides a framework for building console applications, improved ha
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.3.1.0")]
-[assembly: AssemblyFileVersion("1.3.1.0")]
+[assembly: AssemblyVersion("1.3.2.0")]
+[assembly: AssemblyFileVersion("1.3.2.0")]
 [assembly: AssemblyInformationalVersion("1.3.1")]
 
 [assembly: InternalsVisibleTo("ConsoleToolkitTests")]

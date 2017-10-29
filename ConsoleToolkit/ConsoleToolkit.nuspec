@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>$id$</id>
-    <version>1.3.1</version>
+    <version>1.3.2</version>
     <title>Console Toolkit</title>
     <authors>Jamie Davis</authors>
     <owners>Jamie Davis</owners>
@@ -10,10 +10,8 @@
     <projectUrl>http://jamie-davis.github.io/ConsoleTools/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Support for command keywords. This allows groups of commands to be specified e.g. "user add", "user block", "user delete". Here, "user" is the keyword and is associated with "add", "block" and "delete". 
-    Conversly, it could be speocified as "add user", "block user" and "delete user", in which the keywords are "add", "block" and "delete" and each is associated with a seperate command i.e. 3 commands have the name "add" 
-    with a different keyword. In addition to this new feature, a bug has been fixed which caused optional repeating positionals to get the default value in addition to the actual values specified.</releaseNotes>
-    <copyright>Copyright 2014-2016</copyright>
+    <releaseNotes>Fixed an issue in which blank command lines would crash an interactive session. Fixed an issue in which commands that set the Environment.ExitCode would prevent any further commands from executing an an interactive session.</releaseNotes>
+    <copyright>Copyright 2014-2017</copyright>
     <tags>Console Toolkit .NET</tags>
   </metadata>
 </package>
