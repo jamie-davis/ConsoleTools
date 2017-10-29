@@ -48,8 +48,11 @@ namespace ConsoleToolkit.InteractiveSession
                 var command = _interpreter.Interpret(tokens, out errors, false, true);
                 if (command == null)
                 {
-                    foreach (var error in errors)
-                        _error.WrapLine(error);
+                    if (errors != null)
+                    {
+                        foreach (var error in errors)
+                            _error.WrapLine(error);
+                    }
                     continue;
                 }
 

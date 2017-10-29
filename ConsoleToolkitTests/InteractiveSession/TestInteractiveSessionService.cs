@@ -144,6 +144,25 @@ exit";
         }
 
         [Test]
+        public void InteractiveSessionHandlesBlankInput()
+        {
+            //Arrange
+            const string data = @"
+";
+            using (var s = new StringReader(data))
+            {
+                _testConsole.SetInputStream(s);
+
+                //Act
+                UnitTestAppRunner.Run(_app, new [] { "start" }, _testConsole);
+
+                //Assert
+                _console.WrapLine("<Session exited>");
+                Approvals.Verify(_testConsole.GetBuffer());
+            }
+        }
+
+        [Test]
         public void PromptCanBeSetBeforeSessionStarts()
         {
             //Arrange
