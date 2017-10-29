@@ -1,0 +1,11 @@
+﻿StartCommand                                                
+fail                                                        
+CommandFail                                                 
+OnCommandFailure called.                                    
+two                                                         
+Command2                                                    
+OnCommandSuccess called.                                    
+OnCommandFailure called.                                    
+<Session exited>                                            
+Environment.ExitCode = 100                                  
+                                                            

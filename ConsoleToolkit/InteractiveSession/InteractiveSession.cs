@@ -32,15 +32,18 @@ namespace ConsoleToolkit.InteractiveSession
 
         public void Run()
         {
+            var lastNonZeroExitCode = Environment.ExitCode;
             _stopped = false;
             while (!_stopped)
             {
+                Environment.ExitCode = 0;
+
                 if (Prompt != null)
                     _console.Wrap(Prompt);
 
                 var commandText = _console.ReadLine();
                 if (commandText == null)
-                    return;
+                    break;
 
                 var tokens = CommandLineTokeniser.Tokenise(commandText);
                 string[] errors;
@@ -57,7 +60,12 @@ namespace ConsoleToolkit.InteractiveSession
                 }
 
                 HandleCommand(command);
+
+                if (Environment.ExitCode != 0)
+                    lastNonZeroExitCode = Environment.ExitCode;
             }
+
+            Environment.ExitCode = lastNonZeroExitCode;
         }
 
         private void HandleCommand(object command)

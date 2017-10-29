@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
@@ -63,6 +64,17 @@ namespace ConsoleToolkitTests.InteractiveSession
             }
         }
 
+        [Command("fail")]
+        public class CommandFail
+        {
+            [CommandHandler]
+            public void Handle(IConsoleAdapter console)
+            {
+                console.WrapLine(GetType().Name);
+                Environment.ExitCode = 100;
+            }
+        }
+
         [Command]
         public class SetPromptCommand
         {
@@ -100,7 +112,7 @@ namespace ConsoleToolkitTests.InteractiveSession
             _testConsole = new ConsoleInterfaceForTesting();
             _console = new ConsoleAdapter(_testConsole);
             _error = new ErrorAdapter(_testConsole, "ERROR: ");
-            _app = FakeApplication.MakeFakeApplication(_console, _error, typeof(StartCommand), typeof(Command1), typeof(Command2), typeof(Command3), typeof(ExitCommand), typeof(SetPromptCommand));
+            _app = FakeApplication.MakeFakeApplication(_console, _error, typeof(StartCommand), typeof(Command1), typeof(Command2), typeof(Command3), typeof(CommandFail), typeof(ExitCommand), typeof(SetPromptCommand));
         }
 
         [Test]
@@ -159,6 +171,35 @@ exit";
                 //Assert
                 _console.WrapLine("<Session exited>");
                 Approvals.Verify(_testConsole.GetBuffer());
+            }
+        }
+
+        [Test]
+        public void CommandFailuresDoNotEndSession()
+        {
+            var originalExitCode = Environment.ExitCode;
+            try
+            {
+                //Arrange
+                const string data = @"fail
+two
+";
+                using (var s = new StringReader(data))
+                {
+                    _testConsole.SetInputStream(s);
+
+                    //Act
+                    UnitTestAppRunner.Run(_app, new[] {"start"}, _testConsole);
+
+                    //Assert
+                    _console.WrapLine("<Session exited>");
+                    _console.WrapLine($"Environment.ExitCode = {Environment.ExitCode}");
+                    Approvals.Verify(_testConsole.GetBuffer());
+                }
+            } 
+            finally
+            {
+                Environment.ExitCode = originalExitCode;
             }
         }
 
