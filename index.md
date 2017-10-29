@@ -16,6 +16,6 @@ Don't they realise, you knocked this up in literally hours? What do they want? B
 Well, Console Toolkit is here to help. It takes care of the command line. It will format the help text. It gives you control of the output stream. It can take input from the user. All of this is packaged in a convenient and easy to implement framework with very little mental overhead for you. Get into the code you actually wanted to build faster, by letting the toolkit take the strain of actually being a good command line citizen. All this, for the low, low price of free. (Just don't ask for a discount.)
 
 
-##So now what?##
+## So now what? ##
 
 I think it's time for the [Getting Started](GettingStarted/gettingstarted.html) guide. If you've seen it already, there's always the main [documentation.](LibraryDocumentation/root.html)
