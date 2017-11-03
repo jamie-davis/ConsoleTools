@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ConsoleToolkit;
 using ConsoleToolkit.ApplicationStyles;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
@@ -48,6 +45,7 @@ namespace InteractiveOnlyConsoleApplication
     }
 
     [InteractiveCommand]
+    [Keyword("list", "Commands for listing things")]
     [Description("List directories")]
     public class DirCommand
     {
@@ -60,6 +58,23 @@ namespace InteractiveOnlyConsoleApplication
         {
 
             console.FormatTable(Directory.EnumerateDirectories(Path).Select(d => new { Directory = d }));
+        }
+    }
+
+    [InteractiveCommand]
+    [Keyword("list", "Commands for listing things")]
+    [Description("List files")]
+    public class FilesCommand
+    {
+        [Positional(".")]
+        [Description("Optional path to list.")]
+        public string Path { get; set; }
+
+        [CommandHandler]
+        public void Handle(IConsoleAdapter console, IErrorAdapter error)
+        {
+
+            console.FormatTable(Directory.EnumerateFiles(Path).Select(d => new { File = d }));
         }
     }
 
@@ -80,6 +95,6 @@ namespace InteractiveOnlyConsoleApplication
     {
         [Positional(DefaultValue = null)]
         [Description("The command for which to display help")]
-        public string Command { get; set; }
+        public List<string> Command { get; set; }
     }
 }

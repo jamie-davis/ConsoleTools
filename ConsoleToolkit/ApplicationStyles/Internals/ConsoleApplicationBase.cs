@@ -26,7 +26,7 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
         private InitPhase _initPhase = InitPhase.PreInit;
         private Func<Type, bool> _typeFilter;
 
-        private Func<object, string> _interactiveHelpCommandParameterGetter;
+        private Func<object, object> _interactiveHelpCommandParameterGetter;
         private Type _interactiveHelpCommandType;
         private HelpHandler _interactiveHelpHandler;
 
@@ -276,7 +276,7 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
         /// </summary>
         /// <typeparam name="T">The command type. This must be a type used only as the help command.</typeparam>
         /// <param name="getCommandParam">Supply a lambda that returns the command on which help is required. Return null to indicate that program level help.</param>
-        protected void InteractiveHelpCommand<T>(Func<T, string> getCommandParam)
+        protected void InteractiveHelpCommand<T>(Func<T, object> getCommandParam)
         {
             if (typeof(T).GetCustomAttribute<InteractiveCommandAttribute>() == null)
                 throw new InvalidInteractiveHelpCommand("Interactive help command must have the InteractiveCommand attribute.");
