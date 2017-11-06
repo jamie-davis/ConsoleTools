@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>$id$</id>
-    <version>1.3.3</version>
+    <version>1.4.0-beta1</version>
     <title>Console Toolkit</title>
     <authors>Jamie Davis</authors>
     <owners>Jamie Davis</owners>
@@ -10,7 +10,14 @@
     <projectUrl>http://jamie-davis.github.io/ConsoleTools/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Fixed an issue in which the help system could not support keyword commands in an interactive only console application.</releaseNotes>
+    <releaseNotes>Added the ability to specify global options that apply to all commands, but only on the command line. You can specify these options for any non-interactive command, or on the command line when starting an interactive session but not on commands issued interactively.
+    
+    An example of where this would be useful is if it is possible to specify an option thas has an effect on objects (such as specifying an environment) that are registered as injectable into command handlers. In non-interactive mode, these objects will only be injected once, and therfore the global option may
+    safely be used to alter them. In an interactive mode, however, the injectable objects can only be created once, at the start of the session, so it would not be possible to honour the global options on individual interactive commands, so they should not 
+    be valid. Alternative methods of producing the same behaviour require multiple versions of the same command (interactive and non-interactive) which is not convenient or desirable.
+    
+    Global options can only be specified for CommandDrivenApplications, general ConsoleApplications do not need the concept, and interactive only ConsoleApplications can already implement the feature.
+    </releaseNotes>
     <copyright>Copyright 2014-2017</copyright>
     <tags>Console Toolkit .NET</tags>
   </metadata>
