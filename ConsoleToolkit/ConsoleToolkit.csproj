@@ -80,6 +80,7 @@
     <Compile Include="CommandLineInterpretation\ConfigurationAttributes\CommandHandlerAttribute.cs" />
     <Compile Include="CommandLineInterpretation\ConfigurationAttributes\CommandValidatorAttribute.cs" />
     <Compile Include="CommandLineInterpretation\ConfigurationAttributes\DescriptionAttribute.cs" />
+    <Compile Include="CommandLineInterpretation\ConfigurationAttributes\GlobalOptionsAttribute.cs" />
     <Compile Include="CommandLineInterpretation\ConfigurationAttributes\InteractiveCommandAttribute.cs" />
     <Compile Include="CommandLineInterpretation\ConfigurationAttributes\KeywordAttribute.cs" />
     <Compile Include="CommandLineInterpretation\ConfigurationAttributes\NonInteractiveCommandAttribute.cs" />
