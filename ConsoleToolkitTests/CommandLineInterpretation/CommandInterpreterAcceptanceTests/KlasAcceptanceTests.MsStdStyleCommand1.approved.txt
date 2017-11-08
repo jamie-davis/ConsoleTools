@@ -1,0 +1,88 @@
+﻿Test: log add 192.168.0.10 tags.csv 1000 -delim :
+
+AddLogCommand
+{
+    ip = 192.168.0.10
+    tagfile = tags.csv
+    interval = 1000
+    delim = :
+}
+
+
+Test: log add 192.168.0.10 tags.csv 1000 :
+
+AddLogCommand
+{
+    ip = 192.168.0.10
+    tagfile = tags.csv
+    interval = 1000
+    delim = :
+}
+
+
+Test: log add 192.168.0.10 tags.csv 1000 ,
+
+AddLogCommand
+{
+    ip = 192.168.0.10
+    tagfile = tags.csv
+    interval = 1000
+    delim = ,
+}
+
+
+Test: log add 192.168.0.10 tags.csv 1000 -delim ,
+
+AddLogCommand
+{
+    ip = 192.168.0.10
+    tagfile = tags.csv
+    interval = 1000
+    delim = ,
+}
+
+
+Test: log add 192.168.0.10 tags.csv
+
+AddLogCommand
+{
+    ip = 192.168.0.10
+    tagfile = tags.csv
+    interval = 1000
+    delim = ;
+}
+
+
+Test: log add 192.168.0.10
+
+AddLogCommand
+{
+    ip = 192.168.0.10
+    tagfile = tags.csv
+    interval = 1000
+    delim = ;
+}
+
+
+Test: log add
+
+AddLogCommand
+{
+    ip = 99.99.99.99
+    tagfile = tags.csv
+    interval = 1000
+    delim = ;
+}
+
+
+Test: log add -delim ,
+
+AddLogCommand
+{
+    ip = 99.99.99.99
+    tagfile = tags.csv
+    interval = 1000
+    delim = ,
+}
+
+

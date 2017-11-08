@@ -1,0 +1,13 @@
+﻿                                                            
+Description of log add command:                                                                                                      
+Add a log job for controller                                                                                                         
+                                                                                                                                     
+log add [<ip>] [<tagfile>] [<interval>] [<delim>]                                                                                    
+                                                                                                                                     
+Parameters:                                                                                                                          
+                                                                                                                                     
+ip        IP adress of controller , ex 99.99.99.99 Default value: 99.99.99.99                                                        
+tagfile   Tag file to be polled , ex epictags.csv Default value: tags.csv                                                            
+interval  Polling with interval in milliseconds, ex 1000  Default value: 1000                                                        
+delim     Delimiter in log file Default value: ;                                                                                     
+                                                                                                                                     

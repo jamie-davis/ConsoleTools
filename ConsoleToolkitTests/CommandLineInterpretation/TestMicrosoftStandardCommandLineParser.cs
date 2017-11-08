@@ -84,6 +84,16 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         }
 
         [Test]
+        public void NamedParametersAreNotSubjectedToArgSplitting()
+        {
+            var args = CommandLineTokeniser.Tokenise("-pos2 ,");
+            _parser.Parse(args, _options, _positionals, _result);
+
+            Console.WriteLine(_result.Log);
+            Approvals.Verify(_result.Log);
+        }
+
+        [Test]
         public void OptionAndParameterNamesAreNotCaseSensitive()
         {
             

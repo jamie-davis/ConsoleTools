@@ -76,7 +76,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
             {
                 string[] arguments;
                 if ((option == null || (option.ParameterCount > 0 && argQueue.Count > 0)) && (argQueue.Count > 0 && !argQueue.Peek().StartsWith("-")))
-                    arguments = option == null || option.ParameterCount > 1 ? argQueue.Dequeue().Split(',') : new []{ argQueue.Dequeue() };
+                    arguments = option != null && option.ParameterCount > 1 ? argQueue.Dequeue().Split(',') : new []{ argQueue.Dequeue() };
                 else
                     arguments = new string[] {};
 
