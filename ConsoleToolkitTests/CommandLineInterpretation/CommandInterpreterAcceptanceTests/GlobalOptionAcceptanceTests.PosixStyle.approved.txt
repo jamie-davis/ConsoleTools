@@ -1,0 +1,33 @@
+﻿Test: client add bill
+
+ClientAddCommand
+{
+    Name = bill
+}
+
+
+Test: client del bill
+
+ClientDelCommand
+{
+    ClientGuid = bill
+}
+
+
+Test: client add bill ben
+
+Unexpected argument "ben"
+
+
+Test: client del bill ben
+
+Unexpected argument "ben"
+
+
+Test: session
+
+SessionCommand
+{
+}
+
+

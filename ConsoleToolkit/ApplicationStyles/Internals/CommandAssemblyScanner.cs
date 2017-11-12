@@ -37,6 +37,11 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
             return allCommands.Select(t => t.Item2);
         }
 
+        public static IEnumerable<Type> FindGlobalOptions(Assembly assembly)
+        {
+            return FindTypesWithAttribute<GlobalOptionsAttribute>(assembly).Select(t => t.Item2);
+        }
+
         private static IEnumerable<Tuple<T, Type>> FindTypesWithAttribute<T>(Assembly assembly) where T : Attribute
         {
             return assembly.GetTypes()

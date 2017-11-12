@@ -88,8 +88,10 @@
     <Compile Include="CommandLineInterpretation\ConfigurationAttributes\OptionSetAttribute.cs" />
     <Compile Include="CommandLineInterpretation\ConfigurationAttributes\PositionalAttribute.cs" />
     <Compile Include="CommandLineInterpretation\DefaultApplicationNameExtractor.cs" />
+    <Compile Include="CommandLineInterpretation\GlobalOptionsConfig.cs" />
     <Compile Include="CommandLineInterpretation\ICommandKeys.cs" />
     <Compile Include="CommandLineInterpretation\IContext.cs" />
+    <Compile Include="CommandLineInterpretation\IOptionContainer.cs" />
     <Compile Include="CommandLineInterpretation\IOptionNameHelpAdorner.cs" />
     <Compile Include="CommandLineInterpretation\ConfigGenerator.cs" />
     <Compile Include="CommandLineInterpretation\KeywordCommandHelpFormatter.cs" />
@@ -208,6 +210,7 @@
     <Compile Include="Exceptions\CustomParserNotFound.cs" />
     <Compile Include="Exceptions\DefaultValueMayOnlyBeSpecifiedForPositionalParameters.cs" />
     <Compile Include="Exceptions\DuplicateOptionName.cs" />
+    <Compile Include="Exceptions\GlobalOptionsMayNotBeAddedAfterCommandDefinitions.cs" />
     <Compile Include="Exceptions\HelpCommandMustBePartOfConfiguration.cs" />
     <Compile Include="Exceptions\InvalidInteractiveHelpCommand.cs" />
     <Compile Include="Exceptions\InvalidOperationForRedirectedConsole.cs" />
@@ -223,6 +226,7 @@
     <Compile Include="Exceptions\NoCommandHandlerMethodFound.cs" />
     <Compile Include="Exceptions\NoMatchingPropertyFoundException.cs" />
     <Compile Include="Exceptions\ParameterTypeCannotBeResolved.cs" />
+    <Compile Include="Exceptions\PositionalsCannotBeDeclaredInGlobalOptions.cs" />
     <Compile Include="Exceptions\ProgramParametersAlreadySpecified.cs" />
     <Compile Include="Exceptions\ReadPropertyInvalidWithoutTemplate.cs" />
     <Compile Include="Exceptions\ReadPropertyMustBeInitialised.cs" />

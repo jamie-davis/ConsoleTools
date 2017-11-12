@@ -79,6 +79,10 @@
     <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\Config5AcceptanceTests.cs" />
     <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\KlasAcceptanceTestCommands\AddLogCommand.cs" />
     <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\KlasAcceptanceTests.cs" />
+    <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\GlobalOptionAcceptanceTestCommands\ClientAddCommand.cs" />
+    <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\GlobalOptionAcceptanceTestCommands\ClientDelCommand.cs" />
+    <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\GlobalOptionAcceptanceTestCommands\GlobalOptions.cs" />
+    <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\GlobalOptionAcceptanceTestCommands\Session.cs" />
     <Compile Include="CommandLineInterpretation\CommandsForTesting.cs" />
     <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\CommandExecutorUtil.cs" />
     <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\Config1AcceptanceTests.cs" />

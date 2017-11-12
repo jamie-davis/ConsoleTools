@@ -75,8 +75,12 @@ namespace ConsoleToolkit.ApplicationStyles
         internal override void LoadConfigFromAssembly()
         {
             var types = GetCommandTypes();
+            var globalOptions = GetGlobalOptions();
 
             Config = new CommandLineInterpreterConfiguration(Toolkit.Options.ParsingConventions);
+            foreach (var globalOption in globalOptions)
+                Config.LoadGlobalOptions(globalOption);
+
             foreach (var type in types)
                 Config.Load(type);
         }

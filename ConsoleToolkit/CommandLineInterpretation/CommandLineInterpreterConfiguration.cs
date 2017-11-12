@@ -79,8 +79,10 @@ namespace ConsoleToolkit.CommandLineInterpretation
         }
         
         private List<BaseCommandConfig> _commands = new List<BaseCommandConfig>();
+        private List<BaseGlobalOptionsConfig> _globalOptions = new List<BaseGlobalOptionsConfig>();
 
         public IEnumerable<BaseCommandConfig> Commands { get { return _commands; } }
+        public IEnumerable<BaseGlobalOptionsConfig> GlobalOptions { get { return _globalOptions; } }
 
         /// <summary>
         /// Adds a command to the configuration.
@@ -161,6 +163,15 @@ namespace ConsoleToolkit.CommandLineInterpretation
         {
             var commandConfig = CommandAttributeLoader.Load(type);
             _commands.Add(commandConfig);
+        }
+
+        public void LoadGlobalOptions(Type globalOption)
+        {
+            if (_commands.Any())
+                throw new GlobalOptionsMayNotBeAddedAfterCommandDefinitions();
+
+            var optionConfig = CommandAttributeLoader.LoadGlobalOptions(globalOption);
+            _globalOptions.Add(optionConfig);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
     /// or a named "sub-command" of a program that supports that paradigm.
     /// </summary>
     /// <typeparam name="T">The type that will be populated with the command parameters extracted from the command line.</typeparam>
-    public class CommandConfig<T> : BaseCommandConfig where T :class
+    public class CommandConfig<T> : BaseCommandConfig, IOptionContainer<T, CommandConfig<T>> where T :class
     {
         private readonly Func<string, T> _initialiser;
         private IContext _currentContext;
