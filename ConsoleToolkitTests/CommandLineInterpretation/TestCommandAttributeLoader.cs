@@ -290,6 +290,78 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             
         }
 
+        [GlobalOptions]
+        static class GlobalOptionsDefinition
+        {
+
+            [Option]
+            [Description("Option property description")]
+            public static string OptionProp { get; set; }
+
+            [Option]
+            [Description("Option field description")]
+            public static string OptionField;
+
+            [Option("CustomName")]
+            [Description("Option with customised name")]
+            public static string OptionCustom;
+
+            [Option("LongName", "S")]
+            [Description("Option with long and short name")]
+            public static string WellNamedOption;
+
+            [Option("Multi")]
+            [Description("Option with multiple parameters")]
+            public static DefaultName.MultiOpt MultiOptParams { get; set; }
+
+            [Option("switch")]
+            [Description("Boolean option")]
+            public static bool BoolOption { get; set; }
+
+            public class MultiOpt
+            {
+                [Positional(0)]
+                public string StringParam { get; set; }
+
+                [Positional(1)]
+                public int IntParam { get; set; }
+
+                [Positional(2)]
+                public DateTime DateParam { get; set; }
+            }
+        }
+
+        [GlobalOptions]
+        class InstanceGlobalOptionsDefinition
+        {
+            [Option("env")]
+            public string Environment { get; set; }
+
+        }
+
+        [GlobalOptions]
+        static class GlobalOptionsWithDuplicateOptionName
+        {
+            [Option("LongName", "S")]
+            public static string Option1;
+
+            [Option("LongName2", "S")]
+            public static string Option2;
+        }
+
+        [GlobalOptions]
+        static class GlobalOptionsWithShortCircuitOption
+        {
+            [Option]
+            public static bool A { get; set; }
+
+            [Option]
+            public static bool B { get; set; }
+
+            [Option(ShortCircuit = true)]
+            public static bool C { get; set; }
+        }
+
         // ReSharper restore UnusedField.Compiler
         // ReSharper restore UnusedMember.Local
 #pragma warning restore 649
@@ -626,6 +698,85 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             command.FailNoParamValidation();
             config.Validate(command, errors);
             Assert.That(command.ErrorListValidatorCalled, Is.False);
+        }
+
+        [Test]
+        public void GlobalOptionsAreLoaded()
+        {
+            var config = CommandAttributeLoader.LoadGlobalOptions(typeof(GlobalOptionsDefinition));
+            Assert.That(config, Is.Not.Null);
+        }
+
+        [Test]
+        public void GlobalOptionsMustBeStatic()
+        {
+            Assert.Throws<ArgumentException>(() => CommandAttributeLoader.LoadGlobalOptions(typeof(InstanceGlobalOptionsDefinition)));
+        }
+
+        [Test]
+        public void GlobalOptionPropertyIsExtracted()
+        {
+            var config = CommandAttributeLoader.LoadGlobalOptions(typeof(GlobalOptionsDefinition));
+            Assert.That(config.Options.Any(o => o.Name == "optionprop"));
+        }
+
+        [Test]
+        public void GlobalOptionFieldIsExtracted()
+        {
+            var config = CommandAttributeLoader.LoadGlobalOptions(typeof(GlobalOptionsDefinition));
+            Assert.That(config.Options.Any(o => o.Name == "optionfield"));
+        }
+
+        [Test]
+        public void GlobalMultiParamOptionIsExtracted()
+        {
+            var config = CommandAttributeLoader.LoadGlobalOptions(typeof(GlobalOptionsDefinition));
+            Assert.That(config.Options.Any(o => o.Name == "Multi"));
+        }
+
+        [Test]
+        public void GlobalOptionNameCanBeOverridden()
+        {
+            var config = CommandAttributeLoader.LoadGlobalOptions(typeof(GlobalOptionsDefinition));
+            Assert.That(config.Options.Any(o => o.Name == "CustomName"));
+        }
+
+        [Test]
+        public void GlobalOptionLongAndShortNamesCanBeSpecified()
+        {
+            var config = CommandAttributeLoader.LoadGlobalOptions(typeof(GlobalOptionsDefinition));
+            var option = config.Options.First(o => o.Name == "LongName");
+            Assert.That(option.Aliases.Any(a => a == "S"));
+        }
+
+        [Test]
+        public void GlobalOptionShortCircuitIsLoaded()
+        {
+            var config = CommandAttributeLoader.LoadGlobalOptions(typeof(GlobalOptionsWithShortCircuitOption));
+            var option = config.Options.First(o => o.Name == "c");
+            Assert.That(option.IsShortCircuit, Is.True);
+        }
+
+        [Test]
+        public void GlobalOptionsDoNothaveShortCircuitByDefault()
+        {
+            var config = CommandAttributeLoader.LoadGlobalOptions(typeof(GlobalOptionsDefinition));
+            var option = config.Options.First(o => o.Name == "LongName");
+            Assert.That(option.IsShortCircuit, Is.False);
+        }
+
+        [Test]
+        public void GlobalBooleanOptionHasIsBooleanSet()
+        {
+            var config = CommandAttributeLoader.LoadGlobalOptions(typeof(GlobalOptionsDefinition));
+            var option = config.Options.First(o => o.Name == "switch");
+            Assert.That(option.IsBoolean, Is.True);
+        }
+
+        [Test, ExpectedException(typeof(DuplicateOptionName))]
+        public void GlobalConfigWithDuplicateOptionNameThrowsOnLoad()
+        {
+            CommandAttributeLoader.LoadGlobalOptions(typeof(GlobalOptionsWithDuplicateOptionName));
         }
     }
 }

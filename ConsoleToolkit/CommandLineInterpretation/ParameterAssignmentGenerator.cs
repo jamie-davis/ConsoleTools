@@ -172,12 +172,28 @@ namespace ConsoleToolkit.CommandLineInterpretation
         private static Expression ConstructResultAssigment(MemberInfo member, ParameterExpression item, Expression value, MemberInfo parent)
         {
             Expression source;
-            if (parent == null)
+            if (IsStatic(member))
+                source = null;
+            else if (parent == null)
                 source = item;
             else
                 source = Expression.MakeMemberAccess(item, parent);
 
             return Expression.Assign(Expression.MakeMemberAccess(source, member), value);
+        }
+
+        private static bool IsStatic(MemberInfo member)
+        {
+            switch (member)
+            {
+                case PropertyInfo info:
+                    return info.GetGetMethod().IsStatic;
+
+                case FieldInfo fld:
+                    return fld.IsStatic;
+            }
+
+            return false;
         }
 
         private static bool IsSimpleAssignment(Type propertyType)

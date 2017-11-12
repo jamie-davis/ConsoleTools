@@ -1,10 +1,12 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
+using ConsoleToolkit.Exceptions;
 using ConsoleToolkit.Properties;
 using ConsoleToolkit.Utilities;
 using DescriptionAttribute = ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.DescriptionAttribute;
@@ -62,6 +64,24 @@ namespace ConsoleToolkit.CommandLineInterpretation
             return commandConfig;
         }
 
+        // ReSharper disable once UnusedMember.Local
+        //this is called dynamically
+        private static GlobalOptionsConfig<T> CreateGlobalOptions<T>() where T : class
+        {
+            var config = new GlobalOptionsConfig<T>();
+
+            if (GetMembersWithAttribute<PositionalAttribute>(typeof(T), true).Any())
+                throw new PositionalsCannotBeDeclaredInGlobalOptions(typeof(T));
+
+            var options = GetMembersWithAttribute<OptionAttribute>(typeof(T), true)
+                .ToList();
+
+            foreach (var member in options)
+                AttachOption(member, config, null);
+
+            return config;
+        }
+
         /// <summary>
         /// The default name for a command is the class name. If the class name ends with the word 
         /// "Command", this will be dropped automatically. e.g. HelpCommand would have the command
@@ -96,7 +116,9 @@ namespace ConsoleToolkit.CommandLineInterpretation
                 AttachOption(member, commandConfig, optionSet);
         }
 
-        private static void AttachOption<T>(AttributedMember<OptionAttribute> optionMember, CommandConfig<T> commandConfig, AttributedMember<OptionSetAttribute> optionSet) where T : class
+        private static void AttachOption<T, TCommandConfigType>(AttributedMember<OptionAttribute> optionMember, IOptionContainer<T, TCommandConfigType> commandConfig, AttributedMember<OptionSetAttribute> optionSet) 
+            where T : class 
+            where TCommandConfigType : class
         {
             var option = MakeOption(optionMember.Attribute, commandConfig, optionMember.MemberInfo, optionMember.Type, optionSet);
             var desc = GetDescription(optionMember.MemberInfo);
@@ -211,9 +233,9 @@ namespace ConsoleToolkit.CommandLineInterpretation
             return true;
         }
 
-        private static IEnumerable<AttributedMember<T>> GetMembersWithAttribute<T>(Type type) where T : Attribute
+        private static IEnumerable<AttributedMember<T>> GetMembersWithAttribute<T>(Type type, bool useStatics = false) where T : Attribute
         {
-            return type.GetProperties()
+            return (useStatics ? type.GetProperties(BindingFlags.Static | BindingFlags.Public) : type.GetProperties())
                 .Select(p => new AttributedMember<T>(p, p.PropertyType, p.GetCustomAttribute<T>()))
                 .Concat(type.GetFields().Select(f => new AttributedMember<T>(f, f.FieldType, f.GetCustomAttribute<T>())))
                 .Where(m => m.Attribute != null);
@@ -326,14 +348,16 @@ namespace ConsoleToolkit.CommandLineInterpretation
             return Expression.MakeMemberAccess(source, member);
         }
 
-        private static BaseOption MakeOption<T>(OptionAttribute optionAttribute, CommandConfig<T> commandConfig, MemberInfo member, Type memberType, AttributedMember<OptionSetAttribute> optionSet) where T : class
+        private static BaseOption MakeOption<T,TCommandConfigType>(OptionAttribute optionAttribute, IOptionContainer<T,TCommandConfigType> optionContainer, MemberInfo member, Type memberType, AttributedMember<OptionSetAttribute> optionSet) 
+            where T : class
+            where TCommandConfigType : class
         {
             Type[] parameterTypes;
             var optionSetMember = optionSet == null ? null : optionSet.MemberInfo;
             var optionSetter = ParameterAssignmentGenerator<T>.Generate(member, memberType, out parameterTypes, optionSetMember);
             
             var optionName = GetOptionName(optionAttribute, member);
-            var option = CallOptionCreateMethod(commandConfig, optionName, memberType, optionSetter, parameterTypes);
+            var option = CallOptionCreateMethod(optionContainer, optionName, memberType, optionSetter, parameterTypes);
             if (option != null)
             {
                 option.IsShortCircuit = optionAttribute.ShortCircuit;
@@ -343,19 +367,21 @@ namespace ConsoleToolkit.CommandLineInterpretation
             var alias = GetOptionAlias(optionAttribute);
             if (option != null && alias != null)
             {
-                var existingNames = commandConfig.Options.SelectMany(o => new[] { o.Name }.Concat(o.Aliases));
+                var existingNames = optionContainer.Options.SelectMany(o => new[] { o.Name }.Concat(o.Aliases));
                 option.Alias(alias, existingNames);
             }
 
             return option;
         }
 
-        private static BaseOption CallOptionCreateMethod<T>(CommandConfig<T> commandConfig, string optionName, Type memberType, object optionInitialiser, Type[] parameterTypes) where T : class
+        private static BaseOption CallOptionCreateMethod<T, TCommandConfigType>(IOptionContainer<T, TCommandConfigType> container, string optionName, Type memberType, object optionInitialiser, Type[] parameterTypes) 
+            where T : class
+            where TCommandConfigType : class
         {
             MethodInfo optionMethod;
             if (memberType == typeof (bool))
             {
-                optionMethod = commandConfig
+                optionMethod = container
                     .GetType()
                     .GetMethods()
                     .FirstOrDefault(m => m.Name == "Option"
@@ -365,7 +391,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
             }
             else
             {
-                var genericOptionMethod = commandConfig
+                var genericOptionMethod = container
                     .GetType()
                     .GetMethods()
                     .FirstOrDefault(m => m.Name == "Option"
@@ -378,8 +404,8 @@ namespace ConsoleToolkit.CommandLineInterpretation
             }
             Debug.Assert(optionMethod != null);
 
-            MethodInvoker.Invoke(optionMethod, commandConfig, new[] {optionName, optionInitialiser});
-            return commandConfig.Options.FirstOrDefault(o => o.Name == optionName);
+            MethodInvoker.Invoke(optionMethod, container, optionName, optionInitialiser);
+            return container.Options.FirstOrDefault(o => o.Name == optionName);
         }
 
         private static string GetOptionName(OptionAttribute optionAttribute, MemberInfo member)
@@ -406,7 +432,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
             {
                 var commandAttribute = GetCommandAttribute(commandClass);
                 if (commandAttribute == null)
-                    throw new ArgumentException("Type does not have the Command attribute.", "commandClass");
+                    throw new ArgumentException("Type does not have the Command attribute.", nameof(commandClass));
 
                 var keywordAttributes = commandClass.GetCustomAttributes(typeof(KeywordAttribute), true);
 
@@ -421,6 +447,30 @@ namespace ConsoleToolkit.CommandLineInterpretation
                     keywordAttributes == null ? null : keywordAttributes
                 };
                 return MethodInvoker.Invoke(createMethod, null, callParameters) as BaseCommandConfig;
+            }
+            catch (TargetInvocationException e)
+            {
+                if (e.InnerException != null)
+                    throw e.InnerException;
+                throw;
+            }
+        }
+
+        public static BaseGlobalOptionsConfig LoadGlobalOptions(Type optionsClass)
+        {
+            try
+            {
+                var commandAttribute = GetCommandAttribute(optionsClass);
+                if (commandAttribute != null)
+                    throw new ArgumentException("Global options type may not have the Command attribute.", nameof(optionsClass));
+
+                if (!optionsClass.IsAbstract || !optionsClass.IsSealed)
+                    throw new ArgumentException("Global options defition must be a static class.", nameof(optionsClass));
+
+                var genericCreateMethod = typeof (CommandAttributeLoader).GetMethod("CreateGlobalOptions",
+                    BindingFlags.Static | BindingFlags.NonPublic);
+                var createMethod = genericCreateMethod.MakeGenericMethod(optionsClass);
+                return MethodInvoker.Invoke(createMethod, null) as BaseGlobalOptionsConfig;
             }
             catch (TargetInvocationException e)
             {

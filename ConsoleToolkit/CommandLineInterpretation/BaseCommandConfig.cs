@@ -9,6 +9,8 @@ namespace ConsoleToolkit.CommandLineInterpretation
     /// </summary>
     public abstract class BaseCommandConfig : IContext, ICommandKeys
     {
+        private List<BaseOption> _baseOptions = new List<BaseOption>();
+
         public Type CommandType { get; set; }
 
         public string Name { get; set; }
@@ -16,7 +18,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
         internal List<KeywordsDesc> KeywordsDocs => _keywordsDocs;
  
         public List<BasePositional> Positionals = new List<BasePositional>();
-        public List<BaseOption> Options = new List<BaseOption>();
+        public List<BaseOption> Options => _baseOptions;
         private List<string> _keywords = new List<string>();
         private List<KeywordsDesc> _keywordsDocs = new List<KeywordsDesc>();
 

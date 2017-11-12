@@ -241,6 +241,14 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
 
             return types;
         }
+        protected IEnumerable<Type> GetGlobalOptions()
+        {
+            var types = CommandAssemblyScanner.FindGlobalOptions(GetType().Assembly);
+            if (_typeFilter != null)
+                types = types.Where(_typeFilter);
+
+            return types;
+        }
 
         internal static void ExecuteCommand(ConsoleApplicationBase app, object command, CommandExecutionMode executionMode)
         {
