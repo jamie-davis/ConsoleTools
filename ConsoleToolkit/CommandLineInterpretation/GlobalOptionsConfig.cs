@@ -7,9 +7,15 @@ namespace ConsoleToolkit.CommandLineInterpretation
     /// <summary>
     /// The configuration information for the global options of a command driven application.
     /// </summary>
-    public sealed class GlobalOptionsConfig<T> : BaseGlobalOptionsConfig, IOptionContainer<T, GlobalOptionsConfig<T>> where T : class
+    public sealed class GlobalOptionsConfig : BaseGlobalOptionsConfig, IOptionContainer<GlobalOptionsConfig>
     {
+        private readonly Type _optionsType;
         private IContext _currentContext;
+
+        public GlobalOptionsConfig(Type optionsType)
+        {
+            _optionsType = optionsType;
+        }
 
         /// <summary>
         /// Specifies the simplest possible option type - there are no parameters, the option is simply present.
@@ -19,9 +25,9 @@ namespace ConsoleToolkit.CommandLineInterpretation
         /// <param name="optionName">The name of the option.</param>
         /// <param name="optionInitialiser">The lambda that applies the option to the command parameters type. Note that this must accept a boolean.</param>
         /// <returns>The command config.</returns>
-        public GlobalOptionsConfig<T> Option(string optionName, Action<T, bool> optionInitialiser)
+        public GlobalOptionsConfig Option(string optionName, Action<bool> optionInitialiser)
         {
-            var commandOption = new CommandOption<Action<T, bool>>(optionName, optionInitialiser) { IsBoolean = true };
+            var commandOption = new CommandOption<Action<bool>>(optionName, optionInitialiser, true) { IsBoolean = true };
             Options.Add(commandOption);
             _currentContext = commandOption;
             return this;
@@ -35,9 +41,9 @@ namespace ConsoleToolkit.CommandLineInterpretation
         /// <param name="optionName">The name of the option.</param>
         /// <param name="optionVariableIndicator">The expression that identifies the boolean that should be set in the command type.</param>
         /// <returns>The command config.</returns>
-        public GlobalOptionsConfig<T> Option(string optionName, Expression<Func<T, bool>> optionVariableIndicator)
+        public GlobalOptionsConfig Option(string optionName, Expression<Func<bool>> optionVariableIndicator)
         {
-            var commandOption = ConfigGenerator.OptionFromExpression<T>(optionName, optionVariableIndicator, true);
+            var commandOption = ConfigGenerator.OptionFromExpression(_optionsType, optionName, optionVariableIndicator, true, true);
             Options.Add(commandOption);
             _currentContext = commandOption;
             return this;
@@ -49,9 +55,9 @@ namespace ConsoleToolkit.CommandLineInterpretation
         /// <param name="optionName">The name of the option.</param>
         /// <param name="optionVariableIndicator">The expression that identifies the member that should be set in the command type. The type of the member determines the data type of the option.</param>
         /// <returns>The command config.</returns>
-        public GlobalOptionsConfig<T> Option<TParam>(string optionName, Expression<Func<T, TParam>> optionVariableIndicator)
+        public GlobalOptionsConfig Option<TParam>(string optionName, Expression<Func<TParam>> optionVariableIndicator)
         {
-            var commandOption = ConfigGenerator.OptionFromExpression<T>(optionName, optionVariableIndicator, false);
+            var commandOption = ConfigGenerator.OptionFromExpression(_optionsType, optionName, optionVariableIndicator, false, true);
             Options.Add(commandOption);
             _currentContext = commandOption;
             return this;
@@ -64,9 +70,9 @@ namespace ConsoleToolkit.CommandLineInterpretation
         /// <param name="optionName">The name of the option.</param>
         /// <param name="optionInitialiser">The action that will be invoked when the option's parameters have been converted.</param>
         /// <returns>The command config.</returns>
-        public GlobalOptionsConfig<T> Option<T1>(string optionName, Action<T, T1> optionInitialiser)
+        public GlobalOptionsConfig Option<T1>(string optionName, Action<T1> optionInitialiser)
         {
-            var commandOption = new CommandOption<Action<T, T1>>(optionName, optionInitialiser);
+            var commandOption = new CommandOption<Action<T1>>(optionName, optionInitialiser, true);
             Options.Add(commandOption);
             _currentContext = commandOption;
             return this;
@@ -77,9 +83,9 @@ namespace ConsoleToolkit.CommandLineInterpretation
         /// </summary>
         /// <param name="optionName">The name of the option.</param>
         /// <returns>The command config.</returns>
-        public GlobalOptionsConfig<T> Option(string optionName)
+        public GlobalOptionsConfig Option(string optionName)
         {
-            var commandOption = ConfigGenerator.OptionByName<T>(optionName);
+            var commandOption = ConfigGenerator.OptionByName(_optionsType, optionName);
             Options.Add(commandOption);
             _currentContext = commandOption;
             return this;
@@ -93,9 +99,9 @@ namespace ConsoleToolkit.CommandLineInterpretation
         /// <param name="optionName">The name of the option.</param>
         /// <param name="optionInitialiser">The action that will be invoked when the option's parameters have been converted.</param>
         /// <returns>The command config.</returns>
-        public GlobalOptionsConfig<T> Option<T1, T2>(string optionName, Action<T, T1, T2> optionInitialiser)
+        public GlobalOptionsConfig Option<T1, T2>(string optionName, Action<T1, T2> optionInitialiser)
         {
-            var commandOption = new CommandOption<Action<T, T1, T2>>(optionName, optionInitialiser);
+            var commandOption = new CommandOption<Action<T1, T2>>(optionName, optionInitialiser, true);
             Options.Add(commandOption);
             _currentContext = commandOption;
             return this;
@@ -110,9 +116,9 @@ namespace ConsoleToolkit.CommandLineInterpretation
         /// <param name="optionName">The name of the option.</param>
         /// <param name="optionInitialiser">The action that will be invoked when the option's parameters have been converted.</param>
         /// <returns>The command config.</returns>
-        public GlobalOptionsConfig<T> Option<T1, T2, T3>(string optionName, Action<T, T1, T2, T3> optionInitialiser)
+        public GlobalOptionsConfig Option<T1, T2, T3>(string optionName, Action<T1, T2, T3> optionInitialiser)
         {
-            var commandOption = new CommandOption<Action<T, T1, T2, T3>>(optionName, optionInitialiser);
+            var commandOption = new CommandOption<Action<T1, T2, T3>>(optionName, optionInitialiser, true);
             Options.Add(commandOption);
             _currentContext = commandOption;
             return this;
@@ -125,7 +131,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
         /// </summary>
         /// <param name="text">The descriptive test.</param>
         /// <returns>The command config.</returns>
-        public GlobalOptionsConfig<T> Description(string text)
+        public GlobalOptionsConfig Description(string text)
         {
             if (_currentContext != null)
                 _currentContext.Description = text;

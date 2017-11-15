@@ -18,8 +18,16 @@ namespace ConsoleToolkit.CommandLineInterpretation
         private List<Type> _paramTypes;
         private Type _actionType;
 
-        public CommandOption(string optionName, TAction optionInitialiser)
+        /// <summary>
+        /// True if the option initialiser is "self-contained" and does not need the command instance to be supplied as a parameter. For example, 
+        /// global options are self-contained because they are not defined on any particular command, but apply to all, so they cannot rely on
+        /// a command instance. If this is false, then by implication the initialiser requires the owning command instance as its first parameter.
+        /// </summary>
+        public bool IsSelfContained { get; }
+
+        public CommandOption(string optionName, TAction optionInitialiser, bool isSelfContained)
         {
+            IsSelfContained = isSelfContained;
             _optionInitialiser = optionInitialiser;
             Name = optionName;
 
@@ -54,7 +62,9 @@ namespace ConsoleToolkit.CommandLineInterpretation
         {
             error = null;
 
-            var convertedParameters = new List<object> {command};
+            var convertedParameters = new List<object>();
+            if (!IsSelfContained)
+                convertedParameters.Add(command);
 
             using (var paramEnumerator = parameters.GetEnumerator())
             {
@@ -80,24 +90,16 @@ namespace ConsoleToolkit.CommandLineInterpretation
                 }
 
                 if (IsBoolean && index == 0)
+                    convertedParameters.Add(true);
+                else
                 {
-                    callParameters = new[] { command, true };
-                    return true;
+                    if (index < ParameterCount)
+                    {
+                        callParameters = null;
+                        error = String.Format("Not enough parameters for the {0} option.", Name);
+                        return false;
+                    }
                 }
-
-                if (ParameterCount == 0)
-                {
-                    callParameters = new [] { command };
-                    return true;
-                }
-
-                if (index < ParameterCount)
-                {
-                    callParameters = null;
-                    error = String.Format("Not enough parameters for the {0} option.", Name);
-                    return false;
-                }
-
                 callParameters = convertedParameters.ToArray();
                 return true;
                         

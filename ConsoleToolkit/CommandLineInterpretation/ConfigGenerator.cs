@@ -71,16 +71,16 @@ namespace ConsoleToolkit.CommandLineInterpretation
         /// An exact match between the parameter name and a property is preferred, but if there is no exact 
         /// match, a case insensitive match will be acceptable.
         /// </summary>
-        /// <typeparam name="T">The command type. The option name must match one of its properties.</typeparam>
+        /// <param name="commandType">The command type. The option name must match one of its properties.</typeparam>
         /// <param name="optionName">The name of the parameter.</param>
         /// <returns>The instantiated positional paramter.</returns>
-        public static BaseOption OptionByName<T>(string optionName) where T : class
+        public static BaseOption OptionByName(Type commandType, string optionName)
         {
-            var prop = MatchProperty(typeof(T), optionName);
-            var parameter = Expression.Parameter(typeof(T));
-            var delegateType = typeof(Func<,>).MakeGenericType(new[] { typeof(T), prop.PropertyType });
+            var prop = MatchProperty(commandType, optionName);
+            var parameter = Expression.Parameter(commandType);
+            var delegateType = typeof(Func<,>).MakeGenericType(new[] { commandType, prop.PropertyType });
             var accessor = Expression.Lambda(delegateType, Expression.MakeMemberAccess(parameter, prop), new[] { parameter });
-            return OptionFromExpression<T>(optionName, accessor, prop.PropertyType == typeof(bool));
+            return OptionFromExpression(commandType, optionName, accessor, prop.PropertyType == typeof(bool), true);
         }
 
         /// <summary>
@@ -102,16 +102,14 @@ namespace ConsoleToolkit.CommandLineInterpretation
             throw new NoMatchingPropertyFoundException(parameterName, type);
         }
 
-        public static BaseOption OptionFromExpression<TCommand>(string optionName, 
-            LambdaExpression optionVariableIndicator, 
-            bool isBooleanOption) where TCommand : class
+        public static BaseOption OptionFromExpression(Type commandType, string optionName, LambdaExpression optionVariableIndicator, bool isBooleanOption, bool isCommandIndependent)
         {
-            var setter = SetterBuilder.Build<TCommand>(optionVariableIndicator.Body);
+            var setter = SetterBuilder.Build(commandType, optionVariableIndicator.Body);
 
             var optionGenericType = typeof(CommandOption<>);
             var optionType = optionGenericType.MakeGenericType(new[] {setter.GetType()});
 
-            var option = Activator.CreateInstance(optionType, new[] {optionName, setter}) as BaseOption;
+            var option = Activator.CreateInstance(optionType, new[] {optionName, setter, isCommandIndependent }) as BaseOption;
             if (option != null)
                 option.IsBoolean = isBooleanOption;
 

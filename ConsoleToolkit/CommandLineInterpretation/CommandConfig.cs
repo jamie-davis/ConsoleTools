@@ -12,7 +12,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
     /// or a named "sub-command" of a program that supports that paradigm.
     /// </summary>
     /// <typeparam name="T">The type that will be populated with the command parameters extracted from the command line.</typeparam>
-    public class CommandConfig<T> : BaseCommandConfig, IOptionContainer<T, CommandConfig<T>> where T :class
+    public class CommandConfig<T> : BaseCommandConfig, IOptionContainer<CommandConfig<T>> where T :class
     {
         private readonly Func<string, T> _initialiser;
         private IContext _currentContext;
@@ -94,7 +94,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
         /// <returns>The command config.</returns>
         public CommandConfig<T> Option(string optionName, Action<T, bool> optionInitialiser)
         {
-            var commandOption = new CommandOption<Action<T, bool>>(optionName, optionInitialiser) { IsBoolean = true};
+            var commandOption = new CommandOption<Action<T, bool>>(optionName, optionInitialiser, false) { IsBoolean = true};
             Options.Add(commandOption);
             _currentContext = commandOption;
             return this;
@@ -110,7 +110,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
         /// <returns>The command config.</returns>
         public CommandConfig<T> Option(string optionName, Expression<Func<T, bool>> optionVariableIndicator)
         {
-            var commandOption = ConfigGenerator.OptionFromExpression<T>(optionName, optionVariableIndicator, true);
+            var commandOption = ConfigGenerator.OptionFromExpression(typeof(T), optionName, optionVariableIndicator, true, false);
             Options.Add(commandOption);
             _currentContext = commandOption;
             return this;
@@ -124,7 +124,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
         /// <returns>The command config.</returns>
         public CommandConfig<T> Option<TParam>(string optionName, Expression<Func<T, TParam>> optionVariableIndicator)
         {
-            var commandOption = ConfigGenerator.OptionFromExpression<T>(optionName, optionVariableIndicator, false);
+            var commandOption = ConfigGenerator.OptionFromExpression(typeof(T), optionName, optionVariableIndicator, false, false);
             Options.Add(commandOption);
             _currentContext = commandOption;
             return this;
@@ -139,7 +139,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
         /// <returns>The command config.</returns>
         public CommandConfig<T> Option<T1>(string optionName, Action<T, T1> optionInitialiser)
         {
-            var commandOption = new CommandOption<Action<T, T1>>(optionName, optionInitialiser);
+            var commandOption = new CommandOption<Action<T, T1>>(optionName, optionInitialiser, false);
             Options.Add(commandOption);
             _currentContext = commandOption;
             return this;
@@ -152,7 +152,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
         /// <returns>The command config.</returns>
         public CommandConfig<T> Option(string optionName)
         {
-            var commandOption = ConfigGenerator.OptionByName<T>(optionName);
+            var commandOption = ConfigGenerator.OptionByName(typeof(T), optionName);
             Options.Add(commandOption);
             _currentContext = commandOption;
             return this;
@@ -168,7 +168,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
         /// <returns>The command config.</returns>
         public CommandConfig<T> Option<T1, T2>(string optionName, Action<T, T1, T2> optionInitialiser)
         {
-            var commandOption = new CommandOption<Action<T, T1, T2>>(optionName, optionInitialiser);
+            var commandOption = new CommandOption<Action<T, T1, T2>>(optionName, optionInitialiser, false);
             Options.Add(commandOption);
             _currentContext = commandOption;
             return this;
@@ -185,7 +185,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
         /// <returns>The command config.</returns>
         public CommandConfig<T> Option<T1, T2, T3>(string optionName, Action<T, T1, T2, T3> optionInitialiser)
         {
-            var commandOption = new CommandOption<Action<T, T1, T2, T3>>(optionName, optionInitialiser);
+            var commandOption = new CommandOption<Action<T, T1, T2, T3>>(optionName, optionInitialiser, false);
             Options.Add(commandOption);
             _currentContext = commandOption;
             return this;

@@ -61,8 +61,9 @@ namespace ConsoleToolkit.CommandLineInterpretation
             }
 
             var parserArgs = args.Skip(firstArgumentIndex).ToArray();
-            var result = new ParserResult(command, commandName);
-            var optionList = GetOptionsAndAliases(command);
+            var globalOptions = isInteractive ? null : _config.GlobalOptions.SelectMany(o => o.Options).ToList();
+            var optionList = GetOptionsAndAliases(command, globalOptions).ToList();
+            var result = new ParserResult(command, commandName, globalOptions);
             interpreter.Parse(parserArgs, optionList, command.Positionals, result);
             result.ParseCompleted();
             if (result.Status != ParseStatus.CompletedOk)
@@ -103,11 +104,15 @@ namespace ConsoleToolkit.CommandLineInterpretation
         /// Get the full list of ways each option can be referenced. i.e. by its actual name, and all of its aliases.
         /// </summary>
         /// <param name="command">The command.</param>
+        /// <param name="globalOptions">The applicable global options.</param>
         /// <returns>A list of IOption implementations.</returns>
-        private IEnumerable<IOption> GetOptionsAndAliases(BaseCommandConfig command)
+        private IEnumerable<IOption> GetOptionsAndAliases(BaseCommandConfig command, IEnumerable<BaseOption> globalOptions)
         {
-            return command
-                .Options
+            var allOptions = command.Options as IEnumerable<BaseOption>;
+            if (globalOptions != null)
+                allOptions = allOptions.Concat(globalOptions);
+
+            return allOptions
                 .SelectMany(o => new IOption[] {o}
                                     .Concat(o.Aliases.Select(a => new OptionAlias(o, a))));
         }

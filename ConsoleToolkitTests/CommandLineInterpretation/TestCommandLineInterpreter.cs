@@ -134,6 +134,11 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
                 Positionals = positionalArguments.ToList();
             }
         }
+
+        static class GlobalOptions
+        {
+            public static bool Opt { get; set; }
+        }
         // ReSharper restore NotAccessedField.Local
         // ReSharper restore UnusedAutoPropertyAccessor.Global
 
@@ -623,12 +628,69 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(Describe(args, result, errors));
         }
 
+        [Test]
+        public void GlobalOptionsAreValid()
+        {
+            GlobalOptions.Opt = false;
+
+            var config = new CommandLineInterpreterConfiguration();
+            config.GlobalOption(typeof(GlobalOptions))
+                .Option("gopt", () => GlobalOptions.Opt);
+            config.Command("add", s => new GenericCommand<string> {Name = s})
+                .Keyword("key");
+
+            var interpreter = new CommandLineInterpreter(config);
+            string[] errors;
+            var args = new[] { "key", "add", "-gopt" };
+            var result = interpreter.Interpret(args, out errors, false);
+
+            Approvals.Verify(Describe(args, result, errors, new {gopt = GlobalOptions.Opt}));
+        }
+
+        [Test]
+        public void GlobalOptionsAreInvalidInInteractiveMode()
+        {
+            GlobalOptions.Opt = false;
+
+            var config = new CommandLineInterpreterConfiguration();
+            config.GlobalOption(typeof(GlobalOptions))
+                .Option("gopt", () => GlobalOptions.Opt);
+            config.Command("add", s => new GenericCommand<string> {Name = s})
+                .Keyword("key");
+
+            var interpreter = new CommandLineInterpreter(config);
+            string[] errors;
+            var args = new[] { "key", "add", "-gopt" };
+            var result = interpreter.Interpret(args, out errors, false, isInteractive: true);
+
+            Approvals.Verify(Describe(args, result, errors, new {gopt = GlobalOptions.Opt}));
+        }
+
+        [Test]
+        public void GlobalOptionsDefaultIfNotSet()
+        {
+            GlobalOptions.Opt = false; //initialise the global option - this value should be carried through.
+
+            var config = new CommandLineInterpreterConfiguration();
+            config.GlobalOption(typeof(GlobalOptions))
+                .Option("gopt", () => GlobalOptions.Opt);
+            config.Command("add", s => new GenericCommand<string> {Name = s})
+                .Keyword("key");
+
+            var interpreter = new CommandLineInterpreter(config);
+            string[] errors;
+            var args = new[] { "key", "add" };
+            var result = interpreter.Interpret(args, out errors, false);
+
+            Approvals.Verify(Describe(args, result, errors, new {gopt = GlobalOptions.Opt}));
+        }
+
         private void FailValidation(string failureMessage)
         {
             _failureMessage = failureMessage;
         }
 
-        private static string Describe(IEnumerable<string> args, object command, IEnumerable<string> errors)
+        private static string Describe(IEnumerable<string> args, object command, IEnumerable<string> errors, params object[] globalObjects)
         {
             var argsList = new StringBuilder();
             var ix = 0;
@@ -672,6 +734,19 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             {
                 sb.AppendLine();
                 sb.AppendLine(errorReport.ToString());
+            }
+
+            if (globalObjects.Any())
+            {
+                sb.AppendLine();
+                sb.AppendLine("Global Objects:");
+                foreach (var globalObject in globalObjects)
+                {
+                    foreach (var propertyInfo in globalObject.GetType().GetProperties())
+                    {
+                        sb.AppendLine($"{propertyInfo.Name} = {propertyInfo.GetValue(globalObject, null).ToString()}");
+                    }
+                }
             }
 
             return sb.ToString();
