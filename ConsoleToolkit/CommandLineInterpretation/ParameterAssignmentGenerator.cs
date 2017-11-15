@@ -45,8 +45,13 @@ namespace ConsoleToolkit.CommandLineInterpretation
         public static object Generate(MemberInfo memberInfo, Type memberType, out Type[] parameterTypes, MemberInfo parent = null)
         {
             var parameters = new List<ParameterExpression>();
-            var item = Expression.Parameter(typeof(T), "command");
-            parameters.Add(item);
+            ParameterExpression item = null;
+            if (!memberInfo.IsStatic())
+            {
+                item = Expression.Parameter(typeof(T), "command");
+                parameters.Add(item);
+            }
+
             if (IsSimpleAssignment(memberType))
             {
                 return GenerateSimpleMemberAssignment(memberInfo, memberType, out parameterTypes, parent, parameters, item);
@@ -66,7 +71,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
             var value = Expression.Parameter(memberType, "value");
             parameters.Add(value);
             var expression = ConstructResultAssigment(memberInfo, item, value, parent);
-            var genericMakeLambda = typeof (ParameterAssignmentGenerator<T>).GetMethod("MakeLambda1",
+            var genericMakeLambda = typeof (ParameterAssignmentGenerator<T>).GetMethod(memberInfo.IsStatic() ? "MakeStaticLambda1" : "MakeLambda1",
                 BindingFlags.NonPublic | BindingFlags.Static);
             var makeLambda = genericMakeLambda.MakeGenericMethod(new[] {memberType});
             parameterTypes = new[] {memberType};
@@ -78,9 +83,9 @@ namespace ConsoleToolkit.CommandLineInterpretation
         {
             MemberInitExpression memberInit;
             var nestedValues = InitNestedMemberProperties(memberType, parameters, out memberInit);
-
+            var lambdaGroup = memberInfo.IsStatic() ? "MakeStaticLambda" : "MakeLambda";
             var genericMakeLambdaN =
-                typeof (ParameterAssignmentGenerator<T>).GetMethod(string.Format("MakeLambda{0}", nestedValues.Count),
+                typeof (ParameterAssignmentGenerator<T>).GetMethod($"{lambdaGroup}{nestedValues.Count}",
                     BindingFlags.NonPublic | BindingFlags.Static);
             var makeLambdaN = genericMakeLambdaN.MakeGenericMethod(nestedValues.Select(p => p.Value.Type).ToArray());
             var body = ConstructResultAssigment(memberInfo, item, memberInit, parent);
@@ -172,7 +177,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
         private static Expression ConstructResultAssigment(MemberInfo member, ParameterExpression item, Expression value, MemberInfo parent)
         {
             Expression source;
-            if (IsStatic(member))
+            if (member.IsStatic())
                 source = null;
             else if (parent == null)
                 source = item;
@@ -180,20 +185,6 @@ namespace ConsoleToolkit.CommandLineInterpretation
                 source = Expression.MakeMemberAccess(item, parent);
 
             return Expression.Assign(Expression.MakeMemberAccess(source, member), value);
-        }
-
-        private static bool IsStatic(MemberInfo member)
-        {
-            switch (member)
-            {
-                case PropertyInfo info:
-                    return info.GetGetMethod().IsStatic;
-
-                case FieldInfo fld:
-                    return fld.IsStatic;
-            }
-
-            return false;
         }
 
         private static bool IsSimpleAssignment(Type propertyType)
@@ -208,9 +199,19 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
         // ReSharper disable UnusedMember.Local
 
+        private static Action<T1> MakeStaticLambda1<T1>(Expression body, ParameterExpression[] parameters)
+        {
+            return Expression.Lambda<Action<T1>>(body, parameters).Compile();
+        }
+
         private static Action<T, T1> MakeLambda1<T1>(Expression body, ParameterExpression[] parameters)
         {
             return Expression.Lambda<Action<T, T1>>(body, parameters).Compile();
+        }
+
+        private static Action<T1, T2> MakeStaticLambda2<T1, T2>(Expression body, ParameterExpression[] parameters)
+        {
+            return Expression.Lambda<Action<T1, T2>>(body, parameters).Compile();
         }
 
         private static Action<T, T1, T2> MakeLambda2<T1, T2>(Expression body, ParameterExpression[] parameters)
@@ -218,9 +219,19 @@ namespace ConsoleToolkit.CommandLineInterpretation
             return Expression.Lambda<Action<T, T1, T2>>(body, parameters).Compile();
         }
 
+        private static Action<T1, T2, T3> MakeStaticLambda3<T1, T2, T3>(Expression body, ParameterExpression[] parameters)
+        {
+            return Expression.Lambda<Action<T1, T2, T3>>(body, parameters).Compile();
+        }
+
         private static Action<T, T1, T2, T3> MakeLambda3<T1, T2, T3>(Expression body, ParameterExpression[] parameters)
         {
             return Expression.Lambda<Action<T, T1, T2, T3>>(body, parameters).Compile();
+        }
+
+        private static Action<T1, T2, T3, T4> MakeStaticLambda4<T1, T2, T3, T4>(Expression body, ParameterExpression[] parameters)
+        {
+            return Expression.Lambda<Action<T1, T2, T3, T4>>(body, parameters).Compile();
         }
 
         private static Action<T, T1, T2, T3, T4> MakeLambda4<T1, T2, T3, T4>(Expression body, ParameterExpression[] parameters)

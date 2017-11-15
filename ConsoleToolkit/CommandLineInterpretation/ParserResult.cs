@@ -21,11 +21,15 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
         public ParseStatus Status { get; private set; }
 
-        public ParserResult(BaseCommandConfig command, string name)
+        public ParserResult(BaseCommandConfig command, string name, List<BaseOption> globalOptions)
         {
             _positionals = command.Positionals.ToList();
             _usedPositionals = new List<string>();
-            _options = command.Options
+            IEnumerable<BaseOption> allOptions = command.Options;
+            if (globalOptions != null)
+                allOptions = allOptions.Concat(globalOptions);
+
+            _options = allOptions
                 .SelectMany(o => new[] { OptionCollectionEntry(o) }.Concat(OptionAliases(o)))
                 .ToDictionary(c => c.Key, c => c.Value);
             _usedOptions = new List<BaseOption>();

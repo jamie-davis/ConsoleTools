@@ -42,5 +42,20 @@ namespace ConsoleToolkit.Utilities
         {
             return prop.GetValue(instance, null);
         }
+
+        public static bool IsStatic(this MemberInfo member)
+        {
+            switch (member)
+            {
+                case PropertyInfo info:
+                    return info.GetGetMethod().IsStatic;
+
+                case FieldInfo fld:
+                    return fld.IsStatic;
+            }
+
+            return false;
+        }
+
     }
 }

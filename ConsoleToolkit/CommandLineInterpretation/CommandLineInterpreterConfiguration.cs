@@ -120,6 +120,17 @@ namespace ConsoleToolkit.CommandLineInterpretation
         }
 
         /// <summary>
+        /// Adds a set of global options to the configuration. The type receiving the options must be static.
+        /// </summary>
+        /// <typeparam name="T">The type containg the storage for the options. This type must be static.</typeparam>
+        public GlobalOptionsConfig GlobalOption(Type optionsType)
+        {
+            var config = new GlobalOptionsConfig(optionsType);
+            _globalOptions.Add(config);
+            return config;
+        }
+
+        /// <summary>
         /// Specifies the default command (i.e. the command that gets all of the parameters if this is not a command oriented configuration).
         /// 
         /// Use this when your interface has no commands. It allows all of the options of a command to be specified, but does not need a command

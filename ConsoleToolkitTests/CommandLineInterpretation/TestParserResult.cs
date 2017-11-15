@@ -48,7 +48,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
                 .Option<string>("opt3", (c, s) => c.Opt3 = s)
                     .Alias("3")
                     .Alias("three");
-            _parserResult = new ParserResult(_command, "commandName");
+            _parserResult = new ParserResult(_command, "commandName", null);
         }
 
         [Test]

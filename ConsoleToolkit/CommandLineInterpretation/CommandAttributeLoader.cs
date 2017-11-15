@@ -66,18 +66,18 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
         // ReSharper disable once UnusedMember.Local
         //this is called dynamically
-        private static GlobalOptionsConfig<T> CreateGlobalOptions<T>() where T : class
+        private static GlobalOptionsConfig CreateGlobalOptions(Type optionsType)
         {
-            var config = new GlobalOptionsConfig<T>();
+            var config = new GlobalOptionsConfig(optionsType);
 
-            if (GetMembersWithAttribute<PositionalAttribute>(typeof(T), true).Any())
-                throw new PositionalsCannotBeDeclaredInGlobalOptions(typeof(T));
+            if (GetMembersWithAttribute<PositionalAttribute>(optionsType, true).Any())
+                throw new PositionalsCannotBeDeclaredInGlobalOptions(optionsType);
 
-            var options = GetMembersWithAttribute<OptionAttribute>(typeof(T), true)
+            var options = GetMembersWithAttribute<OptionAttribute>(optionsType, true)
                 .ToList();
 
             foreach (var member in options)
-                AttachOption(member, config, null);
+                AttachOption<object, GlobalOptionsConfig>(member, config, null);
 
             return config;
         }
@@ -113,14 +113,13 @@ namespace ConsoleToolkit.CommandLineInterpretation
             foreach (var member in positionals)
                 AttachPositional(member, commandConfig, optionSet);
             foreach (var member in options)
-                AttachOption(member, commandConfig, optionSet);
+                AttachOption<T, CommandConfig<T>>(member, commandConfig, optionSet);
         }
 
-        private static void AttachOption<T, TCommandConfigType>(AttributedMember<OptionAttribute> optionMember, IOptionContainer<T, TCommandConfigType> commandConfig, AttributedMember<OptionSetAttribute> optionSet) 
-            where T : class 
-            where TCommandConfigType : class
+        private static void AttachOption<T, TCommandConfigType>(AttributedMember<OptionAttribute> optionMember, IOptionContainer<TCommandConfigType> commandConfig, AttributedMember<OptionSetAttribute> optionSet) 
+            where TCommandConfigType : class where T : class
         {
-            var option = MakeOption(optionMember.Attribute, commandConfig, optionMember.MemberInfo, optionMember.Type, optionSet);
+            var option = MakeOption<T, TCommandConfigType>(optionMember.Attribute, commandConfig, optionMember.MemberInfo, optionMember.Type, optionSet);
             var desc = GetDescription(optionMember.MemberInfo);
             if (desc != null)
                 option.Description = desc;
@@ -348,7 +347,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
             return Expression.MakeMemberAccess(source, member);
         }
 
-        private static BaseOption MakeOption<T,TCommandConfigType>(OptionAttribute optionAttribute, IOptionContainer<T,TCommandConfigType> optionContainer, MemberInfo member, Type memberType, AttributedMember<OptionSetAttribute> optionSet) 
+        private static BaseOption MakeOption<T,TCommandConfigType>(OptionAttribute optionAttribute, IOptionContainer<TCommandConfigType> optionContainer, MemberInfo member, Type memberType, AttributedMember<OptionSetAttribute> optionSet) 
             where T : class
             where TCommandConfigType : class
         {
@@ -374,8 +373,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
             return option;
         }
 
-        private static BaseOption CallOptionCreateMethod<T, TCommandConfigType>(IOptionContainer<T, TCommandConfigType> container, string optionName, Type memberType, object optionInitialiser, Type[] parameterTypes) 
-            where T : class
+        private static BaseOption CallOptionCreateMethod<TCommandConfigType>(IOptionContainer<TCommandConfigType> container, string optionName, Type memberType, object optionInitialiser, Type[] parameterTypes) 
             where TCommandConfigType : class
         {
             MethodInfo optionMethod;
@@ -467,10 +465,9 @@ namespace ConsoleToolkit.CommandLineInterpretation
                 if (!optionsClass.IsAbstract || !optionsClass.IsSealed)
                     throw new ArgumentException("Global options defition must be a static class.", nameof(optionsClass));
 
-                var genericCreateMethod = typeof (CommandAttributeLoader).GetMethod("CreateGlobalOptions",
+                var createMethod = typeof (CommandAttributeLoader).GetMethod("CreateGlobalOptions",
                     BindingFlags.Static | BindingFlags.NonPublic);
-                var createMethod = genericCreateMethod.MakeGenericMethod(optionsClass);
-                return MethodInvoker.Invoke(createMethod, null) as BaseGlobalOptionsConfig;
+                return MethodInvoker.Invoke(createMethod, null, optionsClass) as BaseGlobalOptionsConfig;
             }
             catch (TargetInvocationException e)
             {

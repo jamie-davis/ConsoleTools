@@ -1,0 +1,15 @@
+﻿GenericCommand`1
+
+Argument list:
+  0: key
+  1: add
+  2: -gopt
+
+
+
+Command type: GenericCommand`1
+
+CMD[add] Option[]
+
+Global Objects:
+gopt = True
