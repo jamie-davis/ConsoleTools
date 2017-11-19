@@ -20,21 +20,11 @@ GlobalOptions.Environment =
 
 Test: client add bill -e live
 
-ClientAddCommand
-{
-    Name = bill
-}
-
-GlobalOptions.Environment = live
+"e" is not a valid option.
 
 
 Test: client del bill -env test
 
-ClientDelCommand
-{
-    ClientGuid = bill
-}
-
-GlobalOptions.Environment = test
+"env" is not a valid option.
 
 

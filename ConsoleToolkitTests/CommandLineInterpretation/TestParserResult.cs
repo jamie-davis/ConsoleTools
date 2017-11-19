@@ -1,4 +1,5 @@
 ﻿using ApprovalTests.Reporters;
+using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
@@ -48,7 +49,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
                 .Option<string>("opt3", (c, s) => c.Opt3 = s)
                     .Alias("3")
                     .Alias("three");
-            _parserResult = new ParserResult(_command, "commandName", null);
+            _parserResult = new ParserResult(_command, "commandName", null, CommandExecutionMode.CommandLine);
         }
 
         [Test]

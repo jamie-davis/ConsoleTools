@@ -1,0 +1,25 @@
+﻿There is a clash between the all of the                     
+global option names and aliased. The                        
+global option should not be selected for                    
+the command at all.                                         
+                                                            
+All command options:                                        
+Name Aliases                                                
+---- -------                                                
+one  o                                                      
+two  t                                                      
+                                                            
+                                                            
+All global options:                                         
+Name Aliases                                                
+---- -------                                                
+o    one                                                    
+                                                            
+                                                            
+Analysed options:                                           
+Option Valid                                                
+Name   Names  Source                                        
+------ ------ -------                                       
+one    one, o Command                                       
+two    two, t Command                                       
+                                                            

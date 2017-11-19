@@ -12,10 +12,8 @@ pos  A positional configured with an
                                                             
 Options:                                                    
                                                             
-**B         A boolean option configured                     
-            with an expression.                             
-**I         A boolean option configured                     
-            with an expression.                             
-**g,        Global setting.                                 
-**global                                                    
+**B  A boolean option configured with an                    
+     expression.                                            
+**I  A boolean option configured with an                    
+     expression.                                            
                                                             

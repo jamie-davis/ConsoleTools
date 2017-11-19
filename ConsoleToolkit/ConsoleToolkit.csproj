@@ -96,6 +96,7 @@
     <Compile Include="CommandLineInterpretation\ConfigGenerator.cs" />
     <Compile Include="CommandLineInterpretation\KeywordCommandHelpFormatter.cs" />
     <Compile Include="CommandLineInterpretation\KeywordsDesc.cs" />
+    <Compile Include="CommandLineInterpretation\OptionsAnalyser.cs" />
     <Compile Include="CommandLineInterpretation\ParameterAssignmentGenerator.cs" />
     <Compile Include="CommandLineInterpretation\SetterBuilder.cs" />
     <Compile Include="CommandLineInterpretation\ICommandLineParser.cs" />

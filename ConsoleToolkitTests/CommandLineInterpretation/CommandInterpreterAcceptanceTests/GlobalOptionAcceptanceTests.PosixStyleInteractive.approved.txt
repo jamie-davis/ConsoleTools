@@ -20,26 +20,16 @@ GlobalOptions.Environment =
 
 Test: client del bill -e
 
-Not enough parameters for the env option.
+"e" is not a valid option.
 
 
 Test: client add bill -elive
 
-ClientAddCommand
-{
-    Name = bill
-}
-
-GlobalOptions.Environment = live
+"e" is not a valid option.
 
 
 Test: client del bill --env test
 
-ClientDelCommand
-{
-    ClientGuid = bill
-}
-
-GlobalOptions.Environment = test
+"env" is not a valid option.
 
 

@@ -22,7 +22,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
         private static void AddDefaultCommandText(IConsoleAdapter console, BaseCommandConfig defaultCommand, string applicationName, IOptionNameHelpAdorner adorner)
         {
-            console.Write(FormatFullCommandDescription(defaultCommand, string.Format("Usage: {0}", applicationName), adorner, false));
+            console.Write(FormatFullCommandDescription(defaultCommand, null, CommandExecutionMode.CommandLine, string.Format("Usage: {0}", applicationName), adorner, false));
         }
 
         private static void AddCommandListText(IConsoleAdapter console, CommandLineInterpreterConfiguration config, IOptionNameHelpAdorner adorner, CommandExecutionMode executionMode)
@@ -56,13 +56,15 @@ namespace ConsoleToolkit.CommandLineInterpretation
             return false;
         }
 
-        private static IConsoleRenderer FormatFullCommandDescription(BaseCommandConfig command, string prefixText = null, IOptionNameHelpAdorner adorner = null, bool displayCommandName = true)
+        private static IConsoleRenderer FormatFullCommandDescription(BaseCommandConfig command, CommandLineInterpreterConfiguration config, CommandExecutionMode executionMode,
+            string prefixText = null, IOptionNameHelpAdorner adorner = null, bool displayCommandName = true)
         {
             var formatter = new RecordingConsoleAdapter();
             formatter.WrapLine(((IContext)command).Description ?? string.Empty);
 
             var positionalsPresent = command.Positionals.Any();
-            var optionsPresent = command.Options.Any();
+            var commandOptions = new OptionsAnalyser(command, config);
+            var optionsPresent = commandOptions.Any(executionMode);
             if (positionalsPresent || optionsPresent)
             {
                 formatter.WriteLine();
@@ -91,8 +93,9 @@ namespace ConsoleToolkit.CommandLineInterpretation
                 formatter.WriteLine("Options:");
                 formatter.WriteLine();
 
-                var options = command.Options
-                    .Select(o => new { OptionName = GetOptionNameAndAliases(adorner, o), o.Description });
+                var options = commandOptions
+                    .AllOptions(executionMode)
+                    .Select(o => new { OptionName = GetAdornedOptionNames(adorner, o), o.BaseOption.Description });
                 formatter.FormatTable(options, FormattingOptions, ColumnSeperator);
             }
 
@@ -104,10 +107,9 @@ namespace ConsoleToolkit.CommandLineInterpretation
             return ((IContext)command).Description ?? string.Empty;
         }
 
-        private static string GetOptionNameAndAliases(IOptionNameHelpAdorner adorner, BaseOption option)
+        private static string GetAdornedOptionNames(IOptionNameHelpAdorner adorner, OptionsAnalyser.AnalysedOption option)
         {
-            var names = new [] { option.Name }.Concat(option.Aliases);
-            return string.Join(", ", names.Select(n => adorner == null ? n : adorner.Adorn(n)));
+            return string.Join(", ", option.ValidNames.Select(n => adorner == null ? n : adorner.Adorn(n)));
         }
 
         private static string FormatPositionalDescription(BasePositional positional)
@@ -125,9 +127,9 @@ namespace ConsoleToolkit.CommandLineInterpretation
             return p.IsOptional ? string.Format("[{0}]", entry) : entry;
         }
 
-        public static void Describe(BaseCommandConfig command, IConsoleAdapter console, CommandExecutionMode executionMode, IOptionNameHelpAdorner adorner)
+        public static void Describe(BaseCommandConfig command, CommandLineInterpreterConfiguration config, IConsoleAdapter console, CommandExecutionMode executionMode, IOptionNameHelpAdorner adorner)
         {
-            console.Write(FormatFullCommandDescription(command, adorner: adorner));
+            console.Write(FormatFullCommandDescription(command, config, executionMode, adorner: adorner));
         }
 
         public static void DescribeKeywords(IEnumerable<BaseCommandConfig> commands, ICollection<string> parameters, IConsoleAdapter console)

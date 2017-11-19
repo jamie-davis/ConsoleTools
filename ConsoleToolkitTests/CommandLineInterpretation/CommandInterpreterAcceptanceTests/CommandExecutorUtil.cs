@@ -11,7 +11,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
 {
     public static class CommandExecutorUtil
     {
-        public static string Do(CommandLineInterpreterConfiguration config, string[] commands, int width)
+        public static string Do(CommandLineInterpreterConfiguration config, string[] commands, int width, bool interactive, params Func<string>[] otherResults)
         {
             var sb = new StringBuilder();
             var interpreter = new CommandLineInterpreter(config);
@@ -22,7 +22,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
 
                 var args = CommandLineTokeniser.Tokenise(command);
                 string[] errors;
-                var result = interpreter.Interpret(args, out errors, false);
+                var result = interpreter.Interpret(args, out errors, false, interactive);
                 if (errors != null &&errors.Any())
                 {
                     foreach (var e in errors)
@@ -33,6 +33,13 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 else
                 {
                     DisplayType(sb, result);
+
+                    if (otherResults.Any())
+                    {
+                        sb.AppendLine();
+                        foreach (var resultFunc in otherResults)
+                            sb.AppendLine(resultFunc());
+                    }
                 }
 
                 sb.AppendLine();

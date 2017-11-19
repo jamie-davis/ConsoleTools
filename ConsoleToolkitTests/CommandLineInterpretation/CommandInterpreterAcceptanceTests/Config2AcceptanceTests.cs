@@ -85,7 +85,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 @"file 4"
             };
 
-            Approvals.Verify(CommandExecutorUtil.Do(_posix, commands, 50));
+            Approvals.Verify(CommandExecutorUtil.Do(_posix, commands, 50, false));
         }
 
         [Test]
@@ -104,7 +104,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 @"name /A:5,"
             };
 
-            Approvals.Verify(CommandExecutorUtil.Do(_msDos, commands, 50));
+            Approvals.Verify(CommandExecutorUtil.Do(_msDos, commands, 50, false));
         }
 
         [Test]
@@ -130,7 +130,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 @"name 4 -maxSize:5"
             };
 
-            Approvals.Verify(CommandExecutorUtil.Do(_msStd, commands, 50));
+            Approvals.Verify(CommandExecutorUtil.Do(_msStd, commands, 50, false));
         }
         // ReSharper restore UnusedAutoPropertyAccessor.Local
         // ReSharper restore UnusedMember.Local

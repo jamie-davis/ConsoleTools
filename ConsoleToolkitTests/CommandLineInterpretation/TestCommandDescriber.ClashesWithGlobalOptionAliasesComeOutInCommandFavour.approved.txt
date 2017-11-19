@@ -1,0 +1,14 @@
+﻿----+----|----+----|----+----|----+----|                    
+Add to config                                               
+                                                            
+config file add <item> [options]                            
+                                                            
+Parameters:                                                 
+                                                            
+item  Item to add to config.                                
+                                                            
+Options:                                                    
+                                                            
+**global  Diagnostics level                                 
+**g       Global setting.                                   
+                                                            

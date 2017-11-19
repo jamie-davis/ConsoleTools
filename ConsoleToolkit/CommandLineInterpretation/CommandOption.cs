@@ -40,7 +40,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
             if (_actionType.IsGenericType)
             {
                 var genericArguments = _actionType.GetGenericArguments();
-                _paramTypes = genericArguments.Skip(1).ToList();
+                _paramTypes = (IsSelfContained ? genericArguments : genericArguments.Skip(1)).ToList();
                 ParameterCount = _paramTypes.Count();
 
                 var invalidParamType = _paramTypes.FirstOrDefault(t => t != typeof(string) && !CommandLineInterpreterConfiguration.Converters.ContainsKey(t));

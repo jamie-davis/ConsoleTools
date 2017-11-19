@@ -4,7 +4,6 @@ using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.CommandLineInterpretation;
-using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.ConsoleIO.UnitTestUtilities;
@@ -26,6 +25,12 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             public string StringProp { get; set; }
             public bool BoolProp { get; set; }
             public int IntProp { get; set; }
+            public bool Override { get; set; }
+        }
+
+        public static class GlobalOptions
+        {
+            public static string Global { get; set; }
         }
 
         public class Adorner : IOptionNameHelpAdorner
@@ -40,6 +45,11 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         public void SetUp()
         {
             _config = new CommandLineInterpreterConfiguration();
+            _config.GlobalOption(typeof(GlobalOptions))
+                .Option<string>("g", s => { GlobalOptions.Global = s; })
+                .Alias("global")
+                .Description("Global setting.");
+
             _config
                 .Command("first", s => new TestCommand())
                 .Description("Description of the first commmand.");
@@ -149,7 +159,15 @@ a line break.")
         public void SelectedCommandDescriptionIsFormatted()
         {
             _console.WriteLine(RulerFormatter.MakeRuler(_console.WindowWidth));
-            CommandDescriber.Describe(_config.Commands.First(c => c.Name == "exp"), _console, CommandExecutionMode.CommandLine, new Adorner());
+            CommandDescriber.Describe(_config.Commands.First(c => c.Name == "exp"), _config, _console, CommandExecutionMode.CommandLine, new Adorner());
+            Approvals.Verify(_consoleOutInterface.GetBuffer());
+        }
+
+        [Test]
+        public void SelectedInteractiveCommandDescriptionIsFormatted()
+        {
+            _console.WriteLine(RulerFormatter.MakeRuler(_console.WindowWidth));
+            CommandDescriber.Describe(_config.Commands.First(c => c.Name == "exp"), _config, _console, CommandExecutionMode.Interactive, new Adorner());
             Approvals.Verify(_consoleOutInterface.GetBuffer());
         }
 
@@ -231,7 +249,74 @@ a line break.")
                 .Description("Diagnostics level");
 
             _console.WriteLine(RulerFormatter.MakeRuler(_console.WindowWidth));
-            CommandDescriber.Describe(config.Commands.First(), _console, CommandExecutionMode.CommandLine, new Adorner());
+            CommandDescriber.Describe(config.Commands.First(), config, _console, CommandExecutionMode.CommandLine, new Adorner());
+            Approvals.Verify(_consoleOutInterface.GetBuffer());
+        }
+
+        [Test]
+        public void ClashesWithGlobalOptionNamesComeOutInCommandFavour()
+        {
+            var config = new CommandLineInterpreterConfiguration();
+            config.GlobalOption(typeof(GlobalOptions))
+                .Option<string>("g", s => { GlobalOptions.Global = s; })
+                .Alias("global")
+                .Description("Global setting.");
+            config
+                .Command("add", t => new TestCommand())
+                .Description("Add to config")
+                .Keyword("config file", "Config file operations")
+                .Positional<string>("item", (command, s) => { })
+                .Description("Item to add to config.")
+                .Option("g", command => command.IntProp)
+                .Description("Diagnostics level");
+
+            _console.WriteLine(RulerFormatter.MakeRuler(_console.WindowWidth));
+            CommandDescriber.Describe(config.Commands.First(), config, _console, CommandExecutionMode.CommandLine, new Adorner());
+            Approvals.Verify(_consoleOutInterface.GetBuffer());
+        }
+
+        [Test]
+        public void ClashesWithGlobalOptionAliasesComeOutInCommandFavour()
+        {
+            var config = new CommandLineInterpreterConfiguration();
+            config.GlobalOption(typeof(GlobalOptions))
+                .Option<string>("g", s => { GlobalOptions.Global = s; })
+                .Alias("global")
+                .Description("Global setting.");
+            config
+                .Command("add", t => new TestCommand())
+                .Description("Add to config")
+                .Keyword("config file", "Config file operations")
+                .Positional<string>("item", (command, s) => { })
+                .Description("Item to add to config.")
+                .Option("global", command => command.IntProp)
+                .Description("Diagnostics level");
+
+            _console.WriteLine(RulerFormatter.MakeRuler(_console.WindowWidth));
+            CommandDescriber.Describe(config.Commands.First(), config, _console, CommandExecutionMode.CommandLine, new Adorner());
+            Approvals.Verify(_consoleOutInterface.GetBuffer());
+        }
+
+        [Test]
+        public void GlobalOptionExcludedIfItHasNoUniqueNames()
+        {
+            var config = new CommandLineInterpreterConfiguration();
+            config.GlobalOption(typeof(GlobalOptions))
+                .Option<string>("g", s => { GlobalOptions.Global = s; })
+                .Alias("global")
+                .Description("Global setting.");
+            config
+                .Command("add", t => new TestCommand())
+                .Description("Add to config")
+                .Keyword("config file", "Config file operations")
+                .Positional<string>("item", (command, s) => { })
+                .Description("Item to add to config.")
+                .Option("global", command => command.IntProp)
+                .Alias("g")
+                .Description("Diagnostics level");
+
+            _console.WriteLine(RulerFormatter.MakeRuler(_console.WindowWidth));
+            CommandDescriber.Describe(config.Commands.First(), config, _console, CommandExecutionMode.CommandLine, new Adorner());
             Approvals.Verify(_consoleOutInterface.GetBuffer());
         }
     }

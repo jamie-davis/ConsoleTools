@@ -1,5 +1,6 @@
 using ApprovalTests;
 using ApprovalTests.Reporters;
+using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.ConsoleIO;
@@ -101,7 +102,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
         [Test]
         public void ConfigurationShouldBeDescribed()
         {
-            CommandConfigDescriber.Describe(_posix, _console, "POSIX", CommandLineParserConventions.PosixConventions);
+            CommandConfigDescriber.Describe(_posix, _console, "POSIX", CommandLineParserConventions.PosixConventions, CommandExecutionMode.CommandLine);
             var description = _consoleOutInterface.GetBuffer();
             Approvals.Verify(description);
         }
@@ -122,7 +123,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 @"bogus"
             };
 
-            Approvals.Verify(CommandExecutorUtil.Do(_posix, commands, 50));
+            Approvals.Verify(CommandExecutorUtil.Do(_posix, commands, 50, false));
         }
 
         [Test]
@@ -141,7 +142,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 @"c2 name 5 /M:5,"
             };
 
-            Approvals.Verify(CommandExecutorUtil.Do(_msDos, commands, 50));
+            Approvals.Verify(CommandExecutorUtil.Do(_msDos, commands, 50, false));
         }
 
         [Test]
@@ -171,7 +172,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 @"c3 40 text 100 -kidding"
             };
 
-            Approvals.Verify(CommandExecutorUtil.Do(_msStd, commands, 50));
+            Approvals.Verify(CommandExecutorUtil.Do(_msStd, commands, 50, false));
         }
     }
 }

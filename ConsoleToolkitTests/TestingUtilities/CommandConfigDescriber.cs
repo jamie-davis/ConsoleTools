@@ -9,16 +9,16 @@ namespace ConsoleToolkitTests.TestingUtilities
 {
     static class CommandConfigDescriber
     {
-        public static void Describe(CommandLineInterpreterConfiguration config, ConsoleAdapter console, string applicationName, CommandLineParserConventions conventions)
+        public static void Describe(CommandLineInterpreterConfiguration config, ConsoleAdapter console, string applicationName, CommandLineParserConventions conventions, CommandExecutionMode executionMode)
         {
-            CommandDescriber.Describe(config, console, applicationName, CommandExecutionMode.CommandLine);
+            CommandDescriber.Describe(config, console, applicationName, executionMode);
 
             var adorner = MakeAdorner(conventions);
             foreach (var baseCommandConfig in config.Commands)
             {
                 console.WriteLine();
                 console.WriteLine("Description of {0} command:", string.Join(" ", baseCommandConfig.Keywords.Concat(new [] { baseCommandConfig.Name })));
-                CommandDescriber.Describe(baseCommandConfig, console, CommandExecutionMode.CommandLine, adorner);
+                CommandDescriber.Describe(baseCommandConfig, config, console, executionMode, adorner);
             }
         }
 

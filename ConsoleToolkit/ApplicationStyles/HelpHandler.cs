@@ -52,7 +52,7 @@ namespace ConsoleToolkit.ApplicationStyles
                 }
                 else if (partialMatches.Count == 1)
                 {
-                    CommandDescriber.Describe((BaseCommandConfig) partialMatches[0], console, executionMode, Adorner);
+                    CommandDescriber.Describe((BaseCommandConfig) partialMatches[0], _config, console, executionMode, Adorner);
                 }
                 else
                 {

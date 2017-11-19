@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using ApprovalTests;
 using ApprovalTests.Reporters;
+using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.ConsoleIO;
@@ -219,7 +220,7 @@ NOTE: see the NOTE for the --shared option.")]
         [Test]
         public void ConfigurationShouldBeDescribed()
         {
-            CommandConfigDescriber.Describe(_posix, _console, "POSIX", CommandLineParserConventions.PosixConventions);
+            CommandConfigDescriber.Describe(_posix, _console, "POSIX", CommandLineParserConventions.PosixConventions, CommandExecutionMode.CommandLine);
             var description = _consoleOutInterface.GetBuffer();
             Approvals.Verify(description);
         }
@@ -237,7 +238,7 @@ NOTE: see the NOTE for the --shared option.")]
                 @"clone --mirror -- https://github.com/exampleuser/repository-to-mirror.git"
             };
 
-            Approvals.Verify(CommandExecutorUtil.Do(_posix, commands, 50));
+            Approvals.Verify(CommandExecutorUtil.Do(_posix, commands, 50, false));
         }
 
         [Test]
@@ -252,7 +253,7 @@ NOTE: see the NOTE for the --shared option.")]
                 @"clone /mirror https://github.com/exampleuser/repository-to-mirror.git"
             };
 
-            Approvals.Verify(CommandExecutorUtil.Do(_msDos, commands, 50));
+            Approvals.Verify(CommandExecutorUtil.Do(_msDos, commands, 50, false));
         }
 
         [Test]
@@ -269,7 +270,7 @@ NOTE: see the NOTE for the --shared option.")]
                 @"clone -mirror:True https://github.com/exampleuser/repository-to-mirror.git"
             };
 
-            Approvals.Verify(CommandExecutorUtil.Do(_msStd, commands, 50));
+            Approvals.Verify(CommandExecutorUtil.Do(_msStd, commands, 50, false));
         }
         // ReSharper restore UnusedAutoPropertyAccessor.Local
         // ReSharper restore UnusedMember.Local

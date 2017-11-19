@@ -463,7 +463,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
                     throw new ArgumentException("Global options type may not have the Command attribute.", nameof(optionsClass));
 
                 if (!optionsClass.IsAbstract || !optionsClass.IsSealed)
-                    throw new ArgumentException("Global options defition must be a static class.", nameof(optionsClass));
+                    throw new ArgumentException("Global options definition must be a static class.", nameof(optionsClass));
 
                 var createMethod = typeof (CommandAttributeLoader).GetMethod("CreateGlobalOptions",
                     BindingFlags.Static | BindingFlags.NonPublic);

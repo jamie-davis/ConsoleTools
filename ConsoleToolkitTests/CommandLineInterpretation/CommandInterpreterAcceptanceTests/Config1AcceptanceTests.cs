@@ -112,7 +112,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             {
                 _console.WriteLine();
                 _console.WriteLine("Description of {0} command:", baseCommandConfig.Name);
-                CommandDescriber.Describe(baseCommandConfig, _console, CommandExecutionMode.CommandLine, adorner);
+                CommandDescriber.Describe(baseCommandConfig, _posix, _console, CommandExecutionMode.CommandLine, adorner);
             }
 
             var description = _consoleOutInterface.GetBuffer();
@@ -138,7 +138,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 @"bogus"
             };
 
-            Approvals.Verify(CommandExecutorUtil.Do(_posix, commands, 50));
+            Approvals.Verify(CommandExecutorUtil.Do(_posix, commands, 50, false));
         }
 
         [Test]
@@ -164,7 +164,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 @"c3 40 text"
             };
 
-            Approvals.Verify(CommandExecutorUtil.Do(_msDos, commands, 50));
+            Approvals.Verify(CommandExecutorUtil.Do(_msDos, commands, 50, false));
         }
 
         [Test]
@@ -196,7 +196,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 @"c3 40 text 100 -kidding"
             };
 
-            Approvals.Verify(CommandExecutorUtil.Do(_msStd, commands, 50));
+            Approvals.Verify(CommandExecutorUtil.Do(_msStd, commands, 50, false));
         }
     }
 }
