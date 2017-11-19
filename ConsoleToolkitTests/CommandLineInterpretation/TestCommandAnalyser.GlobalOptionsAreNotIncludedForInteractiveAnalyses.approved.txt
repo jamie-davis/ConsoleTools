@@ -1,0 +1,24 @@
+﻿This is an interactive analysis, so the                     
+global option should not be considered                      
+at all.                                                     
+                                                            
+All command options:                                        
+Name Aliases                                                
+---- -------                                                
+one  o                                                      
+two  t                                                      
+                                                            
+                                                            
+All global options:                                         
+Name   Aliases                                              
+------ -------                                              
+global g                                                    
+                                                            
+                                                            
+Analysed options:                                           
+Option Valid                                                
+Name   Names  Source                                        
+------ ------ -------                                       
+one    one, o Command                                       
+two    two, t Command                                       
+                                                            

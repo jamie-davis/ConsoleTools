@@ -152,7 +152,7 @@ namespace ConsoleToolkit.CommandLineInterpretation
         /// <returns>The command config.</returns>
         public CommandConfig<T> Option(string optionName)
         {
-            var commandOption = ConfigGenerator.OptionByName(typeof(T), optionName);
+            var commandOption = ConfigGenerator.OptionByName(typeof(T), optionName, false);
             Options.Add(commandOption);
             _currentContext = commandOption;
             return this;

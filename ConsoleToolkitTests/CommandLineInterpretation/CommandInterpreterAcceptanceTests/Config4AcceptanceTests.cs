@@ -1,5 +1,6 @@
 using ApprovalTests;
 using ApprovalTests.Reporters;
+using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.Testing;
@@ -45,7 +46,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
         [Test]
         public void ConfigurationShouldBeDescribed()
         {
-            CommandConfigDescriber.Describe(_posix, _console, "POSIX", CommandLineParserConventions.PosixConventions);
+            CommandConfigDescriber.Describe(_posix, _console, "POSIX", CommandLineParserConventions.PosixConventions, CommandExecutionMode.CommandLine);
             var description = _consoleOutInterface.GetBuffer();
             Approvals.Verify(description);
         }
@@ -62,7 +63,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 @"import file.dat"
             };
 
-            Approvals.Verify(CommandExecutorUtil.Do(_posix, commands, 50));
+            Approvals.Verify(CommandExecutorUtil.Do(_posix, commands, 50, false));
         }
 
         [Test]
@@ -76,7 +77,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 @"import file.dat"
             };
 
-            Approvals.Verify(CommandExecutorUtil.Do(_msDos, commands, 50));
+            Approvals.Verify(CommandExecutorUtil.Do(_msDos, commands, 50, false));
         }
 
         [Test]
@@ -92,7 +93,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 @"import file.dat"
             };
 
-            Approvals.Verify(CommandExecutorUtil.Do(_msStd, commands, 50));
+            Approvals.Verify(CommandExecutorUtil.Do(_msStd, commands, 50, false));
         }
 
         [Test]
@@ -106,7 +107,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 @"import file*.dat -server server2 -database test -u admin -p adm1n -filter filter1 -f filter2"
             };
 
-            Approvals.Verify(CommandExecutorUtil.Do(_msStd, commands, 50));
+            Approvals.Verify(CommandExecutorUtil.Do(_msStd, commands, 50, false));
         }
 
         // ReSharper restore UnusedAutoPropertyAccessor.Local

@@ -5,26 +5,18 @@ client  Client operations
 Description of client add command:                                                                                                   
 Add a new client with default settings.                                                                                              
                                                                                                                                      
-client add <name> [options]                                                                                                          
+client add <name>                                                                                                                    
                                                                                                                                      
 Parameters:                                                                                                                          
                                                                                                                                      
 name  The name of the client                                                                                                         
                                                                                                                                      
-Options:                                                                                                                             
-                                                                                                                                     
---env, -e  The name of the environment to target.                                                                                    
-                                                                                                                                     
 Description of client del command:                                                                                                   
 Delete a client from the system.                                                                                                     
                                                                                                                                      
-client del <clientguid> [options]                                                                                                    
+client del <clientguid>                                                                                                              
                                                                                                                                      
 Parameters:                                                                                                                          
                                                                                                                                      
 clientguid  The guid of the client                                                                                                   
-                                                                                                                                     
-Options:                                                                                                                             
-                                                                                                                                     
---env, -e  The name of the environment to target.                                                                                    
                                                                                                                                      

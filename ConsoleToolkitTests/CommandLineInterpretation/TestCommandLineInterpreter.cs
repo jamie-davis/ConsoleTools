@@ -648,6 +648,25 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         }
 
         [Test]
+        public void GlobalOptionsAreIgnoredIfTheyClashWithCommandOptionNames()
+        {
+            GlobalOptions.Opt = false;
+
+            var config = new CommandLineInterpreterConfiguration();
+            config.GlobalOption(typeof(GlobalOptions))
+                .Option("opt", () => GlobalOptions.Opt);
+            config.Command("add", s => new GenericCommand<bool> {Name = s})
+                .Option("opt", c => c.Option);
+
+            var interpreter = new CommandLineInterpreter(config);
+            string[] errors;
+            var args = new[] { "add", "-opt" };
+            var result = interpreter.Interpret(args, out errors, false);
+
+            Approvals.Verify(Describe(args, result, errors, new {gopt = GlobalOptions.Opt}));
+        }
+
+        [Test]
         public void GlobalOptionsAreInvalidInInteractiveMode()
         {
             GlobalOptions.Opt = false;

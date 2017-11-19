@@ -1,1 +1,7 @@
-﻿ 
+﻿Description of client:                                                                                                               
+Client operations                                                                                                                    
+                                                                                                                                     
+client add - Add a new client with default settings.                                                                                 
+client del - Delete a client from the system.                                                                                        
+                                                                                                                                     
+                                                                                                                                     

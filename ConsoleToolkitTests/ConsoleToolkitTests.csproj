@@ -83,10 +83,12 @@
     <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\GlobalOptionAcceptanceTestCommands\ClientDelCommand.cs" />
     <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\GlobalOptionAcceptanceTestCommands\GlobalOptions.cs" />
     <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\GlobalOptionAcceptanceTestCommands\Session.cs" />
+    <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\GlobalOptionAcceptanceTests.cs" />
     <Compile Include="CommandLineInterpretation\CommandsForTesting.cs" />
     <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\CommandExecutorUtil.cs" />
     <Compile Include="CommandLineInterpretation\CommandInterpreterAcceptanceTests\Config1AcceptanceTests.cs" />
     <Compile Include="CommandLineInterpretation\MockParserResult.cs" />
+    <Compile Include="CommandLineInterpretation\TestCommandAnalyser.cs" />
     <Compile Include="CommandLineInterpretation\TestCommandAttributeLoader.cs" />
     <Compile Include="CommandLineInterpretation\TestCommandConstructionLambdaGenerator.cs" />
     <Compile Include="CommandLineInterpretation\TestCommandDescriber.cs" />

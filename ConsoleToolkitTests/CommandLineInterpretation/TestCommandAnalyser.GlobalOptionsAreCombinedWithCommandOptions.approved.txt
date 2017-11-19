@@ -1,0 +1,25 @@
+﻿There are no clashes between the global                     
+options and the command options, so all                     
+should be valid in the command.                             
+                                                            
+All command options:                                        
+Name Aliases                                                
+---- -------                                                
+one  o                                                      
+two  t                                                      
+                                                            
+                                                            
+All global options:                                         
+Name   Aliases                                              
+------ -------                                              
+global g                                                    
+                                                            
+                                                            
+Analysed options:                                           
+Option Valid                                                
+Name   Names     Source                                     
+------ --------- -------                                    
+one    one, o    Command                                    
+two    two, t    Command                                    
+global global, g Global                                     
+                                                            

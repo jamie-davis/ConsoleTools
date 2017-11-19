@@ -1,0 +1,27 @@
+﻿There is a clash between the global                         
+option alias and one of the command                         
+option aliases. The global option alias                     
+should not be a valid name for the                          
+global option.                                              
+                                                            
+All command options:                                        
+Name Aliases                                                
+---- -------                                                
+one  o                                                      
+two  t                                                      
+                                                            
+                                                            
+All global options:                                         
+Name   Aliases                                              
+------ -------                                              
+global o                                                    
+                                                            
+                                                            
+Analysed options:                                           
+Option Valid                                                
+Name   Names  Source                                        
+------ ------ -------                                       
+one    one, o Command                                       
+two    two, t Command                                       
+global global Global                                        
+                                                            

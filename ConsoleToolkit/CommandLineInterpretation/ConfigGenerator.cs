@@ -71,16 +71,17 @@ namespace ConsoleToolkit.CommandLineInterpretation
         /// An exact match between the parameter name and a property is preferred, but if there is no exact 
         /// match, a case insensitive match will be acceptable.
         /// </summary>
-        /// <param name="commandType">The command type. The option name must match one of its properties.</typeparam>
+        /// <param name="commandType">The command type. The option name must match one of its properties.</param>
         /// <param name="optionName">The name of the parameter.</param>
+        /// <param name="isCommandIndependent">True, if the option is independent of the command instance.</param>
         /// <returns>The instantiated positional paramter.</returns>
-        public static BaseOption OptionByName(Type commandType, string optionName)
+        public static BaseOption OptionByName(Type commandType, string optionName, bool isCommandIndependent)
         {
             var prop = MatchProperty(commandType, optionName);
             var parameter = Expression.Parameter(commandType);
             var delegateType = typeof(Func<,>).MakeGenericType(new[] { commandType, prop.PropertyType });
             var accessor = Expression.Lambda(delegateType, Expression.MakeMemberAccess(parameter, prop), new[] { parameter });
-            return OptionFromExpression(commandType, optionName, accessor, prop.PropertyType == typeof(bool), true);
+            return OptionFromExpression(commandType, optionName, accessor, prop.PropertyType == typeof(bool), isCommandIndependent);
         }
 
         /// <summary>

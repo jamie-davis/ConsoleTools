@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ConsoleToolkit.ApplicationStyles.Internals;
 
 namespace ConsoleToolkit.CommandLineInterpretation
 {
@@ -21,31 +22,24 @@ namespace ConsoleToolkit.CommandLineInterpretation
 
         public ParseStatus Status { get; private set; }
 
-        public ParserResult(BaseCommandConfig command, string name, List<BaseOption> globalOptions)
+        public ParserResult(BaseCommandConfig command, string name, CommandLineInterpreterConfiguration config, CommandExecutionMode executionMode)
         {
             _positionals = command.Positionals.ToList();
             _usedPositionals = new List<string>();
-            IEnumerable<BaseOption> allOptions = command.Options;
-            if (globalOptions != null)
-                allOptions = allOptions.Concat(globalOptions);
 
+            var optionsAnalyser = new OptionsAnalyser(command, config);
+            var allOptions = optionsAnalyser.AllOptions(executionMode);
             _options = allOptions
-                .SelectMany(o => new[] { OptionCollectionEntry(o) }.Concat(OptionAliases(o)))
+                .SelectMany(OptionCollectionEntries)
                 .ToDictionary(c => c.Key, c => c.Value);
             _usedOptions = new List<BaseOption>();
             ParamObject = command.Create(name);
             Status = ParseStatus.Incomplete;
         }
 
-        private static IEnumerable<KeyValuePair<string, BaseOption>> OptionAliases(BaseOption o)
+        private static IEnumerable<KeyValuePair<string, BaseOption>> OptionCollectionEntries(OptionsAnalyser.AnalysedOption o)
         {
-            return o.Aliases.Select(
-                a => new KeyValuePair<string, BaseOption>(a, o));
-        }
-
-        private static KeyValuePair<string, BaseOption> OptionCollectionEntry(BaseOption o)
-        {
-            return new KeyValuePair<string, BaseOption>(o.Name, o);
+            return o.ValidNames.Select(n => new KeyValuePair<string, BaseOption>(n, o.BaseOption));
         }
 
         public ParseOutcome OptionExtracted(string optionName, string[] arguments)
@@ -148,6 +142,11 @@ namespace ConsoleToolkit.CommandLineInterpretation
         private bool UnusedPositional(BasePositional arg)
         {
             return !arg.AllowMultiple || _usedPositionals.All(p => !ReferenceEquals(arg.ParameterName, p));
+        }
+
+        public IEnumerable<KeyValuePair<string, BaseOption>> GetAllOptions()
+        {
+            return _options;
         }
     }
 }
