@@ -115,16 +115,6 @@ namespace ConsoleToolkitTests.ApplicationStyles.Internals
             }
         }
 
-        [Command]
-        class SelfHandlingCommandWithBadParameter
-        {
-            [CommandHandler]
-            public void Handle(Handler7 notImportant)
-            {
-                
-            }
-        }
-
         // ReSharper restore UnusedParameter.Local
         // ReSharper restore UnusedMember.Local
         #endregion
@@ -222,17 +212,6 @@ namespace ConsoleToolkitTests.ApplicationStyles.Internals
         {
             var commandTypes = new[] { typeof(SelfMultiHandlingCommand) };
             var methods = CommandHandlerLoader.LoadHandlerMethods(typeof (SelfMultiHandlingCommand), commandTypes, _injector);
-            foreach (var commandType in methods)
-            {
-                Console.WriteLine(commandType.CommandType);
-            }
-        }
-
-        [Test, ExpectedException(typeof(CommandHandlerMethodHasUnsupportedParameter))]
-        public void SelfHandlingCommandsMayOnlyAcceptSupportedParameterTypes()
-        {
-            var commandTypes = new[] { typeof(SelfHandlingCommandWithBadParameter) };
-            var methods = CommandHandlerLoader.LoadHandlerMethods(typeof(SelfHandlingCommandWithBadParameter), commandTypes, _injector);
             foreach (var commandType in methods)
             {
                 Console.WriteLine(commandType.CommandType);

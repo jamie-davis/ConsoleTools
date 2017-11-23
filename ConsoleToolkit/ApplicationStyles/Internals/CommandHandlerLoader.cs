@@ -103,9 +103,7 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
                 else
                 {
                     var method = enumerator.Current;
-                    if (method.GetParameters().Any(p => !injector.CanSupply(p.ParameterType)))
-                        throw new CommandHandlerMethodHasUnsupportedParameter(type, method);
-                    
+                   
                     yield return new MethodCommandTypeTuple { Method = method, CommandType = type, HandlerType = type};
                 }
 

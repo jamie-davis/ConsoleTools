@@ -57,6 +57,7 @@
     <Compile Include="ApplicationStyles\Internals\TestCommandAssemblyScanner.cs" />
     <Compile Include="ApplicationStyles\Internals\TestCommandHandlerLoader.cs" />
     <Compile Include="ApplicationStyles\Internals\TestConsoleApplicationBase.cs" />
+    <Compile Include="ApplicationStyles\Internals\TestHandlerParameterValidator.cs" />
     <Compile Include="ApplicationStyles\Internals\TestMethodParameterInjector.cs" />
     <Compile Include="ApplicationStyles\TestCommandDrivenApplication.cs" />
     <Compile Include="ApplicationStyles\TestConsoleApplication.cs" />

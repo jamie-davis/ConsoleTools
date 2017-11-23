@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="ApplicationStyles\CommandDrivenApplication.cs" />
     <Compile Include="ApplicationStyles\ConsoleApplication.cs" />
+    <Compile Include="ApplicationStyles\HandlerParameterValidator.cs" />
     <Compile Include="ApplicationStyles\HelpHandler.cs" />
     <Compile Include="ApplicationStyles\Internals\CommandAssemblyScanner.cs" />
     <Compile Include="ApplicationStyles\Internals\CommandExecutionMode.cs" />

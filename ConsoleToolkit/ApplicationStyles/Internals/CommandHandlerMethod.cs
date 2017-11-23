@@ -13,6 +13,8 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
             Execute(app, command, injector);
         }
 
+        public MethodInfo HandlerMethod => _method;
+
         private readonly MethodInfo _method;
         private readonly Type _commandType;
 
@@ -47,6 +49,7 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
         }
 
         public Type CommandType { get; private set; }
+
         public void Execute(ConsoleApplicationBase app, object command, IConsoleAdapter console, MethodParameterInjector injector, CommandExecutionMode executionMode)
         {
             try
@@ -59,5 +62,7 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
                 Toolkit.HandleException(e, command, injector);
             }
         }
+
+        public MethodInfo HandlerMethod => _method;
     }
 }
