@@ -82,10 +82,11 @@ namespace ConsoleToolkit.ApplicationStyles
 
         private static void ExecuteHandler(ConsoleApplication app, object command)
         {
+            app.OnCommandLineValid(command);
+
             var handler = app.Handlers.FirstOrDefault().Value;
             if (handler != null)
             {
-                app.OnCommandLineValid(command);
                 if (Environment.ExitCode == 0)
                     handler.Execute(app, command, app.Console, app.Injector.Value, CommandExecutionMode.CommandLine);
                 RunPostCommandMethod(app);

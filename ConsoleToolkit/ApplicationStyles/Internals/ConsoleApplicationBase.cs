@@ -252,10 +252,11 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
 
         internal static void ExecuteCommand(ConsoleApplicationBase app, object command, CommandExecutionMode executionMode)
         {
+            app.OnCommandLineValid(command);
+
             ICommandHandler handler;
             if (app.Handlers.TryGetValue(command.GetType(), out handler))
             {
-                app.OnCommandLineValid(command);
                 if (Environment.ExitCode == 0)
                     handler.Execute(app, command, app.Console, app.Injector.Value, executionMode);
                 RunPostCommandMethod(app);
@@ -265,6 +266,11 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
                 app.Console.WrapLine("No command handler found.");
                 Environment.ExitCode = app.MissingCommandHandlerExitCode;
             }
+        }
+
+        protected void ValidateConfig()
+        {
+            HandlerParameterValidator.ValidateHandlers(Handlers.Values, Injector.Value);
         }
 
         private static void RunPostCommandMethod(ConsoleApplicationBase app)

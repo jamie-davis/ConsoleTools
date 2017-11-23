@@ -1,6 +1,5 @@
 using System;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.Utilities;
 
@@ -25,6 +24,8 @@ namespace ConsoleToolkit.ApplicationStyles.Internals
         {
             Execute(command, injector);
         }
+
+        public MethodInfo HandlerMethod => _method;
 
         private void Execute(object command, MethodParameterInjector injector)
         {

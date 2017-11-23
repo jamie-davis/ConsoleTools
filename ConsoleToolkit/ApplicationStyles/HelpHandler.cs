@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.ConsoleIO;
@@ -60,5 +61,7 @@ namespace ConsoleToolkit.ApplicationStyles
                 }
             }
         }
+
+        public MethodInfo HandlerMethod => null;
     }
 }

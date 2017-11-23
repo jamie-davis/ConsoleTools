@@ -61,7 +61,23 @@ namespace ConsoleToolkit.ApplicationStyles
                 return;
             }
 
+            app.PostInitialParse();
+            app.ValidateConfig();
+
             ExecuteCommand(app, command, CommandExecutionMode.CommandLine);
+        }
+
+        /// <summary>
+        /// This method is called after the initial command line parsing is complete but before any attempt is made to execute the command. This also
+        /// precedes handler validation, and is therefore a valid place to initialise injection parameters. Placing such initialisation here allows 
+        /// the injection parameters to be constructed using global option values, which will have been evaluated at this point.
+        /// <remarks>
+        /// This method will not be called if the command line parameters are invalid, or for the automatic call of the help command (which is used when 
+        /// no command is specified). However, it should be noted that it will be called for explicit invocations of the application help command.</remarks>
+        /// </summary>
+        protected virtual void PostInitialParse()
+        {
+        
         }
 
         private static void ConfigureHelpHandler(CommandDrivenApplication app, CommandLineInterpreter commandLineInterpreter)
