@@ -16,7 +16,9 @@ namespace ConsoleToolkit.CommandLineInterpretation
                 foreach (var command in keys)
                 {
                     int partialLength;
-                    if (MatchWithKeyword(command, args, out partialLength) || string.Compare(args[0], command.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
+                    if (MatchWithKeyword(command, args, out partialLength) 
+                        || (command.Keywords.Count == 0 
+                            && string.Compare(args[0], command.Name, StringComparison.InvariantCultureIgnoreCase) == 0))
                     {
                         return new SelectionResult
                         {
