@@ -145,6 +145,26 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         }
 
         [Test]
+        public void KeywordsAreMandatory()
+        {
+            //Arrange
+            var commands = new List<ICommandKeys>
+            {
+                new FakeCommand("list", "include"), 
+                new FakeCommand("list", "exclude"), 
+                new FakeCommand("options", "list"),
+                new FakeCommand("options", "add") 
+            };
+            var args = new[] {"list", "ex"};
+
+            //Act
+            var result = CommandSelector.Select(args, commands);
+
+            //Assert
+            Assert.That(result.Command, Is.Null);
+        }
+
+        [Test]
         public void SelectedCommandIsNullIsNotMatched()
         {
             //Arrange
