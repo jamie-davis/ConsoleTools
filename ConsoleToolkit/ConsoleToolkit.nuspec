@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>$id$</id>
-    <version>1.4.0</version>
+    <version>1.4.1</version>
     <title>Console Toolkit</title>
     <authors>Jamie Davis</authors>
     <owners>Jamie Davis</owners>
@@ -18,7 +18,7 @@
     
     Global options can only be specified for CommandDrivenApplications, general ConsoleApplications do not need the concept, and interactive only ConsoleApplications can already implement the feature.
     </releaseNotes>
-    <copyright>Copyright 2014-2017</copyright>
+    <copyright>Copyright 2014-2018</copyright>
     <tags>Console Toolkit .NET</tags>
   </metadata>
 </package>

@@ -8,7 +8,7 @@ copy ..\ConsoleToolKit\bin\release\*.xml "ConsoleToolkit %consoletoolsversion%"
 copy ..\ConsoleToolKit\bin\release\*.dll "ConsoleToolkit_current"
 copy ..\ConsoleToolKit\bin\release\*.xml "ConsoleToolkit_current"
 
-.nuget\nuget pack ..\ConsoleToolkit\ConsoleToolkit.csproj -outputdirectory "ConsoleToolkit_current" -IncludeReferencedProjects -Prop Configuration=Release -symbols
+nuget pack ..\ConsoleToolkit\ConsoleToolkit.csproj -outputdirectory "ConsoleToolkit_current" -IncludeReferencedProjects -Prop Configuration=Release -symbols
 
 copy "ConsoleToolkit_current\*.nupkg" "ConsoleToolkit %consoletoolsversion%"
 
