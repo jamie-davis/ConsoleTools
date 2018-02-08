@@ -438,18 +438,18 @@
             This class interprets a set of command line arguments.
             </summary>
         </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreter.GetOptionsAndAliases(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,ConsoleToolkit.CommandLineInterpretation.BaseOption}})">
+            <summary>
+            Get the full list of ways each option can be referenced.
+            </summary>
+            <param name="options">All of the options with their reference name.</param>
+            <returns>A list of IOption implementations.</returns>
+        </member>
         <member name="T:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreter.OptionAlias">
             <summary>
             An alias for an option. This references the original option by one of its alias names.
             This is returned as part of an enumerable set of <see cref="T:ConsoleToolkit.CommandLineInterpretation.IOption"/> implementations.
             </summary>
-        </member>
-        <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreter.GetOptionsAndAliases(ConsoleToolkit.CommandLineInterpretation.BaseCommandConfig)">
-            <summary>
-            Get the full list of ways each option can be referenced. i.e. by its actual name, and all of its aliases.
-            </summary>
-            <param name="command">The command.</param>
-            <returns>A list of IOption implementations.</returns>
         </member>
         <member name="T:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreterConfiguration">
              <summary>
@@ -473,6 +473,12 @@
             </summary>
             <typeparam name="T">The type of the command that is created. Must have a parameterless constructor to be used with this overload.</typeparam>
             <param name="command">The name of the command i.e. the string that the user will enter to identify the command.</param>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreterConfiguration.GlobalOption(System.Type)">
+            <summary>
+            Adds a set of global options to the configuration. The type receiving the options must be static.
+            </summary>
+            <typeparam name="T">The type containg the storage for the options. This type must be static.</typeparam>
         </member>
         <member name="M:ConsoleToolkit.CommandLineInterpretation.CommandLineInterpreterConfiguration.Parameters``1(System.Func{``0})">
             <summary>
@@ -532,6 +538,13 @@
             specification of the provided action (<see cref="!:TAction"/>).
             </summary>
             <typeparam name="TAction">The action that will be executed when the option is supplied with parameters that can be converted.</typeparam>
+        </member>
+        <member name="P:ConsoleToolkit.CommandLineInterpretation.CommandOption`1.IsSelfContained">
+            <summary>
+            True if the option initialiser is "self-contained" and does not need the command instance to be supplied as a parameter. For example, 
+            global options are self-contained because they are not defined on any particular command, but apply to all, so they cannot rely on
+            a command instance. If this is false, then by implication the initialiser requires the owning command instance as its first parameter.
+            </summary>
         </member>
         <member name="T:ConsoleToolkit.CommandLineInterpretation.CommandPositional`2">
             <summary>
@@ -597,6 +610,11 @@
         <member name="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.DescriptionAttribute">
             <summary>
             This attribute provides a literal description string for a command, positional parameter or option.
+            </summary>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.GlobalOptionsAttribute">
+            <summary>
+            This attribute decorates a class and indicates that it is supplying global options for a command driven application.
             </summary>
         </member>
         <member name="T:ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.InteractiveCommandAttribute">
@@ -678,6 +696,112 @@
             This attribute decorates a property as a positional parameter.
             </summary>
         </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.GlobalOptionsConfig">
+            <summary>
+            The configuration information for the global options of a command driven application.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.GlobalOptionsConfig.Option(System.String,System.Action{System.Boolean})">
+            <summary>
+            Specifies the simplest possible option type - there are no parameters, the option is simply present.
+            However, some parsing conventions allow for a boolean to be specified allowing a false to be supplied.
+            In order to support this, the option must accept a boolean and apply it appropriately.
+            </summary>
+            <param name="optionName">The name of the option.</param>
+            <param name="optionInitialiser">The lambda that applies the option to the command parameters type. Note that this must accept a boolean.</param>
+            <returns>The global config.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.GlobalOptionsConfig.Option(System.String,System.Linq.Expressions.Expression{System.Func{System.Boolean}})">
+            <summary>
+            Specifies the simplest possible option type - there are no parameters, the option is simply present.
+            However, some parsing conventions allow for a boolean to be specified allowing a false to be supplied.
+            In order to support this, the option must accept a boolean and apply it appropriately.
+            </summary>
+            <param name="optionName">The name of the option.</param>
+            <param name="optionVariableIndicator">The expression that identifies the boolean that should be set in the command type.</param>
+            <returns>The global config.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.GlobalOptionsConfig.Option``1(System.String,System.Linq.Expressions.Expression{System.Func{``0}})">
+            <summary>
+            Specifies an option taking a single parameter. The property related to the option is identified using a Linq expression.
+            </summary>
+            <param name="optionName">The name of the option.</param>
+            <param name="optionVariableIndicator">The expression that identifies the member that should be set in the command type. The type of the member determines the data type of the option.</param>
+            <returns>The global config.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.GlobalOptionsConfig.Option``1(System.String,System.Action{``0})">
+            <summary>
+            Specifies an option taking a single parameter. The option is set using a caller supplied lambda expression.
+            </summary>
+            <typeparam name="T1">The parameter.</typeparam>
+            <param name="optionName">The name of the option.</param>
+            <param name="optionInitialiser">The action that will be invoked when the option's parameters have been converted.</param>
+            <returns>The global config.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.GlobalOptionsConfig.Option(System.String)">
+            <summary>
+            Specifies an option taking a single parameter. The property related to the option is identified automatically using the option name.
+            </summary>
+            <param name="optionName">The name of the option.</param>
+            <returns>The global config.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.GlobalOptionsConfig.Option``2(System.String,System.Action{``0,``1})">
+            <summary>
+            Specifies an option taking a two parameters.
+            </summary>
+            <typeparam name="T1">The first parameter.</typeparam>
+            <typeparam name="T2">The second parameter.</typeparam>
+            <param name="optionName">The name of the option.</param>
+            <param name="optionInitialiser">The action that will be invoked when the option's parameters have been converted.</param>
+            <returns>The global config.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.GlobalOptionsConfig.Option``3(System.String,System.Action{``0,``1,``2})">
+            <summary>
+            Specifies an option taking a two parameters.
+            </summary>
+            <typeparam name="T1">The first parameter.</typeparam>
+            <typeparam name="T2">The second parameter.</typeparam>
+            <typeparam name="T3">The third parameter.</typeparam>
+            <param name="optionName">The name of the option.</param>
+            <param name="optionInitialiser">The action that will be invoked when the option's parameters have been converted.</param>
+            <returns>The global config.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.GlobalOptionsConfig.Description(System.String)">
+            <summary>
+            Use this method to provide descriptive text. The description is context sensitive and will be applied to the command, 
+            option or parameter that is currently being configured. Therefore, you must specify the appropriate description before 
+            configuring more detail.
+            </summary>
+            <param name="text">The descriptive test.</param>
+            <returns>The global config.</returns>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.GlobalOptionsConfig.Alias(System.String)">
+            <summary>
+            Set an alias for the current option.
+            </summary>
+            <param name="alias">The alias to set.</param>
+            <returns>The global config.</returns>
+        </member>
+        <member name="T:ConsoleToolkit.CommandLineInterpretation.IOptionContainer`1">
+            <summary>
+            This interface defines a type that can hold command options. This abstraction allows option parsing to be shared between different options sources, such as command definitions and global option definitions.
+            </summary>
+            <typeparam name="T">The type that the extracted options will target.</typeparam>
+            <typeparam name="TCommandConfigType">The (fluent) command config that implements this interface. (The option methods are part of a fluent interface and must return the correct container type.)</typeparam>
+        </member>
+        <member name="P:ConsoleToolkit.CommandLineInterpretation.IOptionContainer`1.Options">
+            <summary>
+            A list of extracted options.
+            </summary>
+        </member>
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.IOptionContainer`1.Description(System.String)">
+            <summary>
+            Use this method to provide descriptive text. The description is context sensitive and will be applied to the option
+            that is currently being configured.
+            </summary>
+            <param name="text">The descriptive test.</param>
+            <returns>The config.</returns>
+        </member>
         <member name="T:ConsoleToolkit.CommandLineInterpretation.IOptionNameHelpAdorner">
             <summary>
             This interface defines a mechanism for translating option names for display in help text.
@@ -715,7 +839,7 @@
             <param name="positionalVariableIdentifier">The expression that identifies the field that should receive the parameter value.</param>
             <returns>The constructed <see cref="T:ConsoleToolkit.CommandLineInterpretation.CommandPositional`2"/>.</returns>
         </member>
-        <member name="M:ConsoleToolkit.CommandLineInterpretation.ConfigGenerator.OptionByName``1(System.String)">
+        <member name="M:ConsoleToolkit.CommandLineInterpretation.ConfigGenerator.OptionByName(System.Type,System.String,System.Boolean)">
             <summary>
             Generate a <see cref="T:ConsoleToolkit.CommandLineInterpretation.CommandOption`1"/> using a parameter name
             string and the type of the command object. The parameter name will be matched to a property of
@@ -724,8 +848,9 @@
             An exact match between the parameter name and a property is preferred, but if there is no exact 
             match, a case insensitive match will be acceptable.
             </summary>
-            <typeparam name="T">The command type. The option name must match one of its properties.</typeparam>
+            <param name="commandType">The command type. The option name must match one of its properties.</param>
             <param name="optionName">The name of the parameter.</param>
+            <param name="isCommandIndependent">True, if the option is independent of the command instance.</param>
             <returns>The instantiated positional paramter.</returns>
         </member>
         <member name="M:ConsoleToolkit.CommandLineInterpretation.ConfigGenerator.MatchProperty(System.Type,System.String)">
