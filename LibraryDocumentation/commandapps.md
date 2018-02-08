@@ -111,7 +111,25 @@ class Program : CommandDrivenApplication`
 }
 {% endhighlight %}
 
-* If you wish to perform initialisation only if the command line parameters are valid, override `OnCommandLineValid`. This method is called before the command handler is executed, and is passed the valid command as an `object` reference.
+* The `CommandDrivenApplication` base class also has an overridable `PostInitialParse` method which is called by the Toolkit just after the validation of the command line parameters, but before the command handler is called. At this point, the [global options](globaloptions.html) will have been initialised with the result of command line parsing. This will only be invoked once, and is the best place to initialise any [objects to be injected into your command handlers](ioc.html) that depend on global options.
+
+{% highlight csharp %}
+{
+    static void Main(string[] args)
+    {
+        Toolkit.Execute<Program>(args);
+    }
+
+    protected override void PostInitialParse()
+    {
+        RegisterInjectionInstance(new Environment(GlobalOptions.Environment));
+
+        base.PostInitialParse();
+    }
+}
+{% endhighlight %}
+
+* If you wish to perform initialisation only if the command line parameters are valid, override `OnCommandLineValid`. This method is called before the command handler is executed, and is passed the valid command as an `object` reference. In an interactive session, this will be called after the parsing of every interactive command.
 
 {% highlight csharp %}
 class Program : CommandDrivenApplication

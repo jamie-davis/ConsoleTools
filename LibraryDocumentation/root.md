@@ -18,8 +18,9 @@ The Console Toolkit documentation covers the following areas:
 	2. [Positional Parameters](positionalParameters.html)
 	3. [Options](options.html)
 	4. [Reusing options through OptionSet](optionsets.html)
-	5. [Defining handlers](defininghandlers.html)
-	6. [Multi-word commands](multiwordcommands.html)
+	5. [Global Options](globaloptions.html)
+	6. [Defining handlers](defininghandlers.html)
+	7. [Multi-word commands](multiwordcommands.html)
 * Formatting output on the console.
 	1. [Output Streams And Adapters](outputstreams.html)
 	1. [Basic Output Features](output.html)
