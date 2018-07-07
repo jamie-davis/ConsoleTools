@@ -47,12 +47,15 @@ namespace ConsoleToolkitTests.ApplicationStyles.Internals
 
         #endregion
 
-        [Test, ExpectedException(typeof(CallOrderViolationException))]
+        [Test]
         public void MultiplePostInitsThrow()
         {
-            var app = new TestConsoleApp();
-            app.CallPostInit();
-            app.CallPostInit(); //second call is invalid.
+            Assert.Throws<CallOrderViolationException>(() =>
+            {
+                var app = new TestConsoleApp();
+                app.CallPostInit();
+                app.CallPostInit(); //second call is invalid.
+            });
         }
 
         [Test]

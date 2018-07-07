@@ -4,7 +4,6 @@ using System.Reflection;
 using ApprovalUtilities.Utilities;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
-using ConsoleToolkit.Utilities;
 using NUnit.Framework;
 
 namespace ConsoleToolkitTests.CommandLineInterpretation

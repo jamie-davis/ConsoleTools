@@ -373,10 +373,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             _defaultNameCommand = CommandAttributeLoader.Load(typeof (DefaultName)) as CommandConfig<DefaultName>;
         }
 
-        [Test, ExpectedException]
+        [Test]
         public void TypesThatAreNotCommandsCannotBeLoaded()
         {
-            CommandAttributeLoader.Load(typeof(InvalidBecauseNotACommand));
+            Assert.That(() => CommandAttributeLoader.Load(typeof(InvalidBecauseNotACommand)), Throws.InstanceOf(typeof(Exception)));
         }
 
         [Test]
@@ -502,10 +502,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Assert.That(option.IsBoolean, Is.True);
         }
 
-        [Test, ExpectedException(typeof (DuplicateOptionName))]
+        [Test]
         public void CommandWithDuplicateOptionNameThrowsOnLoad()
         {
-            CommandAttributeLoader.Load(typeof (CommandWithDuplicateOptionName));
+            Assert.Throws<DuplicateOptionName>(() => CommandAttributeLoader.Load(typeof (CommandWithDuplicateOptionName)));
         }
 
         [Test]
@@ -623,10 +623,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Assert.That(result, Is.EqualTo("First,Second,Third"));
         }
 
-        [Test, ExpectedException]
+        [Test]
         public void RepeatingOptionTypeCannotBeCollection()
         {
-            var config = CommandAttributeLoader.Load(typeof(RepeatingListCommand)) as CommandConfig<RepeatingListCommand>;
+            Assert.That(() => CommandAttributeLoader.Load(typeof(RepeatingListCommand)), Throws.InstanceOf(typeof(Exception)));
         }
 
         [Test]
@@ -773,10 +773,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Assert.That(option.IsBoolean, Is.True);
         }
 
-        [Test, ExpectedException(typeof(DuplicateOptionName))]
+        [Test]
         public void GlobalConfigWithDuplicateOptionNameThrowsOnLoad()
         {
-            CommandAttributeLoader.LoadGlobalOptions(typeof(GlobalOptionsWithDuplicateOptionName));
+            Assert.Throws<DuplicateOptionName>(() => CommandAttributeLoader.LoadGlobalOptions(typeof(GlobalOptionsWithDuplicateOptionName)));
         }
     }
 }

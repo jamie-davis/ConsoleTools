@@ -145,28 +145,28 @@ namespace ConsoleToolkitTests.ApplicationStyles.Internals
             Assert.That(handler.CommandType, Is.EqualTo(typeof(Command)));
         }
 
-        [Test, ExpectedException(typeof (AmbiguousCommandHandler))]
+        [Test]
         public void MultiHandlerRoutinesThrow()
         {
-            CommandHandlerLoader.Load(typeof(Handler2), _commandTypes, _injector);
+            Assert.Throws<AmbiguousCommandHandler>(() => CommandHandlerLoader.Load(typeof(Handler2), _commandTypes, _injector));
         }
 
-        [Test, ExpectedException(typeof (NoCommandHandlerMethodFound))]
+        [Test]
         public void MissingHandlerRoutineThrows()
         {
-            CommandHandlerLoader.Load(typeof(Handler3), _commandTypes, _injector);
+            Assert.Throws<NoCommandHandlerMethodFound>(() => CommandHandlerLoader.Load(typeof(Handler3), _commandTypes, _injector));
         }
 
-        [Test, ExpectedException(typeof(CommandHandlerDoesNotHaveAttribute))]
+        [Test]
         public void NoHandlerAttributeThrows()
         {
-            CommandHandlerLoader.Load(typeof(Command), _commandTypes, _injector);
+            Assert.Throws<CommandHandlerDoesNotHaveAttribute>(() => CommandHandlerLoader.Load(typeof(Command), _commandTypes, _injector));
         }
 
-        [Test, ExpectedException(typeof(CommandHandlerMustHaveDefaultConstructor))]
+        [Test]
         public void NoDefaultConstructorThrows()
         {
-            CommandHandlerLoader.Load(typeof(Handler4), _commandTypes, _injector);
+            Assert.Throws<CommandHandlerMustHaveDefaultConstructor>(() => CommandHandlerLoader.Load(typeof(Handler4), _commandTypes, _injector));
         }
 
         [Test]
@@ -177,10 +177,10 @@ namespace ConsoleToolkitTests.ApplicationStyles.Internals
         }
         // ReSharper disable ReturnValueOfPureMethodIsNotUsed
 
-        [Test, ExpectedException(typeof(MultipleHandlersForCommand))]
+        [Test]
         public void MultipleHandlerMethodsForSameCommandThrows()
         {
-            CommandHandlerLoader.LoadHandlerMethods(typeof(Handler6), _commandTypes, _injector).Count();
+            Assert.Throws<MultipleHandlersForCommand>(() => CommandHandlerLoader.LoadHandlerMethods(typeof(Handler6), _commandTypes, _injector).Count());
         }
 
         [Test]
@@ -207,15 +207,19 @@ namespace ConsoleToolkitTests.ApplicationStyles.Internals
             Assert.That(handler.CommandType, Is.EqualTo(typeof(SelfHandlingCommand)));
         }
 
-        [Test, ExpectedException(typeof(CommandsMayOnlyDeclareOneHandlerMethod))]
+        [Test]
         public void SelfHandlingCommandsMayOnlyDeclareOneHandler()
         {
-            var commandTypes = new[] { typeof(SelfMultiHandlingCommand) };
-            var methods = CommandHandlerLoader.LoadHandlerMethods(typeof (SelfMultiHandlingCommand), commandTypes, _injector);
-            foreach (var commandType in methods)
+            Assert.Throws<CommandsMayOnlyDeclareOneHandlerMethod>(() =>
             {
-                Console.WriteLine(commandType.CommandType);
-            }
+                var commandTypes = new[] {typeof(SelfMultiHandlingCommand)};
+                var methods =
+                    CommandHandlerLoader.LoadHandlerMethods(typeof(SelfMultiHandlingCommand), commandTypes, _injector);
+                foreach (var commandType in methods)
+                {
+                    Console.WriteLine(commandType.CommandType);
+                }
+            });
         }
         // ReSharper restore IteratorMethodResultIsIgnored
         // ReSharper restore ReturnValueOfPureMethodIsNotUsed

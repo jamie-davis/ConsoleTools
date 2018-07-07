@@ -81,12 +81,13 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Assert.That(instance, Is.InstanceOf<TargetTypeWithSetters>());
         }
 
-        [Test, ExpectedException(typeof(InstanceConstructor<TargetTypeWithConstructor>.NoConstructorWithParametersMathingPropertyFound))]
+        [Test]
         public void MakeUsingConstructorThrowsIfConstructorNotFound()
         {
             var bogusProp = typeof (TargetTypeWithConstructor).GetProperty("V1");
             var props = MakeProps<TargetTypeWithConstructor>(new object[] { "A", 10, 45.5 }).Concat(new [] {new PropertySource {Property = bogusProp, Value = 45}});
-            InstanceConstructor<TargetTypeWithConstructor>.MakeInstanceUsingConstructor(props);
+            TestDelegate call = () => InstanceConstructor<TargetTypeWithConstructor>.MakeInstanceUsingConstructor(props);
+            Assert.Throws<InstanceConstructor<TargetTypeWithConstructor>.NoConstructorWithParametersMathingPropertyFound>(call);
         }
 
         [Test]

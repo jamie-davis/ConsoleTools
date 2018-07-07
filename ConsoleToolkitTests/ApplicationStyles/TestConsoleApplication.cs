@@ -458,16 +458,16 @@ namespace ConsoleToolkitTests.ApplicationStyles
             Assert.That(TestApp.LastTestApp.TestOptValue, Is.True);
         }
 
-        [Test, ExpectedException(typeof(MultipleHandlersForCommand))]
+        [Test]
         public void ApplicationWithMultipleCommandHandlersWillNotInitialise()
         {
-            UnitTestAppRunner.Run<MultipleCommandHandlerApp>(new string[] { });
+            Assert.Throws<MultipleHandlersForCommand>(() => UnitTestAppRunner.Run<MultipleCommandHandlerApp>(new string[] { }));
         }
 
-        [Test, ExpectedException(typeof(MultipleCommandsInvalid))]
+        [Test]
         public void ApplicationWithMultipleCommandsWillNotInitialise()
         {
-            UnitTestAppRunner.Run<MultipleCommandApp>(new string[] { });
+            Assert.Throws<MultipleCommandsInvalid>(() => UnitTestAppRunner.Run<MultipleCommandApp>(new string[] { }));
         }
 
         [Test]
@@ -478,11 +478,11 @@ namespace ConsoleToolkitTests.ApplicationStyles
             Approvals.Verify(_consoleOut.GetBuffer());
         }
 
-        [Test, ExpectedException(typeof(HelpCommandMustBePartOfConfiguration))]
+        [Test]
         public void HelpCommandTypeMustBeAConfiguredCommand()
         {
             Toolkit.Options.ParsingConventions = CommandLineParserConventions.MsDosConventions;
-            UnitTestAppRunner.Run<InvalidHelpApp>(new[] { "/h" }, _consoleOut);
+            Assert.Throws<HelpCommandMustBePartOfConfiguration>(() => UnitTestAppRunner.Run<InvalidHelpApp>(new[] { "/h" }, _consoleOut));
         }
 
         [Test]

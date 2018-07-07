@@ -19,7 +19,7 @@ using NUnit.Framework;
 namespace ConsoleToolkitTests.CommandLineInterpretation
 {
     [TestFixture]
-    [UseReporter(typeof (CustomReporter))]
+    [UseReporter(typeof(CustomReporter))]
     public class TestCommandLineInterpreterConfiguration
     {
         private CommandLineInterpreterConfiguration _config;
@@ -32,7 +32,8 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         // ReSharper disable UnusedMember.Local
         public class CustomParser : ICommandLineParser
         {
-            public void Parse(string[] args, IEnumerable<IOption> options, IEnumerable<IPositionalArgument> positionalArguments, IParserResult result)
+            public void Parse(string[] args, IEnumerable<IOption> options,
+                IEnumerable<IPositionalArgument> positionalArguments, IParserResult result)
             {
                 throw new NotImplementedException();
             }
@@ -59,6 +60,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         public class CustomParamType
         {
             public string Value { get; private set; }
+
             public CustomParamType(char c, string name)
             {
                 Value = c + "-" + name;
@@ -77,28 +79,29 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
                 .Command("second", s => new TestCommand())
                 .Description("The second command is a command with a number of parameters.")
                 .Positional<string>("dateofthing", (command, s) => { })
-                    .Description("The date the thing should have.")
+                .Description("The date the thing should have.")
                 .Positional<string>("numberofthing", (command, s) => { })
-                    .Description("The number of things that should be.");
+                .Description("The number of things that should be.");
             _config
                 .Command("third", s => new TestCommand())
                 .Description("The third command has a number of options but no parameters.")
                 .Option("on", (command, b) => { })
-                    .Description("A simple option with no argument.")
+                .Description("A simple option with no argument.")
                 .Option<string, int>("fiddly", (command, s, n) => { })
-                    .Alias("f")
-                    .Description("An option with two arguments. The arguments need to be described in the text.");
+                .Alias("f")
+                .Description("An option with two arguments. The arguments need to be described in the text.");
             _config
                 .Command("fourth", s => new TestCommand())
-                .Description("The fourth command is really complicated with a number of parameters and also options. This is the sort of command that needs lots of text.")
+                .Description(
+                    "The fourth command is really complicated with a number of parameters and also options. This is the sort of command that needs lots of text.")
                 .Positional<string>("date", (command, s) => { })
-                    .Description("The date the complicated nonsense should be forgotten.")
+                .Description("The date the complicated nonsense should be forgotten.")
                 .Positional<string>("crpyticnum", (command, s) => { })
-                    .Description("The amount of nonsense the user needs to forget.")
+                .Description("The amount of nonsense the user needs to forget.")
                 .Option("ignore", (command, b) => { })
-                    .Description("Use this option to consign this command to history, where it belongs.")
+                .Description("Use this option to consign this command to history, where it belongs.")
                 .Option<string, int>("more", (command, s, n) => { })
-                    .Description("Even more.");
+                .Description("Even more.");
 
             _config
                 .Command("desc", s => new TestCommand())
@@ -106,27 +109,28 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
                     @"Descriptions can contain embedded line breaks -->
 <-- like that one. These should be respected in the formatting. (This is meant to look a bit odd. Also, you should be aware that the deliberate line break is the only one in this text.)")
                 .Positional<string>("pos", (command, s) => { })
-                    .Description(@"A parameter with
+                .Description(@"A parameter with
 a line break.")
                 .Option("lb", (command, b) => { })
-                    .Description("Another\nbreak.");
+                .Description("Another\nbreak.");
 
             _config
                 .Command("exp", s => new TestCommand())
                 .Description(@"Command with a positional and options configured using a Linq Expression, not a lambda.")
                 .Positional("pos", command => command.StringProp)
-                    .Description(@"A positional configured with an expression.")
+                .Description(@"A positional configured with an expression.")
                 .Option("B", command => command.BoolProp)
-                    .Description("A boolean option configured with an expression.")
+                .Description("A boolean option configured with an expression.")
                 .Option("I", command => command.IntProp)
-                    .Description("A boolean option configured with an expression.");
+                .Description("A boolean option configured with an expression.");
 
             _config
                 .Command("go", s => new TestCommand())
-                .Keyword("keyword", "Help text for the keyword(s). This text will be presented next to all of the keywords on which it it defined.")
+                .Keyword("keyword",
+                    "Help text for the keyword(s). This text will be presented next to all of the keywords on which it it defined.")
                 .Description(@"Command with a keyword.")
                 .Positional("pos", command => command.StringProp)
-                    .Description(@"A positional configured with an expression.");
+                .Description(@"A positional configured with an expression.");
 
             _customParser = new CustomParser();
 
@@ -136,14 +140,17 @@ a line break.")
             _console.WriteLine(RulerFormatter.MakeRuler(40));
         }
 
-        [Test, ExpectedException(typeof(InvalidParameterType))]
+        [Test]
         public void InvalidOptionParameterTypeThrows()
         {
-            var config = new CommandLineInterpreterConfiguration()
-                .Command("test", s => s)
-                .Option<XDocument>("opt", (s, x) => { });
-        }
+            void Call() =>
+                new CommandLineInterpreterConfiguration()
+                    .Command("test", s => s)
+                    .Option<XDocument>("opt", (s, x) => { });
 
+            Assert.Throws<InvalidParameterType>(Call);
+        }
+    
         [Test]
         public void OptionsCanHaveAliases()
         {
@@ -153,95 +160,124 @@ a line break.")
                 .Alias("optalias");
         }
 
-        [Test, ExpectedException(typeof(DuplicateOptionName))]
+        [Test]
         public void OptionsAliasSameAsOptionNameThrows()
         {
+            void Call() =>
             new CommandLineInterpreterConfiguration()
                 .Command("test", s => s)
                 .Option<string>("opt", (s, x) => { })
                 .Alias("opt");
+
+            Assert.Throws<DuplicateOptionName>(Call);
         }
 
-        [Test, ExpectedException(typeof(DuplicateOptionName))]
+        [Test]
         public void DuplicateOptionAliasThrows()
         {
+            void Call() =>
             new CommandLineInterpreterConfiguration()
                 .Command("test", s => s)
                 .Option<string>("opt", (s, x) => { })
                 .Alias("o")
                 .Alias("o");
+
+            Assert.Throws<DuplicateOptionName>(Call);
         }
 
-        [Test, ExpectedException(typeof(DuplicateOptionName))]
+        [Test]
         public void AliasSameAsOtherOptionNameThrows()
         {
-            new CommandLineInterpreterConfiguration()
-                .Command("test", s => s)
-                .Option<string>("opt", (s, x) => { })
-                .Option<string>("opt2", (s, x) => { })
-                .Alias("opt");
+            void Call() =>
+                new CommandLineInterpreterConfiguration()
+                    .Command("test", s => s)
+                    .Option<string>("opt", (s, x) => { })
+                    .Option<string>("opt2", (s, x) => { })
+                    .Alias("opt");
+
+            Assert.Throws<DuplicateOptionName>(Call);
         }
 
-        [Test, ExpectedException(typeof(DuplicateOptionName))]
+        [Test]
         public void AliasSameAsOtherOptionAliasThrows()
         {
-            new CommandLineInterpreterConfiguration()
-                .Command("test", s => s)
-                .Option<string>("opt", (s, x) => { })
-                .Alias("alias")
-                .Option<string>("opt2", (s, x) => { })
-                .Alias("alias");
+            void Call() =>
+                new CommandLineInterpreterConfiguration()
+                    .Command("test", s => s)
+                    .Option<string>("opt", (s, x) => { })
+                    .Alias("alias")
+                    .Option<string>("opt2", (s, x) => { })
+                    .Alias("alias");
+
+            Assert.Throws<DuplicateOptionName>(Call);
         }
 
-        [Test, ExpectedException(typeof (AliasNotSupported))]
+        [Test]
         public void CommandAliasThrows()
         {
-            new CommandLineInterpreterConfiguration()
-                .Command("test", s => s)
-                .Alias("invalid")
-                .Option<string>("opt", (s, x) => { });
+            void Call() =>
+                new CommandLineInterpreterConfiguration()
+                    .Command("test", s => s)
+                    .Alias("invalid")
+                    .Option<string>("opt", (s, x) => { });
+
+            Assert.Throws<AliasNotSupported>(Call);
         }
 
-        [Test, ExpectedException(typeof(AliasNotSupported))]
+        [Test]
         public void PositionalAliasThrows()
         {
-            new CommandLineInterpreterConfiguration()
-                .Command("test", s => s)
-                .Positional<string>("pos", (c, b) => {})
-                .Alias("invalid")
-                .Option<string>("opt", (s, x) => { });
+            void Call() =>
+                new CommandLineInterpreterConfiguration()
+                    .Command("test", s => s)
+                    .Positional<string>("pos", (c, b) => { })
+                    .Alias("invalid")
+                    .Option<string>("opt", (s, x) => { });
+
+            Assert.Throws<AliasNotSupported>(Call);
         }
 
-        [Test, ExpectedException(typeof(CommandAlreadySpecified))]
+        [Test]
         public void ConfiguringTheSameCommandTwiceThrows()
         {
             var config = new CommandLineInterpreterConfiguration();
             config
                 .Command("test", s => s)
                 .Option<string>("opt", (s, x) => { });
-            config
-                .Command("test", s => s)
-                .Option<string>("opt", (s, x) => { });
+
+            void Call() =>
+                config
+                    .Command("test", s => s)
+                    .Option<string>("opt", (s, x) => { });
+
+            Assert.Throws<CommandAlreadySpecified>(Call);
         }
 
-        [Test, ExpectedException(typeof(InvalidParameterType))]
+        [Test]
         public void InvalidCommandParameterTypeThrows()
         {
-            new CommandLineInterpreterConfiguration()
-                .Parameters(() => "test")
-                .Positional<XDocument>("opt", (s, x) => { });
+            void Call() =>
+                new CommandLineInterpreterConfiguration()
+                    .Parameters(() => "test")
+                    .Positional<XDocument>("opt", (s, x) => { });
+
+            Assert.Throws<InvalidParameterType>(Call);
         }
 
-        [Test, ExpectedException(typeof(ProgramParametersAlreadySpecified))]
+        [Test]
         public void ConfiguringDefaultCommandTwiceThrows()
         {
             var config = new CommandLineInterpreterConfiguration();
             config
                 .Parameters(() => "test")
                 .Positional<string>("opt", (s, x) => { });
-            config
-                .Parameters(() => "test again")
-                .Positional<int>("opt2", (s, x) => { });
+
+            void Call() =>
+                config
+                    .Parameters(() => "test again")
+                    .Positional<int>("opt2", (s, x) => { });
+
+            Assert.Throws<ProgramParametersAlreadySpecified>(Call);
         }
 
         [Test]
@@ -330,16 +366,18 @@ a line break.")
                 .AllowMultiple();
         }
 
-        [Test, ExpectedException(typeof (ShortCircuitInvalidOnPositionalParameter))]
+        [Test]
         public void ShortCircuitOptionOnAPositionalThrows()
         {
             var config = new CommandLineInterpreterConfiguration();
-            config
-                .Parameters(() => new TestCommand())
-                .Description("Description of the whole program.")
-                .Positional<string>("pos", (command, s) => { })
-                    .Description("A positional parameter.")
-                    .ShortCircuitOption();
+            void Call() => config
+                                .Parameters(() => new TestCommand())
+                                .Description("Description of the whole program.")
+                                .Positional<string>("pos", (command, s) => { })
+                                    .Description("A positional parameter.")
+                                    .ShortCircuitOption();
+
+            Assert.Throws<ShortCircuitInvalidOnPositionalParameter>(Call);
         }
 
         [Test]
@@ -354,12 +392,15 @@ a line break.")
                     .AllowMultiple();
         }
 
-        [Test, ExpectedException(typeof(AllowMultipleInvalid))]
+        [Test]
         public void AllowMultipleIsInvalidOnCommands()
         {
             var config = new CommandLineInterpreterConfiguration();
-            config.Command("x", s => new TestCommand())
+
+            void Call() => config.Command("x", s => new TestCommand())
                     .AllowMultiple();
+
+            Assert.Throws<AllowMultipleInvalid>(Call);
         }
 
         [Test]
@@ -409,12 +450,16 @@ a line break.")
             Assert.That(thePositionalParameterType, Is.EqualTo(typeof(string)));
         }
 
-        [Test, ExpectedException(typeof (DefaultValueMayOnlyBeSpecifiedForPositionalParameters))]
+        [Test]
         public void DefaultValueIsInvalidOnAnOption()
         {
             var config = new CommandLineInterpreterConfiguration();
-            config.Parameters(() => new MultiCaseCommand())
-                .Option("AOne").DefaultValue("true");
+
+            void Call() => config.Parameters(() => new MultiCaseCommand())
+                .Option("AOne")
+                .DefaultValue("true");
+
+            Assert.Throws<DefaultValueMayOnlyBeSpecifiedForPositionalParameters>(Call);
         }
 
         [Test]

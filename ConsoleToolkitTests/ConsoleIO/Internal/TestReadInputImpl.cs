@@ -164,12 +164,15 @@ some text");
             Assert.That(prop.ReadInfo.Prompt, Is.EqualTo("age"));
         }
 
-        [Test, ExpectedException(typeof(ReadPropertyInvalidWithoutTemplate))]
+        [Test]
         public void AnExceptionIsThrownIfReadPropertiesAreUsedWithoutATemplate()
         {
-            _interface.SetInputStream(_intStringData);
-            var template = new {Int = Read.Int().Prompt("age"), String = Read.String()};
-            GetImplWithoutTemplate(template);
+            Assert.Throws<ReadPropertyInvalidWithoutTemplate>(() =>
+            {
+                _interface.SetInputStream(_intStringData);
+                var template = new {Int = Read.Int().Prompt("age"), String = Read.String()};
+                GetImplWithoutTemplate(template);
+            });
         }
 
         [Test]
@@ -179,12 +182,15 @@ some text");
             var impl = new ReadInputImpl<Constructable>(_interface, _adapter).Result;
         }
 
-        [Test, ExpectedException(typeof(ReadPropertyMustBeInitialised))]
+        [Test]
         public void AnExceptionIsThrownIfReadPropertiesAreNullInTemplate()
         {
-            _interface.SetInputStream(_intStringData);
-            var template = new { Int = (Read<int>)null };
-            GetImplByTemplate(template);
+            Assert.Throws<ReadPropertyMustBeInitialised>(() =>
+            {
+                _interface.SetInputStream(_intStringData);
+                var template = new {Int = (Read<int>) null};
+                GetImplByTemplate(template);
+            });
         }
 
         [Test]

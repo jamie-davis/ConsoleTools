@@ -62,10 +62,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Testing
             Assert.That(_console.CursorLeft, Is.EqualTo(0));
         }
 
-        [Test, ExpectedException]
+        [Test]
         public void ReadLineThrowsWhenNoInputIsSet()
         {
-            _console.ReadLine();
+            Assert.That(() => _console.ReadLine(), Throws.InstanceOf(typeof(Exception)));
         }
 
         [Test]

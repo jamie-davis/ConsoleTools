@@ -371,10 +371,10 @@ namespace ConsoleToolkitTests.ApplicationStyles
             Assert.That(TestApp.LastTestApp.TestOptValue, Is.True);
         }
 
-        [Test, ExpectedException(typeof(MultipleHandlersForCommand))]
+        [Test]
         public void ApplicationWithDuplicateCommandHandlersWillNotInitialise()
         {
-            UnitTestAppRunner.Run<DuplicateCommandHandlerApp>(new string[] {});
+            Assert.Throws<MultipleHandlersForCommand>(() => UnitTestAppRunner.Run<DuplicateCommandHandlerApp>(new string[] {}));
         }
 
         [Test]
@@ -403,11 +403,11 @@ namespace ConsoleToolkitTests.ApplicationStyles
             Approvals.Verify(_console.GetBuffer());
         }
 
-        [Test,ExpectedException(typeof(HelpCommandMustBePartOfConfiguration))]
+        [Test]
         public void HelpCommandTypeMustBeAConfiguredCommand()
         {
             Toolkit.Options.ParsingConventions = CommandLineParserConventions.MsDosConventions;
-            UnitTestAppRunner.Run<InvalidHelpCommandApp>(new[] { "helpme" }, _console);
+            Assert.Throws<HelpCommandMustBePartOfConfiguration>(() => UnitTestAppRunner.Run<InvalidHelpCommandApp>(new[] { "helpme" }, _console));
         }
 
         [Test]

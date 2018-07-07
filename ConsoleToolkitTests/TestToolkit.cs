@@ -108,11 +108,14 @@ namespace ConsoleToolkitTests
             Assert.That(TestApp.LastTestApp.GetCommandTypesFromConfig(), Is.EqualTo(new[] { typeof(TestApp.TestAppCommand) }));
         }
 
-        [Test, ExpectedException(typeof(NoApplicationClassFound))]
+        [Test]
         public void ContainingApplicationMustBeAppDerived()
         {
-            var args = new[] {"A", "B"};
-            BadTestApp.Main(args);
+            Assert.Throws<NoApplicationClassFound>(() =>
+            {
+                var args = new[] {"A", "B"};
+                BadTestApp.Main(args);
+            });
         }
     }
 }

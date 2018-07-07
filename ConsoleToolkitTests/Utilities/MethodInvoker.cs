@@ -96,7 +96,7 @@ namespace ConsoleToolkitTests.Utilities
             //We expect no assertion
         }
 
-        [Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "test")]
+        [Test]
         public void ExceptionThrownInMethodEmergesIntact()
         {
             //Arrange
@@ -104,7 +104,7 @@ namespace ConsoleToolkitTests.Utilities
             var method = item.GetType().GetMethod("ThrowMethod");
 
             //Act
-            MethodInvoker.Invoke(method, item, new object[] { 55, "bob" });
+            Assert.That(() => MethodInvoker.Invoke(method, item, 55, "bob"), Throws.TypeOf<ArgumentException>().With.Message.EqualTo("test"));
         }
     }
 }

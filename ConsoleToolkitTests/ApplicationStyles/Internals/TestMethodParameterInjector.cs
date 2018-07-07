@@ -65,12 +65,15 @@ namespace ConsoleToolkitTests.ApplicationStyles.Internals
             Assert.That(injector.GetParameters(_method2, new object[] {this}), Is.EqualTo(new object[] {this, 5, "string"}));
         }
 
-        [Test, ExpectedException]
+        [Test]
         public void AnExceptionIsThrownIfTheParametersCannotBeInjected()
         {
-            var injector = new MethodParameterInjector(new object[]{5});
+            Assert.That(() =>
+            {
+                var injector = new MethodParameterInjector(new object[] {5});
 
-            injector.GetParameters(_method2, new object[] {this});
+                injector.GetParameters(_method2, new object[] {this});
+            }, Throws.InstanceOf(typeof(Exception)));
         }
 
         [Test]

@@ -192,20 +192,20 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Assert.That(item.NestedProp.ToString(), Is.EqualTo("10, string value"));
         }
 
-        [Test, ExpectedException(typeof(NestedOptionTypeInvalid))]
+        [Test]
         public void MixedNestedFieldsAndPropertiesAreInvalid()
         {
             Type[] parameterTypes;
             var propertyInfo = typeof(TestTypeMixedNested).GetProperty("NestedProp");
-            ParameterAssignmentGenerator<TestTypeMixedNested>.Generate(propertyInfo, out parameterTypes);
+            Assert.Throws<NestedOptionTypeInvalid>(() => ParameterAssignmentGenerator<TestTypeMixedNested>.Generate(propertyInfo, out parameterTypes));
         }
 
-        [Test, ExpectedException(typeof(NestedOptionTypeInvalid))]
+        [Test]
         public void NestedClassMustHaveDefaultConstructor()
         {
             Type[] parameterTypes;
             var propertyInfo = typeof(TestTypeBadNewNested).GetProperty("NestedProp");
-            ParameterAssignmentGenerator<TestTypeBadNewNested>.Generate(propertyInfo, out parameterTypes);
+            Assert.Throws<NestedOptionTypeInvalid>(() => ParameterAssignmentGenerator<TestTypeBadNewNested>.Generate(propertyInfo, out parameterTypes));
         }
 
         [Test]
