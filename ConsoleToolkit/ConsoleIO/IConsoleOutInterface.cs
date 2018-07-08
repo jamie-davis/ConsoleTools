@@ -1,6 +1,5 @@
 using System;
 using System.Text;
-using Microsoft.SqlServer.Server;
 
 namespace ConsoleToolkit.ConsoleIO
 {

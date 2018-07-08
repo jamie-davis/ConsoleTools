@@ -19,8 +19,10 @@ namespace ConsoleToolkit.Utilities
         
         public RunTimeTypeBuilder(string assemblyName)
         {
-            _assemblyBuilder = Thread.GetDomain()
-                              .DefineDynamicAssembly(new AssemblyName(assemblyName), AssemblyBuilderAccess.Run);
+            _assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName(Guid.NewGuid().ToString()),
+                AssemblyBuilderAccess.Run);
+//            _assemblyBuilder = Thread.GetDomain()
+//                              .DefineDynamicAssembly(new AssemblyName(assemblyName), AssemblyBuilderAccess.Run);
             _moduleBuilder = _assemblyBuilder.DefineDynamicModule(assemblyName);
         }
 
@@ -39,7 +41,7 @@ namespace ConsoleToolkit.Utilities
                 MakeProperty(typeBuilder, property.Name, property.Type);
             }
 
-            var type = typeBuilder.CreateType();
+            var type = typeBuilder.CreateTypeInfo();
             _typeCache[identity] = type;
             return type;
         }

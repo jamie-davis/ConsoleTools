@@ -5,13 +5,9 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ConsoleToolkit")]
 [assembly: AssemblyDescription(@"A library providing the messy bits of console applications.
 
 This package provides a framework for building console applications, improved handling of input and output to the console, and a rich command line parsing infrastructure.")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ConsoleToolkit")]
 [assembly: AssemblyCopyright("Copyright © 2014 Jamie Davis")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -34,8 +30,5 @@ This package provides a framework for building console applications, improved ha
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.4.1.0")]
-[assembly: AssemblyFileVersion("1.4.1.0")]
-[assembly: AssemblyInformationalVersion("1.4.0")]
 
 [assembly: InternalsVisibleTo("ConsoleToolkitTests")]

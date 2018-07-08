@@ -3,8 +3,6 @@ using System.Runtime.InteropServices;
 
 namespace ConsoleToolkit.ConsoleIO.Internal
 {
-    #if TARGET_FRAMEWORK_4
-
     internal static class ConsoleRedirectionStateDetector
     {
         public static bool IsInputRedirected
@@ -44,6 +42,4 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         [DllImport("kernel32.dll")]
         private static extern IntPtr GetStdHandle(StdHandle std);
     }
-
-    #endif
 }
