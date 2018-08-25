@@ -35,7 +35,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
         [CommandValidator]
         public bool Validate()
         {
-            if (File.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
+            if (File.IndexOfAny("*:".ToCharArray()) >= 0)
                 throw new Exception("Invalid characters in filename.");
 
             return true;

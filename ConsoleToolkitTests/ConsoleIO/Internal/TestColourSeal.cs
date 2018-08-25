@@ -4,12 +4,13 @@ using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
+using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
     [TestFixture]
-    [UseReporter(typeof (DiffReporter))]
+    [UseReporter(typeof (CustomReporter))]
     public class TestColourSeal
     {
         [Test]

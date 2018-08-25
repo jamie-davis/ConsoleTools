@@ -73,7 +73,7 @@ namespace CommandLoadTestAssembly
         }
 
         [MethodImpl(MethodImplOptions.NoOptimization)]
-        public static void Main(string[] args)
+        public static void XMain(string[] args)
         {
             Toolkit.Execute<Program>(args);
         }

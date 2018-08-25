@@ -28,7 +28,7 @@ namespace ConsoleToolkitTests
                 LastTestApp = this;
             }
 
-            public static void Main(string[] args)
+            public static void XMain(string[] args)
             {
                 Toolkit.Execute<TestApp>(args);
             }
@@ -74,7 +74,7 @@ namespace ConsoleToolkitTests
 
         private class BadTestApp
         {
-            public static void Main(string[] args)
+            public static void XMain(string[] args)
             {
                 Toolkit.Execute<BadTestApp>(args);
             }
@@ -92,7 +92,7 @@ namespace ConsoleToolkitTests
         public void ContainingApplicationIsExecuted()
         {
             var args = new[] {"A"};
-            TestApp.Main(args);
+            TestApp.XMain(args);
 
             Assert.That(TestApp.LastTestApp.Initialised, Is.EqualTo(true));
         }
@@ -103,7 +103,7 @@ namespace ConsoleToolkitTests
             //The test app applies a filter to exclude commands declared outside of itself. This allows us to test
             //that the filter is applied.
             var args = new[] {"A"};
-            TestApp.Main(args);
+            TestApp.XMain(args);
 
             Assert.That(TestApp.LastTestApp.GetCommandTypesFromConfig(), Is.EqualTo(new[] { typeof(TestApp.TestAppCommand) }));
         }
@@ -114,7 +114,7 @@ namespace ConsoleToolkitTests
             Assert.Throws<NoApplicationClassFound>(() =>
             {
                 var args = new[] {"A", "B"};
-                BadTestApp.Main(args);
+                BadTestApp.XMain(args);
             });
         }
     }

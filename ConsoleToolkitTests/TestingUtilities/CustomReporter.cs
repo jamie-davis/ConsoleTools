@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+#if NOKLUDGE
 using ApprovalTests.Core;
+#endif
 using ApprovalTests.Reporters;
 
 namespace ConsoleToolkitTests.TestingUtilities
@@ -9,6 +11,7 @@ namespace ConsoleToolkitTests.TestingUtilities
     /// <summary>
     /// Simple utility reporter to choose the quiet reporter on the build server, but the WinMerge reporter for development work.
     /// </summary>
+#if NOKLUDGE
     public class CustomReporter : IEnvironmentAwareReporter
     {
         private static readonly IEnvironmentAwareReporter DefaultReporter = QuietReporter.INSTANCE ;
@@ -44,4 +47,10 @@ namespace ConsoleToolkitTests.TestingUtilities
             return _selectedReporter.IsWorkingInThisEnvironment(forFile) || DefaultReporter.IsWorkingInThisEnvironment(forFile);
         }
     }
+#else
+    public class CustomReporter
+    {
+        
+    }
+#endif
 }

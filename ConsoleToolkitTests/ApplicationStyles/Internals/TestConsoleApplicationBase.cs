@@ -61,7 +61,7 @@ namespace ConsoleToolkitTests.ApplicationStyles.Internals
         [Test]
         public void CommandsAreLocatedPostInit()
         {
-            Program.Main(new []{"one"});
+            Program.XMain(new []{"one"});
             var commands = Program.LastProgram.GetConfig().Commands.Select(c => c.Name).JoinWith(",");
             Assert.That(commands, Is.EqualTo("one,two,three,four,ione,itwo,none,ntwo"));
         }
@@ -69,7 +69,7 @@ namespace ConsoleToolkitTests.ApplicationStyles.Internals
         [Test]
         public void CommandsHandlersAreLocatedPostInit()
         {
-            Program.Main(new []{"one"});
+            Program.XMain(new []{"one"});
             var commands = Program.LastProgram.Handlers.Select(c => c.Value.CommandType.Name).JoinWith(",");
             Assert.That(commands, Is.EqualTo("Command4,Command1,Command2,Command3"));
         }
@@ -77,7 +77,7 @@ namespace ConsoleToolkitTests.ApplicationStyles.Internals
         [Test]
         public void HandlerShouldBeInvoked()
         {
-            Program.Main(new []{"three"});
+            Program.XMain(new []{"three"});
             var result = Program.Executed3;
             Assert.That(result, Is.True);
         }

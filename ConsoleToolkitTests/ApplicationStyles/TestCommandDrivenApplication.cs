@@ -122,7 +122,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
                 LastTestApp = this;
             }
 
-            public static void Main(string[] args)
+            public static void XMain(string[] args)
             {
                 Toolkit.Execute<TestApp>(args);
             }
@@ -220,7 +220,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
                 }
             }
 
-            public static void Main(string[] args)
+            public static void XMain(string[] args)
             {
                 Toolkit.Execute<DuplicateCommandHandlerApp>(args);
             }
@@ -259,7 +259,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
                 }
             }
 
-            public static void Main(string[] args)
+            public static void XMain(string[] args)
             {
                 Toolkit.Execute<HelpCommandApp>(args);
             }
@@ -282,7 +282,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
             {
             }
 
-            public static void Main(string[] args)
+            public static void XMain(string[] args)
             {
                 Toolkit.Execute<InvalidHelpCommandApp>(args);
             }
@@ -306,7 +306,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
                 }
             }
 
-            public static void Main(string[] args)
+            public static void XMain(string[] args)
             {
                 Toolkit.Execute<DefaultExceptionHandlerApp>(args);
             }

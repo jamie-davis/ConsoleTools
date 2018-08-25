@@ -131,7 +131,7 @@ exit";
 
                 //Assert
                 _console.WrapLine("<Session exited>");
-                Approvals.Verify(_testConsole.GetBuffer());
+                ApprovalTests.Approvals.Verify(_testConsole.GetBuffer());
             }
         }
 

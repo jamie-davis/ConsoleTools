@@ -3,12 +3,13 @@ using System.Reflection;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
+using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
 
 namespace ConsoleToolkitTests.ConsoleIO
 {
     [TestFixture]
-    [UseReporter(typeof (DiffReporter))]
+    [UseReporter(typeof (CustomReporter))]
     public class TestCachedColumn
     {
         private static readonly DateTime TestDate = DateTime.Parse("2014-06-11 21:20");

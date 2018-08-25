@@ -86,7 +86,7 @@ namespace ConsoleToolkitTests.ConsoleIO
                 SetConfigTypeFilter(t => t.DeclaringType == GetType());
             }
 
-            public static void Main(string[] args)
+            public static void XMain(string[] args)
             {
                 Toolkit.Execute<ConsoleInputAcceptanceTests.Program1>(args);
             }

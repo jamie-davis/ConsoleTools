@@ -7,12 +7,13 @@ using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.ConsoleIO.Internal.RecordedCommands;
 using ConsoleToolkitTests.ConsoleIO.UnitTestUtilities;
+using ConsoleToolkitTests.TestingUtilities;
 using NUnit.Framework;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal.RecordedCommands
 {
     [TestFixture]
-    [UseReporter(typeof (DiffReporter))]
+    [UseReporter(typeof (CustomReporter))]
     public class TestReplayBuffer
     {
         private const int TestBufferWidth = 20;

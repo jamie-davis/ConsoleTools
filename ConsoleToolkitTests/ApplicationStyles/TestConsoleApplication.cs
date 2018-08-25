@@ -56,7 +56,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
                 LastTestApp = this;
             }
 
-            public static void Main(string[] args)
+            public static void XMain(string[] args)
             {
                 Toolkit.Execute<TestApp>(args);
             }
@@ -138,7 +138,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
                 }
             }
 
-            public static void Main(string[] args)
+            public static void XMain(string[] args)
             {
                 Toolkit.Execute<MultipleCommandHandlerApp>(args);
             }
@@ -172,7 +172,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
                 }
             }
 
-            public static void Main(string[] args)
+            public static void XMain(string[] args)
             {
                 Toolkit.Execute<MultipleCommandApp>(args);
             }
@@ -198,7 +198,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
             {
             }
 
-            public static void Main(string[] args)
+            public static void XMain(string[] args)
             {
                 Toolkit.Execute<MultipleCommandApp>(args);
             }
@@ -235,7 +235,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
                 }
             }
 
-            public static void Main(string[] args)
+            public static void XMain(string[] args)
             {
                 Toolkit.Execute<HelpApp>(args);
             }
@@ -260,7 +260,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
                 public bool Help { get; set; }
             }
 
-            public static void Main(string[] args)
+            public static void XMain(string[] args)
             {
                 Toolkit.Execute<InvalidHelpApp>(args);
             }
@@ -284,7 +284,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
                 }
             }
 
-            public static void Main(string[] args)
+            public static void XMain(string[] args)
             {
                 Toolkit.Execute<SelfHandledCommandApp>(args);
             }
@@ -312,7 +312,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
                 }
             }
 
-            public static void Main(string[] args)
+            public static void XMain(string[] args)
             {
                 Toolkit.Execute<HandlerClassApp>(args);
             }
@@ -344,7 +344,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
                 }
             }
 
-            public static void Main(string[] args)
+            public static void XMain(string[] args)
             {
                 Toolkit.Execute<CustomInjectionApp>(args);
             }
@@ -379,7 +379,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
                 }
             }
 
-            public static void Main(string[] args)
+            public static void XMain(string[] args)
             {
                 Toolkit.Execute<CustomInjectionApp>(args);
             }
