@@ -188,3 +188,6 @@ sync.ffs_db
 
 /.vs/ConsoleToolkit/v15/Server/sqlite3
 /.vs/ConsoleToolkit/DesignTimeBuild/.dtbcache
+
+#Rider
+.idea/

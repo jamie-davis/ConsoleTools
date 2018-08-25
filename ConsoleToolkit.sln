@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteractiveCommandSample", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteractiveOnlyConsoleApplication", "Demos\InteractiveOnlyConsoleApplication\InteractiveOnlyConsoleApplication.csproj", "{6C6765DA-D2D1-499B-9FE4-860D5FD41AC4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreConsoleTest", "CoreConsoleTest\CoreConsoleTest.csproj", "{1951D069-14DC-47AA-89A3-8C5E025A4EB0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -127,6 +129,18 @@ Global
 		{6C6765DA-D2D1-499B-9FE4-860D5FD41AC4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{6C6765DA-D2D1-499B-9FE4-860D5FD41AC4}.Release|x86.ActiveCfg = Release|Any CPU
 		{6C6765DA-D2D1-499B-9FE4-860D5FD41AC4}.Release|x86.Build.0 = Release|Any CPU
+		{1951D069-14DC-47AA-89A3-8C5E025A4EB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1951D069-14DC-47AA-89A3-8C5E025A4EB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1951D069-14DC-47AA-89A3-8C5E025A4EB0}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1951D069-14DC-47AA-89A3-8C5E025A4EB0}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{1951D069-14DC-47AA-89A3-8C5E025A4EB0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1951D069-14DC-47AA-89A3-8C5E025A4EB0}.Debug|x86.Build.0 = Debug|Any CPU
+		{1951D069-14DC-47AA-89A3-8C5E025A4EB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1951D069-14DC-47AA-89A3-8C5E025A4EB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1951D069-14DC-47AA-89A3-8C5E025A4EB0}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{1951D069-14DC-47AA-89A3-8C5E025A4EB0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{1951D069-14DC-47AA-89A3-8C5E025A4EB0}.Release|x86.ActiveCfg = Release|Any CPU
+		{1951D069-14DC-47AA-89A3-8C5E025A4EB0}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -140,5 +154,6 @@ Global
 		{9153184F-0731-4C88-9CDC-D9C44FFC12A1} = {85D7B04E-A0D7-4464-8FA0-2F9C84AB130E}
 		{9A6A5573-511A-4F37-84B3-F73C5F835E7A} = {6D911E80-1263-45BA-91FB-E172390C00C5}
 		{6C6765DA-D2D1-499B-9FE4-860D5FD41AC4} = {6D911E80-1263-45BA-91FB-E172390C00C5}
+		{1951D069-14DC-47AA-89A3-8C5E025A4EB0} = {6D911E80-1263-45BA-91FB-E172390C00C5}
 	EndGlobalSection
 EndGlobal
