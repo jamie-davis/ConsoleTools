@@ -71,6 +71,11 @@ namespace CommandLoadTestAssembly
         {
             return Config;
         }
+               
+        protected override void Initialise()
+        {
+            SetConfigTypeFilter(t => t.Namespace == GetType().Namespace);
+        }
 
         [MethodImpl(MethodImplOptions.NoOptimization)]
         public static void XMain(string[] args)

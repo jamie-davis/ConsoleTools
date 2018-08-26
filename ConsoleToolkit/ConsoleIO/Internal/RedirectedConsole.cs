@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using ConsoleToolkit.Exceptions;
@@ -21,7 +22,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         {
             try
             {
-                //this will throw if there is no real console.
+                //this may throw if there is no real console.
                 _width = Console.BufferWidth;
                 Encoding = Console.OutputEncoding;
             }
@@ -30,6 +31,9 @@ namespace ConsoleToolkit.ConsoleIO.Internal
                 _width = DefaultWidth;
                 Encoding = Encoding.Default;
             }
+
+            if (_width == 0)
+                _width = DefaultWidth;
 
             _stream = stream == ConsoleStream.Out ? Console.Out : Console.Error;
         }
@@ -49,8 +53,9 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
         public void Write(string data)
         {
+            Debug.Assert(BufferWidth > 0);
             var charactersLeft = BufferWidth - CursorLeft;
-            while (data.Length >= charactersLeft)
+            while (data.Length >= charactersLeft && BufferWidth > 0)
             {
                 _stream.WriteLine(data.Substring(0, charactersLeft));
                 data = data.Substring(charactersLeft);
