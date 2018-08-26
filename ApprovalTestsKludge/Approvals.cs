@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using ApprovalTests.Exceptions;
@@ -12,8 +13,7 @@ namespace ApprovalTests
     {
         public static void Verify(string text)
         {
-            var stackTrace = new StackTrace(true);
-            var frame = stackTrace.GetFrame(1);
+            var frame = FindStackFrame();
             Debug.WriteLine(frame.GetFileName());
             var path = Path.GetDirectoryName(frame.GetFileName());
             var method = frame.GetMethod();
@@ -38,7 +38,21 @@ namespace ApprovalTests
                 return;
             } 
             
+            File.WriteAllText(receivedFile, text);
+            File.WriteAllText(approvedFile, string.Empty);
+            CompareUtil.CompareFiles(receivedFile, approvedFile);
             throw new NoApprovedFileException();
+        }
+
+        private static StackFrame FindStackFrame()
+        {
+            var stackTrace = new StackTrace(true);
+            Debug.Assert(stackTrace != null);
+            var frames = stackTrace.GetFrames();
+            Debug.Assert(frames != null);
+            return frames.Select(f => new { Frame = f, Method = f.GetMethod()})
+                .First(m => m.Method.DeclaringType != typeof(Approvals))
+                .Frame;
         }
 
         private static string FixPlatformLineEndings(string text)

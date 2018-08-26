@@ -31,9 +31,10 @@ namespace ConsoleToolkit.ConsoleIO.Internal
 
         private static void AddTextControlItems(List<ColourControlItem> controlItems, string text)
         {
+            var newLineChars = "\r\n";
             while (text.Length > 0)
             {
-                var newLinePos = text.IndexOfAny(Environment.NewLine.ToCharArray());
+                var newLinePos = text.IndexOfAny(newLineChars.ToCharArray());
                 if (newLinePos >= 0)
                 {
                     if (newLinePos > 0)
@@ -45,8 +46,8 @@ namespace ConsoleToolkit.ConsoleIO.Internal
                             new ColourControlItem.ControlInstruction(ColourControlItem.ControlCode.NewLine)
                         }));
 
-                    text = text.Substring(newLinePos).StartsWith(Environment.NewLine) 
-                        ? text.Substring(newLinePos + Environment.NewLine.Length)
+                    text = text.Substring(newLinePos).StartsWith(newLineChars) 
+                        ? text.Substring(newLinePos + newLineChars.Length)
                         : text.Substring(newLinePos + 1);
                 }
                 else
