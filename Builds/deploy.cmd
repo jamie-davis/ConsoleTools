@@ -1,1 +1,1 @@
-..\packages\NuGet.CommandLine.4.4.1\tools\nuget push -source https://api.nuget.org/v3/index.json "ConsoleToolkit_current\ConsoleToolkit.%consoletoolsversion%.nupkg"
+..\packages\NuGet.CommandLine.4.4.1\tools\nuget push -source https://api.nuget.org/v3/index.json "ConsoleToolkit %consoletoolsversion%\ConsoleToolkit.%consoletoolsversion%.nupkg"

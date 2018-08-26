@@ -2,7 +2,31 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <PackageLicenseUrl>http://jamie-davis.github.io/ConsoleTools/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>http://jamie-davis.github.io/ConsoleTools/</PackageProjectUrl>
+    <PackageTags>Console Toolkit .NET</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeSource>True</IncludeSource>
+    <IncludeSymbols>True</IncludeSymbols>
+    <Description>The Console Toolkit is a sophisticated but simple to learn library providing a full set of features for building console applications. It focuses on getting out of the way as quickly as possible so that you can get on with implementing functionality without having to deal with the complications of parsing command line options, parsing user input, or formatting console output in a comprehensible format.
+
+The library includes a declaritive mechanism for specifying command line options. You can specify your commands and options in a clear and simple way and the Toolkit will take care of the validation. You simply declare a handler and the library will call it if the user specifies valid parameters.
+
+Applications that accept multiple commands are fully supported, and the Toolkit even allows you to offer your users an interactive session in which they can issue commands into a custom command line interface. This functionality is provided free, you just need to start the session and define a command to allow the user to exit the session.
+
+Command and command option help is provided automatically. You just need to tell the toolkit which option or command invokes the help text, and your user will be shown syntax and options. If you use the [Description(...)] attribute, your descriptions will automatically formatted and incorporated in the help text.
+
+Command output can be formatted using a custom wrapper over the standard .NET Console object. To access this object you only need to add a parameter of type IConsoleAdapter and you can access features such as tabular data formatting and word wrapping. Colour support is provided through extension methods, so that you can specify .Red(), .Green() etc and the toolkit will worry about switching the Console output colour intelligently on your behalf. 
+
+If you need to capture console input from the user, the library provides an input parsing mechanism that supports everything from simple confirmation requests to compound data structures. The library will validate the user's input and provide you with .NET types so that you don't have to parse the strings yourself.
+
+Comprehensive library documentation is available from the project website, but the library has been designed to be unobtrusive and straightforward to use. Follow the getting started guide to get a fully functional and well behaved console application up and running in minutes. You can even choose the parsing standard you prefer. If you want your commands to use DOS convetions, Unix conventions or the current Windows command line conventions, you just select an option and the Toolkit will format your help text and parse the user's arguments using the appropriate rules.
+</Description>
+    <Version>2.0.0</Version>
+    <Authors>Jamie Davis</Authors>
+    <Product>Console Toolkit</Product>
+    <Copyright>Jamie Davis 2014-2018</Copyright>
+    <PackageReleaseNotes>Updated the library to be a netstandard2.0 library. A later release will target an earlier netstandard version, but changes to the library will be required in order to achieve that. Version 1.4.1 will be the last version of the library compatible with .NET 4.0, but I hope to add compatibility with earlier versions than 4.7.1, which is currently the required full framework version.</PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="System.Reflection.Emit" Version="4.3.0" />

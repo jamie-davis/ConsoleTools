@@ -1,5 +1,5 @@
 msbuild ..\ConsoleToolkit.sln /t:clean
-msbuild ..\ConsoleToolkit.sln /t:Rebuild /p:Configuration=Release
+msbuild ..\ConsoleToolkit\ConsoleToolkit.csproj /t:Rebuild /p:Configuration=Release
 
 if NOT EXIST "ConsoleToolkit %consoletoolsversion%" md "ConsoleToolkit %consoletoolsversion%"
 
@@ -8,9 +8,7 @@ copy ..\ConsoleToolKit\bin\release\*.xml "ConsoleToolkit %consoletoolsversion%"
 copy ..\ConsoleToolKit\bin\release\*.dll "ConsoleToolkit_current"
 copy ..\ConsoleToolKit\bin\release\*.xml "ConsoleToolkit_current"
 
-nuget pack ..\ConsoleToolkit\ConsoleToolkit.csproj -outputdirectory "ConsoleToolkit_current" -IncludeReferencedProjects -Prop Configuration=Release -symbols
-
-copy "ConsoleToolkit_current\*.nupkg" "ConsoleToolkit %consoletoolsversion%"
+copy "..\ConsoleToolkit\bin\Release\*.nupkg" "ConsoleToolkit %consoletoolsversion%"
 
 git\git add "ConsoleToolkit %consoletoolsversion%\*.dll" -f
 git\git add "ConsoleToolkit %consoletoolsversion%\*.xml" -f
