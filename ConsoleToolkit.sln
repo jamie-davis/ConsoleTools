@@ -1,18 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26430.6
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31613.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleToolkit", "ConsoleToolkit\ConsoleToolkit.csproj", "{A2662BFA-2746-4782-BAF9-B058D1695C18}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleToolkit", "ConsoleToolkit\ConsoleToolkit.csproj", "{A2662BFA-2746-4782-BAF9-B058D1695C18}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleToolkitDemo", "ConsoleToolkitDemo\ConsoleToolkitDemo.csproj", "{772B7703-D46E-4885-B5C4-03880AA58FFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleToolkitTests", "ConsoleToolkitTests\ConsoleToolkitTests.csproj", "{56C9C1DD-A7C6-46F6-A763-DC775FD1F58B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleToolkitTests", "ConsoleToolkitTests\ConsoleToolkitTests.csproj", "{56C9C1DD-A7C6-46F6-A763-DC775FD1F58B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4. Scripts", "4. Scripts", "{64E43720-EABB-4490-B7CA-A59C9F736F09}"
 	ProjectSection(SolutionItems) = preProject
 		Builds\BuildRelease.cmd = Builds\BuildRelease.cmd
-		ConsoleToolkit\ConsoleToolkit.nuspec = ConsoleToolkit\ConsoleToolkit.nuspec
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Library", "1. Library", "{B9560A14-C93E-44AC-A7F3-2DC07075FB8C}"
@@ -21,7 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Tests", "2. Tests", "{5A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Demos", "3. Demos", "{6D911E80-1263-45BA-91FB-E172390C00C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLoadTestAssembly", "ConsoleToolkitTests\CommandLoadTestAssembly\CommandLoadTestAssembly.csproj", "{76F6C4B9-D3A2-49AD-9AE7-3AC698753BFF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandLoadTestAssembly", "ConsoleToolkitTests\CommandLoadTestAssembly\CommandLoadTestAssembly.csproj", "{76F6C4B9-D3A2-49AD-9AE7-3AC698753BFF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplicationDemo", "Demos\ConsoleApplicationDemo\ConsoleApplicationDemo.csproj", "{175B0883-CD7D-4DA0-9641-FEE19B147BA1}"
 EndProject
@@ -33,9 +32,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteractiveCommandSample", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteractiveOnlyConsoleApplication", "Demos\InteractiveOnlyConsoleApplication\InteractiveOnlyConsoleApplication.csproj", "{6C6765DA-D2D1-499B-9FE4-860D5FD41AC4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreConsoleTest", "CoreConsoleTest\CoreConsoleTest.csproj", "{1951D069-14DC-47AA-89A3-8C5E025A4EB0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreConsoleTest", "CoreConsoleTest\CoreConsoleTest.csproj", "{1951D069-14DC-47AA-89A3-8C5E025A4EB0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApprovalTestsKludge", "ApprovalTestsKludge\ApprovalTestsKludge.csproj", "{223E35E7-669E-4818-89F4-912FA947ACBC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApprovalTestsKludge", "ApprovalTestsKludge\ApprovalTestsKludge.csproj", "{223E35E7-669E-4818-89F4-912FA947ACBC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VT100", "Spikes\VT100\VT100.csproj", "{B9374713-1E19-4DFC-8DD3-F1B65E30AA22}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -155,6 +156,18 @@ Global
 		{223E35E7-669E-4818-89F4-912FA947ACBC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{223E35E7-669E-4818-89F4-912FA947ACBC}.Release|x86.ActiveCfg = Release|Any CPU
 		{223E35E7-669E-4818-89F4-912FA947ACBC}.Release|x86.Build.0 = Release|Any CPU
+		{B9374713-1E19-4DFC-8DD3-F1B65E30AA22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9374713-1E19-4DFC-8DD3-F1B65E30AA22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9374713-1E19-4DFC-8DD3-F1B65E30AA22}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B9374713-1E19-4DFC-8DD3-F1B65E30AA22}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B9374713-1E19-4DFC-8DD3-F1B65E30AA22}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B9374713-1E19-4DFC-8DD3-F1B65E30AA22}.Debug|x86.Build.0 = Debug|Any CPU
+		{B9374713-1E19-4DFC-8DD3-F1B65E30AA22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9374713-1E19-4DFC-8DD3-F1B65E30AA22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9374713-1E19-4DFC-8DD3-F1B65E30AA22}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B9374713-1E19-4DFC-8DD3-F1B65E30AA22}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B9374713-1E19-4DFC-8DD3-F1B65E30AA22}.Release|x86.ActiveCfg = Release|Any CPU
+		{B9374713-1E19-4DFC-8DD3-F1B65E30AA22}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -170,5 +183,9 @@ Global
 		{6C6765DA-D2D1-499B-9FE4-860D5FD41AC4} = {6D911E80-1263-45BA-91FB-E172390C00C5}
 		{1951D069-14DC-47AA-89A3-8C5E025A4EB0} = {6D911E80-1263-45BA-91FB-E172390C00C5}
 		{223E35E7-669E-4818-89F4-912FA947ACBC} = {5A0A62C9-CD4E-4602-BEB9-0589ACB4DB50}
+		{B9374713-1E19-4DFC-8DD3-F1B65E30AA22} = {85D7B04E-A0D7-4464-8FA0-2F9C84AB130E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E9CFCAAB-4BD1-4E5C-8893-112A6FE106FE}
 	EndGlobalSection
 EndGlobal

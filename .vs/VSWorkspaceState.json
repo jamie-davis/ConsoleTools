@@ -1,6 +1,13 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\ConsoleToolkit",
+    "\\ConsoleToolkit\\ConsoleIO",
+    "\\ConsoleToolkit\\ConsoleIO\\Internal",
+    "\\ConsoleToolkit\\ConsoleIO\\Internal\\RecordedCommands",
+    "\\Spikes",
+    "\\Spikes\\InputSpike"
   ],
+  "SelectedNode": "\\ConsoleToolkit\\ConsoleIO\\Internal\\RecordedCommands\\FormatTableCommand.cs",
   "PreviewInSolutionExplorer": false
 }

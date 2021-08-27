@@ -1,0 +1,612 @@
+[
+  [
+    {
+      "Key": {
+        "KeyChar": "\u001b",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "[",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "A",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    }
+  ],
+  [
+    {
+      "Key": {
+        "KeyChar": "\u001b",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "[",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "D",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    }
+  ],
+  [
+    {
+      "Key": {
+        "KeyChar": "\u001b",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "[",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "B",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    }
+  ],
+  [
+    {
+      "Key": {
+        "KeyChar": "\u001b",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "[",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "C",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    }
+  ],
+  [
+    {
+      "Key": {
+        "KeyChar": "h",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    }
+  ],
+  [
+    {
+      "Key": {
+        "KeyChar": "e",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    }
+  ],
+  [
+    {
+      "Key": {
+        "KeyChar": "l",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    }
+  ],
+  [
+    {
+      "Key": {
+        "KeyChar": "l",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    }
+  ],
+  [
+    {
+      "Key": {
+        "KeyChar": "o",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    }
+  ],
+  [
+    {
+      "Key": {
+        "KeyChar": "\u001b",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "[",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "3",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "~",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    }
+  ],
+  [
+    {
+      "Key": {
+        "KeyChar": "\u001b",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "O",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "P",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    }
+  ],
+  [
+    {
+      "Key": {
+        "KeyChar": "\u001b",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "O",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "Q",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    }
+  ],
+  [
+    {
+      "Key": {
+        "KeyChar": "\u001b",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "O",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "R",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    }
+  ],
+  [
+    {
+      "Key": {
+        "KeyChar": "\u001b",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "O",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "S",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    }
+  ],
+  [
+    {
+      "Key": {
+        "KeyChar": "\u001b",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "[",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "1",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "5",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "~",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    }
+  ],
+  [
+    {
+      "Key": {
+        "KeyChar": "\u001b",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "[",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "1",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "7",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "~",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    }
+  ],
+  [
+    {
+      "Key": {
+        "KeyChar": "\u001b",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "[",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "1",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "8",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "~",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    }
+  ],
+  [
+    {
+      "Key": {
+        "KeyChar": "\u001b",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "[",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "1",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "9",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "~",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    }
+  ],
+  [
+    {
+      "Key": {
+        "KeyChar": "\u001b",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "[",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "2",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "0",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "~",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    }
+  ],
+  [
+    {
+      "Key": {
+        "KeyChar": "\u001b",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "[",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "2",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "1",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "~",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    }
+  ],
+  [
+    {
+      "Key": {
+        "KeyChar": "\u001b",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "[",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "2",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "3",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "~",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    }
+  ],
+  [
+    {
+      "Key": {
+        "KeyChar": "\u001b",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "[",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "2",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "4",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "~",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    }
+  ],
+  [
+    {
+      "Key": {
+        "KeyChar": "\u001b",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "[",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "H",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    }
+  ],
+  [
+    {
+      "Key": {
+        "KeyChar": "\u001b",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "[",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    },
+    {
+      "Key": {
+        "KeyChar": "F",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    }
+  ],
+  [
+    {
+      "Key": {
+        "KeyChar": "\u0013",
+        "Key": 0,
+        "Modifiers": 0
+      }
+    }
+  ]
+]
