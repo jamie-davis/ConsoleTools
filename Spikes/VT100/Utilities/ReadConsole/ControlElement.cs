@@ -11,19 +11,17 @@ namespace VT100.Utilities.ReadConsole
 
         public ControlElement(ConsoleKeyInfo key)
         {
-            Key = new KeyInfo();
-            Key.KeyChar = key.KeyChar;
-            Key.Modifiers = key.Modifiers;
-            Key.Key = key.Key;
+            KeyChar = key.KeyChar;
+            Modifiers = key.Modifiers;
+            Key = key.Key;
         }
 
-        public KeyInfo Key { get; set; }
-    }
+        public char KeyChar { get; set; }
+        public ConsoleModifiers Modifiers { get; set; }
+        public ConsoleKey Key { get; set; }    }
 
     internal class KeyInfo
     {
-        public char KeyChar { get; set; }
-        public ConsoleModifiers Modifiers { get; set; }
-        public ConsoleKey Key { get; set; }
+
     }
 }

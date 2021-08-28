@@ -37,16 +37,16 @@ namespace VT100
                     Console.Write(item.CodeType);
                     foreach (var controlElement in item.Items)
                     {
-                        if (controlElement.Key.KeyChar == '\x11' && item.CodeType == AnsiCodeType.None)
+                        if (controlElement.KeyChar == '\x11' && item.CodeType == AnsiCodeType.None)
                             reader.Stop();
-                        if (controlElement.Key.KeyChar == '\x13' && item.CodeType == AnsiCodeType.None)
+                        if (controlElement.KeyChar == '\x13' && item.CodeType == AnsiCodeType.None)
                             monitor.Save();
 
-                        Console.Write($"[{controlElement.Key.Key}, {(int)controlElement.Key.KeyChar}|{(int)controlElement.Key.KeyChar:X}|{TryRender(controlElement.Key.KeyChar)}]");
+                        Console.Write($"[{controlElement.Key}, {(int)controlElement.KeyChar}|{(int)controlElement.KeyChar:X}|{TryRender(controlElement.KeyChar)}]");
                     }
                     if (item.CodeType == AnsiCodeType.None)
-                        Console.Write(item.Items[0].Key.KeyChar);
-                    Console.WriteLine($" {item.ResolvedCode}");
+                        Console.Write(item.Items[0].KeyChar);
+                    Console.WriteLine($" {item.ResolvedCode}{(item.Parameters.Any() ? $"({string.Join(", ", item.Parameters)})" : string.Empty)}");
                 }
             }
         }

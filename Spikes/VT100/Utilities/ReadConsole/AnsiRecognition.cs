@@ -50,8 +50,8 @@ namespace VT100.Utilities.ReadConsole
         {
             if (sequence.Count >= 3)
             {
-                if (sequence[0].Key.KeyChar == ESC
-                    && sequence[1].Key.KeyChar == 'O')
+                if (sequence[0].KeyChar == ESC
+                    && sequence[1].KeyChar == 'O')
                 {
                     result = sequence.Take(3).ToList();
                     sequence.RemoveRange(0,3);
@@ -67,8 +67,8 @@ namespace VT100.Utilities.ReadConsole
         {
             if (sequence.Count >= 2)
             {
-                if (sequence[0].Key.KeyChar == ESC
-                    && sequence[1].Key.KeyChar.Between('@', 'Z'))
+                if (sequence[0].KeyChar == ESC
+                    && sequence[1].KeyChar.Between('@', 'Z'))
                 {
                     result = sequence.Take(2).ToList();
                     sequence.RemoveRange(0,2);
@@ -84,7 +84,7 @@ namespace VT100.Utilities.ReadConsole
         {
             if (sequence.Count >= 1)
             {
-                var keyChar = sequence[0].Key.KeyChar;
+                var keyChar = sequence[0].KeyChar;
                 if (keyChar.Between('\x80', '\x9A')
                     ||  keyChar.Between('\x9C', '\x9F'))
                 {
@@ -104,13 +104,13 @@ namespace VT100.Utilities.ReadConsole
 
             if (sequence.Count >= 1)
             {
-                if (sequence[0].Key.KeyChar == '\x9B')
+                if (sequence[0].KeyChar == '\x9B')
                     csiLength = 1;
             }
             if (csiLength == 0 && sequence.Count >= 2)
             {
-                if (sequence[0].Key.KeyChar == ESC
-                    && sequence[1].Key.KeyChar == '[')
+                if (sequence[0].KeyChar == ESC
+                    && sequence[1].KeyChar == '[')
                 {
                     csiLength = 2;
                 }
@@ -126,7 +126,7 @@ namespace VT100.Utilities.ReadConsole
             {
                 var takenCount = 0;
                 while (sequence.Count > startPosition + takenCount 
-                       && sequence[startPosition+takenCount].Key.KeyChar.Between(lower, upper))
+                       && sequence[startPosition+takenCount].KeyChar.Between(lower, upper))
                 {
                     ++takenCount;
                 }

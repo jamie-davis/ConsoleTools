@@ -15,14 +15,14 @@ namespace VT100.Tests.Utilities.ReadConsole
         {
             //Arrange
             var controlSeq = $"\x1b[{codeFragment}"
-                .Select(c => new ControlElement { Key = new KeyInfo { KeyChar = c } })
+                .Select(c => new ControlElement { KeyChar = c })
                 .ToList();
 
             //Act
             var result = CodeSequenceParameterExtractor.Extract(controlSeq, AnsiCodeType.CSI);
 
             //Assert
-            var rebuilt = new string(result.Sequence.Skip(2).Select(c => c.Key.KeyChar).ToArray());
+            var rebuilt = new string(result.Sequence.Skip(2).Select(c => c.KeyChar).ToArray());
             (rebuilt, string.Join(", ", result.Parameters)).Should().Be((expectedResultFragment, expectedParameters));
         }
 

@@ -70,7 +70,7 @@ namespace VT100.Tests.Utilities.ReadConsole
 
         private List<ControlElement> ToSequence(IEnumerable<char> testChars)
         {
-            return testChars.Select(c => new ControlElement { Key = new KeyInfo { KeyChar = c }}).ToList();
+            return testChars.Select(c => new ControlElement { KeyChar = c }).ToList();
         }
     }
 }

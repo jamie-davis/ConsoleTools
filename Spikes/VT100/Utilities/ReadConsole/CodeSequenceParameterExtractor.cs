@@ -50,7 +50,7 @@ namespace VT100.Utilities.ReadConsole
             {
                 Accept();
 
-                while (!exhausted && last.Key.KeyChar != ';')
+                while (!exhausted && last.KeyChar != ';')
                 {
                     seq.Add(last);
                     Accept();
@@ -66,8 +66,8 @@ namespace VT100.Utilities.ReadConsole
                 do
                 {
                     Accept();
-                    if (last != null && last.Key.KeyChar != ';') result.Add(last);
-                } while (!exhausted && last.Key.KeyChar != ';');
+                    if (last != null && last.KeyChar != ';') result.Add(last);
+                } while (!exhausted && last.KeyChar != ';');
 
                 return result;
             }
@@ -86,7 +86,7 @@ namespace VT100.Utilities.ReadConsole
                     parameter = parameter.Take(parameter.Count - 1).ToList();
                 }
 
-                parameters.Add(string.Concat(parameter.Select(e => e.Key.KeyChar)));
+                parameters.Add(string.Concat(parameter.Select(e => e.KeyChar)));
             }
 
             return (seq, parameters);

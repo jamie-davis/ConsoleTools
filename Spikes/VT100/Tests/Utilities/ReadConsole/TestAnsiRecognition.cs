@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -48,7 +49,7 @@ namespace VT100.Tests.Utilities.ReadConsole
                 c.CodeType,
                 Sequence = string.Join(" ",
                     c.Items.Select(controlElement =>
-                        $"[{controlElement.Key.Key}, {(int)controlElement.Key.KeyChar}|{(int)controlElement.Key.KeyChar:X}|{TryRender(controlElement.Key.KeyChar)}]")),
+                        $"[{controlElement.Key}, {(int)controlElement.KeyChar}|{(int)controlElement.KeyChar:X}|{TryRender(controlElement.KeyChar)}]")),
                 ResolvedCode = c.ResolvedCode,
                 Parameters = string.Join(", ", c.Parameters)
             });

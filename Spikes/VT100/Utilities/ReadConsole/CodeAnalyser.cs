@@ -75,7 +75,7 @@ namespace VT100.Utilities.ReadConsole
 
         private static bool Match(List<ControlElement> seq, int start, params char[] chars)
         {
-            return seq.Skip(start).Select(e => e.Key.KeyChar).SequenceEqual(chars);
+            return seq.Skip(start).Select(e => e.KeyChar).SequenceEqual(chars);
         }
 
     }
