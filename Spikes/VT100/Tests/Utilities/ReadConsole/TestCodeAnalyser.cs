@@ -14,7 +14,14 @@ namespace VT100.Tests.Utilities.ReadConsole
         [InlineData(new [] {'D'}, ResolvedCode.CursorBackwards)]
         [InlineData(new [] {'A'}, ResolvedCode.CursorUp)]
         [InlineData(new [] {'B'}, ResolvedCode.CursorDown)]
-        [InlineData(new [] {'1', '5', '~'}, ResolvedCode.PF5)]
+        [InlineData(new [] {'1', '1', '~'}, ResolvedCode.PF1)]
+        [InlineData(new [] {'1', 'P'}, ResolvedCode.PF1)]
+        [InlineData(new [] {'1', '2', '~'}, ResolvedCode.PF2)]
+        [InlineData(new [] {'1', 'Q'}, ResolvedCode.PF2)]
+        [InlineData(new [] {'1', '3', '~'}, ResolvedCode.PF3)]
+        [InlineData(new [] {'1', 'R'}, ResolvedCode.PF3)]
+        [InlineData(new [] {'1', '4', '~'}, ResolvedCode.PF4)]
+        [InlineData(new [] {'1', 'S'}, ResolvedCode.PF4)]
         [InlineData(new [] {'1', '7', '~'}, ResolvedCode.PF6)]
         [InlineData(new [] {'1', '8', '~'}, ResolvedCode.PF7)]
         [InlineData(new [] {'1', '9', '~'}, ResolvedCode.PF8)]
@@ -32,6 +39,11 @@ namespace VT100.Tests.Utilities.ReadConsole
         [InlineData(new [] {'3', '4', '~'}, ResolvedCode.PF20)]
         [InlineData(new [] {'H'}, ResolvedCode.Home)]
         [InlineData(new [] {'F'}, ResolvedCode.End)]
+        [InlineData(new [] {'3', '~'}, ResolvedCode.Delete)]
+        [InlineData(new [] {'2', '~'}, ResolvedCode.Insert)]
+        [InlineData(new [] {'6', '~'}, ResolvedCode.PageDown)]
+        [InlineData(new [] {'E'}, ResolvedCode.Begin)] 
+        [InlineData(new [] {'5', '~'}, ResolvedCode.PageUp)]  
         [InlineData(new [] {'Z'}, ResolvedCode.NotRecognised)]
         public void SimpleCSICodesAreRecognised(char[] input, ResolvedCode code)
         {
@@ -54,12 +66,32 @@ namespace VT100.Tests.Utilities.ReadConsole
         [InlineData(new [] {'S'}, ResolvedCode.PF4)]
         [InlineData(new [] {'H'}, ResolvedCode.Home)]
         [InlineData(new [] {'F'}, ResolvedCode.End)]
+        [InlineData(new [] {'M'}, ResolvedCode.CR)]
+        [InlineData(new [] {'I'}, ResolvedCode.Tab)]
+        [InlineData(new [] {' '}, ResolvedCode.Space)]
         public void SimpleSS3CodesAreRecognised(char[] input, ResolvedCode code)
         {
             // Arrange
             var testChars = new[] { '\x1b', 'O' }.Concat(input);
             var seq = ToSequence(testChars);
             var type = AnsiCodeType.SS3;
+
+            //Act
+            var result = CodeAnalyser.Analyse(seq, type);
+
+            //Assert
+            (result.Code, string.Join(", ", result.Parameters)).Should().Be((code, ""));
+        }
+
+        [Theory]
+        [InlineData('\t', ResolvedCode.Tab)]
+        [InlineData('\x7f', ResolvedCode.Backspace)]
+        [InlineData('\r', ResolvedCode.CR)]
+        public void SingleCharCodesAreRecognised(char input, ResolvedCode code)
+        {
+            // Arrange
+            var seq = ToSequence(new []{ input });
+            var type = AnsiCodeType.None;
 
             //Act
             var result = CodeAnalyser.Analyse(seq, type);

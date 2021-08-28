@@ -29,6 +29,15 @@ namespace VT100.Utilities.ReadConsole
         PF19,
         PF20,
         Home,
-        End
+        End,
+        Delete,
+        Insert,
+        PageDown,
+        PageUp,
+        Begin,
+        CR,
+        Tab,
+        Space,
+        Backspace
     }
 }
