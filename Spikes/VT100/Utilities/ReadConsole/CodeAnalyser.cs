@@ -24,6 +24,14 @@ namespace VT100.Utilities.ReadConsole
                 { ResolvedCode.PF10, s => Match(s, 2,'2', '1', '~') },
                 { ResolvedCode.PF11, s => Match(s, 2,'2', '3', '~') },
                 { ResolvedCode.PF12, s => Match(s, 2,'2', '4', '~') },
+                { ResolvedCode.PF13, s => Match(s, 2,'2', '5', '~') },
+                { ResolvedCode.PF14, s => Match(s, 2,'2', '6', '~') },
+                { ResolvedCode.PF15, s => Match(s, 2,'2', '8', '~') },
+                { ResolvedCode.PF16, s => Match(s, 2,'2', '9', '~') },
+                { ResolvedCode.PF17, s => Match(s, 2,'3', '1', '~') },
+                { ResolvedCode.PF18, s => Match(s, 2,'3', '2', '~') },
+                { ResolvedCode.PF19, s => Match(s, 2,'3', '3', '~') },
+                { ResolvedCode.PF20, s => Match(s, 2,'3', '4', '~') },
                 { ResolvedCode.Home, s => Match(s, 2,'H') },
                 { ResolvedCode.End, s => Match(s, 2,'F') },
             };        
@@ -38,23 +46,24 @@ namespace VT100.Utilities.ReadConsole
                 { ResolvedCode.End, s => Match(s, 2, 'F') },
             };
 
-        internal static ResolvedCode Analyse(IEnumerable<ControlElement> elements, AnsiCodeType codeType)
+        internal static (ResolvedCode Code, IEnumerable<string> Parameters) 
+            Analyse(IEnumerable<ControlElement> elements, AnsiCodeType codeType)
         {
-            var seq = elements.ToList();
+            var (seq, parameters) = CodeSequenceParameterExtractor.Extract(elements, codeType);
             if (codeType == AnsiCodeType.CSI)
             {
                 var match = _csiResolvers.FirstOrDefault(r => r.Value(seq));
                 if (match.Key != ResolvedCode.NotRecognised)
-                    return match.Key;
+                    return (match.Key, parameters);
             }
             else if (codeType == AnsiCodeType.SS3)
             {
                 var match = _ss3Resolvers.FirstOrDefault(r => r.Value(seq));
                 if (match.Key != ResolvedCode.NotRecognised)
-                    return match.Key;
+                    return (match.Key, parameters);
             }
 
-            return ResolvedCode.NotRecognised;
+            return (ResolvedCode.NotRecognised, new List<string>());
         }
 
         private static bool IsForward(List<ControlElement> seq, AnsiCodeType codeType)

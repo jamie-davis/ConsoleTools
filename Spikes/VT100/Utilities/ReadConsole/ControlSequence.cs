@@ -9,11 +9,14 @@ namespace VT100.Utilities.ReadConsole
         {
             CodeType = codeType;
             Items = seq.ToList();
-            ResolvedCode = CodeAnalyser.Analyse(Items, codeType);
+            var resolved = CodeAnalyser.Analyse(Items, codeType);
+            ResolvedCode = resolved.Code;
+            Parameters = resolved.Parameters;
         }
 
         public AnsiCodeType CodeType { get; }
         public IReadOnlyList<ControlElement> Items { get; }
         public ResolvedCode ResolvedCode { get; }
+        public IEnumerable<string> Parameters { get; set; }
     }
 }

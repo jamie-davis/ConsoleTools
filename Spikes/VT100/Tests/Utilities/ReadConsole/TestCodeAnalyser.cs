@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using FluentAssertions;
 using VT100.Utilities.ReadConsole;
 using Xunit;
+// ReSharper disable InconsistentNaming
 
-namespace VT100.Tests.Utilities
+namespace VT100.Tests.Utilities.ReadConsole
 {
     public class TestCodeAnalyser
     {
@@ -23,6 +22,14 @@ namespace VT100.Tests.Utilities
         [InlineData(new [] {'2', '1', '~'}, ResolvedCode.PF10)]
         [InlineData(new [] {'2', '3', '~'}, ResolvedCode.PF11)]
         [InlineData(new [] {'2', '4', '~'}, ResolvedCode.PF12)]
+        [InlineData(new [] {'2', '5', '~'}, ResolvedCode.PF13)]
+        [InlineData(new [] {'2', '6', '~'}, ResolvedCode.PF14)]
+        [InlineData(new [] {'2', '8', '~'}, ResolvedCode.PF15)]
+        [InlineData(new [] {'2', '9', '~'}, ResolvedCode.PF16)]
+        [InlineData(new [] {'3', '1', '~'}, ResolvedCode.PF17)]
+        [InlineData(new [] {'3', '2', '~'}, ResolvedCode.PF18)]
+        [InlineData(new [] {'3', '3', '~'}, ResolvedCode.PF19)]
+        [InlineData(new [] {'3', '4', '~'}, ResolvedCode.PF20)]
         [InlineData(new [] {'H'}, ResolvedCode.Home)]
         [InlineData(new [] {'F'}, ResolvedCode.End)]
         [InlineData(new [] {'Z'}, ResolvedCode.NotRecognised)]
@@ -37,7 +44,7 @@ namespace VT100.Tests.Utilities
             var result = CodeAnalyser.Analyse(seq, type);
 
             //Assert
-            result.Should().Be(code);
+            (result.Code, string.Join(", ", result.Parameters)).Should().Be((code, ""));
         }
 
         [Theory]
@@ -58,7 +65,7 @@ namespace VT100.Tests.Utilities
             var result = CodeAnalyser.Analyse(seq, type);
 
             //Assert
-            result.Should().Be(code);
+            (result.Code, string.Join(", ", result.Parameters)).Should().Be((code, ""));
         }
 
         private List<ControlElement> ToSequence(IEnumerable<char> testChars)

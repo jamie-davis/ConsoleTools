@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using FluentAssertions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using TestConsole.OutputFormatting;
 using TestConsoleLib;
 using TestConsoleLib.Testing;
 using VT100.Utilities.ReadConsole;
 using Xunit;
 
-namespace VT100.Tests.Utilities
+namespace VT100.Tests.Utilities.ReadConsole
 {
     public class TestAnsiRecognition
     {
@@ -51,11 +49,12 @@ namespace VT100.Tests.Utilities
                 Sequence = string.Join(" ",
                     c.Items.Select(controlElement =>
                         $"[{controlElement.Key.Key}, {(int)controlElement.Key.KeyChar}|{(int)controlElement.Key.KeyChar:X}|{TryRender(controlElement.Key.KeyChar)}]")),
-                ResolvedCode = c.ResolvedCode
+                ResolvedCode = c.ResolvedCode,
+                Parameters = string.Join(", ", c.Parameters)
             });
 
             var output = new Output();
-            output.FormatTable(result);
+            output.FormatTable(result, ReportFormattingOptions.UnlimitedBuffer);
             output.Report.Verify();
         }
     }

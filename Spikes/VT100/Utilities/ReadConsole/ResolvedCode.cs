@@ -20,6 +20,14 @@ namespace VT100.Utilities.ReadConsole
         PF10,
         PF11,
         PF12,
+        PF13,
+        PF14,
+        PF15,
+        PF16,
+        PF17,
+        PF18,
+        PF19,
+        PF20,
         Home,
         End
     }
