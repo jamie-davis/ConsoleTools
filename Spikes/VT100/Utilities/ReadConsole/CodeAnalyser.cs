@@ -7,9 +7,11 @@ using System.Text.RegularExpressions;
 
 namespace VT100.Utilities.ReadConsole
 {
-    internal static class CodeAnalyser
+    internal class CodeAnalyser
     {
-        private static new (ResolvedCode Code, Func<List<ControlElement>, bool> Fn) [] _csiResolvers =
+        private readonly CodeAnalyserSettings _settings;
+
+        private (ResolvedCode Code, Func<List<ControlElement>, bool> Fn) [] _csiResolvers =
             new (ResolvedCode Code, Func<List<ControlElement>, bool> Fn) []
             {
                 ( ResolvedCode.CursorBackwards, s => Match(s, 2, 'D') ),
@@ -47,8 +49,10 @@ namespace VT100.Utilities.ReadConsole
                 ( ResolvedCode.PageDown, s => Match(s, 2,'6', '~') ),
                 ( ResolvedCode.PageUp, s => Match(s, 2,'5', '~') ),
                 ( ResolvedCode.Begin, s => Match(s, 2,'E') ),
-            };        
-        private static (ResolvedCode Code, Func<List<ControlElement>, bool> Fn) [] _ss3Resolvers =
+                ( ResolvedCode.CPR, s => Match(s, 2, 'R') ),
+            };
+
+        private (ResolvedCode Code, Func<List<ControlElement>, bool> Fn) [] _ss3Resolvers =
             new (ResolvedCode Code, Func<List<ControlElement>, bool> Fn) []
             {
                 ( ResolvedCode.PF1, s => Match(s, 2, 'P') ),
@@ -61,7 +65,7 @@ namespace VT100.Utilities.ReadConsole
                 ( ResolvedCode.Tab, s => Match(s, 2, 'I') ),
                 ( ResolvedCode.CR, s => Match(s, 2, 'M') ),
             };
-        private static (ResolvedCode Code, Func<List<ControlElement>, bool> Fn) [] _charResolvers =
+        private (ResolvedCode Code, Func<List<ControlElement>, bool> Fn) [] _charResolvers =
             new (ResolvedCode Code, Func<List<ControlElement>, bool> Fn) []
             {
                 ( ResolvedCode.Tab, s => Match(s, 0, '\x9') ),
@@ -69,37 +73,59 @@ namespace VT100.Utilities.ReadConsole
                 ( ResolvedCode.Backspace, s => Match(s, 0, '\x7f') ),
             };
 
-        internal static (ResolvedCode Code, IEnumerable<string> Parameters) 
+        public CodeAnalyser(CodeAnalyserSettings settings = 0)
+        {
+            _settings = settings;
+        }
+
+        internal (ResolvedCode Code, IEnumerable<string> Parameters) 
             Analyse(IEnumerable<ControlElement> elements, AnsiCodeType codeType)
         {
             var (seq, parameters) = CodeSequenceParameterExtractor.Extract(elements, codeType);
-            if (codeType == AnsiCodeType.CSI)
+            switch (codeType)
             {
-                var match = _csiResolvers.FirstOrDefault(r => r.Fn(seq));
-                if (match.Code != ResolvedCode.NotRecognised)
-                    return (match.Code, parameters);
-            }
-            else if (codeType == AnsiCodeType.SS3)
-            {
-                var match = _ss3Resolvers.FirstOrDefault(r => r.Fn(seq));
-                if (match.Code != ResolvedCode.NotRecognised)
-                    return (match.Code, parameters);
-            }
-            else if (codeType == AnsiCodeType.None)
-            {
-                var match = _charResolvers.FirstOrDefault(r => r.Fn(seq));
-                if (match.Code != ResolvedCode.NotRecognised)
-                    return (match.Code, parameters);
+                case AnsiCodeType.CSI:
+                {
+                    var match = _csiResolvers.FirstOrDefault(r => r.Fn(seq));
+                    if (match.Code != ResolvedCode.NotRecognised)
+                    {
+                        if (OverrideToPF3(match, parameters))
+                        {
+                            parameters.RemoveAt(0);
+                            return (ResolvedCode.PF3, parameters);
+                        }
+
+                        return (match.Code, parameters);
+                    }
+
+                    break;
+                }
+                case AnsiCodeType.SS3:
+                {
+                    var match = _ss3Resolvers.FirstOrDefault(r => r.Fn(seq));
+                    if (match.Code != ResolvedCode.NotRecognised)
+                        return (match.Code, parameters);
+                    break;
+                }
+                case AnsiCodeType.None:
+                {
+                    var match = _charResolvers.FirstOrDefault(r => r.Fn(seq));
+                    if (match.Code != ResolvedCode.NotRecognised)
+                        return (match.Code, parameters);
+                    break;
+                }
             }
 
             return (ResolvedCode.NotRecognised, new List<string>());
         }
 
-        private static bool IsForward(List<ControlElement> seq, AnsiCodeType codeType)
+        private bool OverrideToPF3((ResolvedCode Code, Func<List<ControlElement>, bool> Fn) match, List<string> parameters)
         {
-            if (codeType != AnsiCodeType.CSI || seq.Count < 3) return false;
-
-            return Match(seq, 2, 'C');
+            var overrideEnabled = (_settings & CodeAnalyserSettings.PreferPF3Modifiers) > 0;
+            return overrideEnabled 
+                   && match.Code == ResolvedCode.CPR
+                   && parameters.Count >= 1
+                   && parameters[0] == "1";
         }
 
         private static bool Match(List<ControlElement> seq, int start, params char[] chars)

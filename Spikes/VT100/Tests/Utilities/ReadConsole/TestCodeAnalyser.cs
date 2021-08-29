@@ -45,7 +45,8 @@ namespace VT100.Tests.Utilities.ReadConsole
         [InlineData(new [] {'E'}, ResolvedCode.Begin)] 
         [InlineData(new [] {'5', '~'}, ResolvedCode.PageUp)]  
         [InlineData(new [] {'Z'}, ResolvedCode.NotRecognised)]
-        public void SimpleCSICodesAreRecognised(char[] input, ResolvedCode code)
+        [InlineData(new [] {'9', ';', '5', 'R'}, ResolvedCode.CPR, "9, 5")]
+        public void SimpleCSICodesAreRecognised(char[] input, ResolvedCode code, string parameterString = null)
         {
             // Arrange
             var testChars = new[] { '\x1b', '[' }.Concat(input);
@@ -53,10 +54,11 @@ namespace VT100.Tests.Utilities.ReadConsole
             var type = AnsiCodeType.CSI;
 
             //Act
-            var result = CodeAnalyser.Analyse(seq, type);
+            var codeAnalyser = new CodeAnalyser(CodeAnalyserSettings.PreferPF3Modifiers);
+            var result = codeAnalyser.Analyse(seq, type);
 
             //Assert
-            (result.Code, string.Join(", ", result.Parameters)).Should().Be((code, ""));
+            (result.Code, string.Join(", ", result.Parameters)).Should().Be((code, parameterString ?? string.Empty));
         }
 
         [Theory]
@@ -69,6 +71,7 @@ namespace VT100.Tests.Utilities.ReadConsole
         [InlineData(new [] {'M'}, ResolvedCode.CR)]
         [InlineData(new [] {'I'}, ResolvedCode.Tab)]
         [InlineData(new [] {' '}, ResolvedCode.Space)]
+        [InlineData(new [] {'W'}, ResolvedCode.NotRecognised)]
         public void SimpleSS3CodesAreRecognised(char[] input, ResolvedCode code)
         {
             // Arrange
@@ -77,7 +80,8 @@ namespace VT100.Tests.Utilities.ReadConsole
             var type = AnsiCodeType.SS3;
 
             //Act
-            var result = CodeAnalyser.Analyse(seq, type);
+            var codeAnalyser = new CodeAnalyser();
+            var result = codeAnalyser.Analyse(seq, type);
 
             //Assert
             (result.Code, string.Join(", ", result.Parameters)).Should().Be((code, ""));
@@ -87,6 +91,7 @@ namespace VT100.Tests.Utilities.ReadConsole
         [InlineData('\t', ResolvedCode.Tab)]
         [InlineData('\x7f', ResolvedCode.Backspace)]
         [InlineData('\r', ResolvedCode.CR)]
+        [InlineData('X', ResolvedCode.NotRecognised)]
         public void SingleCharCodesAreRecognised(char input, ResolvedCode code)
         {
             // Arrange
@@ -94,7 +99,8 @@ namespace VT100.Tests.Utilities.ReadConsole
             var type = AnsiCodeType.None;
 
             //Act
-            var result = CodeAnalyser.Analyse(seq, type);
+            var codeAnalyser = new CodeAnalyser();
+            var result = codeAnalyser.Analyse(seq, type);
 
             //Assert
             (result.Code, string.Join(", ", result.Parameters)).Should().Be((code, ""));

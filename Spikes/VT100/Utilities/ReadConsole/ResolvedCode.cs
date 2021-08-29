@@ -38,6 +38,7 @@ namespace VT100.Utilities.ReadConsole
         CR,
         Tab,
         Space,
-        Backspace
+        Backspace,
+        CPR //Cursor position report
     }
 }

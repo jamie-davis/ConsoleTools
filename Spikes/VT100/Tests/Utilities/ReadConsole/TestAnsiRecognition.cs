@@ -43,7 +43,7 @@ namespace VT100.Tests.Utilities.ReadConsole
                 return string.Empty;
             }
 
-            var codes = AnsiRecognition.Split(_keys);
+            var codes = AnsiRecognition.Split(_keys, CodeAnalyserSettings.PreferPF3Modifiers);
             var result = codes.Select(c => new
             {
                 c.CodeType,

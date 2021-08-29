@@ -952,5 +952,101 @@
       "KeyChar": "\u0013",
       "Modifiers": 0
     }
+  ],
+  [
+    {
+      "KeyChar": "\u001b",
+      "Modifiers": 0,
+      "Key": 0
+    },
+    {
+      "KeyChar": "[",
+      "Modifiers": 0,
+      "Key": 0
+    },
+    {
+      "KeyChar": "5",
+      "Modifiers": 0,
+      "Key": 0
+    },
+    {
+      "KeyChar": ";",
+      "Modifiers": 0,
+      "Key": 0
+    },
+    {
+      "KeyChar": "5",
+      "Modifiers": 0,
+      "Key": 0
+    },
+    {
+      "KeyChar": "R",
+      "Modifiers": 0,
+      "Key": 0
+    }
+  ],
+  [
+    {
+      "KeyChar": "\u001b",
+      "Modifiers": 0,
+      "Key": 0
+    },
+    {
+      "KeyChar": "[",
+      "Modifiers": 0,
+      "Key": 0
+    },
+    {
+      "KeyChar": "7",
+      "Modifiers": 0,
+      "Key": 0
+    },
+    {
+      "KeyChar": ";",
+      "Modifiers": 0,
+      "Key": 0
+    },
+    {
+      "KeyChar": "5",
+      "Modifiers": 0,
+      "Key": 0
+    },
+    {
+      "KeyChar": "R",
+      "Modifiers": 0,
+      "Key": 0
+    }
+  ],
+  [
+    {
+      "KeyChar": "\u001b",
+      "Modifiers": 0,
+      "Key": 0
+    },
+    {
+      "KeyChar": "[",
+      "Modifiers": 0,
+      "Key": 0
+    },
+    {
+      "KeyChar": "9",
+      "Modifiers": 0,
+      "Key": 0
+    },
+    {
+      "KeyChar": ";",
+      "Modifiers": 0,
+      "Key": 0
+    },
+    {
+      "KeyChar": "5",
+      "Modifiers": 0,
+      "Key": 0
+    },
+    {
+      "KeyChar": "R",
+      "Modifiers": 0,
+      "Key": 0
+    }
   ]
 ]

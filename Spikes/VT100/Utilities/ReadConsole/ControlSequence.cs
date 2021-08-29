@@ -5,11 +5,12 @@ namespace VT100.Utilities.ReadConsole
 {
     internal class ControlSequence
     {
-        public ControlSequence(IEnumerable<ControlElement> seq, AnsiCodeType codeType)
+        public ControlSequence(IEnumerable<ControlElement> seq, AnsiCodeType codeType, CodeAnalyserSettings settings)
         {
             CodeType = codeType;
             Items = seq.ToList();
-            var resolved = CodeAnalyser.Analyse(Items, codeType);
+            var analyser = new CodeAnalyser(settings);
+            var resolved = analyser.Analyse(Items, codeType);
             ResolvedCode = resolved.Code;
             Parameters = resolved.Parameters;
         }

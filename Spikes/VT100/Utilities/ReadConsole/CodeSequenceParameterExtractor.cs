@@ -15,7 +15,7 @@ namespace VT100.Utilities.ReadConsole
         internal static (List<ControlElement> Sequence, List<string> Parameters) Extract(IEnumerable<ControlElement> elements, AnsiCodeType ansiCodeType)
         {
             if (ansiCodeType != AnsiCodeType.CSI)
-                return (elements.ToList(), new List<string>());
+                return (elements.ToList(), new List<string>()); //parameters can only be extracted from CSI sequences
 
             var exhausted = false;
             var seq = new List<ControlElement>();
@@ -39,8 +39,6 @@ namespace VT100.Utilities.ReadConsole
             //Take a character and add it to the sequence if the sequence is not finished
             void AcceptAndCopyIfPossible()
             {
-                if (exhausted) return;
-
                 var element = Accept();
                 if (element != null)
                     seq.Add(element);
@@ -57,12 +55,14 @@ namespace VT100.Utilities.ReadConsole
                 }
             }
 
+            string MakeParameterString(List<ControlElement> controlElements)
+            {
+                return string.Concat(controlElements.Select(e => e.KeyChar));
+            }
+
             List<ControlElement> PullParameter()
             {
                 var result = new List<ControlElement>();
-                if (exhausted)
-                    return new List<ControlElement>();
-
                 do
                 {
                     Accept();
@@ -73,9 +73,10 @@ namespace VT100.Utilities.ReadConsole
             }
 
             AcceptAndCopyIfPossible(); //ESC
-            AcceptAndCopyIfPossible(); //[
 
+            AcceptAndCopyIfPossible(); //[
             CopyCodeElements();
+
             var parameters = new List<string>();
             while (!exhausted)
             {
@@ -86,11 +87,29 @@ namespace VT100.Utilities.ReadConsole
                     parameter = parameter.Take(parameter.Count - 1).ToList();
                 }
 
-                parameters.Add(string.Concat(parameter.Select(e => e.KeyChar)));
+                parameters.Add(MakeParameterString(parameter));
             }
 
+            var terminator = seq.Last();
+            if (IsDirectParameterSequence(terminator))
+            {
+                //some sequences have a parameter not prefixed with ; eg "CSI 5;10R" where "5" is a parameter that needs to be extracted
+                //in the example this is a cursor position report where 5 is the row, and 10 is the column.
+                if (seq.Count > 3)
+                {
+                    var parameter = seq.Skip(2).Take(seq.Count - 3).ToList();
+                    for (var delIx = 0; delIx < parameter.Count; ++delIx)
+                        seq.RemoveAt(2);
+                    parameters.Insert(0, MakeParameterString(parameter));
+                }
+            }
             return (seq, parameters);
         }
 
+        private static bool IsDirectParameterSequence(ControlElement terminator)
+        {
+            const string directParameterTerminators = "R";
+            return directParameterTerminators.Contains(terminator.KeyChar);
+        }
     }
 }

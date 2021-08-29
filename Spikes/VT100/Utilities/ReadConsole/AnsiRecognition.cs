@@ -10,18 +10,18 @@ namespace VT100.Utilities.ReadConsole
     {
         internal const char ESC = '\x1b';
 
-        internal static IEnumerable<ControlSequence> Split(List<ControlElement> sequence)
+        internal static IEnumerable<ControlSequence> Split(List<ControlElement> sequence, CodeAnalyserSettings settings = 0)
         {
             while (sequence.Count > 0)
             {
                 var (haveSequence, extractedSequence, sequenceType) = TryTakeAnsiSequence(sequence);
                 if (haveSequence)
-                    yield return new ControlSequence(extractedSequence, sequenceType);
+                    yield return new ControlSequence(extractedSequence, sequenceType, settings);
                 else
                 {
                     var elementAsList = sequence.Take(1).ToList();
                     sequence.RemoveAt(0);
-                    yield return new ControlSequence(elementAsList, AnsiCodeType.None);
+                    yield return new ControlSequence(elementAsList, AnsiCodeType.None, settings);
                 }
             }
         }

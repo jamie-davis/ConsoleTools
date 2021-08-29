@@ -9,10 +9,16 @@ namespace VT100.Utilities.ReadConsole
 {
     internal class ConsoleInputReader
     {
+        private readonly CodeAnalyserSettings _analyserSettings;
         private bool _stop;
         public BlockingCollection<ControlSequence> Items { get; } = new BlockingCollection<ControlSequence>();
 
         internal IInputMonitor KeyMonitor { get; set; }
+
+        public ConsoleInputReader(CodeAnalyserSettings analyserSettings = 0)
+        {
+            _analyserSettings = analyserSettings;
+        }
 
         public void Stop()
         {
@@ -36,7 +42,7 @@ namespace VT100.Utilities.ReadConsole
 
                 KeyMonitor?.SequenceCaptured(keys);
 
-                var controlSequence = AnsiRecognition.Split(keys);
+                var controlSequence = AnsiRecognition.Split(keys, _analyserSettings);
                 foreach (var sequence in controlSequence)
                 {
                     Items.Add(sequence);
