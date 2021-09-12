@@ -4,7 +4,7 @@ using VT100.Exceptions;
 
 namespace VT100.Utilities
 {
-    internal class RequireVTMode : IDisposable
+    internal class RequireVTMode : IDisposable, IVTModeControl
     {
         private IntPtr _stdInHandle;
         private IntPtr _stdOutHandle;
@@ -22,6 +22,8 @@ namespace VT100.Utilities
         private const uint DISABLE_NEWLINE_AUTO_RETURN = 0x0008;
 
         private const uint ENABLE_VIRTUAL_TERMINAL_INPUT = 0x0200;
+        
+        private const uint ENABLE_INSERT_MODE = 0x0020;
 
         // ReSharper restore InconsistentNaming
 
@@ -36,6 +38,25 @@ namespace VT100.Utilities
 
         [DllImport("kernel32.dll")]
         public static extern uint GetLastError();
+
+        [DllImport("Kernel32")]
+        private static extern bool SetConsoleCtrlHandler(EventHandler handler, bool add);
+
+        enum CtrlType {
+            CTRL_C_EVENT = 0,
+            CTRL_BREAK_EVENT = 1,
+            CTRL_CLOSE_EVENT = 2,
+            CTRL_LOGOFF_EVENT = 5,
+            CTRL_SHUTDOWN_EVENT = 6
+        }
+
+        private delegate bool EventHandler(CtrlType sig);
+
+        private uint _inConsoleMode;
+        private uint _outConsoleMode;
+        private IntPtr _iStdInHandle;
+        private IntPtr _iStdOutHandle;
+        private bool _insertModeOn;
 
         #endregion
 
@@ -52,6 +73,8 @@ namespace VT100.Utilities
 
         public bool TryApply()
         {
+            SetConsoleCtrlHandler(HandleConsoleCtrl, true);
+
             _stdInHandle = GetStdHandle(STD_INPUT_HANDLE);
             _stdOutHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -102,6 +125,29 @@ namespace VT100.Utilities
             return true;
         }
 
+        /// <summary>
+        /// Fetch the current console insert/overwrite mode mode.
+        /// </summary>
+        public bool InsertModeOn
+        {
+            get
+            {
+                if (GetConsoleMode(_stdInHandle, out var mode))
+                    return (mode & ENABLE_INSERT_MODE) > 0;
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// The console application is being terminated, so we need to reset the console mode.
+        /// </summary>
+        private bool HandleConsoleCtrl(CtrlType sig)
+        {
+            ResetInConsoleMode();
+            ResetOutConsoleMode();
+            return false; //allow the termination to happen. returning true would block it.
+        }
+
         private void ResetInConsoleMode()
         {
             SetConsoleMode(_stdInHandle, BaseInputConsoleMode);
@@ -131,5 +177,15 @@ namespace VT100.Utilities
                 ResetOutConsoleMode();
             }
         }
+
+        #region Implementation of IVTModeControl
+
+        public void ToggleInsertMode()
+        {
+            if (GetConsoleMode(_stdInHandle, out var mode))
+                SetConsoleMode(_stdInHandle, mode ^ ENABLE_INSERT_MODE);
+        }
+
+        #endregion
     }
 }

@@ -1,0 +1,24 @@
+Processed: CursorForward
+>T                   
+ --------------------
+  ^
+Cursor position: Row 0, Column 1
+
+Value is: -->T<--
+
+Processed: CursorForward
+>T                   
+ --------------------
+   ^
+Cursor position: Row 0, Column 2
+
+Value is: -->T<--
+
+Processed: T
+>T T                 
+ --------------------
+    ^
+Cursor position: Row 0, Column 3
+
+Value is: -->T T<--
+

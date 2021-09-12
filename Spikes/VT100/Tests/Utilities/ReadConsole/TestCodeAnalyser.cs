@@ -92,6 +92,7 @@ namespace VT100.Tests.Utilities.ReadConsole
         [InlineData('\x7f', ResolvedCode.Backspace)]
         [InlineData('\r', ResolvedCode.CR)]
         [InlineData('X', ResolvedCode.NotRecognised)]
+        [InlineData('\x1b', ResolvedCode.Escape)]
         public void SingleCharCodesAreRecognised(char input, ResolvedCode code)
         {
             // Arrange

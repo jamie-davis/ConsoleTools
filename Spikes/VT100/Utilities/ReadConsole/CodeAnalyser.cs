@@ -71,6 +71,7 @@ namespace VT100.Utilities.ReadConsole
                 ( ResolvedCode.Tab, s => Match(s, 0, '\x9') ),
                 ( ResolvedCode.CR, s => Match(s, 0, '\r') ),
                 ( ResolvedCode.Backspace, s => Match(s, 0, '\x7f') ),
+                ( ResolvedCode.Escape, s => Match(s, 0, '\x1b') ),
             };
 
         public CodeAnalyser(CodeAnalyserSettings settings = 0)

@@ -23,12 +23,14 @@ namespace VT100
                 Console.Write(new[] { (char)0x1b, '[', '1', 'B' });
                 Console.Write($"Output: {req.BaseOutputConsoleMode} to {req.RequiredOutputConsoleMode}");
                 Console.WriteLine();
-                Console.WriteLine("Ctrl-Q Quit, Ctrl-S Save keystokes, Ctrl-A Report cursor position");
+                Console.WriteLine("Ctrl-Q Quit, Ctrl-S Save keystokes, Ctrl-A Report cursor position, Ctrl-F Full screen UI test");
 
                 var reader = new ConsoleInputReader(CodeAnalyserSettings.PreferPF3Modifiers);
                 var monitor = new Monitor();
                 reader.KeyMonitor = monitor;
                 Task.Factory.StartNew(reader.Read, TaskCreationOptions.LongRunning);
+                var goUI = false;
+                Console.WriteLine("Requesting device attributes (DA)...\x1b[0c");
                 foreach (var item in reader.Items.GetConsumingEnumerable())
                 {
                     Console.Write(item.CodeType);
@@ -40,12 +42,22 @@ namespace VT100
                             monitor.Save();
                         if (controlElement.KeyChar == '\x1' && item.CodeType == AnsiCodeType.None)
                             Console.Write("\x1b[6n");
+                        if (controlElement.KeyChar == '\x6' && item.CodeType == AnsiCodeType.None)
+                        {
+                            reader.Stop();
+                            goUI = true;
+                        }
 
                         Console.Write($"[{controlElement.Key}, {(int)controlElement.KeyChar}|{(int)controlElement.KeyChar:X}|{TryRender(controlElement.KeyChar)}]");
                     }
                     if (item.CodeType == AnsiCodeType.None)
                         Console.Write(item.Items[0].KeyChar);
                     Console.WriteLine($" {item.ResolvedCode}{(item.Parameters.Any() ? $"({string.Join(", ", item.Parameters)})" : string.Empty)}");
+                }
+
+                if (goUI)
+                {
+                    FullScreenTester.Run();
                 }
             }
         }

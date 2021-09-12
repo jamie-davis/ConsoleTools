@@ -1,0 +1,16 @@
+Processed: A
+>ATest               
+ --------------------
+  ^
+Cursor position: Row 0, Column 1
+
+Value is: -->ATest<--
+
+Processed:  
+>A Test              
+ --------------------
+   ^
+Cursor position: Row 0, Column 2
+
+Value is: -->A Test<--
+
