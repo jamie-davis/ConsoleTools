@@ -185,10 +185,9 @@ sync.ffs_db
 *.csproj.Updated
 *.csproj.Original
 *.csproj.bak
-
-
 /.vs/ConsoleToolkit/v15/Server/sqlite3
 /.vs/ConsoleToolkit/DesignTimeBuild/.dtbcache
+launchSettings.json
 
 #Rider
 .idea/
