@@ -6,7 +6,7 @@ namespace Vt100.FullScreen.Controls
 {
     internal class CursorController
     {
-        public CursorController(int characterOffset, int visualOffset, int maxVisualOffset, int cursorPosX, int cursorPosY, int maxCharacterOffset)
+        public CursorController(int characterOffset, int visualOffset, int maxVisualOffset, int cursorPosX, int cursorPosY, int maxCharacterOffset, int initiualDataLength)
         {
             CharacterOffset = characterOffset;
             VisualOffset = visualOffset;
@@ -16,6 +16,7 @@ namespace Vt100.FullScreen.Controls
             CursorPosY = cursorPosY;
             RootCursorX = cursorPosX;
             RootCursorY = cursorPosY;
+            DataLength = initiualDataLength;
         }
 
         public event EventHandler Redraw;
@@ -24,7 +25,9 @@ namespace Vt100.FullScreen.Controls
         public int CharacterOffset { get; private set; }
         public int VisualOffset { get; private set; }
         public int MaxVisualOffset { get; private set; }
-        public int MaxCharacterOffset { get; }
+        public int MaxCharacterOffset { get; private set; }
+        
+        public int DataLength { get; private set; }
         public int CursorPosX { get; private set; }
         public int CursorPosY { get; private set; }
         public int RootCursorX { get; private set; }
@@ -33,15 +36,10 @@ namespace Vt100.FullScreen.Controls
         public void AdvanceCursor()
         {
             if (VisualOffset == MaxVisualOffset)
-            {
                 CharacterOffset += 1;
-                ResetCursor();
-            }
             else
-            {
                 VisualOffset += 1;
-                ResetCursor();
-            }
+            ResetCursor();
         }
 
         public bool CursorControl(ControlSequence key)
@@ -49,30 +47,14 @@ namespace Vt100.FullScreen.Controls
             switch (key.ResolvedCode)
             {
                 case ResolvedCode.CursorBackwards:
-                    if (VisualOffset == 0 && CharacterOffset > 0)
-                    {
-                        CharacterOffset -= 1;
-                        ResetCursor();
-                    }
-                    else if (VisualOffset > 0)
-                    {
-                        VisualOffset -= 1;
-                        ResetCursor();
-                    }
+                    CursorBackward();
+                    ResetCursor();
 
                     return true;
 
                 case ResolvedCode.CursorForward:
-                    if (VisualOffset == MaxVisualOffset && CharacterOffset < MaxVisualOffset)
-                    {
-                        CharacterOffset += 1;
-                        ResetCursor();
-                    }
-                    else if (VisualOffset < MaxVisualOffset)
-                    {
-                        VisualOffset += 1;
-                        ResetCursor();
-                    }
+                    CursorForward();
+                    ResetCursor();
 
                     return true;
 
@@ -80,8 +62,86 @@ namespace Vt100.FullScreen.Controls
                 case ResolvedCode.CursorDown:
                     Debug.WriteLine($"Got {key.ResolvedCode}");
                     return true;
+                
+                case ResolvedCode.End:
+                    if (CursorEndIfNotAlreadyThere())
+                        ResetCursor();
+                    return true;
+                
+                case ResolvedCode.Home:
+                    if (CursorHomeIfNotAlreadyThere())
+                        ResetCursor();
+                    return true;
             }
             return false;
+        }
+
+        private void CursorBackward()
+        {
+            if (VisualOffset == 0 && CharacterOffset > 0)
+                CharacterOffset -= 1;
+            else if (VisualOffset > 0)
+                VisualOffset -= 1;
+        }
+
+        private void CursorForward()
+        {
+            if (VisualOffset == MaxVisualOffset && CharacterOffset < MaxCharacterOffset)
+                CharacterOffset += 1;
+            else if (VisualOffset < MaxVisualOffset)
+                VisualOffset += 1;
+        }
+
+        /// <summary>
+        /// Move the cursor to the beginning of the text, if it's not already there.
+        /// </summary>
+        /// <returns>True if the cursor is moved.</returns>
+        private bool CursorHomeIfNotAlreadyThere()
+        {
+            var moved = false;
+            if (CharacterOffset > 0)
+            {
+                CharacterOffset = 0;
+                moved = true;
+            }
+
+            if (VisualOffset > 0)
+            {
+                VisualOffset = 0;
+                moved = true;
+            }
+
+            return moved;
+        }
+
+        /// <summary>
+        /// Move the cursor to the end of the text, if it's not already there.
+        /// </summary>
+        /// <returns>True if the cursor is moved.</returns>
+        private bool CursorEndIfNotAlreadyThere()
+        {
+            var moved = false;
+            if (CharacterOffset < MaxCharacterOffset)
+            {
+                CharacterOffset = MaxCharacterOffset;
+                moved = true;
+            }
+
+            if (MaxCharacterOffset == 0)
+            {
+                if (VisualOffset < DataLength)
+                {
+                    VisualOffset = DataLength;
+                    moved = true;
+                }
+            }
+            else if (VisualOffset < MaxVisualOffset)
+            {
+                VisualOffset = MaxVisualOffset;
+                moved = true;
+            }
+
+            return moved;
         }
 
         private void ResetCursor()
@@ -89,6 +149,37 @@ namespace Vt100.FullScreen.Controls
             CursorPosX = RootCursorX + VisualOffset;
             CursorPosY = RootCursorY;
             MoveCursor?.Invoke(this, (CursorPosX, CursorPosY, CharacterOffset));
+        }
+
+        public int GetCharacterPosition()
+        {
+            return CharacterOffset + VisualOffset;
+        }
+
+        public void MoveCursorBack(int n = 1)
+        {
+            var moved = false;
+            for (int done = 0; done < n; ++done)
+            {
+                CursorBackward();
+                moved = true;
+            }
+            if (moved)
+                ResetCursor();
+        }
+
+        public void SetDataLength(int dataLength)
+        {
+            var difference = dataLength - DataLength;
+            DataLength = dataLength;
+
+            var newMaxCharacterOffset = dataLength > MaxVisualOffset
+                ? MaxCharacterOffset + difference
+                : 0;
+            if (newMaxCharacterOffset < 0)
+                MaxCharacterOffset = 0;
+            else
+                MaxCharacterOffset = newMaxCharacterOffset;
         }
     }
 }

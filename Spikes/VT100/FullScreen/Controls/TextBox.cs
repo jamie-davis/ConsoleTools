@@ -52,12 +52,12 @@ namespace Vt100.FullScreen.Controls
             {
                 if (CharacterOffset < _value.Length)
                     visibleValue = _value.Substring(CharacterOffset);
-
-                if (visibleValue.Length > _width)
-                    visibleValue = visibleValue.Substring(0, _width);
-                else if (visibleValue.Length < _width)
-                    visibleValue = visibleValue.PadRight(_width);
             }
+            
+            if (visibleValue.Length > _width)
+                visibleValue = visibleValue.Substring(0, _width);
+            else if (visibleValue.Length < _width)
+                visibleValue = visibleValue.PadRight(_width);
 
             _app.Console.Write(visibleValue);
         }
@@ -73,7 +73,8 @@ namespace Vt100.FullScreen.Controls
         public void SetFocus()
         {
             _app.Console.SetCursorPosition(_column, _row);
-            _cursorControl = new CursorController(0, 0, _width - 1, _column, _row, _value.Length);
+            var maxCharacterOffset = _value.Length - _width + 1;
+            _cursorControl = new CursorController(0, 0, _width - 1, _column, _row, maxCharacterOffset > 0 ? maxCharacterOffset : 0, _value.Length);
             _cursorControl.MoveCursor += OnMoveCursor;
             _app.GotFocus(this);
         }
@@ -93,26 +94,50 @@ namespace Vt100.FullScreen.Controls
 
             if (next.ResolvedCode == ResolvedCode.NotRecognised)
             {
-                var nextChar = next.Items.FirstOrDefault()?.KeyChar;
-                if (nextChar == null) return;
-
-                _app.Console.Write(nextChar);
-                var characterPosition = _cursorControl.CharacterOffset + _cursorControl.VisualOffset;
-                if (characterPosition > _value.Length)
-                {
-                    _value = _value.PadRight(characterPosition) + nextChar;
-                }
-                else
-                {
-                    if (_app.IsCursorModeInsert())
-                        _value = _value.Substring(0, characterPosition) + nextChar + (characterPosition <= _value.Length ? _value.Substring(characterPosition) : string.Empty);
-                    else
-                        _value = _value.Substring(0, characterPosition) + nextChar + (characterPosition < _value.Length ? _value.Substring(characterPosition + 1) : string.Empty);
-                }
-
-                SaveValue();
-                _cursorControl.AdvanceCursor();
+                TryAddCharacter(next);
             }
+            else if (next.ResolvedCode == ResolvedCode.Backspace)
+            {
+                TryBackspace();
+            }
+            _cursorControl.SetDataLength(_value.Length);            
+        }
+
+        private void TryAddCharacter(ControlSequence next)
+        {
+            var nextChar = next.Items.FirstOrDefault()?.KeyChar;
+            if (nextChar == null) return;
+
+            _app.Console.Write(nextChar);
+            var characterPosition = _cursorControl.GetCharacterPosition();
+            if (characterPosition > _value.Length)
+            {
+                _value = _value.PadRight(characterPosition) + nextChar;
+            }
+            else
+            {
+                if (_app.IsCursorModeInsert())
+                    _value = _value.Substring(0, characterPosition) + nextChar + (characterPosition <= _value.Length
+                        ? _value.Substring(characterPosition)
+                        : string.Empty);
+                else
+                    _value = _value.Substring(0, characterPosition) + nextChar + (characterPosition < _value.Length
+                        ? _value.Substring(characterPosition + 1)
+                        : string.Empty);
+            }
+
+            SaveValue();
+            _cursorControl.AdvanceCursor();
+        }
+
+        private void TryBackspace()
+        {
+            var characterPosition = _cursorControl.GetCharacterPosition();
+            if (characterPosition == 0) return;
+
+            _value = _value.Substring(0, characterPosition - 1) + _value.Substring(characterPosition);
+            SaveValue();
+            _cursorControl.MoveCursorBack();
         }
 
         private void LoadValue()

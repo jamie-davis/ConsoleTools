@@ -1,3 +1,11 @@
+Initial display:
+>T                   
+ --------------------
+ ^
+Cursor position: Row 0, Column 0
+
+Value is: -->T<--
+
 Processed: CursorForward
 >T                   
  --------------------

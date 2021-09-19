@@ -1,3 +1,11 @@
+Initial display:
+>Test                
+ --------------------
+ ^
+Cursor position: Row 0, Column 0
+
+Value is: -->Test<--
+
 Processed: A
 >ATest               
  --------------------
@@ -7,7 +15,7 @@ Cursor position: Row 0, Column 1
 Value is: -->ATest<--
 
 Processed:  
->A Test              
+>A Tes               
  --------------------
    ^
 Cursor position: Row 0, Column 2

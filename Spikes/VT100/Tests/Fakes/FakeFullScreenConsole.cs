@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using Vt100.FullScreen;
 
 namespace VT100.Tests.Fakes
@@ -20,9 +21,9 @@ namespace VT100.Tests.Fakes
             _cursorX = 0;
             _cursorY = 0;
             _screenBuffer = new char[rows, columns];
-            for (int row = 0; row < rows; row++)
+            for (var row = 0; row < rows; row++)
             {
-                for (int column = 0; column < columns; column++)
+                for (var column = 0; column < columns; column++)
                 {
                     _screenBuffer[row, column] = ' ';
                 }
@@ -70,7 +71,7 @@ namespace VT100.Tests.Fakes
                 {
                     var sourceOffset = (copyToRow + 1) * _columns;
                     var destOffset = copyToRow * _columns;
-                    Buffer.BlockCopy(_screenBuffer, sourceOffset, _screenBuffer, destOffset, _columns);
+                    Buffer.BlockCopy(_screenBuffer, sourceOffset, _screenBuffer, destOffset, _columns * sizeof(char));
                 }
 
                 for (var col = 0; col < _columns; ++col)
@@ -80,6 +81,28 @@ namespace VT100.Tests.Fakes
             {
                 ++_cursorY;
             }
+        }
+
+        public string GetDisplayReport()
+        {
+            var sb = new StringBuilder();
+            var lineArray = new char[_columns]; 
+            for (var row = 0; row < _rows; row++)
+            {
+                var sourceOffset = row * _columns;
+                Buffer.BlockCopy(_screenBuffer, sourceOffset, lineArray, 0, _columns * sizeof(char));
+                if (row == _cursorY)
+                    sb.Append('>');
+                else
+                    sb.Append('|');
+                sb.AppendLine(new string(lineArray));
+            }
+
+            sb.AppendLine(" " + new string('-', _columns));
+            sb.AppendLine(" " + new string(' ', _cursorX) + "^");
+            sb.AppendLine($"Cursor position: Row {_cursorY}, Column {_cursorX}");
+            
+            return sb.ToString();
         }
     }
 }
