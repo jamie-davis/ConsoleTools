@@ -50,17 +50,17 @@ namespace VT100.Utilities.ReadConsole
                 StartSequence();
             }
 
-            bool WaitForKeyOrTimeout()
+            bool CheckForNextKeyAvailable()
             {
                 if (Console.KeyAvailable) return true;
-                Thread.Sleep(50);
+                Thread.Yield();
                 return Console.KeyAvailable;
             }
         
             StartSequence();
             while (!_stop)
             {
-                var keyAvailable = WaitForKeyOrTimeout();
+                var keyAvailable = CheckForNextKeyAvailable();
                 if (seqAvailable && !keyAvailable)
                     Switch();
 

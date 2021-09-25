@@ -12,9 +12,15 @@ namespace VT100
     internal class Program
     {
         public static void Main(string[] args)
-        { 
+        {
             using (var req = new RequireVTMode())
             {
+                if (args.Length == 1 && args[0] == "f")
+                {
+                    FullScreenTester.Run();
+                    return;
+                }
+
                 Console.Write("test");
                 Console.Write(new[] { (char)0x1b, '[', '1', 'B' });
                 Console.Write($"{req.ModeWasSet}");

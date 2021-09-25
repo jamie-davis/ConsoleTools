@@ -31,7 +31,7 @@ namespace VT100.Tests.TestUtilities
             return new ControlSequence(elements, codeType, 0);
         }
 
-        public static void Process(ILayoutControl control, object[] data, Action<string> postInputProcessing = null)
+        public static void Process(ILayoutControl control, IEnumerable<object> data, Action<string> postInputProcessing = null)
         {
             foreach (var keyRequest in data)
             {

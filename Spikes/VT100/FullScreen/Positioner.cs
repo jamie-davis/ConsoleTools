@@ -60,11 +60,15 @@ namespace Vt100.FullScreen
 
         public void Render()
         {
-            foreach (var container in _controls)
+            //hide
+            using (new CursorHider())
             {
-                Console.SetCursorPosition(container.CaptionX, container.CaptionY);
-                Console.Write(container.CaptionText);
-                container.Control.Render();
+                foreach (var container in _controls)
+                {
+                    Console.SetCursorPosition(container.CaptionX, container.CaptionY);
+                    Console.Write(container.CaptionText);
+                    container.Control.Render();
+                }
             }
         }
 

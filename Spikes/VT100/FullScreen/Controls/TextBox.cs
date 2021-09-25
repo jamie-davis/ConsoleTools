@@ -84,8 +84,12 @@ namespace Vt100.FullScreen.Controls
             if (!ReferenceEquals(sender, _cursorControl)) return;
 
             CharacterOffset = e.CharacterOffset;
-            Render();
-            _app.Console.SetCursorPosition(e.X, e.Y);
+            
+            using (new CursorHider())
+            {
+                Render();
+                _app.Console.SetCursorPosition(e.X, e.Y);
+            }
         }
 
         public void Accept(ControlSequence next)

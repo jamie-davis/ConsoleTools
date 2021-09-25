@@ -12,6 +12,10 @@
         public static string UseAlternateScreenBuffer = $"{CSI}?1049h";
         public static string UseMainScreenBuffer = $"{CSI}?1049l";
 
+        //Cursor Visibility
+        public static string HideCursor = $"{CSI}?25l";
+        public static string ShowCursor = $"{CSI}?25h";
+
         //Character attributes
         public static string UnderlineMode = $"{CSI}4m";
 
