@@ -1,0 +1,56 @@
+Initial display:
+>Test                
+ --------------------
+ ^
+Cursor position: Row 0, Column 0
+
+Value is: -->Test long string<--
+
+Processed: CursorForward
+>Test                
+ --------------------
+  ^
+Cursor position: Row 0, Column 1
+
+Value is: -->Test long string<--
+
+Processed: CursorForward
+>Test                
+ --------------------
+   ^
+Cursor position: Row 0, Column 2
+
+Value is: -->Test long string<--
+
+Processed: CursorForward
+>Test                
+ --------------------
+    ^
+Cursor position: Row 0, Column 3
+
+Value is: -->Test long string<--
+
+Processed: CursorForward
+>Test                
+ --------------------
+     ^
+Cursor position: Row 0, Column 4
+
+Value is: -->Test long string<--
+
+Processed: CursorForward
+>est l               
+ --------------------
+     ^
+Cursor position: Row 0, Column 4
+
+Value is: -->Test long string<--
+
+Processed: CursorForward
+>st lo               
+ --------------------
+     ^
+Cursor position: Row 0, Column 4
+
+Value is: -->Test long string<--
+

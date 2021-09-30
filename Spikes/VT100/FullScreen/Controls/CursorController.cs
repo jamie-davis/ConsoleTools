@@ -181,5 +181,10 @@ namespace Vt100.FullScreen.Controls
             else
                 MaxCharacterOffset = newMaxCharacterOffset;
         }
+
+        public void RefreshCursor()
+        {
+            ResetCursor();
+        }
     }
 }

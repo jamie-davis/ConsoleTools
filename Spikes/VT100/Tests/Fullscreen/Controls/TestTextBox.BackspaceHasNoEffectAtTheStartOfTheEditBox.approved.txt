@@ -1,0 +1,16 @@
+Initial display:
+>Test                
+ --------------------
+ ^
+Cursor position: Row 0, Column 0
+
+Value is: -->Test<--
+
+Processed: Backspace
+>Test                
+ --------------------
+ ^
+Cursor position: Row 0, Column 0
+
+Value is: -->Test<--
+

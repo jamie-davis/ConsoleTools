@@ -1,0 +1,56 @@
+Initial display:
+>Test                
+ --------------------
+ ^
+Cursor position: Row 0, Column 0
+
+Value is: -->Test<--
+
+Processed: Home
+>Test                
+ --------------------
+ ^
+Cursor position: Row 0, Column 0
+
+Value is: -->Test<--
+
+Processed: CursorForward
+>Test                
+ --------------------
+  ^
+Cursor position: Row 0, Column 1
+
+Value is: -->Test<--
+
+Processed: Delete
+>Tst                 
+ --------------------
+  ^
+Cursor position: Row 0, Column 1
+
+Value is: -->Tst<--
+
+Processed: Delete
+>Tt                  
+ --------------------
+  ^
+Cursor position: Row 0, Column 1
+
+Value is: -->Tt<--
+
+Processed: Delete
+>T                   
+ --------------------
+  ^
+Cursor position: Row 0, Column 1
+
+Value is: -->T<--
+
+Processed: Delete
+>T                   
+ --------------------
+  ^
+Cursor position: Row 0, Column 1
+
+Value is: -->T<--
+

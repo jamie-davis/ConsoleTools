@@ -1,0 +1,24 @@
+Initial display:
+>Tes                 
+ --------------------
+ ^
+Cursor position: Row 0, Column 0
+
+Value is: -->Tes<--
+
+Processed: End
+>Tes                 
+ --------------------
+    ^
+Cursor position: Row 0, Column 3
+
+Value is: -->Tes<--
+
+Processed: t
+>Test                
+ --------------------
+     ^
+Cursor position: Row 0, Column 4
+
+Value is: -->Test<--
+

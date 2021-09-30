@@ -17,6 +17,7 @@ namespace VT100.Tests.TestUtilities
                 { ResolvedCode.End, MakeControlSequence(AnsiCodeType.CSI, '\x1b', 'O', 'F') },
                 { ResolvedCode.Home, MakeControlSequence(AnsiCodeType.CSI, '\x1b', 'O', 'H') },
                 { ResolvedCode.Tab, MakeControlSequence(AnsiCodeType.None, '\t')},
+                { ResolvedCode.Delete, MakeControlSequence(AnsiCodeType.CSI, '\x1b', '[', '3', '~')},
                 { ResolvedCode.Backspace, MakeControlSequence(AnsiCodeType.None, '\x7f')},
                 { ResolvedCode.CR, MakeControlSequence(AnsiCodeType.None, '\r')},
                 { ResolvedCode.NotRecognised, MakeControlSequence(AnsiCodeType.None, 'X')},

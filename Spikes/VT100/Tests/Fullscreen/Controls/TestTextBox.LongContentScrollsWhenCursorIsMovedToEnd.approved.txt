@@ -1,0 +1,16 @@
+Initial display:
+>Test                
+ --------------------
+ ^
+Cursor position: Row 0, Column 0
+
+Value is: -->Test long string<--
+
+Processed: End
+>ring                
+ --------------------
+     ^
+Cursor position: Row 0, Column 4
+
+Value is: -->Test long string<--
+

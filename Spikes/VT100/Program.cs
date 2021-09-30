@@ -20,8 +20,15 @@ namespace VT100
                     FullScreenTester.Run();
                     return;
                 }
-
-                Console.Write("test");
+                
+                {
+                    var codePage = Console.OutputEncoding.CodePage.ToString();
+                    var length = codePage.Length;
+                    Console.WriteLine($"╔{new String('═', length)}╗");
+                    Console.WriteLine($"║{codePage}║");
+                    Console.WriteLine($"╚{new String('═', length)}╝");
+                }
+                Console.Write("\u2501test");
                 Console.Write(new[] { (char)0x1b, '[', '1', 'B' });
                 Console.Write($"{req.ModeWasSet}");
                 Console.Write(new[] { (char)0x1b, '[', '1', 'B' });

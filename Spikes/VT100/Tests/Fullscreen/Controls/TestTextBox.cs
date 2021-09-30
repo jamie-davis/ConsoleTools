@@ -79,6 +79,23 @@ namespace VT100.Tests.Fullscreen.Controls
         }
         
         [Fact]
+        public void DeleteRemovesCharactersUnderCursor()
+        {
+            //Arrange
+            var textBox = new TextBox();
+            textBox.Position(0,0,5,1);
+            var valueWrapper = new ValueWrapper<string>("Test");
+            var data = new object[] { ResolvedCode.Home, ResolvedCode.CursorForward, ResolvedCode.Delete, ResolvedCode.Delete , ResolvedCode.Delete , ResolvedCode.Delete };
+            var testRig = new ControlTestRig<string>(textBox, valueWrapper, data);
+            
+            //Act
+            testRig.RunTest();
+
+            //Assert
+            testRig.GetReport().Verify();
+        }
+        
+        [Fact]
         public void BackspaceHasNoEffectAtTheStartOfTheEditBox()
         {
             //Arrange

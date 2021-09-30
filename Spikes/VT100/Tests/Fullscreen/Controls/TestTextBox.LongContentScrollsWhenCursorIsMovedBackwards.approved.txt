@@ -1,0 +1,64 @@
+Initial display:
+>Test                
+ --------------------
+ ^
+Cursor position: Row 0, Column 0
+
+Value is: -->Test long string<--
+
+Processed: End
+>ring                
+ --------------------
+     ^
+Cursor position: Row 0, Column 4
+
+Value is: -->Test long string<--
+
+Processed: CursorBackwards
+>ring                
+ --------------------
+    ^
+Cursor position: Row 0, Column 3
+
+Value is: -->Test long string<--
+
+Processed: CursorBackwards
+>ring                
+ --------------------
+   ^
+Cursor position: Row 0, Column 2
+
+Value is: -->Test long string<--
+
+Processed: CursorBackwards
+>ring                
+ --------------------
+  ^
+Cursor position: Row 0, Column 1
+
+Value is: -->Test long string<--
+
+Processed: CursorBackwards
+>ring                
+ --------------------
+ ^
+Cursor position: Row 0, Column 0
+
+Value is: -->Test long string<--
+
+Processed: CursorBackwards
+>tring               
+ --------------------
+ ^
+Cursor position: Row 0, Column 0
+
+Value is: -->Test long string<--
+
+Processed: CursorBackwards
+>strin               
+ --------------------
+ ^
+Cursor position: Row 0, Column 0
+
+Value is: -->Test long string<--
+

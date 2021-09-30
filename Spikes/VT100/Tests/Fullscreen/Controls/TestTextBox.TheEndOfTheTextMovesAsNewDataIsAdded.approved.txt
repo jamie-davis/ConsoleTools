@@ -1,0 +1,56 @@
+Initial display:
+>Test                
+ --------------------
+ ^
+Cursor position: Row 0, Column 0
+
+Value is: -->Test long string<--
+
+Processed: End
+>ring                
+ --------------------
+     ^
+Cursor position: Row 0, Column 4
+
+Value is: -->Test long string<--
+
+Processed: A
+>ingA                
+ --------------------
+     ^
+Cursor position: Row 0, Column 4
+
+Value is: -->Test long stringA<--
+
+Processed: B
+>ngAB                
+ --------------------
+     ^
+Cursor position: Row 0, Column 4
+
+Value is: -->Test long stringAB<--
+
+Processed: C
+>gABC                
+ --------------------
+     ^
+Cursor position: Row 0, Column 4
+
+Value is: -->Test long stringABC<--
+
+Processed: Home
+>Test                
+ --------------------
+ ^
+Cursor position: Row 0, Column 0
+
+Value is: -->Test long stringABC<--
+
+Processed: End
+>gABC                
+ --------------------
+     ^
+Cursor position: Row 0, Column 4
+
+Value is: -->Test long stringABC<--
+

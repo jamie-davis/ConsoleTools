@@ -1,0 +1,32 @@
+Initial display:
+>Test                
+ --------------------
+ ^
+Cursor position: Row 0, Column 0
+
+Value is: -->Test<--
+
+Processed: End
+>Test                
+ --------------------
+     ^
+Cursor position: Row 0, Column 4
+
+Value is: -->Test<--
+
+Processed: CursorBackwards
+>Test                
+ --------------------
+    ^
+Cursor position: Row 0, Column 3
+
+Value is: -->Test<--
+
+Processed: Backspace
+>Tet                 
+ --------------------
+   ^
+Cursor position: Row 0, Column 2
+
+Value is: -->Tet<--
+

@@ -25,6 +25,8 @@ namespace VT100.Utilities
         
         private const uint ENABLE_INSERT_MODE = 0x0020;
 
+        private static readonly uint UNICODE_CP = (uint)System.Text.Encoding.UTF8.CodePage;
+
         // ReSharper restore InconsistentNaming
 
         [DllImport("kernel32.dll")]
@@ -41,6 +43,18 @@ namespace VT100.Utilities
 
         [DllImport("Kernel32")]
         private static extern bool SetConsoleCtrlHandler(EventHandler handler, bool add);
+        
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool SetConsoleOutputCP(uint wCodePageID);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern uint GetConsoleOutputCP();
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool SetConsoleCP(uint wCodePageID);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern uint GetConsoleCP();
 
         enum CtrlType {
             CTRL_C_EVENT = 0,
@@ -57,6 +71,8 @@ namespace VT100.Utilities
         private IntPtr _iStdInHandle;
         private IntPtr _iStdOutHandle;
         private bool _insertModeOn;
+        private uint _consoleCP; 
+        private uint _consoleOutputCP; 
 
         #endregion
 
@@ -77,6 +93,8 @@ namespace VT100.Utilities
 
             _stdInHandle = GetStdHandle(STD_INPUT_HANDLE);
             _stdOutHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+            _consoleCP = GetConsoleCP();
+            _consoleOutputCP = GetConsoleOutputCP();
 
             if (!GetConsoleMode(_stdInHandle, out uint inConsoleMode))
             {
@@ -121,12 +139,33 @@ namespace VT100.Utilities
                 return false;
             }
 
+            if (!SetConsoleOutputCP(UNICODE_CP))
+            {
+                var lastError = GetLastError();
+                ResetInConsoleMode();
+                ResetOutConsoleMode();
+                LastError = $"failed to set console output code page, error code: {lastError}";
+                return false;
+            }
+
+            if (!SetConsoleCP(UNICODE_CP))
+            {
+                var lastError = GetLastError();
+                ResetInConsoleMode();
+                ResetOutConsoleMode();
+                ResetOutputCP();
+                LastError = $"failed to set console code page, error code: {lastError}";
+                Console.ReadKey();
+                return false;
+            }
+
+            
             ModeWasSet = true;
             return true;
         }
 
         /// <summary>
-        /// Fetch the current console insert/overwrite mode mode.
+        /// Fetch the current console insert/overwrite mode.
         /// </summary>
         public bool InsertModeOn
         {
@@ -158,6 +197,16 @@ namespace VT100.Utilities
             SetConsoleMode(_stdOutHandle, BaseOutputConsoleMode);
         }
 
+        private void ResetOutputCP()
+        {
+            SetConsoleOutputCP(_consoleOutputCP);
+        }
+
+        private void ResetCP()
+        {
+            SetConsoleCP(_consoleCP);
+        }
+
 
         public uint BaseInputConsoleMode { get; private set; }
         public uint BaseOutputConsoleMode { get; private set; }
@@ -175,6 +224,8 @@ namespace VT100.Utilities
             {
                 ResetInConsoleMode();
                 ResetOutConsoleMode();
+                ResetOutputCP();
+                ResetCP();
             }
         }
 

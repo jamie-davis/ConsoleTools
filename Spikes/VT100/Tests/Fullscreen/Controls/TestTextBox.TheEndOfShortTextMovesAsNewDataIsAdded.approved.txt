@@ -1,0 +1,48 @@
+Initial display:
+>A                   
+ --------------------
+ ^
+Cursor position: Row 0, Column 0
+
+Value is: -->A<--
+
+Processed: End
+>A                   
+ --------------------
+  ^
+Cursor position: Row 0, Column 1
+
+Value is: -->A<--
+
+Processed: B
+>AB                  
+ --------------------
+   ^
+Cursor position: Row 0, Column 2
+
+Value is: -->AB<--
+
+Processed: C
+>ABC                 
+ --------------------
+    ^
+Cursor position: Row 0, Column 3
+
+Value is: -->ABC<--
+
+Processed: Home
+>ABC                 
+ --------------------
+ ^
+Cursor position: Row 0, Column 0
+
+Value is: -->ABC<--
+
+Processed: End
+>ABC                 
+ --------------------
+    ^
+Cursor position: Row 0, Column 3
+
+Value is: -->ABC<--
+

@@ -104,6 +104,10 @@ namespace Vt100.FullScreen.Controls
             {
                 TryBackspace();
             }
+            else if (next.ResolvedCode == ResolvedCode.Delete)
+            {
+                TryDelete();
+            }
             _cursorControl.SetDataLength(_value.Length);            
         }
 
@@ -142,6 +146,16 @@ namespace Vt100.FullScreen.Controls
             _value = _value.Substring(0, characterPosition - 1) + _value.Substring(characterPosition);
             SaveValue();
             _cursorControl.MoveCursorBack();
+        }
+
+        private void TryDelete()
+        {
+            var characterPosition = _cursorControl.GetCharacterPosition();
+            if (characterPosition >= _value.Length) return;
+            
+            _value = _value.Substring(0, characterPosition) + _value.Substring(characterPosition + 1);
+            SaveValue();
+            _cursorControl.RefreshCursor();
         }
 
         private void LoadValue()
