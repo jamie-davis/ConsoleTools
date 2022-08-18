@@ -1,4 +1,4 @@
-using Vt100.FullScreen;
+using VT100.FullScreen;
 
 namespace VT100.Tests.Fakes
 {

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Vt100.FullScreen;
-using Vt100.FullScreen.Controls;
+using VT100.FullScreen;
+using VT100.FullScreen.Controls;
 using VT100.Utilities.ReadConsole;
 
 namespace VT100.Tests.TestUtilities

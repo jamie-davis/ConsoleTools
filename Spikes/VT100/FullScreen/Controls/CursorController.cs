@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using VT100.Utilities.ReadConsole;
 
-namespace Vt100.FullScreen.Controls
+namespace VT100.FullScreen.Controls
 {
     internal class CursorController
     {

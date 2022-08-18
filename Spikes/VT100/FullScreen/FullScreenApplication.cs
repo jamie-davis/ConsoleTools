@@ -9,7 +9,7 @@ using VT100;
 using VT100.Utilities;
 using VT100.Utilities.ReadConsole;
 
-namespace Vt100.FullScreen
+namespace VT100.FullScreen
 {
     internal class FullScreenApplication : IDisposable, IFullScreenApplication
     {

@@ -5,10 +5,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
-using Vt100.Attributes;
-using Vt100.FullScreen.Controls;
+using VT100.Attributes;
+using VT100.FullScreen.Controls;
 
-namespace Vt100.FullScreen
+namespace VT100.FullScreen
 {
     internal static class LayoutControls
     {

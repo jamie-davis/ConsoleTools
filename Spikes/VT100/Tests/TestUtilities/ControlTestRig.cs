@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Vt100.FullScreen;
+using VT100.FullScreen;
 using VT100.Tests.Fakes;
 
 namespace VT100.Tests.TestUtilities

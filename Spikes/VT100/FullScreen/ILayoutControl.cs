@@ -1,7 +1,8 @@
 ﻿using System;
+using VT100.FullScreen.ControlBehaviour;
 using VT100.Utilities.ReadConsole;
 
-namespace Vt100.FullScreen
+namespace VT100.FullScreen
 {
     internal interface ILayoutControl
     {
@@ -11,7 +12,7 @@ namespace Vt100.FullScreen
         void Position(int column, int row, int width, int height);
         void SetFocus();
         void Accept(ControlSequence next);
+        
+        Style Style { get; }
     }
-
-
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.XPath;
 
-namespace Vt100.FullScreen
+namespace VT100.FullScreen
 {
     internal class Positioner
     {

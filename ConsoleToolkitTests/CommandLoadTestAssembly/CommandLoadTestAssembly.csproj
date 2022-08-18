@@ -4,6 +4,7 @@
       <TargetFramework>netstandard2.0</TargetFramework>
       <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
       <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
   </PropertyGroup>
   <ItemGroup>
       <ProjectReference Include="..\..\ConsoleToolkit\ConsoleToolkit.csproj" />

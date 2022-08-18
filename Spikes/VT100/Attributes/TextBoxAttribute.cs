@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Vt100.Attributes
+namespace VT100.Attributes
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     internal class TextBoxAttribute : Attribute

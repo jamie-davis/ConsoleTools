@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Vt100.FullScreen
+namespace VT100.FullScreen
 {
     internal class ScreenCapture : IDisposable
     {

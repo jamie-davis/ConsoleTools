@@ -1,5 +1,5 @@
 using FluentAssertions;
-using Vt100.FullScreen.Controls;
+using VT100.FullScreen.Controls;
 using VT100.Tests.Fakes;
 using VT100.Tests.TestUtilities;
 using VT100.Utilities.ReadConsole;

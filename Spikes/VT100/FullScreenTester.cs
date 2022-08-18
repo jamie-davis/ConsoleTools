@@ -1,7 +1,7 @@
 ﻿using System;
-using Vt100;
-using Vt100.Attributes;
-using Vt100.FullScreen;
+using VT100;
+using VT100.Attributes;
+using VT100.FullScreen;
 using VT100.Utilities;
 
 namespace VT100

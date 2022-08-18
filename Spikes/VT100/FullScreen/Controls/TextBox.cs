@@ -2,10 +2,11 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using Vt100.Attributes;
+using VT100.Attributes;
+using VT100.FullScreen.ControlBehaviour;
 using VT100.Utilities.ReadConsole;
 
-namespace Vt100.FullScreen.Controls
+namespace VT100.FullScreen.Controls
 {
     [Control(typeof(TextBoxAttribute))]
     internal class TextBox : ILayoutControl
@@ -22,6 +23,7 @@ namespace Vt100.FullScreen.Controls
         private int _height;
         private IFullScreenApplication _app;
         private CursorController _cursorControl;
+        private readonly Style _style = new Style();
 
         internal void AcceptConfig(TextBoxAttribute attribute)
         {
@@ -110,6 +112,8 @@ namespace Vt100.FullScreen.Controls
             }
             _cursorControl.SetDataLength(_value.Length);            
         }
+
+        public Style Style => _style;
 
         private void TryAddCharacter(ControlSequence next)
         {
