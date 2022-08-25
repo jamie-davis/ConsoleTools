@@ -11,7 +11,6 @@ namespace VT100.FullScreen.ScreenLayers
     {
         public static IEnumerable<BoxCharacter> Classify()
         {
-            //var members = Enum.GetNames(typeof(DEBUGType));
             var members = Enum.GetNames(typeof(BoxCharacterType));
             var boxCharacters = members.Select(i => ParseEnumElement(i));
             return boxCharacters;

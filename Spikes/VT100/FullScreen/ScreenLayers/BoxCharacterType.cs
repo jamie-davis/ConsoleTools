@@ -1,10 +1,5 @@
 namespace VT100.FullScreen.ScreenLayers
 {
-    public enum DEBUGType
-    {
-        DOWN_SINGLE_AND_HORIZONTAL_DOUBLE = 0x2552, //	 ╒ 	
-
-    }
     /// <summary>
     /// Enumeration for box character types. Note that the values used are the unicode character values. The literal
     /// in the comment is the unicode character itself. 
