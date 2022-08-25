@@ -1,0 +1,132 @@
+                                                                            Corner   Line                                                                                            
+                                  Source Char Unparsed                        Type  Count Left                   Right                  Up                     Down                  
+---------------------------------------- ---- ----------------------------- ------ ------ ---------------------- ---------------------- ---------------------- ----------------------
+                        LIGHT_HORIZONTAL ─                                     Box Single Light Single None      Light Single None                                                   
+                        HEAVY_HORIZONTAL ━                                     Box Single Heavy Single None      Heavy Single None                                                   
+                          LIGHT_VERTICAL │                                     Box Single                                               Light Single None      Light Single None     
+                          HEAVY_VERTICAL ┃                                     Box Single                                               Heavy Single None      Heavy Single None     
+            LIGHT_TRIPLE_DASH_HORIZONTAL ┄                                     Box Single Light Single Triple    Light Single Triple                                                 
+            HEAVY_TRIPLE_DASH_HORIZONTAL ┅                                     Box Single Heavy Single Triple    Heavy Single Triple                                                 
+              LIGHT_TRIPLE_DASH_VERTICAL ┆                                     Box Single                                               Light Single Triple    Light Single Triple   
+              HEAVY_TRIPLE_DASH_VERTICAL ┇                                     Box Single                                               Heavy Single Triple    Heavy Single Triple   
+         LIGHT_QUADRUPLE_DASH_HORIZONTAL ┈                                     Box Single Light Single Quadruple Light Single Quadruple                                              
+         HEAVY_QUADRUPLE_DASH_HORIZONTAL ┉                                     Box Single Heavy Single Quadruple Heavy Single Quadruple                                              
+           LIGHT_QUADRUPLE_DASH_VERTICAL ┊                                     Box Single                                               Light Single Quadruple Light Single Quadruple
+           HEAVY_QUADRUPLE_DASH_VERTICAL ┋                                     Box Single                                               Heavy Single Quadruple Heavy Single Quadruple
+                    LIGHT_DOWN_AND_RIGHT ┌                                     Box Single                        Light Single None                             Light Single None     
+              DOWN_LIGHT_AND_RIGHT_HEAVY ┍                                     Box Single                        Heavy Single None                             Light Single None     
+              DOWN_HEAVY_AND_RIGHT_LIGHT ┎                                     Box Single                        Light Single None                             Heavy Single None     
+                    HEAVY_DOWN_AND_RIGHT ┏                                     Box Single                        Heavy Single None                             Heavy Single None     
+                     LIGHT_DOWN_AND_LEFT ┐                                     Box Single Light Single None                                                    Light Single None     
+               DOWN_LIGHT_AND_LEFT_HEAVY ┑                                     Box Single Heavy Single None                                                    Light Single None     
+               DOWN_HEAVY_AND_LEFT_LIGHT ┒                                     Box Single Light Single None                                                    Heavy Single None     
+                     HEAVY_DOWN_AND_LEFT ┓                                     Box Single Heavy Single None                                                    Heavy Single None     
+                      LIGHT_UP_AND_RIGHT └                                     Box Single                        Light Single None      Light Single None                            
+                UP_LIGHT_AND_RIGHT_HEAVY ┕                                     Box Single                        Heavy Single None      Light Single None                            
+                UP_HEAVY_AND_RIGHT_LIGHT ┖                                     Box Single                        Light Single None      Heavy Single None                            
+                      HEAVY_UP_AND_RIGHT ┗                                     Box Single                        Heavy Single None      Heavy Single None                            
+                       LIGHT_UP_AND_LEFT ┘                                     Box Single Light Single None                             Light Single None                            
+                 UP_LIGHT_AND_LEFT_HEAVY ┙                                     Box Single Heavy Single None                             Light Single None                            
+                 UP_HEAVY_AND_LEFT_LIGHT ┚                                     Box Single Light Single None                             Heavy Single None                            
+                       HEAVY_UP_AND_LEFT ┛                                     Box Single Heavy Single None                             Heavy Single None                            
+                LIGHT_VERTICAL_AND_RIGHT ├                                     Box Single                        Light Single None      Light Single None      Light Single None     
+          VERTICAL_LIGHT_AND_RIGHT_HEAVY ┝                                     Box Single                        Heavy Single None      Light Single None      Light Single None     
+           UP_HEAVY_AND_RIGHT_DOWN_LIGHT ┞                                     Box Single                        Light Single None      Heavy Single None      Light Single None     
+           DOWN_HEAVY_AND_RIGHT_UP_LIGHT ┟                                     Box Single                        Light Single None      Light Single None      Heavy Single None     
+          VERTICAL_HEAVY_AND_RIGHT_LIGHT ┠                                     Box Single                        Light Single None      Heavy Single None      Heavy Single None     
+           DOWN_LIGHT_AND_RIGHT_UP_HEAVY ┡                                     Box Single                        Heavy Single None      Heavy Single None      Light Single None     
+           UP_LIGHT_AND_RIGHT_DOWN_HEAVY ┢                                     Box Single                        Heavy Single None      Light Single None      Heavy Single None     
+                HEAVY_VERTICAL_AND_RIGHT ┣                                     Box Single                        Heavy Single None      Heavy Single None      Heavy Single None     
+                 LIGHT_VERTICAL_AND_LEFT ┤                                     Box Single Light Single None                             Light Single None      Light Single None     
+           VERTICAL_LIGHT_AND_LEFT_HEAVY ┥                                     Box Single Heavy Single None                             Light Single None      Light Single None     
+            UP_HEAVY_AND_LEFT_DOWN_LIGHT ┦                                     Box Single Light Single None                             Heavy Single None      Light Single None     
+            DOWN_HEAVY_AND_LEFT_UP_LIGHT ┧                                     Box Single Light Single None                             Light Single None      Heavy Single None     
+           VERTICAL_HEAVY_AND_LEFT_LIGHT ┨                                     Box Single Light Single None                             Heavy Single None      Heavy Single None     
+            DOWN_LIGHT_AND_LEFT_UP_HEAVY ┩                                     Box Single Heavy Single None                             Heavy Single None      Light Single None     
+            UP_LIGHT_AND_LEFT_DOWN_HEAVY ┪                                     Box Single Heavy Single None                             Light Single None      Heavy Single None     
+                 HEAVY_VERTICAL_AND_LEFT ┫                                     Box Single Heavy Single None                             Heavy Single None      Heavy Single None     
+               LIGHT_DOWN_AND_HORIZONTAL ┬                                     Box Single Light Single None      Light Single None                             Light Single None     
+         LEFT_HEAVY_AND_RIGHT_DOWN_LIGHT ┭                                     Box Single Heavy Single None      Light Single None                             Light Single None     
+         RIGHT_HEAVY_AND_LEFT_DOWN_LIGHT ┮                                     Box Single Light Single None      Heavy Single None                             Light Single None     
+         DOWN_LIGHT_AND_HORIZONTAL_HEAVY ┯                                     Box Single Heavy Single None      Heavy Single None                             Light Single None     
+         DOWN_HEAVY_AND_HORIZONTAL_LIGHT ┰                                     Box Single Light Single None      Light Single None                             Heavy Single None     
+         RIGHT_LIGHT_AND_LEFT_DOWN_HEAVY ┱                                     Box Single Heavy Single None      Light Single None                             Heavy Single None     
+         LEFT_LIGHT_AND_RIGHT_DOWN_HEAVY ┲                                     Box Single Light Single None      Heavy Single None                             Heavy Single None     
+               HEAVY_DOWN_AND_HORIZONTAL ┳                                     Box Single Heavy Single None      Heavy Single None                             Heavy Single None     
+                 LIGHT_UP_AND_HORIZONTAL ┴                                     Box Single Light Single None      Light Single None      Light Single None                            
+           LEFT_HEAVY_AND_RIGHT_UP_LIGHT ┵                                     Box Single Heavy Single None      Light Single None      Light Single None                            
+           RIGHT_HEAVY_AND_LEFT_UP_LIGHT ┶                                     Box Single Light Single None      Heavy Single None      Light Single None                            
+           UP_LIGHT_AND_HORIZONTAL_HEAVY ┷                                     Box Single Heavy Single None      Heavy Single None      Light Single None                            
+           UP_HEAVY_AND_HORIZONTAL_LIGHT ┸                                     Box Single Light Single None      Light Single None      Heavy Single None                            
+           RIGHT_LIGHT_AND_LEFT_UP_HEAVY ┹                                     Box Single Heavy Single None      Light Single None      Heavy Single None                            
+           LEFT_LIGHT_AND_RIGHT_UP_HEAVY ┺                                     Box Single Light Single None      Heavy Single None      Heavy Single None                            
+                 HEAVY_UP_AND_HORIZONTAL ┻                                     Box Single Heavy Single None      Heavy Single None      Heavy Single None                            
+           LIGHT_VERTICAL_AND_HORIZONTAL ┼                                     Box Single Light Single None      Light Single None      Light Single None      Light Single None     
+     LEFT_HEAVY_AND_RIGHT_VERTICAL_LIGHT ┽                                     Box Single Heavy Single None      Light Single None      Light Single None      Light Single None     
+     RIGHT_HEAVY_AND_LEFT_VERTICAL_LIGHT ┾                                     Box Single Light Single None      Heavy Single None      Light Single None      Light Single None     
+     VERTICAL_LIGHT_AND_HORIZONTAL_HEAVY ┿                                     Box Single Heavy Single None      Heavy Single None      Light Single None      Light Single None     
+      UP_HEAVY_AND_DOWN_HORIZONTAL_LIGHT ╀                                     Box Single Light Single None      Light Single None      Heavy Single None      Light Single None     
+      DOWN_HEAVY_AND_UP_HORIZONTAL_LIGHT ╁                                     Box Single Light Single None      Light Single None      Light Single None      Heavy Single None     
+     VERTICAL_HEAVY_AND_HORIZONTAL_LIGHT ╂                                     Box Single Light Single None      Light Single None      Heavy Single None      Heavy Single None     
+      LEFT_UP_HEAVY_AND_RIGHT_DOWN_LIGHT ╃                                     Box Single Heavy Single None      Light Single None      Heavy Single None      Light Single None     
+      RIGHT_UP_HEAVY_AND_LEFT_DOWN_LIGHT ╄                                     Box Single Light Single None      Heavy Single None      Heavy Single None      Light Single None     
+      LEFT_DOWN_HEAVY_AND_RIGHT_UP_LIGHT ╅                                     Box Single Heavy Single None      Light Single None      Light Single None      Heavy Single None     
+      RIGHT_DOWN_HEAVY_AND_LEFT_UP_LIGHT ╆                                     Box Single Light Single None      Heavy Single None      Light Single None      Heavy Single None     
+      DOWN_LIGHT_AND_UP_HORIZONTAL_HEAVY ╇                                     Box Single Heavy Single None      Heavy Single None      Heavy Single None      Light Single None     
+      UP_LIGHT_AND_DOWN_HORIZONTAL_HEAVY ╈                                     Box Single Heavy Single None      Heavy Single None      Light Single None      Heavy Single None     
+     RIGHT_LIGHT_AND_LEFT_VERTICAL_HEAVY ╉                                     Box Single Heavy Single None      Light Single None      Heavy Single None      Heavy Single None     
+     LEFT_LIGHT_AND_RIGHT_VERTICAL_HEAVY ╊                                     Box Single Light Single None      Heavy Single None      Heavy Single None      Heavy Single None     
+           HEAVY_VERTICAL_AND_HORIZONTAL ╋                                     Box Single Heavy Single None      Heavy Single None      Heavy Single None      Heavy Single None     
+            LIGHT_DOUBLE_DASH_HORIZONTAL ╌                                     Box Single Light Single Double    Light Single Double                                                 
+            HEAVY_DOUBLE_DASH_HORIZONTAL ╍                                     Box Single Heavy Single Double    Heavy Single Double                                                 
+              LIGHT_DOUBLE_DASH_VERTICAL ╎                                     Box Single                                               Light Single Double    Light Single Double   
+              HEAVY_DOUBLE_DASH_VERTICAL ╏                                     Box Single                                               Heavy Single Double    Heavy Single Double   
+                       DOUBLE_HORIZONTAL ═                                     Box Single Light Double None      Light Double None                                                   
+                         DOUBLE_VERTICAL ║                                     Box Single                                               Light Double None      Light Double None     
+            DOWN_SINGLE_AND_RIGHT_DOUBLE ╒                                     Box Single                        Light Double None                             Light Single None     
+            DOWN_DOUBLE_AND_RIGHT_SINGLE ╓                                     Box Single                        Light Single None                             Light Double None     
+                   DOUBLE_DOWN_AND_RIGHT ╔                                     Box Single                        Light Double None                             Light Double None     
+             DOWN_SINGLE_AND_LEFT_DOUBLE ╕                                     Box Single Light Double None                                                    Light Single None     
+             DOWN_DOUBLE_AND_LEFT_SINGLE ╖                                     Box Single Light Single None                                                    Light Double None     
+                    DOUBLE_DOWN_AND_LEFT ╗                                     Box Single Light Double None                                                    Light Double None     
+              UP_SINGLE_AND_RIGHT_DOUBLE ╘                                     Box Single                        Light Double None      Light Single None                            
+              UP_DOUBLE_AND_RIGHT_SINGLE ╙                                     Box Single                        Light Single None      Light Double None                            
+                     DOUBLE_UP_AND_RIGHT ╚                                     Box Single                        Light Double None      Light Double None                            
+               UP_SINGLE_AND_LEFT_DOUBLE ╛                                     Box Single Light Double None                             Light Single None                            
+               UP_DOUBLE_AND_LEFT_SINGLE ╜                                     Box Single Light Single None                             Light Double None                            
+                      DOUBLE_UP_AND_LEFT ╝                                     Box Single Light Double None                             Light Double None                            
+        VERTICAL_SINGLE_AND_RIGHT_DOUBLE ╞                                     Box Single                        Light Double None      Light Single None      Light Single None     
+        VERTICAL_DOUBLE_AND_RIGHT_SINGLE ╟                                     Box Single                        Light Single None      Light Double None      Light Double None     
+               DOUBLE_VERTICAL_AND_RIGHT ╠                                     Box Single                        Light Double None      Light Double None      Light Double None     
+         VERTICAL_SINGLE_AND_LEFT_DOUBLE ╡                                     Box Single Light Double None                             Light Single None      Light Single None     
+         VERTICAL_DOUBLE_AND_LEFT_SINGLE ╢                                     Box Single Light Single None                             Light Double None      Light Double None     
+                DOUBLE_VERTICAL_AND_LEFT ╣                                     Box Single Light Double None                             Light Double None      Light Double None     
+       DOWN_SINGLE_AND_HORIZONTAL_DOUBLE ╤                                     Box Single Light Double None      Light Double None                             Light Single None     
+       DOWN_DOUBLE_AND_HORIZONTAL_SINGLE ╥                                     Box Single Light Single None      Light Single None                             Light Double None     
+              DOUBLE_DOWN_AND_HORIZONTAL ╦                                     Box Single Light Double None      Light Double None                             Light Double None     
+         UP_SINGLE_AND_HORIZONTAL_DOUBLE ╧                                     Box Single Light Double None      Light Double None      Light Single None                            
+         UP_DOUBLE_AND_HORIZONTAL_SINGLE ╨                                     Box Single Light Single None      Light Single None      Light Double None                            
+                DOUBLE_UP_AND_HORIZONTAL ╩                                     Box Single Light Double None      Light Double None      Light Double None                            
+   VERTICAL_SINGLE_AND_HORIZONTAL_DOUBLE ╪                                     Box Single Light Double None      Light Double None      Light Single None      Light Single None     
+   VERTICAL_DOUBLE_AND_HORIZONTAL_SINGLE ╫                                     Box Single Light Single None      Light Single None      Light Double None      Light Double None     
+          DOUBLE_VERTICAL_AND_HORIZONTAL ╬                                     Box Single Light Double None      Light Double None      Light Double None      Light Double None     
+                LIGHT_ARC_DOWN_AND_RIGHT ╭                                     Arc Single                        Light Single None                             Light Single None     
+                 LIGHT_ARC_DOWN_AND_LEFT ╮                                     Arc Single Light Single None                                                    Light Single None     
+                   LIGHT_ARC_UP_AND_LEFT ╯                                     Arc Single Light Single None                             Light Single None                            
+                  LIGHT_ARC_UP_AND_RIGHT ╰                                     Arc Single                        Light Single None      Light Single None                            
+LIGHT_DIAGONAL_UPPER_RIGHT_TO_LOWER_LEFT ╱    LIGHT DIAGONAL UPPER TO LOWER    Box Single Light Single None      Light Single None                                                   
+LIGHT_DIAGONAL_UPPER_LEFT_TO_LOWER_RIGHT ╲    LIGHT DIAGONAL UPPER TO LOWER    Box Single Light Single None      Light Single None                                                   
+                    LIGHT_DIAGONAL_CROSS ╳    LIGHT DIAGONAL CROSS             Box Single                                                                                            
+                              LIGHT_LEFT ╴                                     Box Single Light Single None                                                                          
+                                LIGHT_UP ╵                                     Box Single                                               Light Single None                            
+                             LIGHT_RIGHT ╶                                     Box Single                        Light Single None                                                   
+                              LIGHT_DOWN ╷                                     Box Single                                                                      Light Single None     
+                              HEAVY_LEFT ╸                                     Box Single Heavy Single None                                                                          
+                                HEAVY_UP ╹                                     Box Single                                               Heavy Single None                            
+                             HEAVY_RIGHT ╺                                     Box Single                        Heavy Single None                                                   
+                              HEAVY_DOWN ╻                                     Box Single                                                                      Heavy Single None     
+              LIGHT_LEFT_AND_HEAVY_RIGHT ╼                                     Box Single Light Single None      Heavy Single None                                                   
+                 LIGHT_UP_AND_HEAVY_DOWN ╽                                     Box Single                                               Light Single None      Heavy Single None     
+              HEAVY_LEFT_AND_LIGHT_RIGHT ╾                                     Box Single Heavy Single None      Light Single None                                                   
+                 HEAVY_UP_AND_LIGHT_DOWN ╿                                     Box Single                                               Heavy Single None      Light Single None     
+                                                                                               
