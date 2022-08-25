@@ -1,0 +1,131 @@
+                                  Source Char Left         Right        Up           Down      
+---------------------------------------- ---- ------------ ------------ ------------ ----------
+                        LIGHT_HORIZONTAL ─    Light        Light                               
+                        HEAVY_HORIZONTAL ━    Heavy        Heavy                               
+                          LIGHT_VERTICAL │                              Light        Light     
+                          HEAVY_VERTICAL ┃                              Heavy        Heavy     
+            LIGHT_TRIPLE_DASH_HORIZONTAL ┄    Light        Light                               
+            HEAVY_TRIPLE_DASH_HORIZONTAL ┅    Heavy        Heavy                               
+              LIGHT_TRIPLE_DASH_VERTICAL ┆                              Light        Light     
+              HEAVY_TRIPLE_DASH_VERTICAL ┇                              Heavy        Heavy     
+         LIGHT_QUADRUPLE_DASH_HORIZONTAL ┈    Light        Light                               
+         HEAVY_QUADRUPLE_DASH_HORIZONTAL ┉    Heavy        Heavy                               
+           LIGHT_QUADRUPLE_DASH_VERTICAL ┊                              Light        Light     
+           HEAVY_QUADRUPLE_DASH_VERTICAL ┋                              Heavy        Heavy     
+                    LIGHT_DOWN_AND_RIGHT ┌                 Light                     Light     
+              DOWN_LIGHT_AND_RIGHT_HEAVY ┍                 Heavy                     Light     
+              DOWN_HEAVY_AND_RIGHT_LIGHT ┎                 Light                     Heavy     
+                    HEAVY_DOWN_AND_RIGHT ┏                 Heavy                     Heavy     
+                     LIGHT_DOWN_AND_LEFT ┐    Light                                  Light     
+               DOWN_LIGHT_AND_LEFT_HEAVY ┑    Heavy                                  Light     
+               DOWN_HEAVY_AND_LEFT_LIGHT ┒    Light                                  Heavy     
+                     HEAVY_DOWN_AND_LEFT ┓    Heavy                                  Heavy     
+                      LIGHT_UP_AND_RIGHT └                 Light        Light                  
+                UP_LIGHT_AND_RIGHT_HEAVY ┕                 Heavy        Light                  
+                UP_HEAVY_AND_RIGHT_LIGHT ┖                 Light        Heavy                  
+                      HEAVY_UP_AND_RIGHT ┗                 Heavy        Heavy                  
+                       LIGHT_UP_AND_LEFT ┘    Light                     Light                  
+                 UP_LIGHT_AND_LEFT_HEAVY ┙    Heavy                     Light                  
+                 UP_HEAVY_AND_LEFT_LIGHT ┚    Light                     Heavy                  
+                       HEAVY_UP_AND_LEFT ┛    Heavy                     Heavy                  
+                LIGHT_VERTICAL_AND_RIGHT ├                 Light        Light        Light     
+          VERTICAL_LIGHT_AND_RIGHT_HEAVY ┝                 Heavy        Light        Light     
+           UP_HEAVY_AND_RIGHT_DOWN_LIGHT ┞                 Light        Heavy        Light     
+           DOWN_HEAVY_AND_RIGHT_UP_LIGHT ┟                 Light        Light        Heavy     
+          VERTICAL_HEAVY_AND_RIGHT_LIGHT ┠                 Light        Heavy        Heavy     
+           DOWN_LIGHT_AND_RIGHT_UP_HEAVY ┡                 Heavy        Heavy        Light     
+           UP_LIGHT_AND_RIGHT_DOWN_HEAVY ┢                 Heavy        Light        Heavy     
+                HEAVY_VERTICAL_AND_RIGHT ┣                 Heavy        Heavy        Heavy     
+                 LIGHT_VERTICAL_AND_LEFT ┤    Light                     Light        Light     
+           VERTICAL_LIGHT_AND_LEFT_HEAVY ┥    Heavy                     Light        Light     
+            UP_HEAVY_AND_LEFT_DOWN_LIGHT ┦    Light                     Heavy        Light     
+            DOWN_HEAVY_AND_LEFT_UP_LIGHT ┧    Light                     Light        Heavy     
+           VERTICAL_HEAVY_AND_LEFT_LIGHT ┨    Light                     Heavy        Heavy     
+            DOWN_LIGHT_AND_LEFT_UP_HEAVY ┩    Heavy                     Heavy        Light     
+            UP_LIGHT_AND_LEFT_DOWN_HEAVY ┪    Heavy                     Light        Heavy     
+                 HEAVY_VERTICAL_AND_LEFT ┫    Heavy                     Heavy        Heavy     
+               LIGHT_DOWN_AND_HORIZONTAL ┬    Light        Light                     Light     
+         LEFT_HEAVY_AND_RIGHT_DOWN_LIGHT ┭    Heavy        Light                     Light     
+         RIGHT_HEAVY_AND_LEFT_DOWN_LIGHT ┮    Light        Heavy                     Light     
+         DOWN_LIGHT_AND_HORIZONTAL_HEAVY ┯    Heavy        Heavy                     Light     
+         DOWN_HEAVY_AND_HORIZONTAL_LIGHT ┰    Light        Light                     Heavy     
+         RIGHT_LIGHT_AND_LEFT_DOWN_HEAVY ┱    Heavy        Light                     Heavy     
+         LEFT_LIGHT_AND_RIGHT_DOWN_HEAVY ┲    Light        Heavy                     Heavy     
+               HEAVY_DOWN_AND_HORIZONTAL ┳    Heavy        Heavy                     Heavy     
+                 LIGHT_UP_AND_HORIZONTAL ┴    Light        Light        Light                  
+           LEFT_HEAVY_AND_RIGHT_UP_LIGHT ┵    Heavy        Light        Light                  
+           RIGHT_HEAVY_AND_LEFT_UP_LIGHT ┶    Light        Heavy        Light                  
+           UP_LIGHT_AND_HORIZONTAL_HEAVY ┷    Heavy        Heavy        Light                  
+           UP_HEAVY_AND_HORIZONTAL_LIGHT ┸    Light        Light        Heavy                  
+           RIGHT_LIGHT_AND_LEFT_UP_HEAVY ┹    Heavy        Light        Heavy                  
+           LEFT_LIGHT_AND_RIGHT_UP_HEAVY ┺    Light        Heavy        Heavy                  
+                 HEAVY_UP_AND_HORIZONTAL ┻    Heavy        Heavy        Heavy                  
+           LIGHT_VERTICAL_AND_HORIZONTAL ┼    Light        Light        Light        Light     
+     LEFT_HEAVY_AND_RIGHT_VERTICAL_LIGHT ┽    Heavy        Light        Light        Light     
+     RIGHT_HEAVY_AND_LEFT_VERTICAL_LIGHT ┾    Light        Heavy        Light        Light     
+     VERTICAL_LIGHT_AND_HORIZONTAL_HEAVY ┿    Heavy        Heavy        Light        Light     
+      UP_HEAVY_AND_DOWN_HORIZONTAL_LIGHT ╀    Light        Light        Heavy        Light     
+      DOWN_HEAVY_AND_UP_HORIZONTAL_LIGHT ╁    Light        Light        Light        Heavy     
+     VERTICAL_HEAVY_AND_HORIZONTAL_LIGHT ╂    Light        Light        Heavy        Heavy     
+      LEFT_UP_HEAVY_AND_RIGHT_DOWN_LIGHT ╃    Heavy        Light        Heavy        Light     
+      RIGHT_UP_HEAVY_AND_LEFT_DOWN_LIGHT ╄    Light        Heavy        Heavy        Light     
+      LEFT_DOWN_HEAVY_AND_RIGHT_UP_LIGHT ╅    Heavy        Light        Light        Heavy     
+      RIGHT_DOWN_HEAVY_AND_LEFT_UP_LIGHT ╆    Light        Heavy        Light        Heavy     
+      DOWN_LIGHT_AND_UP_HORIZONTAL_HEAVY ╇    Heavy        Heavy        Heavy        Light     
+      UP_LIGHT_AND_DOWN_HORIZONTAL_HEAVY ╈    Heavy        Heavy        Light        Heavy     
+     RIGHT_LIGHT_AND_LEFT_VERTICAL_HEAVY ╉    Heavy        Light        Heavy        Heavy     
+     LEFT_LIGHT_AND_RIGHT_VERTICAL_HEAVY ╊    Light        Heavy        Heavy        Heavy     
+           HEAVY_VERTICAL_AND_HORIZONTAL ╋    Heavy        Heavy        Heavy        Heavy     
+            LIGHT_DOUBLE_DASH_HORIZONTAL ╌    Light        Light                               
+            HEAVY_DOUBLE_DASH_HORIZONTAL ╍    Heavy        Heavy                               
+              LIGHT_DOUBLE_DASH_VERTICAL ╎                              Light        Light     
+              HEAVY_DOUBLE_DASH_VERTICAL ╏                              Heavy        Heavy     
+                       DOUBLE_HORIZONTAL ═    Light        Light                               
+                         DOUBLE_VERTICAL ║                              Light        Light     
+            DOWN_SINGLE_AND_RIGHT_DOUBLE ╒                 Light                     Light     
+            DOWN_DOUBLE_AND_RIGHT_SINGLE ╓                 Light                     Light     
+                   DOUBLE_DOWN_AND_RIGHT ╔                 Light                     Light     
+             DOWN_SINGLE_AND_LEFT_DOUBLE ╕    Light                                  Light     
+             DOWN_DOUBLE_AND_LEFT_SINGLE ╖    Light                                  Light     
+                    DOUBLE_DOWN_AND_LEFT ╗    Light                                  Light     
+              UP_SINGLE_AND_RIGHT_DOUBLE ╘                 Light        Light                  
+              UP_DOUBLE_AND_RIGHT_SINGLE ╙                 Light        Light                  
+                     DOUBLE_UP_AND_RIGHT ╚                 Light        Light                  
+               UP_SINGLE_AND_LEFT_DOUBLE ╛    Light                     Light                  
+               UP_DOUBLE_AND_LEFT_SINGLE ╜    Light                     Light                  
+                      DOUBLE_UP_AND_LEFT ╝    Light                     Light                  
+        VERTICAL_SINGLE_AND_RIGHT_DOUBLE ╞                 Light        Light        Light     
+        VERTICAL_DOUBLE_AND_RIGHT_SINGLE ╟                 Light        Light        Light     
+               DOUBLE_VERTICAL_AND_RIGHT ╠                 Light        Light        Light     
+         VERTICAL_SINGLE_AND_LEFT_DOUBLE ╡    Light                     Light        Light     
+         VERTICAL_DOUBLE_AND_LEFT_SINGLE ╢    Light                     Light        Light     
+                DOUBLE_VERTICAL_AND_LEFT ╣    Light                     Light        Light     
+       DOWN_SINGLE_AND_HORIZONTAL_DOUBLE ╤    Light        Light                     Light     
+       DOWN_DOUBLE_AND_HORIZONTAL_SINGLE ╥    Light        Light                     Light     
+              DOUBLE_DOWN_AND_HORIZONTAL ╦    Light        Light                     Light     
+         UP_SINGLE_AND_HORIZONTAL_DOUBLE ╧    Light        Light        Light                  
+         UP_DOUBLE_AND_HORIZONTAL_SINGLE ╨    Light        Light        Light                  
+                DOUBLE_UP_AND_HORIZONTAL ╩    Light        Light        Light                  
+   VERTICAL_SINGLE_AND_HORIZONTAL_DOUBLE ╪    Light        Light        Light        Light     
+   VERTICAL_DOUBLE_AND_HORIZONTAL_SINGLE ╫    Light        Light        Light        Light     
+          DOUBLE_VERTICAL_AND_HORIZONTAL ╬    Light        Light        Light        Light     
+                LIGHT_ARC_DOWN_AND_RIGHT ╭                 Light                     Light     
+                 LIGHT_ARC_DOWN_AND_LEFT ╮    Light                                  Light     
+                   LIGHT_ARC_UP_AND_LEFT ╯    Light                     Light                  
+                  LIGHT_ARC_UP_AND_RIGHT ╰                 Light        Light                  
+LIGHT_DIAGONAL_UPPER_RIGHT_TO_LOWER_LEFT ╱    Light        Light                               
+LIGHT_DIAGONAL_UPPER_LEFT_TO_LOWER_RIGHT ╲    Light        Light                               
+                    LIGHT_DIAGONAL_CROSS ╳                                                     
+                              LIGHT_LEFT ╴    Light                                            
+                                LIGHT_UP ╵                              Light                  
+                             LIGHT_RIGHT ╶                 Light                               
+                              LIGHT_DOWN ╷                                           Light     
+                              HEAVY_LEFT ╸    Heavy                                            
+                                HEAVY_UP ╹                              Heavy                  
+                             HEAVY_RIGHT ╺                 Heavy                               
+                              HEAVY_DOWN ╻                                           Heavy     
+              LIGHT_LEFT_AND_HEAVY_RIGHT ╼    Light        Heavy                               
+                 LIGHT_UP_AND_HEAVY_DOWN ╽                              Light        Heavy     
+              HEAVY_LEFT_AND_LIGHT_RIGHT ╾    Heavy        Light                               
+                 HEAVY_UP_AND_LIGHT_DOWN ╿                              Heavy        Light     
+                                                                                               
