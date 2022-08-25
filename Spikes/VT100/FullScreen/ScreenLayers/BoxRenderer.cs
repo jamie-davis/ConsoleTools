@@ -7,15 +7,15 @@ namespace VT100.FullScreen.ScreenLayers
     {
         internal static void RenderToPlate(IEnumerable<BoxRegion> regions, Plate plate)
         {
-            var map = BoxMapMaker.Map(regions);
+            var map = BoxMapMaker.Map(regions, plate.Width, plate.Height);
         }
     }
 
     internal static class BoxMapMaker
     {
-        internal BoxMap Map(IEnumerable<BoxRegion> regions)
+        internal static BoxMap Map(IEnumerable<BoxRegion> regions, int plateWidth, int plateHeight)
         {
-            var boxCharacters = new BoxCharRequest[plate.Height * plate.Width];
+            var boxCharacters = new BoxCharRequest[plateHeight * plateWidth];
             foreach (var boxRegion in regions)
             {
                 

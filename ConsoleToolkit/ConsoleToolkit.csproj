@@ -8,6 +8,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IncludeSource>True</IncludeSource>
     <IncludeSymbols>True</IncludeSymbols>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Description>The Console Toolkit is a sophisticated but simple to learn library providing a full set of features for building console applications. It focuses on getting out of the way as quickly as possible so that you can get on with implementing functionality without having to deal with the complications of parsing command line options, parsing user input, or formatting console output in a comprehensible format.
 
 The library includes a declaritive mechanism for specifying command line options. You can specify your commands and options in a clear and simple way and the Toolkit will take care of the validation. You simply declare a handler and the library will call it if the user specifies valid parameters.

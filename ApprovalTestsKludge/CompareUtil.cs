@@ -8,7 +8,7 @@ namespace ApprovalTests
         {
             var startInfo = new ProcessStartInfo
             {
-                FileName = "kompare",
+                FileName = "winmergeu",
                 Arguments = $"\"{receivedFile}\" \"{approvedFile}\""
             };
             var process = new Process();
