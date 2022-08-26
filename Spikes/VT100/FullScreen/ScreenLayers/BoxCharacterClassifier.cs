@@ -332,5 +332,10 @@ namespace VT100.FullScreen.ScreenLayers
         {
             return $"{LineWeight} {LineCount} {DashType}";
         }
+
+        public bool Matches(Edge edge)
+        {
+            return LineWeight == edge.LineWeight && LineCount == edge.LineCount && DashType == edge.DashType;
+        }
     }
 }

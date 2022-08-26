@@ -8,5 +8,6 @@ namespace VT100.FullScreen.ScreenLayers
     /// </summary>
     internal struct BoxCharRequest
     {
+        public BoxCharacter Class { get; set; }
     }
 }
