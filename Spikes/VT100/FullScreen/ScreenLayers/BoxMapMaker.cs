@@ -46,10 +46,10 @@ namespace VT100.FullScreen.ScreenLayers
                 var bottomLeft = BoxCharacterSelector.SelectBottomLeft(boxRegion);
                 var topIx = BoxCharacterIndexCalculator.GetIndex(x, y, plateWidth);
                 if (topIx >= 0 && x >= 0 && x < plateWidth &&  topIx < boxCharacters.Length)
-                    boxCharacters[topIx] = topLeft;
+                    Merge(boxCharacters, topIx, topLeft);
                 var bottomIx = BoxCharacterIndexCalculator.GetIndex(x, y + boxRegion.Height - 1, plateWidth);
                 if (bottomIx > 0 && bottomIx < boxCharacters.Length)
-                    boxCharacters[bottomIx] = bottomLeft;
+                    Merge(boxCharacters, bottomIx, bottomLeft);
                 var xpos = boxRegion.X + 1;
                 var horz = BoxCharacterSelector.SelectHorizontal(boxRegion);
                 ++bottomIx;
@@ -57,9 +57,9 @@ namespace VT100.FullScreen.ScreenLayers
                 for (var n = 0; n < boxRegion.Width-2 && xpos < plateWidth; n++)
                 {
                     if (topIx > 0 && xpos >= 0)
-                        boxCharacters[topIx] = horz;
+                        Merge(boxCharacters, topIx, horz);
                     if (bottomIx > 0 && bottomIx < boxCharacters.Length)
-                        boxCharacters[bottomIx] = horz;
+                        Merge(boxCharacters, bottomIx, horz);
                     ++xpos;
                     ++bottomIx;
                     ++topIx;
@@ -70,9 +70,9 @@ namespace VT100.FullScreen.ScreenLayers
                     var topRight = BoxCharacterSelector.SelectTopRight(boxRegion);
                     var bottomRight = BoxCharacterSelector.SelectBottomRight(boxRegion);
                     if (topIx >= 0)
-                        boxCharacters[topIx] = topRight;
+                        Merge(boxCharacters, topIx, topRight);
                     if (bottomIx >= 0 && bottomIx < boxCharacters.Length)
-                        boxCharacters[bottomIx] = bottomRight;
+                        Merge(boxCharacters, bottomIx, bottomRight);
                     ++topIx; ++bottomIx;
                 }
 
@@ -81,14 +81,37 @@ namespace VT100.FullScreen.ScreenLayers
                 {
                     var leftIx = BoxCharacterIndexCalculator.GetIndex(boxRegion.X, boxRegion.Y + row, plateWidth);
                     if (leftIx > 0 && leftIx < boxCharacters.Length && boxRegion.X >= 0 && boxRegion.X < plateWidth)
-                        boxCharacters[leftIx] = vert;
+                        Merge(boxCharacters, leftIx, vert);
                     var rightIx = leftIx + boxRegion.Width - 1;
-                    if (rightIx > 0 && rightIx < boxCharacters.Length && boxRegion.Width + boxRegion.X >= 0 && boxRegion.Width + boxRegion.X < plateWidth)
-                        boxCharacters[rightIx] = vert;
+                    if (rightIx > 0 && rightIx < boxCharacters.Length && boxRegion.Width + boxRegion.X >= 0 && boxRegion.Width + boxRegion.X - 1 < plateWidth)
+                        Merge(boxCharacters, rightIx, vert);
                 }
             }
 
             return new BoxMap(boxCharacters, plateWidth);
+        }
+
+        private static void Merge(BoxCharRequest[] boxCharacters, int index, BoxCharRequest request)
+        {
+            if (boxCharacters[index].Class == null)
+            {
+                boxCharacters[index] = request;
+                return;
+            }
+
+            if (request.RequestedLeft != null)
+                boxCharacters[index].RequestedLeft = request.RequestedLeft;
+
+            if (request.RequestedRight != null)
+                boxCharacters[index].RequestedRight = request.RequestedRight;
+
+            if (request.RequestedUp != null)
+                boxCharacters[index].RequestedUp = request.RequestedUp;
+
+            if (request.RequestedDown != null)
+                boxCharacters[index].RequestedDown = request.RequestedDown;
+
+            boxCharacters[index].Class = BoxCharacterSelector.Select(boxCharacters[index]);
         }
     }
 }

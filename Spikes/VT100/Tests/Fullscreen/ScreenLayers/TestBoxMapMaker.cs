@@ -102,5 +102,35 @@ namespace VT100.Tests.Fullscreen.ScreenLayers
             BoxRenderer.RenderMapToPlate(map, plate);
             PlateDumpFormatter.Format(plate).Verify();
         }
+
+        [Fact]
+        public void BoxRegionsEdgesCanOverlap()
+        {
+            //Arrange
+            var regions = new []
+            {
+                new BoxRegion(0, 0, 3, 3),
+                new BoxRegion(2, 0, 3, 3),
+                new BoxRegion(4, 0, 3, 3),
+                new BoxRegion(6, 0, 3, 3),
+                new BoxRegion(8, 0, 3, 3),
+                new BoxRegion(1, 2, 3, 3),
+                new BoxRegion(3, 2, 3, 3),
+                new BoxRegion(5, 2, 3, 3),
+                new BoxRegion(7, 2, 3, 3),
+                new BoxRegion(1, 4, 3, 3),
+                new BoxRegion(3, 4, 3, 3),
+                new BoxRegion(5, 4, 3, 3),
+                new BoxRegion(7, 4, 3, 3),
+            };
+            
+            //Act
+            var map = BoxMapMaker.Map(regions, 10, 10);
+
+            //Assert
+            var plate = new Plate(10, 10);
+            BoxRenderer.RenderMapToPlate(map, plate);
+            PlateDumpFormatter.Format(plate).Verify();
+        }
     }
 }

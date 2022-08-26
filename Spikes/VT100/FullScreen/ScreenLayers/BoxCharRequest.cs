@@ -9,5 +9,11 @@ namespace VT100.FullScreen.ScreenLayers
     internal struct BoxCharRequest
     {
         public BoxCharacter Class { get; set; }
+
+        public CornerType RequestedCornerType { get; set; }
+        public Edge RequestedLeft { get; set; }
+        public Edge RequestedRight { get; set; }
+        public Edge RequestedUp { get; set; }
+        public Edge RequestedDown { get; set; }
     }
 }

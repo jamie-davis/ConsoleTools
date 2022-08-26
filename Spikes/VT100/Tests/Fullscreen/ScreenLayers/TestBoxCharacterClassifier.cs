@@ -26,7 +26,6 @@ namespace VT100.Tests.Fullscreen.ScreenLayers
                 Char = (char)n.Source,
                 Unparsed = string.Join(" ", n.Unparsed),
                 n.CornerType, 
-                n.LineCount,
                 Left = n.Left?.ToString(),
                 Right = n.Right?.ToString(),
                 Up = n.Up?.ToString(),
@@ -57,5 +56,6 @@ namespace VT100.Tests.Fullscreen.ScreenLayers
         private static string SourcePath([CallerFilePath] string path = null)
         {
             return path;
-        }    }
+        }
+    }
 }

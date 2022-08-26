@@ -294,7 +294,6 @@ namespace VT100.FullScreen.ScreenLayers
     internal class BoxCharacter
     {
         public CornerType CornerType { get; }
-        public LineCount LineCount { get; }
         public Edge Left { get; }
         public Edge Right { get; }
         public Edge Up { get; }
@@ -335,6 +334,7 @@ namespace VT100.FullScreen.ScreenLayers
 
         public bool Matches(Edge edge)
         {
+            if (edge == null) return false;
             return LineWeight == edge.LineWeight && LineCount == edge.LineCount && DashType == edge.DashType;
         }
     }
