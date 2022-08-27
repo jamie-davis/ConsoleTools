@@ -8,8 +8,9 @@ namespace VT100.FullScreen.ScreenLayers
     {
         private int _windowWidth;
         private int _windowHeight;
-        private readonly int _cursorX;
-        private readonly int _cursorY;
+        private int _cursorX;
+        private int _cursorY;
+        private int _writeIndex;
 
         public Plate Plate { get; }
         
@@ -19,6 +20,7 @@ namespace VT100.FullScreen.ScreenLayers
             _windowHeight = windowHeight;
             _cursorX = 0;
             _cursorY = 0;
+            _writeIndex = 0;
             Plate = new Plate(windowWidth, windowHeight);
         }
         
@@ -26,17 +28,29 @@ namespace VT100.FullScreen.ScreenLayers
 
         public void Write(string text)
         {
-            throw new System.NotImplementedException();
+            var available = Plate.Width - _cursorX;
+            var fittedText = text.Length > available ? text.Substring(0, available) : text;
+            if (fittedText.Length > 0)
+            {
+                Plate.WriteText(_cursorX, _cursorY, fittedText);
+                _cursorX += fittedText.Length;
+            }
         }
 
         public void Write(char? character)
         {
-            throw new System.NotImplementedException();
+            if (_cursorX < Plate.Width)
+            {
+                Plate.WriteText(_cursorX, _cursorY, character?.ToString() ?? " ");
+                _cursorX++;
+            }
         }
 
         public void SetCursorPosition(int column, int row)
         {
-            throw new System.NotImplementedException();
+            _cursorX = column;
+            _cursorY = row;
+            _writeIndex = CharacterArrayIndexCalculator.GetIndex(_cursorX, _cursorY, Plate.Width);
         }
 
         public int WindowWidth => _windowWidth;

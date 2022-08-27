@@ -21,8 +21,8 @@ namespace VT100.Tests.TestUtilities
             _input = input;
             _app = new FakeFullScreenApplication(20, 1);
             _control.Bind(_app, new FakeLayout(), _valueWrapper.GetValue, _valueWrapper.SetValue);
-            _control.Render();
-            _control.SetFocus();
+            _control.Render(_app.Console);
+            _control.SetFocus(_app.Console);
 
             MakeInitialReport();
         }
@@ -45,7 +45,7 @@ namespace VT100.Tests.TestUtilities
                 _keyReports.Add(sb.ToString());
             }
             
-            ControlInputFeeder.Process(_control, _input, PostProcess);
+            ControlInputFeeder.Process(_app.Console, _control, _input, PostProcess);
         }
 
         public string GetDisplayReport()

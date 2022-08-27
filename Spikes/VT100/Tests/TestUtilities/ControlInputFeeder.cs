@@ -32,14 +32,14 @@ namespace VT100.Tests.TestUtilities
             return new ControlSequence(elements, codeType, 0);
         }
 
-        public static void Process(ILayoutControl control, IEnumerable<object> data, Action<string> postInputProcessing = null)
+        public static void Process(IFullScreenConsole console, ILayoutControl control, IEnumerable<object> data, Action<string> postInputProcessing = null)
         {
             foreach (var keyRequest in data)
             {
                 if (keyRequest is char charRequest)
-                    control.Accept(MakeControlSequence(AnsiCodeType.None, charRequest));
+                    control.Accept(console, MakeControlSequence(AnsiCodeType.None, charRequest));
                 else if (keyRequest is ResolvedCode code && _sequences.TryGetValue(code, out var sequence))
-                    control.Accept(sequence);
+                    control.Accept(console, sequence);
                 else
                     continue;
 

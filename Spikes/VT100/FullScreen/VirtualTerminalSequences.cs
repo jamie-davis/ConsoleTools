@@ -23,5 +23,10 @@
 
         //Screen control
         public static string ClearScreen = $"{CSI}2J";
+
+        public static string SetColour()
+        {
+            return $"{CSI}";
+        }
     }
 }

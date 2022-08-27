@@ -1,4 +1,4 @@
-namespace VT100.FullScreen.ScreenLayers
+namespace VT100.FullScreen
 {
     internal enum VtColour
     {
@@ -20,4 +20,5 @@ namespace VT100.FullScreen.ScreenLayers
         BrightCyan,
         BrightWhite
     }
+
 }

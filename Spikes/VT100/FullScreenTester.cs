@@ -28,8 +28,11 @@ namespace VT100
 
             #endregion
 
-            [TextBox("Name")]
+            [TextBox("Real Name")]
             public string Name { get; set; }
+
+            [TextBox("Nickname")]
+            public string NickName { get; set; }
         }
     }
 }

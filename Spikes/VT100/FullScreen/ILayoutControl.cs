@@ -8,10 +8,10 @@ namespace VT100.FullScreen
     {
         void Bind(IFullScreenApplication app, ILayout layout, Func<object, object> getter, Action<object, object> setter);
         string Caption { get; }
-        void Render();
+        void Render(IFullScreenConsole console);
         void Position(int column, int row, int width, int height);
-        void SetFocus();
-        void Accept(ControlSequence next);
+        void SetFocus(IFullScreenConsole console);
+        void Accept(IFullScreenConsole console, ControlSequence next);
         
         Style Style { get; }
     }

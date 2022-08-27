@@ -20,7 +20,7 @@ namespace VT100.FullScreen.Controls
         }
 
         public event EventHandler Redraw;
-        public event EventHandler<(int X, int Y, int CharacterOffset)> MoveCursor;
+        public event EventHandler<(IFullScreenConsole Console, int X, int Y, int CharacterOffset)> MoveCursor;
 
         public int CharacterOffset { get; private set; }
         public int VisualOffset { get; private set; }
@@ -33,28 +33,28 @@ namespace VT100.FullScreen.Controls
         public int RootCursorX { get; private set; }
         public int RootCursorY { get; private set; }
 
-        public void AdvanceCursor()
+        public void AdvanceCursor(IFullScreenConsole console)
         {
             if (VisualOffset == MaxVisualOffset)
                 CharacterOffset += 1;
             else
                 VisualOffset += 1;
-            ResetCursor();
+            ResetCursor(console);
         }
 
-        public bool CursorControl(ControlSequence key)
+        public bool CursorControl(IFullScreenConsole console, ControlSequence key)
         {
             switch (key.ResolvedCode)
             {
                 case ResolvedCode.CursorBackwards:
                     CursorBackward();
-                    ResetCursor();
+                    ResetCursor(console);
 
                     return true;
 
                 case ResolvedCode.CursorForward:
                     CursorForward();
-                    ResetCursor();
+                    ResetCursor(console);
 
                     return true;
 
@@ -65,12 +65,12 @@ namespace VT100.FullScreen.Controls
                 
                 case ResolvedCode.End:
                     if (CursorEndIfNotAlreadyThere())
-                        ResetCursor();
+                        ResetCursor(console);
                     return true;
                 
                 case ResolvedCode.Home:
                     if (CursorHomeIfNotAlreadyThere())
-                        ResetCursor();
+                        ResetCursor(console);
                     return true;
             }
             return false;
@@ -144,11 +144,11 @@ namespace VT100.FullScreen.Controls
             return moved;
         }
 
-        private void ResetCursor()
+        private void ResetCursor(IFullScreenConsole console)
         {
             CursorPosX = RootCursorX + VisualOffset;
             CursorPosY = RootCursorY;
-            MoveCursor?.Invoke(this, (CursorPosX, CursorPosY, CharacterOffset));
+            MoveCursor?.Invoke(this, (console, CursorPosX, CursorPosY, CharacterOffset));
         }
 
         public int GetCharacterPosition()
@@ -156,7 +156,7 @@ namespace VT100.FullScreen.Controls
             return CharacterOffset + VisualOffset;
         }
 
-        public void MoveCursorBack(int n = 1)
+        public void MoveCursorBack(IFullScreenConsole console, int n = 1)
         {
             var moved = false;
             for (int done = 0; done < n; ++done)
@@ -165,7 +165,7 @@ namespace VT100.FullScreen.Controls
                 moved = true;
             }
             if (moved)
-                ResetCursor();
+                ResetCursor(console);
         }
 
         public void SetDataLength(int dataLength)
@@ -182,9 +182,9 @@ namespace VT100.FullScreen.Controls
                 MaxCharacterOffset = newMaxCharacterOffset;
         }
 
-        public void RefreshCursor()
+        public void RefreshCursor(IFullScreenConsole console)
         {
-            ResetCursor();
+            ResetCursor(console);
         }
     }
 }

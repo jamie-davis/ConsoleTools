@@ -46,9 +46,9 @@ namespace VT100.FullScreen.Controls
         public string Caption => _attribute?.Caption;
         public int CharacterOffset { get; private set; }
 
-        public void Render()
+        public void Render(IFullScreenConsole console)
         {
-            _app.Console.SetCursorPosition(_column, _row);
+            console.SetCursorPosition(_column, _row);
             var visibleValue = _value;
             if (CharacterOffset > 0)
             {
@@ -61,7 +61,7 @@ namespace VT100.FullScreen.Controls
             else if (visibleValue.Length < _width)
                 visibleValue = visibleValue.PadRight(_width);
 
-            _app.Console.Write(visibleValue);
+            console.Write(visibleValue);
         }
         
         public void Position(int column, int row, int width, int height)
@@ -72,16 +72,16 @@ namespace VT100.FullScreen.Controls
             _height = height;
         }
 
-        public void SetFocus()
+        public void SetFocus(IFullScreenConsole console)
         {
-            _app.Console.SetCursorPosition(_column, _row);
+            console.SetCursorPosition(_column, _row);
             var maxCharacterOffset = _value.Length - _width + 1;
             _cursorControl = new CursorController(0, 0, _width - 1, _column, _row, maxCharacterOffset > 0 ? maxCharacterOffset : 0, _value.Length);
             _cursorControl.MoveCursor += OnMoveCursor;
             _app.GotFocus(this);
         }
 
-        private void OnMoveCursor(object? sender, (int X, int Y, int CharacterOffset) e)
+        private void OnMoveCursor(object? sender, (IFullScreenConsole Console, int X, int Y, int CharacterOffset) e)
         {
             if (!ReferenceEquals(sender, _cursorControl)) return;
 
@@ -89,38 +89,38 @@ namespace VT100.FullScreen.Controls
             
             using (new CursorHider())
             {
-                Render();
-                _app.Console.SetCursorPosition(e.X, e.Y);
+                Render(e.Console);
+                e.Console.SetCursorPosition(e.X, e.Y);
             }
         }
 
-        public void Accept(ControlSequence next)
+        public void Accept(IFullScreenConsole console, ControlSequence next)
         {
-            if (_cursorControl.CursorControl(next)) return;
+            if (_cursorControl.CursorControl(console, next)) return;
 
             if (next.ResolvedCode == ResolvedCode.NotRecognised)
             {
-                TryAddCharacter(next);
+                TryAddCharacter(console, next);
             }
             else if (next.ResolvedCode == ResolvedCode.Backspace)
             {
-                TryBackspace();
+                TryBackspace(console);
             }
             else if (next.ResolvedCode == ResolvedCode.Delete)
             {
-                TryDelete();
+                TryDelete(console);
             }
             _cursorControl.SetDataLength(_value.Length);            
         }
 
         public Style Style => _style;
 
-        private void TryAddCharacter(ControlSequence next)
+        private void TryAddCharacter(IFullScreenConsole console, ControlSequence next)
         {
             var nextChar = next.Items.FirstOrDefault()?.KeyChar;
             if (nextChar == null) return;
 
-            _app.Console.Write(nextChar);
+            console.Write(nextChar);
             var characterPosition = _cursorControl.GetCharacterPosition();
             if (characterPosition > _value.Length)
             {
@@ -139,27 +139,27 @@ namespace VT100.FullScreen.Controls
             }
 
             SaveValue();
-            _cursorControl.AdvanceCursor();
+            _cursorControl.AdvanceCursor(console);
         }
 
-        private void TryBackspace()
+        private void TryBackspace(IFullScreenConsole console)
         {
             var characterPosition = _cursorControl.GetCharacterPosition();
             if (characterPosition == 0) return;
 
             _value = _value.Substring(0, characterPosition - 1) + _value.Substring(characterPosition);
             SaveValue();
-            _cursorControl.MoveCursorBack();
+            _cursorControl.MoveCursorBack(console);
         }
 
-        private void TryDelete()
+        private void TryDelete(IFullScreenConsole console)
         {
             var characterPosition = _cursorControl.GetCharacterPosition();
             if (characterPosition >= _value.Length) return;
             
             _value = _value.Substring(0, characterPosition) + _value.Substring(characterPosition + 1);
             SaveValue();
-            _cursorControl.RefreshCursor();
+            _cursorControl.RefreshCursor(console);
         }
 
         private void LoadValue()

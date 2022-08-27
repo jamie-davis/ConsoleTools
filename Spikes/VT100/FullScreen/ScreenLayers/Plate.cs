@@ -81,7 +81,7 @@ namespace VT100.FullScreen.ScreenLayers
 
             char GetContentChar(int ix)
             {
-                 Dictionary<VtColour, char> ColourChars = new Dictionary<VtColour, char>
+                Dictionary<VtColour, char> ColourChars = new Dictionary<VtColour, char>
                 {
                     {VtColour.NoColourChange,' '},
                     {VtColour.Black,'0'},
@@ -139,12 +139,18 @@ namespace VT100.FullScreen.ScreenLayers
             return sb.ToString();
         }
 
-    }
+        public string GetCharacter(int index, int line)
+        {
+            var indexPos = _windowWidth * line + index;
+            var vtColour = _format[indexPos].Colour;
+            var content = _content[indexPos];
+            if (content == 0 && vtColour == VtColour.NoColourChange)
+                return " ";
 
-    internal enum DumpType
-    {
-        Text,
-        Colour,
-        Formatting
+            if (content == 0)
+                content = ' ';
+
+            return $"{content}{ColourAttribute.GetColourAttribute(vtColour)}";
+        }
     }
 }

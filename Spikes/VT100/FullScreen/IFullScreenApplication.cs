@@ -4,6 +4,5 @@
     {
         void GotFocus(ILayoutControl focusControl);
         bool IsCursorModeInsert();
-        IFullScreenConsole Console { get; }
     }
 }

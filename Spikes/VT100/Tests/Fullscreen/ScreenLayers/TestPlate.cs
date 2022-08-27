@@ -1,4 +1,5 @@
 using TestConsoleLib.Testing;
+using VT100.FullScreen;
 using VT100.FullScreen.ControlBehaviour;
 using VT100.FullScreen.ScreenLayers;
 using VT100.Tests.Utilities;

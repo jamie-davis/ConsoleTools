@@ -23,8 +23,6 @@ namespace VT100.Tests.Fakes
 
         public FakeFullScreenConsole Console { get; }
 
-        IFullScreenConsole IFullScreenApplication.Console => Console;
-
         public bool InsertModeOn { get; set; } = true;
 
         #endregion

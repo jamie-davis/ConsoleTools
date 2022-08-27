@@ -44,10 +44,10 @@ namespace VT100.FullScreen.ScreenLayers
 
                 var topLeft = BoxCharacterSelector.SelectTopLeft(boxRegion);
                 var bottomLeft = BoxCharacterSelector.SelectBottomLeft(boxRegion);
-                var topIx = BoxCharacterIndexCalculator.GetIndex(x, y, plateWidth);
+                var topIx = CharacterArrayIndexCalculator.GetIndex(x, y, plateWidth);
                 if (topIx >= 0 && x >= 0 && x < plateWidth &&  topIx < boxCharacters.Length)
                     Merge(boxCharacters, topIx, topLeft);
-                var bottomIx = BoxCharacterIndexCalculator.GetIndex(x, y + boxRegion.Height - 1, plateWidth);
+                var bottomIx = CharacterArrayIndexCalculator.GetIndex(x, y + boxRegion.Height - 1, plateWidth);
                 if (bottomIx > 0 && bottomIx < boxCharacters.Length)
                     Merge(boxCharacters, bottomIx, bottomLeft);
                 var xpos = boxRegion.X + 1;
@@ -79,7 +79,7 @@ namespace VT100.FullScreen.ScreenLayers
                 var vert = BoxCharacterSelector.SelectVertical(boxRegion);
                 for (int row = 1; row <= boxRegion.Height - 2; row++)
                 {
-                    var leftIx = BoxCharacterIndexCalculator.GetIndex(boxRegion.X, boxRegion.Y + row, plateWidth);
+                    var leftIx = CharacterArrayIndexCalculator.GetIndex(boxRegion.X, boxRegion.Y + row, plateWidth);
                     if (leftIx > 0 && leftIx < boxCharacters.Length && boxRegion.X >= 0 && boxRegion.X < plateWidth)
                         Merge(boxCharacters, leftIx, vert);
                     var rightIx = leftIx + boxRegion.Width - 1;

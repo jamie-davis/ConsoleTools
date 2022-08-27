@@ -1,5 +1,6 @@
 using System.Linq;
 using FluentAssertions;
+using VT100.FullScreen;
 using VT100.FullScreen.ControlBehaviour;
 using VT100.FullScreen.ScreenLayers;
 using Xunit;

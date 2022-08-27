@@ -16,7 +16,7 @@
 
         public BoxCharRequest GetAt(int x, int y)
         {
-            var ix = BoxCharacterIndexCalculator.GetIndex(x, y, _width);
+            var ix = CharacterArrayIndexCalculator.GetIndex(x, y, _width);
             if (ix < BoxCharacters.Length)
                 return BoxCharacters[ix];
 

@@ -7,6 +7,8 @@ namespace VT100.FullScreen
 {
     internal class Positioner
     {
+        private readonly IFullScreenConsole _console;
+
         private class ControlContainer
         {
             private readonly ILayoutControl _control;
@@ -33,8 +35,9 @@ namespace VT100.FullScreen
 
         private List<ControlContainer> _controls;
 
-        public Positioner(int width, int height, CaptionAlignment captionAlignment, IEnumerable<ILayoutControl> controls)
+        public Positioner(int width, int height, CaptionAlignment captionAlignment, IEnumerable<ILayoutControl> controls, IFullScreenConsole console)
         {
+            _console = console;
             Width = width;
             Height = height;
             CaptionAlignment = captionAlignment;
@@ -60,21 +63,39 @@ namespace VT100.FullScreen
 
         public void Render()
         {
-            //hide
             using (new CursorHider())
             {
                 foreach (var container in _controls)
                 {
-                    Console.SetCursorPosition(container.CaptionX, container.CaptionY);
-                    Console.Write(container.CaptionText);
-                    container.Control.Render();
+                    _console.SetCursorPosition(container.CaptionX, container.CaptionY);
+                    _console.Write(container.CaptionText);
+                    container.Control.Render(_console);
                 }
             }
         }
 
-        public void SetFocus()
+        public void SetFocus(IFullScreenConsole console)
         {
-            _controls.FirstOrDefault()?.Control?.SetFocus();
+            _controls.FirstOrDefault()?.Control?.SetFocus(console);
+        }
+
+        public void NextFocus(IFullScreenConsole console, ILayoutControl layoutControl)
+        {
+            var focusContainer = _controls.FirstOrDefault(c => ReferenceEquals(c.Control, layoutControl));
+            if (focusContainer == null)
+            {
+                SetFocus(console);
+                return;
+            }
+            var index = _controls.IndexOf(focusContainer);
+            if (index + 1 >= _controls.Count)
+            {
+                SetFocus(console);
+                return;
+            }
+
+            var control = _controls[index + 1];
+            control.Control?.SetFocus(console);
         }
     }
 }

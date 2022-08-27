@@ -1,11 +1,7 @@
 ﻿using System;
-using System.ComponentModel.Design;
-using System.Data;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Threading.Tasks;
-using VT100;
+using VT100.FullScreen.ScreenLayers;
 using VT100.Utilities;
 using VT100.Utilities.ReadConsole;
 
@@ -17,7 +13,6 @@ namespace VT100.FullScreen
         private readonly IVTModeControl _vtModeControl;
         private ScreenCapture _screenCapture;
         private ILayoutControl _focus;
-        private IFullScreenConsole _console;
 
         public FullScreenApplication(ILayout layout, IVTModeControl vtModeControl, IFullScreenConsole console = null)
         {
@@ -67,15 +62,17 @@ namespace VT100.FullScreen
         public void Run()
         {
             var layoutControls = LayoutControls.Extract(this, _layout).ToList();
-            var positioner = new Positioner(Console.WindowWidth, Console.WindowHeight, CaptionAlignment.Left, layoutControls);
+            var plateInterface = new PlateFullScreenConsole(Console.WindowWidth, Console.WindowHeight);
+            var positioner = new Positioner(Console.WindowWidth, Console.WindowHeight, CaptionAlignment.Left, layoutControls, plateInterface);
             positioner.Render();
-            positioner.SetFocus();
+            var plateStack = new PlateStack(plateInterface.Plate);
+            plateStack.Render(Console);
+            positioner.SetFocus(Console);
 
             var reader = new ConsoleInputReader(CodeAnalyserSettings.PreferPF3Modifiers);
             var monitor = new Monitor();
             reader.KeyMonitor = monitor;
             Task.Factory.StartNew(reader.Read, TaskCreationOptions.LongRunning);
-            var goUI = false;
             foreach (var item in reader.Items.GetConsumingEnumerable())
             {
                 if (ExitKey(item))
@@ -89,13 +86,24 @@ namespace VT100.FullScreen
                     _vtModeControl.ToggleInsertMode();
                     continue;
                 }
-                _focus?.Accept(item);
+                
+                if (NextFocusKey(item))
+                {
+                    positioner.NextFocus(Console, _focus);
+                    continue;
+                }
+                _focus?.Accept(Console, item);
             }
         }
 
         private bool ExitKey(ControlSequence next)
         {
             return next.ResolvedCode == ResolvedCode.Escape;
+        }
+
+        private bool NextFocusKey(ControlSequence next)
+        {
+            return next.ResolvedCode == ResolvedCode.Tab;
         }
 
         private bool ModeSwitchKey(ControlSequence next)

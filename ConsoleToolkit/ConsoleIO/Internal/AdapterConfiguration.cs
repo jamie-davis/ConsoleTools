@@ -54,7 +54,7 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         /// This is unlikely.
         ///</remarks>
         /// <remarks>
-        /// The correct time to reset this value if before any other code runs.
+        /// The correct time to reset this value is before any other code runs.
         /// 
         /// Do not reset this if output strings are being formatted in another thread.
         /// Do not store strings containing control characters, and then reset this, as
