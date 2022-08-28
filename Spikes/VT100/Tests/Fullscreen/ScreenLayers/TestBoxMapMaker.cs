@@ -1,5 +1,7 @@
-﻿using TestConsoleLib.Testing;
+﻿using System;
+using TestConsoleLib.Testing;
 using VT100.FullScreen.ScreenLayers;
+using VT100.Tests.Fakes;
 using VT100.Tests.Utilities;
 using Xunit;
 

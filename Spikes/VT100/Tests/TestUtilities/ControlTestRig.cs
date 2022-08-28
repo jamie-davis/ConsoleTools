@@ -20,7 +20,7 @@ namespace VT100.Tests.TestUtilities
             _valueWrapper = valueWrapper;
             _input = input;
             _app = new FakeFullScreenApplication(20, 1);
-            _control.Bind(_app, new FakeLayout(), _valueWrapper.GetValue, _valueWrapper.SetValue);
+            _control.PropertyBind(_app, new FakeLayout(), _valueWrapper.GetValue, _valueWrapper.SetValue);
             _control.Render(_app.Console);
             _control.SetFocus(_app.Console);
 

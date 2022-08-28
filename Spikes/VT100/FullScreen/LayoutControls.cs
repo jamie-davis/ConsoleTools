@@ -13,6 +13,7 @@ namespace VT100.FullScreen
     internal static class LayoutControls
     {
         private static Dictionary<Type, Type> _controlLookup;
+        private static object[] noParams = {};
 
         public static IEnumerable<ILayoutControl> Extract(IFullScreenApplication app, ILayout layout)
         {
@@ -28,15 +29,26 @@ namespace VT100.FullScreen
             {
                 yield return prop.Control;
             }
+
+            var methods = layout.GetType().GetMethods()
+                .Select(m => new {Method = m, Control = GetControl(app, layout, methodInfo: m)})
+                .Where(m => m.Control != null)
+                .ToList();
+
+            foreach (var method in methods)
+            {
+                yield return method.Control;
+            }
         }
 
-        private static ILayoutControl GetControl(IFullScreenApplication app, ILayout layout, PropertyInfo propertyInfo)
+        private static ILayoutControl GetControl(IFullScreenApplication app, ILayout layout, PropertyInfo propertyInfo = null, MethodInfo methodInfo = null)
         {
             if (_controlLookup == null) LoadControls();
 
-            var attribs = propertyInfo.GetCustomAttributes().Where(a => _controlLookup.ContainsKey(a.GetType())).ToList();
+            var attribs = propertyInfo?.GetCustomAttributes().Where(a => _controlLookup.ContainsKey(a.GetType())).ToList()
+                ?? methodInfo?.GetCustomAttributes().Where(a => _controlLookup.ContainsKey(a.GetType())).ToList();
             if (attribs.Count > 1)
-                throw new Exception($"{propertyInfo.Name} : Element must have a single control type.");
+                throw new Exception($"{propertyInfo?.Name ?? methodInfo?.Name} : Element must have a single control type.");
 
             if (attribs.Count == 1)
             {
@@ -46,7 +58,19 @@ namespace VT100.FullScreen
                 var control = Activator.CreateInstance(controlType) as ILayoutControl;
                 if (control != null)
                 {
-                    control.Bind(app, layout, propertyInfo.GetValue, MakeUpdater(propertyInfo));
+                    if (propertyInfo != null)
+                    {
+                        Func<object,object> getter = propertyInfo.GetValue;
+                        var updater = MakeUpdater(propertyInfo);
+                        control.PropertyBind(app, layout, getter, updater);
+                    }
+
+                    if (methodInfo != null)
+                    {
+                        Func<object, bool> methodRunner = MakeMethodCall(methodInfo);
+                        control.MethodBind(app, layout, methodRunner);
+                    }
+
                     var acceptMethod = control.GetType().GetMethod("AcceptConfig", BindingFlags.NonPublic | BindingFlags.Instance);
                     if (acceptMethod != null && acceptMethod.GetParameters().Length == 1 && acceptMethod.GetParameters()[0].ParameterType == attribType)
                     {
@@ -56,6 +80,20 @@ namespace VT100.FullScreen
                 }
             }
             return null;
+        }
+
+        private static Func<object, bool> MakeMethodCall(MethodInfo methodInfo)
+        {
+            if (methodInfo.ReturnType == typeof(bool))
+            {
+                return o => (bool)(methodInfo.Invoke(o, noParams) ?? true);
+            }
+
+            return o =>
+            {
+                methodInfo.Invoke(o, noParams);
+                return true;
+            };
         }
 
         private static Action<object, object> MakeUpdater(PropertyInfo propertyInfo)

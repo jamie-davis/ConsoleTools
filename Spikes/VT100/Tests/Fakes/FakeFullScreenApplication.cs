@@ -21,6 +21,11 @@ namespace VT100.Tests.Fakes
             return InsertModeOn;
         }
 
+        public void CloseScreen()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public FakeFullScreenConsole Console { get; }
 
         public bool InsertModeOn { get; set; } = true;

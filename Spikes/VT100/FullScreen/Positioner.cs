@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.XPath;
+using VT100.FullScreen.Controls;
 
 namespace VT100.FullScreen
 {
@@ -33,7 +34,9 @@ namespace VT100.FullScreen
         public int Height { get; }
         public CaptionAlignment CaptionAlignment { get; }
 
+        private List<ControlContainer> _combinedControls;
         private List<ControlContainer> _controls;
+        private List<ControlContainer> _buttons;
 
         public Positioner(int width, int height, CaptionAlignment captionAlignment, IEnumerable<ILayoutControl> controls, IFullScreenConsole console)
         {
@@ -45,7 +48,10 @@ namespace VT100.FullScreen
             Row = 1;
             Column = 1;
 
-            _controls = controls.Select(c => new ControlContainer(c)).ToList();
+            var allControls = controls.Select(c => new ControlContainer(c)).ToList();
+            _controls = allControls.Where(c => !(c.Control is ButtonControl)).ToList();
+            _buttons = allControls.Where(c => c.Control is ButtonControl).ToList();
+            _combinedControls = _controls.Concat(_buttons).ToList();
 
             var maxAllowableCaption = width - 4;
             var maxCaption = Math.Min(_controls.Max(c => c.Caption.Length), maxAllowableCaption);
@@ -59,6 +65,20 @@ namespace VT100.FullScreen
 
                 Row += 2;
             }
+
+            var space = _buttons.Select(b => b.Control.GetRequestedSize()).ToList();
+            var maxHeight = space.Max(m => (int?)m.Height) ?? 0;
+            Row += maxHeight;
+            var column = Width;
+            foreach (var container in _buttons.Select(b => b).Reverse()) 
+            {
+                container.CaptionText = $"{container.Caption.PadRight(maxCaption)}:";
+                var requestedSize = container.Control.GetRequestedSize();
+                column -= requestedSize.Width;
+                var controlY = Row - requestedSize.Height;
+                var controlX = column--;
+                container.Control.Position(controlX, controlY, requestedSize.Width, requestedSize.Height);
+            }
         }
 
         public void Render()
@@ -71,6 +91,11 @@ namespace VT100.FullScreen
                     _console.Write(container.CaptionText);
                     container.Control.Render(_console);
                 }
+                
+                foreach (var container in _buttons)
+                {
+                    container.Control.Render(_console);
+                }
             }
         }
 
@@ -81,20 +106,20 @@ namespace VT100.FullScreen
 
         public void NextFocus(IFullScreenConsole console, ILayoutControl layoutControl)
         {
-            var focusContainer = _controls.FirstOrDefault(c => ReferenceEquals(c.Control, layoutControl));
+            var focusContainer = _combinedControls.FirstOrDefault(c => ReferenceEquals(c.Control, layoutControl));
             if (focusContainer == null)
             {
                 SetFocus(console);
                 return;
             }
-            var index = _controls.IndexOf(focusContainer);
-            if (index + 1 >= _controls.Count)
+            var index = _combinedControls.IndexOf(focusContainer);
+            if (index + 1 >= _combinedControls.Count)
             {
                 SetFocus(console);
                 return;
             }
 
-            var control = _controls[index + 1];
+            var control = _combinedControls[index + 1];
             control.Control?.SetFocus(console);
         }
     }

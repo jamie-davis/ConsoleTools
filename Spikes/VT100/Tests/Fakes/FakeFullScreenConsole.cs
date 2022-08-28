@@ -6,24 +6,22 @@ namespace VT100.Tests.Fakes
 {
     internal class FakeFullScreenConsole : IFullScreenConsole
     {
-        private readonly int _columns;
-        private readonly int _rows;
-        private readonly char[,] _screenBuffer;
         private readonly int _windowWidth;
         private readonly int _windowHeight;
+        private readonly char[,] _screenBuffer;
         private int _cursorX;
         private int _cursorY;
 
-        public FakeFullScreenConsole(int columns, int rows)
+        public FakeFullScreenConsole(int windowWidth, int windowHeight)
         {
-            _columns = columns;
-            _rows = rows;
+            _windowWidth = windowWidth;
+            _windowHeight = windowHeight;
             _cursorX = 0;
             _cursorY = 0;
-            _screenBuffer = new char[rows, columns];
-            for (var row = 0; row < rows; row++)
+            _screenBuffer = new char[windowHeight, windowWidth];
+            for (var row = 0; row < windowHeight; row++)
             {
-                for (var column = 0; column < columns; column++)
+                for (var column = 0; column < windowWidth; column++)
                 {
                     _screenBuffer[row, column] = ' ';
                 }
@@ -42,7 +40,7 @@ namespace VT100.Tests.Fakes
 
         public void Write(char? character)
         {
-            if (_cursorX >= _columns)
+            if (_cursorX >= _windowWidth)
             {
                 CursorToNextLine();
             }
@@ -65,17 +63,17 @@ namespace VT100.Tests.Fakes
         private void CursorToNextLine()
         {
             _cursorX = 0;
-            if (_cursorY == _rows)
+            if (_cursorY == _windowHeight)
             {
-                for (var copyToRow = 0; copyToRow < _rows - 1; copyToRow++)
+                for (var copyToRow = 0; copyToRow < _windowHeight - 1; copyToRow++)
                 {
-                    var sourceOffset = (copyToRow + 1) * _columns;
-                    var destOffset = copyToRow * _columns;
-                    Buffer.BlockCopy(_screenBuffer, sourceOffset, _screenBuffer, destOffset, _columns * sizeof(char));
+                    var sourceOffset = (copyToRow + 1) * _windowWidth;
+                    var destOffset = copyToRow * _windowWidth;
+                    Buffer.BlockCopy(_screenBuffer, sourceOffset, _screenBuffer, destOffset, _windowWidth * sizeof(char));
                 }
 
-                for (var col = 0; col < _columns; ++col)
-                    _screenBuffer[_rows - 1, col] = ' ';
+                for (var col = 0; col < _windowWidth; ++col)
+                    _screenBuffer[_windowHeight - 1, col] = ' ';
             }
             else
             {
@@ -86,11 +84,11 @@ namespace VT100.Tests.Fakes
         public string GetDisplayReport()
         {
             var sb = new StringBuilder();
-            var lineArray = new char[_columns]; 
-            for (var row = 0; row < _rows; row++)
+            var lineArray = new char[_windowWidth]; 
+            for (var row = 0; row < _windowHeight; row++)
             {
-                var sourceOffset = row * _columns;
-                Buffer.BlockCopy(_screenBuffer, sourceOffset, lineArray, 0, _columns * sizeof(char));
+                var sourceOffset = row * _windowWidth;
+                Buffer.BlockCopy(_screenBuffer, sourceOffset * sizeof(char), lineArray, 0, _windowWidth * sizeof(char));
                 if (row == _cursorY)
                     sb.Append('>');
                 else
@@ -98,7 +96,7 @@ namespace VT100.Tests.Fakes
                 sb.AppendLine(new string(lineArray));
             }
 
-            sb.AppendLine(" " + new string('-', _columns));
+            sb.AppendLine(" " + new string('-', _windowWidth));
             sb.AppendLine(" " + new string(' ', _cursorX) + "^");
             sb.AppendLine($"Cursor position: Row {_cursorY}, Column {_cursorX}");
             

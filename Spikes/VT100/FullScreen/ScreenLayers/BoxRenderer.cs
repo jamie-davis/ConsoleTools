@@ -25,5 +25,21 @@ namespace VT100.FullScreen.ScreenLayers
                 }
             }
         }
+
+        public static void RenderMapToConsole(BoxMap map, IFullScreenConsole console)
+        {
+            for (int y = 0; y < console.WindowHeight; y++)
+            {
+                for (int x = 0; x < console.WindowWidth; x++)
+                {
+                    var mapItem = map.GetAt(x, y);
+                    if (mapItem.Class != null)
+                    {
+                        console.SetCursorPosition(x, y);
+                        console.Write(((char)mapItem.Class.Source).ToString());
+                    }
+                }
+            }
+        }
     }
 }

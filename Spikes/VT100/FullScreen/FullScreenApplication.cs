@@ -13,6 +13,7 @@ namespace VT100.FullScreen
         private readonly IVTModeControl _vtModeControl;
         private ScreenCapture _screenCapture;
         private ILayoutControl _focus;
+        private bool _exit;
 
         public FullScreenApplication(ILayout layout, IVTModeControl vtModeControl, IFullScreenConsole console = null)
         {
@@ -47,6 +48,11 @@ namespace VT100.FullScreen
             return _vtModeControl.InsertModeOn;
         }
 
+        public void CloseScreen()
+        {
+            _exit = true;
+        }
+
         public IFullScreenConsole Console { get; }
 
         #region IDisposable
@@ -68,6 +74,7 @@ namespace VT100.FullScreen
             var plateStack = new PlateStack(plateInterface.Plate);
             plateStack.Render(Console);
             positioner.SetFocus(Console);
+            _exit = false;
 
             var reader = new ConsoleInputReader(CodeAnalyserSettings.PreferPF3Modifiers);
             var monitor = new Monitor();
@@ -93,6 +100,11 @@ namespace VT100.FullScreen
                     continue;
                 }
                 _focus?.Accept(Console, item);
+
+                if (_exit)
+                {
+                    reader.Stop();
+                }
             }
         }
 
@@ -110,30 +122,5 @@ namespace VT100.FullScreen
         {
             return next.ResolvedCode == ResolvedCode.Insert;
         }
-    }
-
-    internal class DefaultFullScreenConsole : IFullScreenConsole
-    {
-        #region Implementation of IFullScreenConsole
-
-        public void Write(string text)
-        {
-            Console.Write(text);
-        }
-
-        public void Write(char? character)
-        {
-            Console.Write(character ?? ' ');
-        }
-
-        public void SetCursorPosition(int column, int row)
-        {
-            Console.SetCursorPosition(column, row);
-        }
-
-        public int WindowWidth => Console.WindowWidth;
-        public int WindowHeight => Console.WindowHeight;
-
-        #endregion
     }
 }

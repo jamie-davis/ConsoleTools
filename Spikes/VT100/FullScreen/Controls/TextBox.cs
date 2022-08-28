@@ -25,6 +25,7 @@ namespace VT100.FullScreen.Controls
         private CursorController _cursorControl;
         private readonly Style _style = new Style();
 
+        // ReSharper disable once UnusedMember.Global
         internal void AcceptConfig(TextBoxAttribute attribute)
         {
             _attribute = attribute;
@@ -32,13 +33,18 @@ namespace VT100.FullScreen.Controls
         
         #region Implementation of ILayoutControl
 
-        public void Bind(IFullScreenApplication app, ILayout layout, Func<object, object> getter, Action<object, object> setter)
+        public void PropertyBind(IFullScreenApplication app, ILayout layout, Func<object, object> getter, Action<object, object> setter)
         {
             _app = app;
             _dataContainer = layout;
             _getter = getter;
             _setter = setter;
             LoadValue();
+        }
+
+        public void MethodBind(IFullScreenApplication app, ILayout layout, Func<object, bool> method)
+        {
+            //Not possible for a textbox
         }
 
         #endregion
@@ -63,7 +69,7 @@ namespace VT100.FullScreen.Controls
 
             console.Write(visibleValue);
         }
-        
+
         public void Position(int column, int row, int width, int height)
         {
             _column = column;

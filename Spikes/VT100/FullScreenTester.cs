@@ -12,7 +12,7 @@ namespace VT100
         {
             using (var vtMode = new RequireVTMode())
             {
-                var layout = new Layout() { Name = "Test" };
+                var layout = new Layout() { Name = "Test", NickName = "Wolf" };
                 using (var fsa = new FullScreenApplication(layout, vtMode))
                     fsa.Run();
 
@@ -20,6 +20,7 @@ namespace VT100
             }
         }
 
+        [Screen()]
         public class Layout : ILayout
         {
             #region Implementation of ILayout
@@ -33,6 +34,12 @@ namespace VT100
 
             [TextBox("Nickname")]
             public string NickName { get; set; }
+
+            [Button("OK", ExitMode.ExitOnSuccess)]
+            public bool OK()
+            {
+                return true;
+            }
         }
     }
 }
