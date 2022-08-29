@@ -5,5 +5,6 @@
         void GotFocus(ILayoutControl focusControl);
         bool IsCursorModeInsert();
         void CloseScreen();
+        void ReRender();
     }
 }

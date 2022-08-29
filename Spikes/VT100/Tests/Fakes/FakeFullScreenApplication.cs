@@ -23,7 +23,12 @@ namespace VT100.Tests.Fakes
 
         public void CloseScreen()
         {
-            throw new System.NotImplementedException();
+            
+        }
+
+        public void ReRender()
+        {
+            
         }
 
         public FakeFullScreenConsole Console { get; }

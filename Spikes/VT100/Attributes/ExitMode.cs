@@ -3,7 +3,6 @@
     internal enum ExitMode
     {
         DoesNotExit,
-        CancelScreen,
         ExitOnSuccess
     }
 }

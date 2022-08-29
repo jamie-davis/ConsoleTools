@@ -92,8 +92,10 @@ namespace VT100.FullScreen.Controls
                 || (next.ResolvedCode == ResolvedCode.NotRecognised 
                     && next.Items.Count == 1 && next.Items[0].KeyChar == ' '))
             {
-                if (_method(_dataContainer))
+                if (_method(_dataContainer) && _attribute?.ExitMode == ExitMode.ExitOnSuccess)
                     _app.CloseScreen();
+
+                _app.ReRender();
             }
         }
 

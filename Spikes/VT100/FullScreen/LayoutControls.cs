@@ -39,6 +39,33 @@ namespace VT100.FullScreen
             {
                 yield return method.Control;
             }
+            
+                        
+            if (CancelRequired(layout, out var cancelCaption))
+                yield return MakeCancelButton(app, layout, cancelCaption);
+
+        }
+
+        private static ButtonControl MakeCancelButton(IFullScreenApplication app, ILayout layout,
+            string caption)
+        {
+            var button = new ButtonControl();
+            button.MethodBind(app, layout, o => true);
+            button.AcceptConfig(new ButtonAttribute(caption ?? "Cancel", ExitMode.ExitOnSuccess));
+            return button;
+        }
+
+        private static bool CancelRequired(ILayout layout, out string cancelCaption)
+        {
+            var attribute = layout.GetType().GetCustomAttribute<ScreenAttribute>();
+            if (attribute == null)
+            {
+                cancelCaption = null;
+                return false;
+            }
+
+            cancelCaption = attribute.ExitButtonCaption;
+            return true;
         }
 
         private static ILayoutControl GetControl(IFullScreenApplication app, ILayout layout, PropertyInfo propertyInfo = null, MethodInfo methodInfo = null)
@@ -129,5 +156,6 @@ namespace VT100.FullScreen
                 .Where(t => t.ControlAttribute != null);
             _controlLookup = controlTypes.ToDictionary(t => t.ControlAttribute.IntroducingAttribute, t => t.Type);
         }
+        
     }
 }

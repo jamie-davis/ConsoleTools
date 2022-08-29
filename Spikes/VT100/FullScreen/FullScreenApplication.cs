@@ -53,6 +53,11 @@ namespace VT100.FullScreen
             _exit = true;
         }
 
+        public void ReRender()
+        {
+            
+        }
+
         public IFullScreenConsole Console { get; }
 
         #region IDisposable
