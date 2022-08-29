@@ -120,6 +120,12 @@ namespace VT100.FullScreen.Controls
         }
 
         public Style Style => _style;
+        
+        public void Refresh(IFullScreenConsole console)
+        {
+            LoadValue();
+            Render(console);
+        }
 
         private void TryAddCharacter(IFullScreenConsole console, ControlSequence next)
         {

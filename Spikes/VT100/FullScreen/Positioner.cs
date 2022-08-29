@@ -123,5 +123,13 @@ namespace VT100.FullScreen
             var control = _combinedControls[index + 1];
             control.Control?.SetFocus(console);
         }
+
+        public void ReRender(IFullScreenConsole console)
+        {
+            foreach (var control in _combinedControls)
+            {
+                control.Control.Refresh(console);
+            }
+        }
     }
 }

@@ -106,5 +106,9 @@ namespace VT100.FullScreen.Controls
         }
 
         public Style Style { get; }
+        public void Refresh(IFullScreenConsole console)
+        {
+            
+        }
     }
 }

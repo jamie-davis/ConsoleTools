@@ -21,5 +21,6 @@ namespace VT100.FullScreen
         void Accept(IFullScreenConsole console, ControlSequence next);
         
         Style Style { get; }
+        void Refresh(IFullScreenConsole console);
     }
 }

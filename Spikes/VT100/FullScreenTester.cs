@@ -35,6 +35,13 @@ namespace VT100
             [TextBox("Nickname")]
             public string NickName { get; set; }
 
+            [Button("Default")]
+            public void SetDefaults()
+            {
+                Name = "Default name";
+                NickName = "Defaulty";
+            }
+            
             [Button("OK", ExitMode.ExitOnSuccess)]
             public bool OK()
             {

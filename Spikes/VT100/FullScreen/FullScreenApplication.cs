@@ -14,6 +14,7 @@ namespace VT100.FullScreen
         private ScreenCapture _screenCapture;
         private ILayoutControl _focus;
         private bool _exit;
+        private Positioner _positioner;
 
         public FullScreenApplication(ILayout layout, IVTModeControl vtModeControl, IFullScreenConsole console = null)
         {
@@ -55,7 +56,11 @@ namespace VT100.FullScreen
 
         public void ReRender()
         {
-            
+            using (new CursorHider())
+            {
+                _positioner?.ReRender(Console);
+                _focus.SetFocus(Console);
+            }
         }
 
         public IFullScreenConsole Console { get; }
@@ -74,11 +79,11 @@ namespace VT100.FullScreen
         {
             var layoutControls = LayoutControls.Extract(this, _layout).ToList();
             var plateInterface = new PlateFullScreenConsole(Console.WindowWidth, Console.WindowHeight);
-            var positioner = new Positioner(Console.WindowWidth, Console.WindowHeight, CaptionAlignment.Left, layoutControls, plateInterface);
-            positioner.Render();
+            _positioner = new Positioner(Console.WindowWidth, Console.WindowHeight, CaptionAlignment.Left, layoutControls, plateInterface);
+            _positioner.Render();
             var plateStack = new PlateStack(plateInterface.Plate);
             plateStack.Render(Console);
-            positioner.SetFocus(Console);
+            _positioner.SetFocus(Console);
             _exit = false;
 
             var reader = new ConsoleInputReader(CodeAnalyserSettings.PreferPF3Modifiers);
@@ -101,7 +106,7 @@ namespace VT100.FullScreen
                 
                 if (NextFocusKey(item))
                 {
-                    positioner.NextFocus(Console, _focus);
+                    _positioner.NextFocus(Console, _focus);
                     continue;
                 }
                 _focus?.Accept(Console, item);
@@ -111,6 +116,8 @@ namespace VT100.FullScreen
                     reader.Stop();
                 }
             }
+
+            _positioner = null;
         }
 
         private bool ExitKey(ControlSequence next)
