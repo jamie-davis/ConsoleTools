@@ -68,15 +68,16 @@ namespace VT100.FullScreen
 
             var space = _buttons.Select(b => b.Control.GetRequestedSize()).ToList();
             var maxHeight = space.Max(m => (int?)m.Height) ?? 0;
+            var fullWidth = (space.Sum(m => (int?)m.Width) ?? 0) + space.Count - 1;
             Row += maxHeight;
-            var column = Width;
-            foreach (var container in _buttons.Select(b => b).Reverse()) 
+            var column = (Width - fullWidth)/2;
+            foreach (var container in _buttons) 
             {
                 container.CaptionText = $"{container.Caption.PadRight(maxCaption)}:";
                 var requestedSize = container.Control.GetRequestedSize();
-                column -= requestedSize.Width;
                 var controlY = Row - requestedSize.Height;
-                var controlX = column--;
+                var controlX = column;
+                column += requestedSize.Width + 1;
                 container.Control.Position(controlX, controlY, requestedSize.Width, requestedSize.Height);
             }
         }
