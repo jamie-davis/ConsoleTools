@@ -7,5 +7,6 @@
   </PropertyGroup>
   <ItemGroup>
       <ProjectReference Include="..\..\ConsoleToolkit\ConsoleToolkit.csproj" />
+      <ProjectReference Include="..\ConsoleToolkit\ConsoleToolkit.csproj" />
   </ItemGroup>
 </Project>
