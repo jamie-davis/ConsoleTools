@@ -32,13 +32,13 @@ namespace ConsoleToolkitDemo
         public bool Force { get; set; }
 
         [Option("interactive", "i")]
-        [Description("Add modified contents in the working tree interactively to the index. Optional path arguments may be supplied to limit operation to a subset of the working tree. See ìInteractive modeî for details.")]
+        [Description("Add modified contents in the working tree interactively to the index. Optional path arguments may be supplied to limit operation to a subset of the working tree. See ‚ÄúInteractive mode‚Äù for details.")]
         public bool Interactive { get; set; }
 
         [Option("patch", "p")]
         [Description(@"Interactively choose hunks of patch between the index and the work tree and add them to the index. This gives the user a chance to review the difference before adding modified contents to the index.
 
-This effectively runs add --interactive, but bypasses the initial command menu and directly jumps to the patch subcommand. See ìInteractive modeî for details.")]
+This effectively runs add --interactive, but bypasses the initial command menu and directly jumps to the patch subcommand. See ‚ÄúInteractive mode‚Äù for details.")]
         public bool Patch { get; set; }
 
         [Option("edit", "e")]
@@ -62,7 +62,7 @@ If no <filepattern> is given, default to "".""; in other words, update all track
         public bool IntentToAdd { get; set; }
 
         [Option]
-        [Description(@"Donít add the file(s), but only refresh their stat() information in the index.")]
+        [Description(@"Don‚Äôt add the file(s), but only refresh their stat() information in the index.")]
         public bool Refresh { get; set; }
 
         [Option("ignore-errors")]
@@ -115,7 +115,7 @@ NOTE: see the NOTE for the --shared option.")]
         public string ReferenceRepository { get; set; }
 
         [Option("quiet", "q")]
-        [Description("Operate quietly. Progress is not reported to the standard error stream. This flag is also passed to the ërsyncí command when given.")]
+        [Description("Operate quietly. Progress is not reported to the standard error stream. This flag is also passed to the ‚Äòrsync‚Äô command when given.")]
         public bool Quiet { get; set; }
 
         [Option("verbose", "v")]
@@ -143,7 +143,7 @@ NOTE: see the NOTE for the --shared option.")]
         public string Origin { get; set; }
 
         [Option("branch", "b")]
-        [Description(@"Instead of pointing the newly created HEAD to the branch pointed to by the cloned repositoryís HEAD, point to <name> branch instead. In a non-bare repository, this is the branch that will be checked out. --branch can also take tags and detaches the HEAD at that commit in the resulting repository.")]
+        [Description(@"Instead of pointing the newly created HEAD to the branch pointed to by the cloned repository‚Äôs HEAD, point to <name> branch instead. In a non-bare repository, this is the branch that will be checked out. --branch can also take tags and detaches the HEAD at that commit in the resulting repository.")]
         public string Branch { get; set; }
 
         [Option("upload-pack", "u")]
@@ -163,7 +163,7 @@ NOTE: see the NOTE for the --shared option.")]
         public int Depth { get; set; }
 
         [Option("single-branch")]
-        [Description(@"Clone only the history leading to the tip of a single branch, either specified by the --branch option or the primary branch remoteís HEAD points at. When creating a shallow clone with the --depth option, this is the default, unless --no-single-branch is given to fetch the histories near the tips of all branches. Further fetches into the resulting repository will only update the remote-tracking branch for the branch this option was used for the initial cloning. If the HEAD at the remote did not point at any branch when --single-branch clone was made, no remote-tracking branch is created.")]
+        [Description(@"Clone only the history leading to the tip of a single branch, either specified by the --branch option or the primary branch remote‚Äôs HEAD points at. When creating a shallow clone with the --depth option, this is the default, unless --no-single-branch is given to fetch the histories near the tips of all branches. Further fetches into the resulting repository will only update the remote-tracking branch for the branch this option was used for the initial cloning. If the HEAD at the remote did not point at any branch when --single-branch clone was made, no remote-tracking branch is created.")]
         public bool SingleBranch { get; set; }
 
         [Option("recursive", "recursive-submodules")]
