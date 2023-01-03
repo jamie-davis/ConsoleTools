@@ -1,6 +1,7 @@
 using System;
 using System.Text;
 using VT100.FullScreen;
+using VT100.FullScreen.ControlBehaviour;
 
 namespace VT100.Tests.Fakes
 {
@@ -30,7 +31,7 @@ namespace VT100.Tests.Fakes
 
         #region Implementation of IFullScreenConsole
 
-        public void Write(string text)
+        public void Write(string text, DisplayFormat format = default)
         {
             foreach (var character in text)
             {
@@ -38,7 +39,7 @@ namespace VT100.Tests.Fakes
             }
         }
 
-        public void Write(char? character)
+        public void Write(char? character, DisplayFormat format = default)
         {
             if (_cursorX >= _windowWidth)
             {

@@ -1,3 +1,5 @@
+using VT100.FullScreen.ControlBehaviour;
+
 namespace VT100.FullScreen.ScreenLayers
 {
     /// <summary>
@@ -14,34 +16,34 @@ namespace VT100.FullScreen.ScreenLayers
 
         public Plate Plate { get; }
         
-        public PlateFullScreenConsole(int windowWidth, int windowHeight)
+        public PlateFullScreenConsole(int windowWidth, int windowHeight, DisplayFormat? baseFormat = null)
         {
             _windowWidth = windowWidth;
             _windowHeight = windowHeight;
             _cursorX = 0;
             _cursorY = 0;
             _writeIndex = 0;
-            Plate = new Plate(windowWidth, windowHeight);
+            Plate = new Plate(windowWidth, windowHeight, baseFormat);
         }
         
         #region Implementation of IFullScreenConsole
 
-        public void Write(string text)
+        public void Write(string text, DisplayFormat format = default)
         {
             var available = Plate.Width - _cursorX;
             var fittedText = text.Length > available ? text.Substring(0, available) : text;
             if (fittedText.Length > 0)
             {
-                Plate.WriteText(_cursorX, _cursorY, fittedText);
+                Plate.WriteText(_cursorX, _cursorY, fittedText, format);
                 _cursorX += fittedText.Length;
             }
         }
 
-        public void Write(char? character)
+        public void Write(char? character, DisplayFormat format = default)
         {
             if (_cursorX < Plate.Width)
             {
-                Plate.WriteText(_cursorX, _cursorY, character?.ToString() ?? " ");
+                Plate.WriteText(_cursorX, _cursorY, character?.ToString() ?? " ", format);
                 _cursorX++;
             }
         }

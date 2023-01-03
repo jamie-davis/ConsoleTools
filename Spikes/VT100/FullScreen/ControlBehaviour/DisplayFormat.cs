@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using VT100.FullScreen.ScreenLayers;
 
 namespace VT100.FullScreen.ControlBehaviour
@@ -5,15 +6,17 @@ namespace VT100.FullScreen.ControlBehaviour
     /// <summary>
     /// Format specification for a character in a full screen display
     /// </summary>
+    [DebuggerDisplay("Foreground:{Foreground} Background:{Background}")]
     internal struct DisplayFormat
     {
-        public VtColour Colour;
+        public VtColour Foreground;
+        public VtColour Background;
 
         private static readonly DisplayFormat Default;
 
         public bool IsDefault()
         {
-            return Colour == Default.Colour;
+            return Foreground == Default.Foreground && Background == Default.Background;
         }
 
         internal void Apply(DisplayFormat[] array, int start, int length)
@@ -23,8 +26,10 @@ namespace VT100.FullScreen.ControlBehaviour
 
         internal void Apply(DisplayFormat displayFormat)
         {
-            if (displayFormat.Colour != VtColour.NoColourChange)
-                Colour = displayFormat.Colour;
+            if (displayFormat.Foreground != VtColour.NoColourChange)
+                Foreground = displayFormat.Foreground;
+            if (displayFormat.Background != VtColour.NoColourChange)
+                Background = displayFormat.Background;
         }
     }
 }

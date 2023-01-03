@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Xml.XPath;
+using VT100.ControlPropertyAnalysis;
 using VT100.FullScreen.Controls;
 
 namespace VT100.FullScreen
@@ -12,11 +13,13 @@ namespace VT100.FullScreen
 
         private class ControlContainer
         {
+            public ReadOnlyCollection<PropertySetting> PropertySettings { get; }
             private readonly ILayoutControl _control;
 
             public string Caption => _control.Caption ?? string.Empty;
-            public ControlContainer(ILayoutControl control)
+            public ControlContainer(ILayoutControl control, ReadOnlyCollection<PropertySetting> propertySettings)
             {
+                PropertySettings = propertySettings;
                 _control = control;
             }
 
@@ -38,7 +41,7 @@ namespace VT100.FullScreen
         private List<ControlContainer> _controls;
         private List<ControlContainer> _buttons;
 
-        public Positioner(int width, int height, CaptionAlignment captionAlignment, IEnumerable<ILayoutControl> controls, IFullScreenConsole console)
+        public Positioner(int width, int height, CaptionAlignment captionAlignment, IEnumerable<LayedOutControl> controls, IFullScreenConsole console)
         {
             _console = console;
             Width = width;
@@ -48,7 +51,7 @@ namespace VT100.FullScreen
             Row = 1;
             Column = 1;
 
-            var allControls = controls.Select(c => new ControlContainer(c)).ToList();
+            var allControls = controls.Select(c => new ControlContainer(c.Control, c.PropertySettings)).ToList();
             _controls = allControls.Where(c => !(c.Control is ButtonControl)).ToList();
             _buttons = allControls.Where(c => c.Control is ButtonControl).ToList();
             _combinedControls = _controls.Concat(_buttons).ToList();
@@ -82,7 +85,7 @@ namespace VT100.FullScreen
             }
         }
 
-        public void Render()
+        public void Render(List<PropertySetting> settings)
         {
             using (new CursorHider())
             {
@@ -90,6 +93,7 @@ namespace VT100.FullScreen
                 {
                     _console.SetCursorPosition(container.CaptionX, container.CaptionY);
                     _console.Write(container.CaptionText);
+                    ControlSettingsUpdater.Update(container.Control, settings, container.PropertySettings);
                     container.Control.Render(_console);
                 }
                 

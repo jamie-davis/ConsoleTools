@@ -105,7 +105,7 @@ namespace VT100.FullScreen.Controls
             _attribute = attribute;
         }
 
-        public Style Style { get; }
+        public BorderBorderStyle BorderBorderStyle { get; }
         public void Refresh(IFullScreenConsole console)
         {
             

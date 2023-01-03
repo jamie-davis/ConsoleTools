@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using VT100.Attributes;
 using VT100.FullScreen.ControlBehaviour;
 using VT100.Utilities.ReadConsole;
@@ -9,7 +7,7 @@ using VT100.Utilities.ReadConsole;
 namespace VT100.FullScreen.Controls
 {
     [Control(typeof(TextBoxAttribute))]
-    internal class TextBox : ILayoutControl
+    internal class TextBox : IFormattedLayoutControl<TextBoxFormat>
     {
         private ILayout _dataContainer;
         private Func<object, object> _getter;
@@ -23,7 +21,7 @@ namespace VT100.FullScreen.Controls
         private int _height;
         private IFullScreenApplication _app;
         private CursorController _cursorControl;
-        private readonly Style _style = new Style();
+        private readonly BorderBorderStyle _borderBorderStyle = new();
 
         // ReSharper disable once UnusedMember.Global
         internal void AcceptConfig(TextBoxAttribute attribute)
@@ -67,7 +65,13 @@ namespace VT100.FullScreen.Controls
             else if (visibleValue.Length < _width)
                 visibleValue = visibleValue.PadRight(_width);
 
-            console.Write(visibleValue);
+            var format = new DisplayFormat()
+            {
+                Background = Format?.InputBackground ?? VtColour.NoColourChange,
+                Foreground = Format?.InputForeground ?? VtColour.NoColourChange,
+            };
+            
+            console.Write(visibleValue, format);
         }
 
         public void Position(int column, int row, int width, int height)
@@ -119,7 +123,7 @@ namespace VT100.FullScreen.Controls
             _cursorControl.SetDataLength(_value.Length);            
         }
 
-        public Style Style => _style;
+        public BorderBorderStyle BorderBorderStyle => _borderBorderStyle;
         
         public void Refresh(IFullScreenConsole console)
         {
@@ -197,5 +201,17 @@ namespace VT100.FullScreen.Controls
                 _setter(_dataContainer, _value);
             }
         }
+
+        #region Implementation of IFormattedLayoutControl<TextBoxFormat>
+
+        public TextBoxFormat Format { get; set; }
+
+        #endregion
+    }
+
+    internal class TextBoxFormat
+    {
+        public VtColour InputBackground { get; set; }
+        public VtColour InputForeground { get; set; }
     }
 }

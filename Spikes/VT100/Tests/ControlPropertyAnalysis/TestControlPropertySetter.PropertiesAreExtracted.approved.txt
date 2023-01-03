@@ -1,0 +1,14 @@
+Property set:                                                                                  
+                                                                                               
+Property          Value                                                                        
+---------- ------------                                                                        
+Background        Black                                                                        
+Foreground        White                                                                        
+                                                                                               
+                                                                                               
+Extracted:                                                                                     
+                                                                                               
+  Background   Foreground                                                                      
+------------ ------------                                                                      
+       Black        White                                                                      
+                                                                                               

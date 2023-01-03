@@ -20,7 +20,9 @@ namespace VT100
             }
         }
 
-        [Screen()]
+        [Screen]
+        [Background(VtColour.Blue)]
+        [InputBackground(VtColour.Yellow)]
         public class Layout : ILayout
         {
             #region Implementation of ILayout
@@ -30,9 +32,11 @@ namespace VT100
             #endregion
 
             [TextBox("Real Name")]
+            [InputForeground(VtColour.Black)]
             public string Name { get; set; }
 
             [TextBox("Nickname")]
+            [InputBackground(VtColour.Red)]
             public string NickName { get; set; }
 
             [Button("Default")]

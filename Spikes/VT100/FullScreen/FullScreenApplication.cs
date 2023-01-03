@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using VT100.ControlPropertyAnalysis;
 using VT100.FullScreen.ScreenLayers;
 using VT100.Utilities;
 using VT100.Utilities.ReadConsole;
@@ -15,6 +16,7 @@ namespace VT100.FullScreen
         private ILayoutControl _focus;
         private bool _exit;
         private Positioner _positioner;
+        private ScreenProps _screenProperties = new();
 
         public FullScreenApplication(ILayout layout, IVTModeControl vtModeControl, IFullScreenConsole console = null)
         {
@@ -78,9 +80,12 @@ namespace VT100.FullScreen
         public void Run()
         {
             var layoutControls = LayoutControls.Extract(this, _layout).ToList();
-            var plateInterface = new PlateFullScreenConsole(Console.WindowWidth, Console.WindowHeight);
+            var props = ControlPropertyExtractor.Extract(_layout?.GetType());
+            ControlPropertySetter.Set(_screenProperties, props);
+                
+            var plateInterface = new PlateFullScreenConsole(Console.WindowWidth, Console.WindowHeight, _screenProperties.MakeBaseFormat());
             _positioner = new Positioner(Console.WindowWidth, Console.WindowHeight, CaptionAlignment.Left, layoutControls, plateInterface);
-            _positioner.Render();
+            _positioner.Render(props);
             var plateStack = new PlateStack(plateInterface.Plate);
             plateStack.Render(Console);
             _positioner.SetFocus(Console);

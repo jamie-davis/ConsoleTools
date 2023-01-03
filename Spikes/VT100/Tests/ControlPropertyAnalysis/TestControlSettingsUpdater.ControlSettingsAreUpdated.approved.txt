@@ -1,0 +1,26 @@
+Original settings:                                                                             
+                                                                                               
+Property Value                                                                                 
+-------- ------------                                                                          
+Prop1    value1                                                                                
+Prop2    value2                                                                                
+Prop3    value3                                                                                
+Prop4    value4                                                                                
+Prop5    value5                                                                                
+                                                                                               
+                                                                                               
+Override set:                                                                                  
+                                                                                               
+Property Value                                                                                 
+-------- ------------                                                                          
+Prop3    replaced3                                                                             
+Prop5    replaced5                                                                             
+Prop6    value6                                                                                
+                                                                                               
+                                                                                               
+Settings from control:                                                                         
+                                                                                               
+Prop1  Prop2  Prop3                                                                            
+------ ------ ---------                                                                        
+value1 value2 replaced3                                                                        
+                                                                                               

@@ -1,0 +1,6 @@
+                             Value                                                             
+Property        Value        Type                                                              
+--------------- ------------ --------                                                          
+InputBackground Black        VtColour                                                          
+InputForeground White        VtColour                                                          
+                                                                                               

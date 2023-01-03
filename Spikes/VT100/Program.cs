@@ -2,8 +2,10 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using VT100.Attributes;
 using VT100.Utilities;
 using VT100.Utilities.ReadConsole;
 
@@ -20,7 +22,9 @@ namespace VT100
                     FullScreenTester.Run();
                     return;
                 }
-                
+
+                DisplayColours();
+
                 {
                     var codePage = Console.OutputEncoding.CodePage.ToString();
                     var length = codePage.Length;
@@ -73,6 +77,50 @@ namespace VT100
                     FullScreenTester.Run();
                 }
             }
+        }
+
+        private static void DisplayColours()
+        {
+            var consoleColours = typeof(ConsoleColor).GetFields()
+                .Where(f => f.IsLiteral)
+                .OrderBy(f => f.Name)
+                .Select(c => new { Colour = (ConsoleColor)c.GetRawConstantValue() })
+                .Select(c => new { c.Colour, VtColour = ConsoleToVtColour.Convert(c.Colour) })
+                .ToList();
+
+            foreach (var colour in consoleColours)
+            {
+                Console.BackgroundColor = colour.Colour;
+                Console.Write(" ");
+            }
+            Console.WriteLine();
+
+            var sb = new StringBuilder();
+            foreach (var colour in consoleColours)
+            {
+                sb.Append(ColourAttribute.GetBackgroundAttribute(colour.VtColour));
+                sb.Append(" ");
+            }
+
+            sb.Append(ColourAttribute.GetDefaultBackgroundAttribute());
+            Console.WriteLine(sb);
+            
+            foreach (var colour in consoleColours)
+            {
+                Console.ForegroundColor = colour.Colour;
+                Console.Write("X");
+            }
+            Console.WriteLine();
+
+            var sb2 = new StringBuilder();
+            foreach (var colour in consoleColours)
+            {
+                sb2.Append(ColourAttribute.GetForegroundAttribute(colour.VtColour));
+                sb2.Append("X");
+            }
+
+            sb2.Append(ColourAttribute.GetDefaultForegroundAttribute());
+            Console.WriteLine(sb2);
         }
 
         private static string TryRender(char keyChar)

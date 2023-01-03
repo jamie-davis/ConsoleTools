@@ -1,0 +1,7 @@
+                             Value                                                             
+Property        Value        Type                                                              
+--------------- ------------ --------                                                          
+Background      Green        VtColour                                                          
+Foreground      White        VtColour                                                          
+InputForeground BrightYellow VtColour                                                          
+                                                                                               

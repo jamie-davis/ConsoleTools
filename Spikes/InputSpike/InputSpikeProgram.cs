@@ -28,7 +28,7 @@ namespace InputSpike
         }
 
 
-        private static T GetInput<T>(T template)
+        private static T GetInput<T>(T template) where T: notnull
         {
             var ctor = template.GetType().GetConstructors().Single();
             var args = new List<object>();
@@ -40,7 +40,7 @@ namespace InputSpike
                 else
                 {
                     var value = property.GetValue(template) as IInputItem;
-                    object captured = null;
+                    object? captured = null;
                     if (value == null)
                         captured = Activator.CreateInstance(property.PropertyType);
                     else
@@ -61,11 +61,11 @@ namespace InputSpike
         }
     }
 
-    internal class InputItem<T> : IInputItem
-    {
-        public string Prompt { get; set; }
+    internal class InputItem<T> : IInputItem 
+    {    
+        public string? Prompt { get; set; }
 
-        public static implicit operator T(InputItem<T> item)
+        public static implicit operator T?(InputItem<T> item)
         {
             return item.Value;
         }
@@ -77,14 +77,14 @@ namespace InputSpike
             Prompt = prompt;
         }
 
-        public T Value { get; private set; }
+        public T? Value { get; private set; }
 
         public override string ToString()
         {
-            return Value.ToString();
+            return Value?.ToString() ?? string.Empty;
         }
 
-        object IInputItem.Capture()
+        object? IInputItem.Capture()
         {
             Console.Write(Prompt);
             Console.Write(" : ");

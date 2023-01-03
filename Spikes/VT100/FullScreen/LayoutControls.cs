@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
 using VT100.Attributes;
+using VT100.ControlPropertyAnalysis;
 using VT100.FullScreen.Controls;
 
 namespace VT100.FullScreen
@@ -15,7 +17,7 @@ namespace VT100.FullScreen
         private static Dictionary<Type, Type> _controlLookup;
         private static object[] noParams = {};
 
-        public static IEnumerable<ILayoutControl> Extract(IFullScreenApplication app, ILayout layout)
+        public static IEnumerable<LayedOutControl> Extract(IFullScreenApplication app, ILayout layout)
         {
             if (layout == null)
                 yield break;
@@ -27,7 +29,7 @@ namespace VT100.FullScreen
 
             foreach (var prop in props)
             {
-                yield return prop.Control;
+                yield return new(prop.Control, ControlPropertyExtractor.Extract(prop.Property));
             }
 
             var methods = layout.GetType().GetMethods()
@@ -37,7 +39,7 @@ namespace VT100.FullScreen
 
             foreach (var method in methods)
             {
-                yield return method.Control;
+                yield return new(method.Control, ControlPropertyExtractor.Extract(method.Method));
             }
             
                         
@@ -46,13 +48,13 @@ namespace VT100.FullScreen
 
         }
 
-        private static ButtonControl MakeCancelButton(IFullScreenApplication app, ILayout layout,
+        private static LayedOutControl MakeCancelButton(IFullScreenApplication app, ILayout layout,
             string caption)
         {
             var button = new ButtonControl();
             button.MethodBind(app, layout, o => true);
             button.AcceptConfig(new ButtonAttribute(caption ?? "Cancel", ExitMode.ExitOnSuccess));
-            return button;
+            return new (button, new List<PropertySetting>());
         }
 
         private static bool CancelRequired(ILayout layout, out string cancelCaption)
@@ -157,5 +159,17 @@ namespace VT100.FullScreen
             _controlLookup = controlTypes.ToDictionary(t => t.ControlAttribute.IntroducingAttribute, t => t.Type);
         }
         
+    }
+
+    internal class LayedOutControl
+    {
+        public LayedOutControl(ILayoutControl control, List<PropertySetting> propertySettings)
+        {
+            Control = control;
+            PropertySettings = new(propertySettings);
+        }
+
+        public ILayoutControl Control { get; }
+        public ReadOnlyCollection<PropertySetting> PropertySettings { get; }
     }
 }

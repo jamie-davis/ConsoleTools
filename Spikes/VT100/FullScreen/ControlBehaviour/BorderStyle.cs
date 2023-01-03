@@ -8,13 +8,13 @@ namespace VT100.FullScreen.ControlBehaviour
         Normal
     }
     
-    public class Style : IStyle
+    public class BorderBorderStyle : IBorderStyle
     {
-        private IStyle _impl;
+        private IBorderStyle _impl;
 
-        public Style()
+        public BorderBorderStyle()
         {
-            _impl = new StandardStyleImpl();
+            _impl = new StandardBorderStyleImpl();
         }
 
         public event EventHandler<StyleChanged> StyleChanged;
@@ -45,7 +45,7 @@ namespace VT100.FullScreen.ControlBehaviour
 
     }
 
-    internal interface IStyle
+    internal interface IBorderStyle
     {
         event EventHandler<StyleChanged> StyleChanged;
         
@@ -60,7 +60,7 @@ namespace VT100.FullScreen.ControlBehaviour
     {
     }
 
-    internal class StandardStyleImpl : IStyle
+    internal class StandardBorderStyleImpl : IBorderStyle
     {
         #region Implementation of IStyle
 

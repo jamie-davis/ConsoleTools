@@ -1,0 +1,20 @@
+Console                                                                                        
+Color           Vt Colour                                                                      
+----------- -------------                                                                      
+Black               Black                                                                      
+DarkBlue             Blue                                                                      
+DarkGreen           Green                                                                      
+DarkCyan             Cyan                                                                      
+DarkRed               Red                                                                      
+DarkMagenta       Magenta                                                                      
+DarkYellow         Yellow                                                                      
+Gray                White                                                                      
+DarkGray      BrightBlack                                                                      
+Blue           BrightBlue                                                                      
+Green         BrightGreen                                                                      
+Cyan           BrightCyan                                                                      
+Red             BrightRed                                                                      
+Magenta     BrightMagenta                                                                      
+Yellow       BrightYellow                                                                      
+White         BrightWhite                                                                      
+                                                                                               

@@ -20,7 +20,13 @@ namespace VT100.FullScreen
         void SetFocus(IFullScreenConsole console);
         void Accept(IFullScreenConsole console, ControlSequence next);
         
-        Style Style { get; }
+        BorderBorderStyle BorderBorderStyle { get; }
         void Refresh(IFullScreenConsole console);
+    }
+
+    interface IFormattedLayoutControl<TFormat> : ILayoutControl 
+        where TFormat : class, new()
+    {
+        public TFormat Format { get; set; }
     }
 }

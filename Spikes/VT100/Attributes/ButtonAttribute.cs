@@ -2,6 +2,9 @@
 
 namespace VT100.Attributes
 {
+    /// <summary>
+    /// Specifies that a button should be created that executes the attributed method. 
+    /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     internal class ButtonAttribute : Attribute
     {

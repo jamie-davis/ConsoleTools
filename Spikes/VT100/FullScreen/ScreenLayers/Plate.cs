@@ -28,20 +28,24 @@ namespace VT100.FullScreen.ScreenLayers
         private char[] _content;
         private int _width;
 
-        public Plate(int windowWidth, int windowHeight)
+        public Plate(int windowWidth, int windowHeight, DisplayFormat? background = null)
         {
             _windowWidth = windowWidth;
             _windowHeight = windowHeight;
-            Clear();
+            Clear(background);
         }
 
         public int Width => _windowWidth;
         public int Height => _windowHeight;
 
-        private void Clear()
+        private void Clear(DisplayFormat? background = null)
         {
             var arraySize = _windowHeight * _windowWidth;
             _format = new DisplayFormat[arraySize];
+            if (background != null)
+            {
+                for (var n = 0; n < arraySize; ++n) _format[n] = background.Value;
+            }
             _content = new char[arraySize];
         }
 
@@ -108,7 +112,7 @@ namespace VT100.FullScreen.ScreenLayers
                         return _content[ix] == '\0' ? ' ' : _content[ix];
                     
                     case DumpType.Colour:
-                        var element = _format[ix].Colour;
+                        var element = _format[ix].Foreground;
                         return ColourChars[element];
                         
                     case DumpType.Formatting:
@@ -142,15 +146,16 @@ namespace VT100.FullScreen.ScreenLayers
         public string GetCharacter(int index, int line)
         {
             var indexPos = _windowWidth * line + index;
-            var vtColour = _format[indexPos].Colour;
+            var foreground = _format[indexPos].Foreground;
+            var background = _format[indexPos].Background;
             var content = _content[indexPos];
-            if (content == 0 && vtColour == VtColour.NoColourChange)
+            if (content == 0 && foreground == VtColour.NoColourChange && background == VtColour.NoColourChange)
                 return " ";
 
             if (content == 0)
                 content = ' ';
 
-            return $"{content}{ColourAttribute.GetColourAttribute(vtColour)}";
+            return $"{ColourAttribute.GetColourAttribute(_format[indexPos])}{content}";
         }
     }
 }

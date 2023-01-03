@@ -1,0 +1,7 @@
+Property Attribute                                                                             
+------------------------                                                                       
+BackgroundAttribute                                                                            
+ForegroundAttribute                                                                            
+InputBackgroundAttribute                                                                       
+InputForegroundAttribute                                                                       
+                                                                                               

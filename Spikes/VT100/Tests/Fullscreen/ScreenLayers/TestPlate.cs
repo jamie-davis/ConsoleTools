@@ -29,7 +29,7 @@ namespace VT100.Tests.Fullscreen.ScreenLayers
             var plate = new Plate(11,3);
             
             //Act
-            plate.WriteText(3,1,"Hello", new DisplayFormat { Colour = VtColour.Green });
+            plate.WriteText(3,1,"Hello", new DisplayFormat { Foreground = VtColour.Green });
 
             //Assert
             PlateDumpFormatter.Format(plate).Verify();
