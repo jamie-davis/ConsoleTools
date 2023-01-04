@@ -114,6 +114,12 @@ namespace VT100.FullScreen
                     _positioner.NextFocus(Console, _focus);
                     continue;
                 }
+                
+                if (PrevFocusKey(item))
+                {
+                    _positioner.PrevFocus(Console, _focus);
+                    continue;
+                }
                 _focus?.Accept(Console, item);
 
                 if (_exit)
@@ -133,6 +139,11 @@ namespace VT100.FullScreen
         private bool NextFocusKey(ControlSequence next)
         {
             return next.ResolvedCode == ResolvedCode.Tab;
+        }
+
+        private bool PrevFocusKey(ControlSequence next)
+        {
+            return next.ResolvedCode == ResolvedCode.CBT;
         }
 
         private bool ModeSwitchKey(ControlSequence next)

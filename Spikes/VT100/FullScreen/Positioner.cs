@@ -128,6 +128,23 @@ namespace VT100.FullScreen
             control.Control?.SetFocus(console);
         }
 
+        public void PrevFocus(IFullScreenConsole console, ILayoutControl layoutControl)
+        {
+            var focusContainer = _combinedControls.FirstOrDefault(c => ReferenceEquals(c.Control, layoutControl));
+            if (focusContainer == null)
+            {
+                SetFocus(console);
+                return;
+            }
+            var index = _combinedControls.IndexOf(focusContainer);
+            var newIndex = index - 1;
+            if (newIndex < 0 && _combinedControls.Count > 0) newIndex = _combinedControls.Count - 1;
+            if (newIndex < 0) return;
+
+            var control = _combinedControls[newIndex];
+            control.Control?.SetFocus(console);
+        }
+
         public void ReRender(IFullScreenConsole console)
         {
             foreach (var control in _combinedControls)
