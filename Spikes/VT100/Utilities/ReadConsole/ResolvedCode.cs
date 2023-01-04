@@ -40,6 +40,7 @@ namespace VT100.Utilities.ReadConsole
         Space,
         Backspace,
         CPR, //Cursor position report
+        CBT, //Cursor backwards tabulation
         Escape
     }
 }

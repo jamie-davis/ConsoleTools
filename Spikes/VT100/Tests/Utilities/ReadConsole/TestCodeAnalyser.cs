@@ -44,7 +44,7 @@ namespace VT100.Tests.Utilities.ReadConsole
         [InlineData(new [] {'6', '~'}, ResolvedCode.PageDown)]
         [InlineData(new [] {'E'}, ResolvedCode.Begin)] 
         [InlineData(new [] {'5', '~'}, ResolvedCode.PageUp)]  
-        [InlineData(new [] {'Z'}, ResolvedCode.NotRecognised)]
+        [InlineData(new [] {'Z'}, ResolvedCode.CBT)]
         [InlineData(new [] {'9', ';', '5', 'R'}, ResolvedCode.CPR, "9, 5")]
         public void SimpleCSICodesAreRecognised(char[] input, ResolvedCode code, string parameterString = null)
         {

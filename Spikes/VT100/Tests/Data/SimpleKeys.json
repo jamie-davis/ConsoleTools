@@ -1048,5 +1048,21 @@
       "Modifiers": 0,
       "Key": 0
     }
-  ]
-]
+  ],
+  [
+    {
+      "KeyChar": "\u001b",
+      "Modifiers": 0,
+      "Key": 0
+    },
+    {
+      "KeyChar": "[",
+      "Modifiers": 0,
+      "Key": 0
+    },
+    {
+      "KeyChar": "Z",
+      "Modifiers": 0,
+      "Key": 0
+    }
+  ]]

@@ -12,7 +12,6 @@ namespace VT100.Utilities.ReadConsole
         private readonly CodeAnalyserSettings _settings;
 
         private (ResolvedCode Code, Func<List<ControlElement>, bool> Fn) [] _csiResolvers =
-            new (ResolvedCode Code, Func<List<ControlElement>, bool> Fn) []
             {
                 ( ResolvedCode.CursorBackwards, s => Match(s, 2, 'D') ),
                 ( ResolvedCode.CursorForward, s => Match(s, 2, 'C') ),
@@ -50,10 +49,10 @@ namespace VT100.Utilities.ReadConsole
                 ( ResolvedCode.PageUp, s => Match(s, 2,'5', '~') ),
                 ( ResolvedCode.Begin, s => Match(s, 2,'E') ),
                 ( ResolvedCode.CPR, s => Match(s, 2, 'R') ),
+                ( ResolvedCode.CBT, s => Match(s, 2, 'Z') ),
             };
 
         private (ResolvedCode Code, Func<List<ControlElement>, bool> Fn) [] _ss3Resolvers =
-            new (ResolvedCode Code, Func<List<ControlElement>, bool> Fn) []
             {
                 ( ResolvedCode.PF1, s => Match(s, 2, 'P') ),
                 ( ResolvedCode.PF2, s => Match(s, 2, 'Q') ),
@@ -66,7 +65,6 @@ namespace VT100.Utilities.ReadConsole
                 ( ResolvedCode.CR, s => Match(s, 2, 'M') ),
             };
         private (ResolvedCode Code, Func<List<ControlElement>, bool> Fn) [] _charResolvers =
-            new (ResolvedCode Code, Func<List<ControlElement>, bool> Fn) []
             {
                 ( ResolvedCode.Tab, s => Match(s, 0, '\x9') ),
                 ( ResolvedCode.CR, s => Match(s, 0, '\r') ),
