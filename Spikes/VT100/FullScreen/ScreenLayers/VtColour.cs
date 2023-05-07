@@ -1,6 +1,6 @@
 namespace VT100.FullScreen
 {
-    internal enum VtColour
+    public enum VtColour
     {
         NoColourChange,
         Black,	

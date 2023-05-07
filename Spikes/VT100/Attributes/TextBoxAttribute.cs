@@ -6,7 +6,7 @@ namespace VT100.Attributes
     /// Indicates that a text box should be used to represent the attributed field's value in the user interface.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    internal class TextBoxAttribute : Attribute
+    public class TextBoxAttribute : Attribute
     {
         public string Caption { get; }
 

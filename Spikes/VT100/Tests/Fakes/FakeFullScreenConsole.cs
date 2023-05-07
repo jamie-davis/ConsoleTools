@@ -33,12 +33,12 @@ namespace VT100.Tests.Fakes
 
         public void Write(string text, DisplayFormat format = default)
         {
-            foreach (var character in text)
+            foreach (var character in RawTextExtractor.Extract(text))
             {
                 Write(character);
             }
         }
-
+        
         public void Write(char? character, DisplayFormat format = default)
         {
             if (_cursorX >= _windowWidth)

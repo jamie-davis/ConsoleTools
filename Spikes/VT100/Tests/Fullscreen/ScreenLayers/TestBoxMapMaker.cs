@@ -1,5 +1,6 @@
 ﻿using System;
 using TestConsoleLib.Testing;
+using VT100.FullScreen.ControlBehaviour;
 using VT100.FullScreen.ScreenLayers;
 using VT100.Tests.Fakes;
 using VT100.Tests.Utilities;
@@ -20,7 +21,7 @@ namespace VT100.Tests.Fullscreen.ScreenLayers
 
             //Assert
             var plate = new Plate(10, 10);
-            BoxRenderer.RenderMapToPlate(map, plate);
+            BoxRenderer.RenderMapToPlate(map, plate, new DisplayFormat());
             PlateDumpFormatter.Format(plate).Verify();
         }
 
@@ -35,7 +36,7 @@ namespace VT100.Tests.Fullscreen.ScreenLayers
 
             //Assert
             var plate = new Plate(10, 10);
-            BoxRenderer.RenderMapToPlate(map, plate);
+            BoxRenderer.RenderMapToPlate(map, plate, new DisplayFormat());
             PlateDumpFormatter.Format(plate).Verify();
         }
 
@@ -50,7 +51,7 @@ namespace VT100.Tests.Fullscreen.ScreenLayers
 
             //Assert
             var plate = new Plate(10, 10);
-            BoxRenderer.RenderMapToPlate(map, plate);
+            BoxRenderer.RenderMapToPlate(map, plate, new DisplayFormat());
             PlateDumpFormatter.Format(plate).Verify();
         }
 
@@ -65,7 +66,7 @@ namespace VT100.Tests.Fullscreen.ScreenLayers
 
             //Assert
             var plate = new Plate(10, 10);
-            BoxRenderer.RenderMapToPlate(map, plate);
+            BoxRenderer.RenderMapToPlate(map, plate, new DisplayFormat());
             PlateDumpFormatter.Format(plate).Verify();
         }
 
@@ -86,7 +87,7 @@ namespace VT100.Tests.Fullscreen.ScreenLayers
 
             //Assert
             var plate = new Plate(10, 10);
-            BoxRenderer.RenderMapToPlate(map, plate);
+            BoxRenderer.RenderMapToPlate(map, plate, new DisplayFormat());
             PlateDumpFormatter.Format(plate).Verify();
         }
 
@@ -101,7 +102,7 @@ namespace VT100.Tests.Fullscreen.ScreenLayers
 
             //Assert
             var plate = new Plate(10, 10);
-            BoxRenderer.RenderMapToPlate(map, plate);
+            BoxRenderer.RenderMapToPlate(map, plate, new DisplayFormat());
             PlateDumpFormatter.Format(plate).Verify();
         }
 
@@ -131,7 +132,7 @@ namespace VT100.Tests.Fullscreen.ScreenLayers
 
             //Assert
             var plate = new Plate(10, 10);
-            BoxRenderer.RenderMapToPlate(map, plate);
+            BoxRenderer.RenderMapToPlate(map, plate, new DisplayFormat());
             PlateDumpFormatter.Format(plate).Verify();
         }
     }

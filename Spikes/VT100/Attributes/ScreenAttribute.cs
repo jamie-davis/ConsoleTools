@@ -8,7 +8,7 @@ namespace VT100.Attributes
     /// screen with controls.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    internal class ScreenAttribute : Attribute
+    public class ScreenAttribute : Attribute
     {
         public bool GenerateExitButton { get; }
         public string ExitButtonCaption { get; }

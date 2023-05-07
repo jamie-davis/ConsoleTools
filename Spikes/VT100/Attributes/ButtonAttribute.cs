@@ -6,7 +6,7 @@ namespace VT100.Attributes
     /// Specifies that a button should be created that executes the attributed method. 
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    internal class ButtonAttribute : Attribute
+    public class ButtonAttribute : Attribute
     {
         public string Caption { get; }
         public ExitMode ExitMode { get; }

@@ -1,31 +1,24 @@
-﻿using System;
-using VT100;
+using System.Linq;
+using TestConsoleLib.Testing;
 using VT100.Attributes;
+using VT100.ControlPropertyAnalysis;
 using VT100.FullScreen;
 using VT100.FullScreen.ControlBehaviour;
-using VT100.Utilities;
+using VT100.FullScreen.ScreenLayers;
+using VT100.Tests.Fakes;
+using Xunit;
 
-namespace VT100
+namespace VT100.Tests.Fullscreen
 {
-    internal static class FullScreenTester
+    public class TestPositioner
     {
-        public static void Run()
-        {
-            using (var vtMode = new RequireVTMode())
-            {
-                var layout = new Layout() { Name = "Test", NickName = "Wolf" };
-                using (var fsa = new FullScreenApplication(layout, vtMode))
-                    fsa.Run();
-
-                Console.WriteLine(layout.Name);
-            }
-        }
+        #region Types for test
 
         [Screen]
         [Border(BorderType.Normal)]
         [Background(VtColour.Blue)]
         [InputBackground(VtColour.Yellow)]
-        public class Layout : ILayout
+        class Layout : ILayout
         {
             #region Implementation of ILayout
 
@@ -54,6 +47,23 @@ namespace VT100
             {
                 return true;
             }
+        }
+
+
+        #endregion
+        
+        [Fact]
+        public void ControlsArePositioned()
+        {
+            //Arrange
+            var layout = new Layout() { Name = "Test", NickName = "Wolf" };
+            var app = new FakeFullScreenApplication(layout, 50, 20);
+    
+            //Act
+            app.Start();
+
+            //Assert
+            app.Console.GetDisplayReport().Verify();
         }
     }
 }

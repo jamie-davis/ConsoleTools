@@ -7,15 +7,8 @@ namespace VT100.Attributes
     /// Sets the general foreground colour. This will be used as the setting for any *Foreground attributes that are
     /// not given a more specific setting (e.g. <see cref="InputForegroundAttribute"/> if not specified in its own right.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Class, AllowMultiple = false)]
-    [PropertyAttribute]
-    internal class ForegroundAttribute : Attribute
+    public class ForegroundAttribute : BaseColourAttribute
     {
-        public VtColour Colour { get; }
-
-        public ForegroundAttribute(VtColour unknown)
-        {
-            Colour = unknown;
-        }
+        public ForegroundAttribute(VtColour colour) : base(colour) {}
     }
 }

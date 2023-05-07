@@ -19,14 +19,17 @@ namespace VT100.Tests.TestUtilities
             _control = control;
             _valueWrapper = valueWrapper;
             _input = input;
-            _app = new FakeFullScreenApplication(20, 1);
-            _control.PropertyBind(_app, new FakeLayout(), _valueWrapper.GetValue, _valueWrapper.SetValue);
+            var fakeLayout = new FakeLayout();
+            _app = new FakeFullScreenApplication(fakeLayout, 20, 1);
+            _control.PropertyBind(_app, fakeLayout, _valueWrapper.GetValue, _valueWrapper.SetValue);
             _control.Render(_app.Console);
             _control.SetFocus(_app.Console);
 
             MakeInitialReport();
         }
 
+        public FakeFullScreenConsole Console => _app.Console;
+        
         private void MakeInitialReport()
         {
             var sb = new StringBuilder();

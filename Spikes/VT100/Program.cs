@@ -120,6 +120,7 @@ namespace VT100
             }
 
             sb2.Append(ColourAttribute.GetDefaultForegroundAttribute());
+            sb2.Append(ColourAttribute.GetDefaultBackgroundAttribute());
             Console.WriteLine(sb2);
         }
 

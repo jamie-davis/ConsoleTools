@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TestConsoleLib.Testing;
+using VT100.FullScreen.ControlBehaviour;
 using VT100.FullScreen.ScreenLayers;
 using VT100.Tests.Fakes;
 using VT100.Tests.Utilities;
@@ -17,7 +18,7 @@ namespace VT100.Tests.Fullscreen.ScreenLayers
             var boxes = new List<BoxRegion> { new BoxRegion(2, 1, 12, 2) };
 
             //Act
-            BoxRenderer.RenderToPlate(boxes, plate);
+            BoxRenderer.RenderToPlate(boxes, plate, new DisplayFormat());
 
             //Assert
             PlateDumpFormatter.Format(plate).Verify();
@@ -47,7 +48,7 @@ namespace VT100.Tests.Fullscreen.ScreenLayers
             var console = new FakeFullScreenConsole(10, 10);
 
             //Act
-            BoxRenderer.RenderMapToConsole(map, console);
+            BoxRenderer.RenderMapToConsole(map, console, new DisplayFormat());
 
             //Assert
             console.GetDisplayReport().Verify();

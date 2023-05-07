@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using VT100.Attributes;
+using VT100.FullScreen;
 using VT100.FullScreen.ControlBehaviour;
 using VT100.FullScreen.ScreenLayers;
 using VT100.Utilities.ReadConsole;
@@ -9,7 +10,7 @@ using VT100.Utilities.ReadConsole;
 namespace VT100.FullScreen.Controls
 {
     [Control(typeof(ButtonAttribute), bindsToProperty:false)]
-    internal class ButtonControl : ILayoutControl
+    internal class ButtonControl : IFormattedLayoutControl<ButtonFormat>
     {
         private ButtonAttribute _attribute;
         private Func<object, bool> _method;
@@ -56,15 +57,21 @@ namespace VT100.FullScreen.Controls
             else
                 _captionRow = _row;
 
+            var format = new DisplayFormat()
+            {
+                Background = Format?.ButtonBackground ?? VtColour.NoColourChange,
+                Foreground = Format?.ButtonForeground ?? VtColour.NoColourChange,
+            };
+
             if (_width > Caption.Length + 1 && _height > 2)
             {
                 var regions = new[] { new BoxRegion(_column, _row, _width, _height, LineWeight.Heavy) };
                 var map = BoxMapMaker.Map(regions, console.WindowWidth, console.WindowHeight);
-                BoxRenderer.RenderMapToConsole(map, console);
+                BoxRenderer.RenderMapToConsole(map, console, format);
             }
             
             console.SetCursorPosition(_captionColumn, _captionRow);
-            console.Write(caption);
+            console.Write(caption, format);
         }
 
         public (int Width, int Height) GetRequestedSize()
@@ -108,7 +115,20 @@ namespace VT100.FullScreen.Controls
         public BorderBorderStyle BorderBorderStyle { get; }
         public void Refresh(IFullScreenConsole console)
         {
-            
+            Render(console);
         }
+
+        #region Implementation of IFormattedLayoutControl<ButtonFormat>
+
+        public ButtonFormat Format { get; set; }
+
+        #endregion
     }
+}
+internal class ButtonFormat
+{
+    [DefaultFrom(typeof(BackgroundAttribute))]
+    public VtColour ButtonBackground { get; set; }
+    [DefaultFrom(typeof(ForegroundAttribute))]
+    public VtColour ButtonForeground { get; set; }
 }

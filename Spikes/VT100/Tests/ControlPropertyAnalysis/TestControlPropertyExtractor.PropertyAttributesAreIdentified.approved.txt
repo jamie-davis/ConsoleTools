@@ -1,7 +1,12 @@
 Property Attribute                                                                             
-------------------------                                                                       
+-------------------------                                                                      
+BorderAttribute                                                                                
 BackgroundAttribute                                                                            
+ButtonBackgroundAttribute                                                                      
+ButtonForegroundAttribute                                                                      
 ForegroundAttribute                                                                            
 InputBackgroundAttribute                                                                       
 InputForegroundAttribute                                                                       
+LabelBackgroundAttribute                                                                       
+LabelForegroundAttribute                                                                       
                                                                                                

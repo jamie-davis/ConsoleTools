@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using VT100.ControlPropertyAnalysis;
+using VT100.FullScreen.ControlBehaviour;
 using VT100.FullScreen.Controls;
 
 namespace VT100.FullScreen
@@ -11,21 +12,28 @@ namespace VT100.FullScreen
     {
         private readonly IFullScreenConsole _console;
 
+        class LayoutProperties
+        {
+            public IBorderStyle Border { get; set; }
+        }
+
         private class ControlContainer
         {
             public ReadOnlyCollection<PropertySetting> PropertySettings { get; }
             private readonly ILayoutControl _control;
 
-            public string Caption => _control.Caption ?? string.Empty;
+            public string CaptionText => _control.Caption ?? string.Empty;
             public ControlContainer(ILayoutControl control, ReadOnlyCollection<PropertySetting> propertySettings)
             {
                 PropertySettings = propertySettings;
                 _control = control;
+                Label = new Label();
+                LayoutProperties = new LayoutProperties();
+                ControlPropertySetter.Set(LayoutProperties, propertySettings);
             }
-
-            public int CaptionX { get; set; }
-            public int CaptionY { get; set; }
-            public string CaptionText { get; set; }
+            
+            public Label Label { get; }
+            public LayoutProperties LayoutProperties { get; }
 
             public ILayoutControl Control => _control;
         }
@@ -57,12 +65,24 @@ namespace VT100.FullScreen
             _combinedControls = _controls.Concat(_buttons).ToList();
 
             var maxAllowableCaption = width - 4;
-            var maxCaption = Math.Min(_controls.Max(c => c.Caption.Length), maxAllowableCaption);
+
+            int GetLongestCaptionLength()
+            {
+                var captionedContainers = _controls.Where(c => c.LayoutProperties.Border == null);
+                return Math.Min(captionedContainers.Max(c => c.CaptionText.Length), maxAllowableCaption);
+            }
+
+            var maxCaption = GetLongestCaptionLength();
             foreach (var container in _controls)
             {
-                container.CaptionText = $"{container.Caption.PadRight(maxCaption)}:";
-                container.CaptionX = Column;
-                container.CaptionY = Row;
+                container.Label.Caption = container.CaptionText;
+                if (container.LayoutProperties.Border != null)
+                {
+                    
+                }
+                
+                container.Label.Position(Column, Row, maxCaption, 1);
+
                 var controlX = Column + maxCaption + 2;
                 container.Control.Position(controlX, Row, Width - controlX - 1, 1);
 
@@ -76,7 +96,6 @@ namespace VT100.FullScreen
             var column = (Width - fullWidth)/2;
             foreach (var container in _buttons) 
             {
-                container.CaptionText = $"{container.Caption.PadRight(maxCaption)}:";
                 var requestedSize = container.Control.GetRequestedSize();
                 var controlY = Row - requestedSize.Height;
                 var controlX = column;
@@ -91,15 +110,15 @@ namespace VT100.FullScreen
             {
                 foreach (var container in _controls)
                 {
-                    _console.SetCursorPosition(container.CaptionX, container.CaptionY);
-                    _console.Write(container.CaptionText);
                     ControlSettingsUpdater.Update(container.Control, settings, container.PropertySettings);
-                    container.Control.Render(_console);
+                    container.Label.Refresh(_console);
+                    container.Control.Refresh(_console);
                 }
                 
                 foreach (var container in _buttons)
                 {
-                    container.Control.Render(_console);
+                    ControlSettingsUpdater.Update(container.Control, settings, container.PropertySettings);
+                    container.Control.Refresh(_console);
                 }
             }
         }

@@ -1,6 +1,6 @@
 ﻿namespace VT100.Attributes
 {
-    internal enum ExitMode
+    public enum ExitMode
     {
         DoesNotExit,
         ExitOnSuccess

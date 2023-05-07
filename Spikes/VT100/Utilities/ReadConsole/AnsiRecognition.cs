@@ -122,7 +122,7 @@ namespace VT100.Utilities.ReadConsole
                 return false;
             }
 
-            int AcceptRange(List<ControlElement> controlElements, int startPosition, char lower, char upper)
+            int AcceptRange(int startPosition, char lower, char upper)
             {
                 var takenCount = 0;
                 while (sequence.Count > startPosition + takenCount 
@@ -134,9 +134,9 @@ namespace VT100.Utilities.ReadConsole
                 return takenCount;
             }
 
-            var paramCount = AcceptRange(sequence, csiLength, '0', '?');
-            var interCount = AcceptRange(sequence, csiLength + paramCount, ' ', '/');
-            var finalByte = AcceptRange(sequence, csiLength + paramCount, '@', '~') > 0
+            var paramCount = AcceptRange(csiLength, '0', '?');
+            var interCount = AcceptRange(csiLength + paramCount, ' ', '/');
+            var finalByte = AcceptRange(csiLength + paramCount, '@', '~') > 0
                 ? 1
                 : 0;
 

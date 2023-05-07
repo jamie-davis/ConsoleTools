@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using VT100.Attributes;
 
 namespace VT100.ControlPropertyAnalysis
 {
@@ -26,6 +27,18 @@ namespace VT100.ControlPropertyAnalysis
             {
                 value = nameMatch.GetValue();
                 return true;
+            }
+
+            foreach (var defaultFromAttribute in property.GetCustomAttributes<DefaultFromAttribute>())
+            {
+                var type = defaultFromAttribute.AttributeToUseForDefault;
+                var targetPropName = PropertyNameConverter.FromAttributeTypeName(type.Name);
+                var defaultMatch = props.FirstOrDefault(p => p.Property == targetPropName && p.GetValueType() != null && property.PropertyType.IsAssignableFrom(p.GetValueType()));
+                if (defaultMatch != null)
+                {
+                    value = defaultMatch.GetValue();
+                    return true;
+                }
             }
 
             value = null;

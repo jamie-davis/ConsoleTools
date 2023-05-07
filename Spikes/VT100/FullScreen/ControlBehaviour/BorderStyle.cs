@@ -45,7 +45,7 @@ namespace VT100.FullScreen.ControlBehaviour
 
     }
 
-    internal interface IBorderStyle
+    public interface IBorderStyle
     {
         event EventHandler<StyleChanged> StyleChanged;
         

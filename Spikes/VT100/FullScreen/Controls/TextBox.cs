@@ -180,18 +180,7 @@ namespace VT100.FullScreen.Controls
 
         private void LoadValue()
         {
-            if (_dataContainer != null && _getter != null)
-                _value = GetString(_getter(_dataContainer));
-            else
-                _value = null;
-        }
-
-        private string GetString(object objValue)
-        {
-            if (objValue is string strValue)
-                return strValue;
-
-            return objValue?.ToString() ?? string.Empty;
+            _value = ControlValueLoader.GetString(_getter, _dataContainer);
         }
 
         private void SaveValue()
