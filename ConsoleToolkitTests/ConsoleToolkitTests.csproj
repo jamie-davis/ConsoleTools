@@ -12,6 +12,7 @@
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\ApprovalTestsKludge\ApprovalTestsKludge.csproj" />
+      <ProjectReference Include="..\CommandLoadTestAssembly\CommandLoadTestAssembly.csproj" />
       <ProjectReference Include="..\ConsoleToolkit\ConsoleToolkit.csproj" />
     </ItemGroup>
 </Project>
