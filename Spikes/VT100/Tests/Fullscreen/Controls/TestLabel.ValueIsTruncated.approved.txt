@@ -1,0 +1,8 @@
+Initial display:
+>12345               
+ --------------------
+      ^
+Cursor position: Row 0, Column 5
+
+Value is: -->1234567890<--
+

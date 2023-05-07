@@ -1,0 +1,8 @@
+Note: ESC characters are replaced with ^ for display purposes                                  
+                                                                                               
+Input                                       Result                                             
+------------------------------------------- ----------------------------                       
+Simple string                               Simple string                                      
+^[43mBackground Yellow then ^[41mRed^[49m   Background Yellow then Red                         
+^[34mForeground Blue then ^[45mMagenta^[39m Foreground Blue then Magenta                       
+                                                                                               

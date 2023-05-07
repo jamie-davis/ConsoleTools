@@ -1,0 +1,37 @@
+Input text:                                                                                    
+                                                                                               
+abcdefgABCDEFG123456    !£$                                                                    
+                                                                                               
+                                                                                               
+Result:                                                                                        
+                                                                                               
+Key                                                                                            
+Char Code          Key    Modifiers                                                            
+---- ---- ------------ ------------                                                            
+a    0x61            A            0                                                            
+b    0x62            B            0                                                            
+c    0x63            C            0                                                            
+d    0x64            D            0                                                            
+e    0x65            E            0                                                            
+f    0x66            F            0                                                            
+g    0x67            G            0                                                            
+A    0x41            A        Shift                                                            
+B    0x42            B        Shift                                                            
+C    0x43            C        Shift                                                            
+D    0x44            D        Shift                                                            
+E    0x45            E        Shift                                                            
+F    0x46            F        Shift                                                            
+G    0x47            G        Shift                                                            
+1    0x31           D1            0                                                            
+2    0x32           D2            0                                                            
+3    0x33           D3            0                                                            
+4    0x34           D4            0                                                            
+5    0x35           D5            0                                                            
+6    0x36           D6            0                                                            
+     0x09          Tab            0                                                            
+!    0x21            0            0                                                            
+£    0xA3            0            0                                                            
+$    0x24            0            0                                                            
+     0x0D        Enter            0                                                            
+     0x0A            0            0                                                            
+                                                                                               

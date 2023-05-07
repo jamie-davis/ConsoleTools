@@ -1,0 +1,15 @@
+Property set:                                                                                  
+                                                                                               
+Property          Value                                                                        
+---------- ------------                                                                        
+Background        Black                                                                        
+Foreground        White                                                                        
+                                                                                               
+                                                                                               
+Extracted:                                                                                     
+                                                                                               
+      Button       Button                                                                      
+  Background   Foreground                                                                      
+------------ ------------                                                                      
+       Black        White                                                                      
+                                                                                               

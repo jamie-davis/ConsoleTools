@@ -1,0 +1,95 @@
+Input Output                                                                                   
+----- ------------                                                                             
+A     A                                                                                        
+B     B                                                                                        
+C     C                                                                                        
+D     D                                                                                        
+E     E                                                                                        
+F     F                                                                                        
+G     G                                                                                        
+H     H                                                                                        
+I     I                                                                                        
+J     J                                                                                        
+K     K                                                                                        
+L     L                                                                                        
+M     M                                                                                        
+N     N                                                                                        
+O     O                                                                                        
+P     P                                                                                        
+Q     Q                                                                                        
+R     R                                                                                        
+S     S                                                                                        
+T     T                                                                                        
+U     U                                                                                        
+V     V                                                                                        
+W     W                                                                                        
+X     X                                                                                        
+Y     Y                                                                                        
+a     A                                                                                        
+b     B                                                                                        
+c     C                                                                                        
+d     D                                                                                        
+e     E                                                                                        
+f     F                                                                                        
+g     G                                                                                        
+h     H                                                                                        
+i     I                                                                                        
+j     J                                                                                        
+k     K                                                                                        
+l     L                                                                                        
+m     M                                                                                        
+n     N                                                                                        
+o     O                                                                                        
+p     P                                                                                        
+q     Q                                                                                        
+r     R                                                                                        
+s     S                                                                                        
+t     T                                                                                        
+u     U                                                                                        
+v     V                                                                                        
+w     W                                                                                        
+x     X                                                                                        
+y     Y                                                                                        
+0     D0                                                                                       
+1     D1                                                                                       
+2     D2                                                                                       
+3     D3                                                                                       
+4     D4                                                                                       
+5     D5                                                                                       
+6     D6                                                                                       
+7     D7                                                                                       
+8     D8                                                                                       
+      Tab                                                                                      
+      Enter                                                                                    
+                                                                                               
+[     Oem1                                                                                     
+]     Oem6                                                                                     
+(                                                                                              
+)                                                                                              
+,     OemComma                                                                                 
+.     OemPeriod                                                                                
+!                                                                                              
+"                                                                                              
+£                                                                                              
+$                                                                                              
+%                                                                                              
+^                                                                                              
+&                                                                                              
+*                                                                                              
++     OemMinus                                                                                 
+-     OemPlus                                                                                  
+_                                                                                              
+=     OemPlus                                                                                  
+@                                                                                              
+~     Oem7                                                                                     
+#     End                                                                                      
+?     Oem2                                                                                     
+/     Oem2                                                                                     
+<     OemComma                                                                                 
+>     OemPeriod                                                                                
+|     Oem5                                                                                     
+\     Oem5                                                                                     
+'     RightArrow                                                                               
+:     Oem1                                                                                     
+;     Oem1                                                                                     
+                                                                                               

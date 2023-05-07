@@ -1,0 +1,8 @@
+Initial display:
+>Test                
+ --------------------
+      ^
+Cursor position: Row 0, Column 5
+
+Value is: -->Test<--
+
