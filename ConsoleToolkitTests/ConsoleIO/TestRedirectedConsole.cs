@@ -25,7 +25,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             _buffer = new StringWriter();
             Console.SetOut(_buffer);
 
-            _consoleOut = new RedirectedConsole(ConsoleStream.Out);
+            _consoleOut = new RedirectedConsole(ConsoleStream.Out, 80);
         }
 
         [TearDown]
