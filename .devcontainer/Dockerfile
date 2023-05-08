@@ -6,3 +6,4 @@ RUN wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-p
     && apt-get update \
     && apt-get install -y dotnet-sdk-2.1
 RUN apt-get install -y kompare
+RUN apt-get install -y mono-devel
