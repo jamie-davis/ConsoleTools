@@ -4,11 +4,10 @@ using ApprovalTests.Reporters;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestPropertyStackColumnSizer
     {
@@ -20,53 +19,51 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             public string StringVal { get; set; }
             public string StringVal2 { get; set; }
         }
-
-        [SetUp]
-        public void SetUp()
+        public TestPropertyStackColumnSizer()
         {
             _sizer = new PropertyStackColumnSizer();
             _columnFormats = FormatAnalyser.Analyse(typeof(TestType), null, true).ToList();
         }
 
-        [Test]
+        [Fact]
         public void SizerWithNoContentHasZeroMinWidth()
         {
-            Assert.That(_sizer.GetMinWidth(), Is.EqualTo(0));
+            Assert.Equal(0, _sizer.GetMinWidth());
         }
 
-        [Test]
+        [Fact]
         public void MinWidthIsCalculated()
         {
             _sizer.AddColumn(_columnFormats[0], new FormattingIntermediate[] { "A", "B", "CCCC" });
-            Assert.That(_sizer.GetMinWidth(), Is.EqualTo("String Val: CCCC".Length));
+            Assert.Equal("String Val: CCCC".Length, _sizer.GetMinWidth());
         }
 
-        [Test]
+        [Fact]
         public void MinWidthIsLengthOfLongestWordInStackIfAllFirstLinesAreShorter()
         {
             const string longB = "BBBBBBBBBBBBBBBBBB";
             _sizer.AddColumn(_columnFormats[0], new FormattingIntermediate[] { "A", "B B B B B B " + longB + " B B B B B B B", "CCCC" });
-            Assert.That(_sizer.GetMinWidth(), Is.EqualTo(longB.Length));
+            Assert.Equal(longB.Length, _sizer.GetMinWidth());
         }
 
-        [Test]
+        [Fact]
         public void MinWidthIsMinWidthOfLongestColumnInStack()
         {
             const string longB = "BBBBBBBBBBBBBBBBBB";
             _sizer.AddColumn(_columnFormats[0], new FormattingIntermediate[] { "A", "B B B B B B", "CCCC" });
             _sizer.AddColumn(_columnFormats[1], new FormattingIntermediate[] { "A", "B B B B B B " + longB + " B B B B B B B", "CCCC" });
-            Assert.That(_sizer.GetMinWidth(), Is.EqualTo(longB.Length));
+            Assert.Equal(longB.Length, _sizer.GetMinWidth());
         }
 
-        [Test]
+        [Fact]
         public void MinWidthIsMinWidthOfLongestFirstLineInStack()
         {
             _sizer.AddColumn(_columnFormats[0], new FormattingIntermediate[] { "A", "BBBBBB", "CCCC" });
             _sizer.AddColumn(_columnFormats[1], new FormattingIntermediate[] { "A", "B", "CCCC" });
-            Assert.That(_sizer.GetMinWidth(), Is.EqualTo("String Val: BBBBBB".Length));
+            Assert.Equal("String Val: BBBBBB".Length, _sizer.GetMinWidth());
         }
 
-        [Test]
+        [Fact]
         public void SizingValuesCanBeRetrieved()
         {
             const string longB = "BBBBBBBBBBBBBBBBBB";
@@ -75,10 +72,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             _sizer.AddColumn(_columnFormats[1], colValues1);
             _sizer.AddColumn(_columnFormats[0], colValues0);
 
-            Assert.That(_sizer.GetSizeValues(1), Is.EqualTo(new [] {colValues0[1], colValues1[1]}));
+            Assert.Equal(new[] { colValues0[1], colValues1[1] }, _sizer.GetSizeValues(1));
         }
 
-        [Test]
+        [Fact]
         public void SizerWithRenderableReturnsMinWidth()
         {
             var colValues = new []
@@ -88,7 +85,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
                 MakeRenderer("Rather longer text that may need to be wrapped.", 5),
             };
             _sizer.AddColumn(_columnFormats[0], colValues);
-            Assert.That(_sizer.GetMinWidth(), Is.EqualTo("wrapped.".Length));
+            Assert.Equal("wrapped.".Length, _sizer.GetMinWidth());
         }
 
         private static FormattingIntermediate MakeRenderer(string text, int rows)

@@ -1,12 +1,12 @@
-﻿using ApprovalTests.Reporters;
+using ApprovalTests.Reporters;
 using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using FluentAssertions;
+using Xunit;
 
 namespace ConsoleToolkitTests.CommandLineInterpretation
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestParserResult
     {
@@ -28,9 +28,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
                 return string.Format("\"{0}\",{1}", Opt1String, Opt1Int);
             }
         }
-
-        [SetUp]
-        public void SetUp()
+        public TestParserResult()
         {
             _config = new CommandLineInterpreterConfiguration();
             _command = _config.Parameters(() => new CommandParams())
@@ -52,225 +50,225 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             _parserResult = new ParserResult(_command, "commandName", null, CommandExecutionMode.CommandLine);
         }
 
-        [Test]
+        [Fact]
         public void PositionalParametersAreApplied()
         {
             _parserResult.PositionalArgument("pos");
             var paramObject = (CommandParams)_parserResult.ParamObject;
-            Assert.That(paramObject.Pos1, Is.EqualTo("pos"));
+            Assert.Equal("pos", paramObject.Pos1);
         }
 
-        [Test]
+        [Fact]
         public void ExpectedPositionalParametersCauseParserContinue()
         {
             var result = _parserResult.PositionalArgument("pos");
-            Assert.That(result, Is.EqualTo(ParseOutcome.Continue));
+            Assert.Equal(ParseOutcome.Continue, result);
         }
 
-        [Test]
+        [Fact]
         public void CommandObjectIsInstantiated()
         {
-            Assert.That(_parserResult.ParamObject, Is.InstanceOf(typeof(CommandParams)));
+            _parserResult.ParamObject.Should().BeOfType<CommandParams>();
         }
 
-        [Test]
+        [Fact]
         public void UnexpectedPositionalsGenerateError()
         {
             _parserResult.PositionalArgument("pos");
             _parserResult.PositionalArgument("12");
             _parserResult.PositionalArgument("invalid");
-            Assert.That(_parserResult.Error, Is.EqualTo("Unexpected argument \"invalid\""));
+            Assert.Equal("Unexpected argument \"invalid\"", _parserResult.Error);
         }
 
-        [Test]
+        [Fact]
         public void UnexpectedPositionalsCauseParsingHalt()
         {
             _parserResult.PositionalArgument("pos");
             _parserResult.PositionalArgument("12");
             var result = _parserResult.PositionalArgument("invalid");
-            Assert.That(result, Is.EqualTo(ParseOutcome.Halt));
+            Assert.Equal(ParseOutcome.Halt, result);
         }
 
-        [Test]
+        [Fact]
         public void InvalidValueForPositionalGeneratesError()
         {
             _parserResult.PositionalArgument("pos");
             _parserResult.PositionalArgument("invalid");
-            Assert.That(_parserResult.Error, Is.EqualTo("The pos2 parameter value \"invalid\" is invalid."));
+            Assert.Equal("The pos2 parameter value \"invalid\" is invalid.", _parserResult.Error);
         }
 
-        [Test]
+        [Fact]
         public void InvalidValueForPositionalCauseParsingHalt()
         {
             _parserResult.PositionalArgument("pos");
             var result = _parserResult.PositionalArgument("invalid");
-            Assert.That(result, Is.EqualTo(ParseOutcome.Halt));
+            Assert.Equal(ParseOutcome.Halt, result);
         }
 
-        [Test]
+        [Fact]
         public void OptionsAreApplied()
         {
             _parserResult.OptionExtracted("opt1", new []{"str", "10"});
             var paramObject = (CommandParams)_parserResult.ParamObject;
-            Assert.That(paramObject.Opt1Settings(), Is.EqualTo("\"str\",10"));
+            Assert.Equal("\"str\",10", paramObject.Opt1Settings());
         }
 
-        [Test]
+        [Fact]
         public void OptionsAreAppliedViaAlias()
         {
             _parserResult.OptionExtracted("1", new []{"str", "10"});
             var paramObject = (CommandParams)_parserResult.ParamObject;
-            Assert.That(paramObject.Opt1Settings(), Is.EqualTo("\"str\",10"));
+            Assert.Equal("\"str\",10", paramObject.Opt1Settings());
         }
 
-        [Test]
+        [Fact]
         public void ExpectedOptionsCauseParsingContinue()
         {
             var result = _parserResult.OptionExtracted("opt1", new []{"str", "10"});
-            Assert.That(result, Is.EqualTo(ParseOutcome.Continue));
+            Assert.Equal(ParseOutcome.Continue, result);
         }
 
-        [Test]
+        [Fact]
         public void UnexpectedOptionsCauseParsingHalt()
         {
             var result = _parserResult.OptionExtracted("invalid", new []{"str", "10"});
-            Assert.That(result, Is.EqualTo(ParseOutcome.Halt));
+            Assert.Equal(ParseOutcome.Halt, result);
         }
 
-        [Test]
+        [Fact]
         public void UnexpectedOptionsGenerateAnError()
         {
             var result = _parserResult.OptionExtracted("invalid", new []{"str", "10"});
-            Assert.That(_parserResult.Error, Is.EqualTo("\"invalid\" is not a valid option."));
+            Assert.Equal("\"invalid\" is not a valid option.", _parserResult.Error);
         }
 
-        [Test]
+        [Fact]
         public void InvalidOptionArgumentCausesParsingHalt()
         {
             var result = _parserResult.OptionExtracted("opt1", new[] { "str", "non-numeric" });
-            Assert.That(result, Is.EqualTo(ParseOutcome.Halt));
+            Assert.Equal(ParseOutcome.Halt, result);
         }
 
-        [Test]
+        [Fact]
         public void InvalidOptionArgumentGeneratesAnError()
         {
             var result = _parserResult.OptionExtracted("opt1", new[] { "str", "non-numeric" });
-            Assert.That(_parserResult.Error, Is.EqualTo("The parameter \"non-numeric\" of the opt1 option has an invalid value."));
+            Assert.Equal("The parameter \"non-numeric\" of the opt1 option has an invalid value.", _parserResult.Error);
         }
 
-        [Test]
+        [Fact]
         public void ExcessiveOptionArgumentGeneratesAnError()
         {
             var result = _parserResult.OptionExtracted("opt1", new[] { "str", "5", "toomany" });
-            Assert.That(_parserResult.Error, Is.EqualTo("The opt1 option has too many parameters."));
+            Assert.Equal("The opt1 option has too many parameters.", _parserResult.Error);
         }
 
-        [Test]
+        [Fact]
         public void InsufficientOptionArgumentGeneratesAnError()
         {
             var result = _parserResult.OptionExtracted("opt1", new[] { "str" });
-            Assert.That(_parserResult.Error, Is.EqualTo("Not enough parameters for the opt1 option."));
+            Assert.Equal("Not enough parameters for the opt1 option.", _parserResult.Error);
         }
 
-        [Test]
+        [Fact]
         public void OptionsGenerateAnErrorIfUsedMoreThanOnce()
         {
             _parserResult.OptionExtracted("opt1", new[] { "str", "10" });
             var result = _parserResult.OptionExtracted("opt1", new[] { "str", "11" });
-            Assert.That(_parserResult.Error, Is.EqualTo("The \"opt1\" option may only be specified once."));
+            Assert.Equal("The \"opt1\" option may only be specified once.", _parserResult.Error);
         }
 
-        [Test]
+        [Fact]
         public void OptionsGenerateAnErrorIfUsedMoreThanOnceViaAlias()
         {
             _parserResult.OptionExtracted("opt1", new[] { "str", "10" });
             var result = _parserResult.OptionExtracted("one", new[] { "str", "11" });
-            Assert.That(_parserResult.Error, Is.EqualTo("The \"opt1\" option may only be specified once."));
+            Assert.Equal("The \"opt1\" option may only be specified once.", _parserResult.Error);
         }
 
-        [Test]
+        [Fact]
         public void OptionsCauseParsingHaltIfUsedMoreThanOnce()
         {
             _parserResult.OptionExtracted("opt1", new[] { "str", "10" });
             var result = _parserResult.OptionExtracted("opt1", new[] { "str", "11" });
-            Assert.That(result, Is.EqualTo(ParseOutcome.Halt));
+            Assert.Equal(ParseOutcome.Halt, result);
         }
 
-        [Test]
+        [Fact]
         public void PositionalsPresentedAsOptionsAreNotProcessedAsPositionals()
         {
             _parserResult.OptionExtracted("pos1", new[] { "str", "10" });
             _parserResult.PositionalArgument("7");
             var paramObject = (CommandParams)_parserResult.ParamObject;
             var result = string.Format("Pos1 = \"{0}\", Pos2 = {1}", paramObject.Pos1, paramObject.Pos2);
-            Assert.That(result, Is.EqualTo("Pos1 = \"str\", Pos2 = 7"));
+            Assert.Equal("Pos1 = \"str\", Pos2 = 7", result);
         }
 
-        [Test]
+        [Fact]
         public void ItIsNotAnErrorForAPositionalToBePresentedAsAnOption()
         {
             var result = _parserResult.OptionExtracted("pos1", new[] { "str", "10" });
-            Assert.That(result, Is.EqualTo(ParseOutcome.Continue));
+            Assert.Equal(ParseOutcome.Continue, result);
         }
 
-        [Test]
+        [Fact]
         public void UsedPositionalsPresentedAsOptionsGenerateAnError()
         {
             _parserResult.PositionalArgument("pos");
             var result = _parserResult.OptionExtracted("pos1", new[] { "str" });
-            Assert.That(_parserResult.Error, Is.EqualTo("The \"pos1\" parameter may only be specified once."));
+            Assert.Equal("The \"pos1\" parameter may only be specified once.", _parserResult.Error);
         }
 
-        [Test]
+        [Fact]
         public void UsedPositionalsPresentedAsOptionsCauseParserHalt()
         {
             _parserResult.PositionalArgument("pos");
             var result = _parserResult.OptionExtracted("pos1", new[] { "str", "10" });
-            Assert.That(result, Is.EqualTo(ParseOutcome.Halt));
+            Assert.Equal(ParseOutcome.Halt, result);
         }
 
-        [Test]
+        [Fact]
         public void ParsingCompleteShouldPerformErrorCheck()
         {
             _parserResult.PositionalArgument("str");
             _parserResult.PositionalArgument("10");
             _parserResult.ParseCompleted();
-            Assert.That(_parserResult.Status, Is.EqualTo(ParseStatus.CompletedOk));
+            Assert.Equal(ParseStatus.CompletedOk, _parserResult.Status);
         }
 
-        [Test]
+        [Fact]
         public void ParsingCompleteShouldSetErrorStatusAfterInvalidInput()
         {
             _parserResult.PositionalArgument("str");
             _parserResult.PositionalArgument("not valid");
             _parserResult.ParseCompleted();
-            Assert.That(_parserResult.Status, Is.EqualTo(ParseStatus.Failed));
+            Assert.Equal(ParseStatus.Failed, _parserResult.Status);
         }
 
-        [Test]
+        [Fact]
         public void ParsingCompleteShouldSetErrorStatusAfterInvalidOption()
         {
             _parserResult.PositionalArgument("str");
             _parserResult.PositionalArgument("10");
             _parserResult.OptionExtracted("invalid", new string[] {});
             _parserResult.ParseCompleted();
-            Assert.That(_parserResult.Status, Is.EqualTo(ParseStatus.Failed));
+            Assert.Equal(ParseStatus.Failed, _parserResult.Status);
         }
 
-        [Test]
+        [Fact]
         public void ParsingCompleteShouldSetErrorStatusIfNotAllPositionalsPresent()
         {
             _parserResult.PositionalArgument("str");
             _parserResult.ParseCompleted();
-            Assert.That(_parserResult.Status, Is.EqualTo(ParseStatus.Failed));
+            Assert.Equal(ParseStatus.Failed, _parserResult.Status);
         }
 
-        [Test]
+        [Fact]
         public void ParsingCompleteShouldSetErrorMessageIfNotAllPositionalsPresent()
         {
             _parserResult.PositionalArgument("str");
             _parserResult.ParseCompleted();
-            Assert.That(_parserResult.Error, Is.EqualTo("Not enough parameters specified."));
+            Assert.Equal("Not enough parameters specified.", _parserResult.Error);
         }
     }
 }

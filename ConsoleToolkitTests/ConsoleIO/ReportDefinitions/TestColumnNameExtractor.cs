@@ -1,11 +1,10 @@
-﻿using System;
+using System;
 using System.Linq.Expressions;
 using ConsoleToolkit.ConsoleIO.ReportDefinitions;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
 {
-    [TestFixture]
     public class TestColumnNameExtractor
     {
         #region Type for test
@@ -18,7 +17,7 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
 
         #endregion
 
-        [Test]
+        [Fact]
         public void PropertyNameIsExtractedFromAPropertyReference()
         {
             //Arrange
@@ -28,10 +27,10 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
             var name = ColumnNameExtractor.FromExpression(lambda);
 
             //Assert
-            Assert.That(name, Is.EqualTo("Property One"));
+            Assert.Equal("Property One", name);
         }
 
-        [Test]
+        [Fact]
         public void FieldNameIsExtractedFromAFieldReference()
         {
             //Arrange
@@ -41,10 +40,10 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
             var name = ColumnNameExtractor.FromExpression(lambda);
 
             //Assert
-            Assert.That(name, Is.EqualTo("Field One"));
+            Assert.Equal("Field One", name);
         }
 
-        [Test]
+        [Fact]
         public void CalculatedExpressionReturnsExp()
         {
             //Arrange
@@ -54,7 +53,7 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
             var name = ColumnNameExtractor.FromExpression(lambda);
 
             //Assert
-            Assert.That(name, Is.EqualTo("exp"));
+            Assert.Equal("exp", name);
         }
 
         private Expression MakeLambdaExpression<T>(Expression<Func<TestType, T>> expression)

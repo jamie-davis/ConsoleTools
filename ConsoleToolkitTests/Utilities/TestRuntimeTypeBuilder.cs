@@ -1,23 +1,21 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using ApprovalUtilities.Utilities;
 using ConsoleToolkit.Utilities;
-using NUnit.Framework;
+using FluentAssertions;
+using Xunit;
 
 namespace ConsoleToolkitTests.Utilities
 {
-    [TestFixture]
     public class TestRuntimeTypeBuilder
     {
         private RunTimeTypeBuilder _builder;
-
-        [SetUp]
-        public void SetUp()
+        public TestRuntimeTypeBuilder()
         {
             _builder = new RunTimeTypeBuilder(GetType().Name);
         }
 
-        [Test]
+        [Fact]
         public void SimpleTypeCanBeCreated()
         {
             //Arrange
@@ -35,10 +33,10 @@ namespace ConsoleToolkitTests.Utilities
             var result =type.GetProperties()
                 .Select(p => string.Format("{0} {1};", p.Name, p.PropertyType.Name))
                 .JoinWith(" ");
-            Assert.That(result, Is.EqualTo("A Int32; B Double; C String;"));
+            Assert.Equal("A Int32; B Double; C String;", result);
         }
 
-        [Test]
+        [Fact]
         public void TheSameTypeIsReturnedIfItIsRequestedTwice()
         {
             //Arrange
@@ -54,7 +52,7 @@ namespace ConsoleToolkitTests.Utilities
             var subsequentTypeReturned = _builder.MakeRuntimeType(props);
 
             //Assert
-            Assert.That(subsequentTypeReturned, Is.SameAs(intialTypeReturned));
+            subsequentTypeReturned.Should().BeSameAs(intialTypeReturned);
         }
     }
 }

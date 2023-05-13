@@ -7,18 +7,15 @@ using ApprovalTests.Reporters;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestDefaultWidthCalculator
     {
         private List<ColumnFormat> _formats;
-
-        [SetUp]
-        public void SetUp()
+        public TestDefaultWidthCalculator()
         {
             SetUpTests.OverrideCulture();
             _formats = new List<ColumnFormat>
@@ -48,14 +45,14 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             return new ColumnFormat("A", typeof(T));
         }
 
-        [Test]
+        [Fact]
         public void DefaultMinWidthIsAsExpected()
         {
             var report = AllFormats(f => DefaultWidthCalculator.Min(f).ToString(CultureInfo.InvariantCulture));
             Approvals.Verify(report);
         }
 
-        [Test]
+        [Fact]
         public void DefaultMaxWidthIsAsExpected()
         {
             var report = AllFormats(f => DefaultWidthCalculator.Max(f).ToString(CultureInfo.InvariantCulture));

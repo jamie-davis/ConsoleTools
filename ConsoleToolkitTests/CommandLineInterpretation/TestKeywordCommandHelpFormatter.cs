@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using ApprovalTests;
 using ApprovalTests.Reporters;
@@ -6,11 +6,10 @@ using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.CommandLineInterpretation
 {
-    [TestFixture]
     [UseReporter(typeof(CustomReporter))]
     public class TestKeywordCommandHelpFormatter
     {
@@ -18,8 +17,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         private List<KeywordCommand> _commandSet;
         private IConsoleAdapter _console;
 
-        [SetUp]
-        public void SetUp()
+        public TestKeywordCommandHelpFormatter()
         {
             _output = new UnitTestConsole();
             _console = _output.Console;
@@ -61,7 +59,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             return result;
         }
 
-        [Test]
+        [Fact]
         public void CorrectKeywordsAreListed()
         {
             //Act

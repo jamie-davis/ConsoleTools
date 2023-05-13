@@ -8,11 +8,10 @@ using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.ConsoleIO.UnitTestUtilities;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAcceptanceTests
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class Config2AcceptanceTests
     {
@@ -29,9 +28,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             public bool Delete { get; set; }
             public string Archive { get; set; }
         }
-
-        [SetUp]
-        public void SetUp()
+        public Config2AcceptanceTests()
         {
             _posix = new CommandLineInterpreterConfiguration(CommandLineParserConventions.PosixConventions);
             _msDos = new CommandLineInterpreterConfiguration(CommandLineParserConventions.MsDosConventions);
@@ -59,7 +56,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                 .Description("Archive after processing");
         }
 
-        [Test]
+        [Fact]
         public void ConfigurationShouldBeDescribed()
         {
             var interpreter = new CommandLineInterpreter(_posix);
@@ -69,7 +66,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             Approvals.Verify(description);
         }
 
-        [Test]
+        [Fact]
         public void PosixStyleCommand1()
         {
             var commands = new[]
@@ -88,7 +85,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             Approvals.Verify(CommandExecutorUtil.Do(_posix, commands, 50, false));
         }
 
-        [Test]
+        [Fact]
         public void MsDosStyleCommand1()
         {
             var commands = new[]
@@ -107,7 +104,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             Approvals.Verify(CommandExecutorUtil.Do(_msDos, commands, 50, false));
         }
 
-        [Test]
+        [Fact]
         public void MsStdStyleCommand1()
         {
             var commands = new[]

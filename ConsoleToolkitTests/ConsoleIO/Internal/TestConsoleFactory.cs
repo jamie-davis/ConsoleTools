@@ -1,13 +1,13 @@
-﻿using ConsoleToolkit.ConsoleIO;
+using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
-using NUnit.Framework;
+using FluentAssertions;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
-    [TestFixture]
     public class TestConsoleFactory
     {
-        [Test]
+        [Fact]
         public void DefaultConsoleIsCreatedIfConsoleNotRedirected()
         {
             //Arrange
@@ -17,10 +17,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             var console = factory.Console;
 
             //Assert
-            Assert.That(console, Is.InstanceOf<DefaultConsole>());
+            console.Should().BeOfType<DefaultConsole>();
         }
 
-        [Test]
+        [Fact]
         public void RedirectedConsoleIsCreatedIfConsoleIsRedirected()
         {
             //Arrange
@@ -30,9 +30,9 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             var console = factory.Console;
 
             //Assert
-            Assert.That(console, Is.InstanceOf<RedirectedConsole>());
+            console.Should().BeOfType<RedirectedConsole>();
         }
-        [Test]
+        [Fact]
         public void DefaultConsoleIsCreatedForErrorIfErrorNotRedirected()
         {
             //Arrange
@@ -42,10 +42,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             var error = factory.Error;
 
             //Assert
-            Assert.That(error, Is.InstanceOf<DefaultConsole>());
+            error.Should().BeOfType<DefaultConsole>();
         }
 
-        [Test]
+        [Fact]
         public void RedirectedConsoleIsCreatedForErrorIfErrorIsRedirected()
         {
             //Arrange
@@ -55,7 +55,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             var error = factory.Error;
 
             //Assert
-            Assert.That(error, Is.InstanceOf<RedirectedConsole>());
+            error.Should().BeOfType<RedirectedConsole>();
         }
 
         private class FakeConsoleRedirectTester : IConsoleRedirectTester

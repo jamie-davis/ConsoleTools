@@ -7,11 +7,10 @@ using ApprovalTests.Reporters;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkitTests.ConsoleIO.UnitTestUtilities;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestColumnExpander
     {
@@ -37,11 +36,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
                 Integer = shortString.Length + longString.Length;
             }
         }
-        // ReSharper restore UnusedAutoPropertyAccessor.Local
-        // ReSharper restore MemberCanBePrivate.Local
-
-        [SetUp]
-        public void SetUp()
+        public TestColumnExpander()
         {
             _data = Enumerable.Range(0, 5)
                 .Select(i => new TestType("AAAA" + i, "AAAAAAA AAAAAAAA AAAAAAAA"))
@@ -86,7 +81,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             }
         }
 
-        [Test]
+        [Fact]
         public void ReportWithNoWrappingIsExpanded()
         {
             const int width = 80;
@@ -97,7 +92,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_initialReport + ruler + report);
         }
 
-        [Test]
+        [Fact]
         public void ReportWithWrappingIsExpanded()
         {
             const int width = 43;
@@ -108,7 +103,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_initialReport + ruler + report);
         }
 
-        [Test]
+        [Fact]
         public void FixedWidthColumnsAreNotExpanded()
         {
             const int width = 43;
@@ -120,7 +115,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_initialReport + ruler + report);
         }
 
-        [Test]
+        [Fact]
         public void ColumnsAreNotExpandedBeyondMaxWidth()
         {
             const int width = 43;

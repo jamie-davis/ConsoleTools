@@ -6,18 +6,17 @@ using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkitTests.ConsoleIO.UnitTestUtilities;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestPropertyStackFormatter
     {
         private static readonly string End = Environment.NewLine + "End";
         const int ColumnWidth = 20;
 
-        [Test]
+        [Fact]
         public void FormatHeadingIsUsedAsThePropertyName()
         {
             var output = PropertyStackFormatter.Format(new ColumnFormat("Heading"), "Value", ColumnWidth);
@@ -26,7 +25,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(text);
         }
 
-        [Test]
+        [Fact]
         public void LongValuesAreWordWrapped()
         {
             var output = PropertyStackFormatter.Format(new ColumnFormat("Heading"), "A nice long value that can only be accomodated with word wrapping.", ColumnWidth);
@@ -35,7 +34,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(text);
         }
 
-        [Test]
+        [Fact]
         public void AllPartsOfARightAlignedValueAreRightAligned()
         {
             var output = PropertyStackFormatter.Format(new ColumnFormat("Heading", alignment: ColumnAlign.Right), "A nice long value that can only be accomodated with word wrapping.", ColumnWidth);
@@ -44,7 +43,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(text);
         }
 
-        [Test]
+        [Fact]
         public void FormattingAcceptsValueWhereFirstWordDoesNotFitOnFirstLine()
         {
             var output = PropertyStackFormatter.Format(new ColumnFormat("Format heading", alignment: ColumnAlign.Right), "Firstwordislong", ColumnWidth);
@@ -53,7 +52,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(text);
         }
 
-        [Test]
+        [Fact]
         public void FirstLineHangingIndentIsRespected()
         {
             var output = PropertyStackFormatter.Format(new ColumnFormat("Format heading", alignment: ColumnAlign.Right), "Value words words", ColumnWidth, firstLineHangingIndent: 10);
@@ -62,7 +61,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(text);
         }
 
-        [Test]
+        [Fact]
         public void RenderableElementsAreStacked()
         {
             var recorder = new RecordingConsoleAdapter();

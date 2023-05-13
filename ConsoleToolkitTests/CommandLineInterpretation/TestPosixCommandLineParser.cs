@@ -5,11 +5,11 @@ using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using FluentAssertions;
+using Xunit;
 
 namespace ConsoleToolkitTests.CommandLineInterpretation
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestPosixCommandLineParser
     {
@@ -29,9 +29,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             public bool IsBoolean { get; set; }
             public int ParameterCount { get; set; }
         }
-
-        [SetUp]
-        public void SetUp()
+        public TestPosixCommandLineParser()
         {
             _positionals = new[] {"pos1", "pos2", "pos3"}.Select(Positional).ToList();
             _options = new[] {"opt", "opt1", "opt2", "O", "X"}.Select(Option).ToList();
@@ -39,7 +37,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             _parser = new PosixCommandLineParser();
         }
 
-        [Test]
+        [Fact]
         public void PositionalParametersAreExtracted()
         {
             
@@ -50,7 +48,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(_result.Log);
         }
 
-        [Test]
+        [Fact]
         public void ParsingStopsWhenPositionalReturnsHalt()
         {
             
@@ -62,7 +60,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(_result.Log);
         }
 
-        [Test]
+        [Fact]
         public void ParsingStopsWhenOptionReturnsHalt()
         {
             
@@ -74,7 +72,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(_result.Log);
         }
 
-        [Test]
+        [Fact]
         public void NoParameterLongOptionsAreExtracted()
         {
             
@@ -85,7 +83,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(_result.Log);
         }
 
-        [Test]
+        [Fact]
         public void OptionNamesAreCaseSensitive()
         {
             
@@ -96,7 +94,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(_result.Log);
         }
 
-        [Test]
+        [Fact]
         public void OptionNamesWithParametersAreCaseSensitive()
         {
             
@@ -107,7 +105,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(_result.Log);
         }
 
-        [Test]
+        [Fact]
         public void UnrecognisedOptionsArePassedThroughVerbatim()
         {
             
@@ -118,7 +116,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(_result.Log);
         }
 
-        [Test]
+        [Fact]
         public void ConjoinedOptionParametersAreExtracted()
         {
             var args = CommandLineTokeniser.Tokenise("-Xarg");
@@ -128,7 +126,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(_result.Log);
         }
 
-        [Test]
+        [Fact]
         public void ConjoinedOptionWithMultipleParametersIsExtracted()
         {
             var args = CommandLineTokeniser.Tokenise("-Xarg,56,more");
@@ -138,7 +136,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(_result.Log);
         }
 
-        [Test]
+        [Fact]
         public void ShortOptionWithMultiplePatametersIsExtracted()
         {
             var args = CommandLineTokeniser.Tokenise("-Xarg,56,more");
@@ -148,7 +146,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(_result.Log);
         }
 
-        [Test]
+        [Fact]
         public void LongOptionWithEqualsAndMultiplePatametersIsExtracted()
         {
             _options.First(o => o.Name == "opt1").ParameterCount = 2;
@@ -159,7 +157,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(_result.Log);
         }
 
-        [Test]
+        [Fact]
         public void LongOptionWithMultipleParametersInNextTokenIsExtracted()
         {
             _options.First(o => o.Name == "opt1").ParameterCount = 2;
@@ -170,7 +168,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(_result.Log);
         }
 
-        [Test]
+        [Fact]
         public void MultipleOptionParametersAreExtracted()
         { 
             var args = CommandLineTokeniser.Tokenise("--Opt1=arg,45,arg3");
@@ -180,7 +178,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(_result.Log);
         }
 
-        [Test]
+        [Fact]
         public void DoubleDashTokenEndsOptionProcessing()
         { 
             var args = CommandLineTokeniser.Tokenise("-- --Opt1=arg,45,arg3");
@@ -190,24 +188,24 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(_result.Log);
         }
 
-        [Test]
+        [Fact]
         public void ParserIsAlsoAnOptionAdorner()
         {
-            Assert.That(_parser, Is.InstanceOf(typeof(IOptionNameHelpAdorner)));
+            _parser.Should().BeAssignableTo<IOptionNameHelpAdorner>();
         }
 
-        [Test]
+        [Fact]
         public void ShortOptionNameIsAdorned()
         {
             var adorner = _parser as IOptionNameHelpAdorner;
-            Assert.That(adorner.Adorn("X"), Is.EqualTo("-X"));
+            Assert.Equal("-X", adorner.Adorn("X"));
         }
 
-        [Test]
+        [Fact]
         public void LongOptionNameIsAdorned()
         {
             var adorner = _parser as IOptionNameHelpAdorner;
-            Assert.That(adorner.Adorn("long"), Is.EqualTo("--long"));
+            Assert.Equal("--long", adorner.Adorn("long"));
         }
 
         private PositionalArg Positional(string name)

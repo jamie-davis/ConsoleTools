@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using ApprovalTests;
 using ApprovalTests.Reporters;
@@ -8,11 +8,10 @@ using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.InteractiveSession;
 using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.InteractiveSession
 {
-    [TestFixture]
     [UseReporter(typeof(CustomReporter))]
     public class TestInteractiveSessionService
     {
@@ -105,9 +104,7 @@ namespace ConsoleToolkitTests.InteractiveSession
         private IConsoleAdapter _console;
         private IErrorAdapter _error;
         private FakeApplication _app;
-
-        [SetUp]
-        public void SetUp()
+        public TestInteractiveSessionService()
         {
             _testConsole = new ConsoleInterfaceForTesting();
             _console = new ConsoleAdapter(_testConsole);
@@ -115,7 +112,7 @@ namespace ConsoleToolkitTests.InteractiveSession
             _app = FakeApplication.MakeFakeApplication(_console, _error, typeof(StartCommand), typeof(Command1), typeof(Command2), typeof(Command3), typeof(CommandFail), typeof(ExitCommand), typeof(SetPromptCommand));
         }
 
-        [Test]
+        [Fact]
         public void InteractiveSessionRunsCommands()
         {
             //Arrange
@@ -135,7 +132,7 @@ exit";
             }
         }
 
-        [Test]
+        [Fact]
         public void InteractiveSessionHandlesErrors()
         {
             //Arrange
@@ -155,7 +152,7 @@ exit";
             }
         }
 
-        [Test]
+        [Fact]
         public void InteractiveSessionHandlesBlankInput()
         {
             //Arrange
@@ -174,7 +171,7 @@ exit";
             }
         }
 
-        [Test]
+        [Fact]
         public void CommandFailuresDoNotEndSession()
         {
             var originalExitCode = Environment.ExitCode;
@@ -203,7 +200,7 @@ two
             }
         }
 
-        [Test]
+        [Fact]
         public void PromptCanBeSetBeforeSessionStarts()
         {
             //Arrange
@@ -223,7 +220,7 @@ exit";
             }
         }
 
-        [Test]
+        [Fact]
         public void PromptCanBeChangedDuringASession()
         {
             //Arrange

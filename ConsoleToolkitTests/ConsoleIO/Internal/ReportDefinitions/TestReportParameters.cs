@@ -1,11 +1,11 @@
-﻿using System.Linq;
+using System.Linq;
 using ApprovalUtilities.Utilities;
 using ConsoleToolkit.ConsoleIO.ReportDefinitions;
-using NUnit.Framework;
+using FluentAssertions;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal.ReportDefinitions
 {
-    [TestFixture]
     public class TestReportParameters
     {
         #region Test types
@@ -18,17 +18,17 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal.ReportDefinitions
         }
 
         #endregion
-        [Test]
+        [Fact]
         public void ByDefaultOmitHeadingsIsFalse()
         {
             //Arrange
             var parameters = new ReportParameters<TestRec>();
 
             //Assert
-            Assert.That(parameters.Details.OmitHeadings, Is.False);
+            parameters.Details.OmitHeadings.Should().BeFalse();
         }
 
-        [Test]
+        [Fact]
         public void OmitHeadingsSettingIsRecorded()
         {
             //Arrange
@@ -38,20 +38,20 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal.ReportDefinitions
             parameters.OmitHeadings();
 
             //Assert
-            Assert.That(parameters.Details.OmitHeadings, Is.True);
+            parameters.Details.OmitHeadings.Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void IndentIsZeroByDefault()
         {
             //Act
             var parameters = new ReportParameters<TestRec>();
 
             //Assert
-            Assert.That(parameters.Details.IndentSpaces, Is.EqualTo(0));
+            Assert.Equal(0, parameters.Details.IndentSpaces);
         }
 
-        [Test]
+        [Fact]
         public void RequestedIndentIsRecorded()
         {
             //Arrange
@@ -61,20 +61,20 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal.ReportDefinitions
             parameters.Indent(4);
 
             //Assert
-            Assert.That(parameters.Details.IndentSpaces, Is.EqualTo(4));
+            Assert.Equal(4, parameters.Details.IndentSpaces);
         }
 
-        [Test]
+        [Fact]
         public void ByDefaultNoColumnsAreDefined()
         {
             //Arrange
             var parameters = new ReportParameters<TestRec>();
 
             //Assert
-            Assert.That(parameters.ColumnSource.Columns, Is.Empty);
+            parameters.ColumnSource.Columns.Should().BeEmpty();
         }
 
-        [Test]
+        [Fact]
         public void AddedColumnsAreRecorded()
         {
             //Arrange
@@ -84,10 +84,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal.ReportDefinitions
             parameters.AddColumn(i => i.Integer, c => { });
 
             //Assert
-            Assert.That(parameters.ColumnSource.Columns.Count(), Is.EqualTo(1));
+            Assert.Equal(1, parameters.ColumnSource.Columns.Count());
         }
 
-        [Test]
+        [Fact]
         public void AddedColumnsHaveCorrectType()
         {
             //Arrange
@@ -100,10 +100,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal.ReportDefinitions
 
             //Assert
             var result = parameters.ColumnSource.Columns.Select(c => c.Type.Name).JoinWith(" ");
-            Assert.That(result, Is.EqualTo("Int32 Double String"));
+            Assert.Equal("Int32 Double String", result);
         }
 
-        [Test]
+        [Fact]
         public void SuppressHeadingsSettingIsRecorded()
         {
             //Arrange
@@ -113,7 +113,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal.ReportDefinitions
             parameters.SuppressHeadingRepetition();
 
             //Assert
-            Assert.That(parameters.Details.SuppressHeadingRepetition, Is.True);
+            parameters.Details.SuppressHeadingRepetition.Should().BeTrue();
         }
     }
 }

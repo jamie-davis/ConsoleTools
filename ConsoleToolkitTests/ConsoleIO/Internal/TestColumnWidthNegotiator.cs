@@ -8,11 +8,10 @@ using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkitTests.ConsoleIO.UnitTestUtilities;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestColumnWidthNegotiator
     {
@@ -32,13 +31,12 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             }
         }
 
-        [SetUp]
-        public void TestFixtureSetUp()
+        public TestColumnWidthNegotiator()
         {
             _formats = FormatAnalyser.Analyse(typeof (TestType), null, true);
         }
 
-        [Test]
+        [Fact]
         public void ColumnsArePreciselySizedWhenDataFits()
         {
             var cwn = new ColumnWidthNegotiator(_formats, 1);
@@ -57,7 +55,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output);
         }
 
-        [Test]
+        [Fact]
         public void RowDataCanBeLoadedFromCachedRow()
         {
             var cwn = new ColumnWidthNegotiator(_formats, 1);
@@ -77,7 +75,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output);
         }
 
-        [Test]
+        [Fact]
         public void ColumnsAreShrunkInOrderToFitData()
         {
             var cwn = new ColumnWidthNegotiator(_formats, 1);
@@ -96,7 +94,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output);
         }
 
-        [Test]
+        [Fact]
         public void IfTheReportCannotBeShrunkTheRightmostColumnsAreStacked()
         {
             var cwn = new ColumnWidthNegotiator(_formats, 1);
@@ -115,7 +113,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output);
         }
 
-        [Test]
+        [Fact]
         public void SizingDataCanBeRetrievedFromSizedColumns()
         {
             var cwn = new ColumnWidthNegotiator(_formats, 1);
@@ -134,7 +132,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output);
         }
 
-        [Test]
+        [Fact]
         public void SizingDataIncludesStackedProperties()
         {
             var cwn = new ColumnWidthNegotiator(_formats, 1);
@@ -154,7 +152,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output);
         }
 
-        [Test]
+        [Fact]
         public void FixedWidthColumnsAreNeverStretched()
         {
             var longStringColFormat = _formats.First(f => f.Property.Name == "LongString").Format;
@@ -176,7 +174,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output);
         }
 
-        [Test]
+        [Fact]
         public void FixedWidthColumnsAreNeverShrunk()
         {
             var longStringColFormat = _formats.First(f => f.Property.Name == "LongString").Format;
@@ -198,7 +196,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output);
         }
 
-        [Test]
+        [Fact]
         public void FixedWidthColumnsCanBeStacked()
         {
             var longStringColFormat = _formats.Last().Format;
@@ -217,10 +215,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             cwn.CalculateWidths(40);
 
             var output = cwn.StackedColumns.Select(sc => sc.Property.Name).JoinWith(", ");
-            Assert.That(output, Is.EqualTo("LongString"));
+            Assert.Equal("LongString", output);
         }
 
-        [Test]
+        [Fact]
         public void MinWidthColumnsAreNotShrunkPastMinimum()
         {
             var longStringColFormat = _formats.First(f => f.Property.Name == "Integer").Format;
@@ -242,7 +240,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output);
         }
 
-        [Test]
+        [Fact]
         public void MinWidthColumnsCanBeWiderThanMinimum()
         {
             var longStringColFormat = _formats.First(f => f.Property.Name == "LongString").Format;
@@ -264,7 +262,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output);
         }
 
-        [Test]
+        [Fact]
         public void ProportionalColumnsShareTheAvailableSpace()
         {
             var longStringColFormat = _formats.First(f => f.Property.Name == "LongString").Format;

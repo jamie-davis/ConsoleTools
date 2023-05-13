@@ -4,11 +4,10 @@ using System.Linq;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestFormattingIntermediate
     {
@@ -19,9 +18,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         private RecordingConsoleAdapter _renderableTable;
         private FormattingIntermediate _renderableValue;
         private FormattingIntermediate _renderableTableValue;
-
-        [SetUp]
-        public void SetUp()
+        public TestFormattingIntermediate()
         {
             _simpleValue = new FormattingIntermediate(SimpleText);
             _multiLineValue = new FormattingIntermediate("Simple text string" + Environment.NewLine +
@@ -47,58 +44,58 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             _renderableTable.FormatTable(data);
         }
 
-        [Test]
+        [Fact]
         public void LongestWordIsCalculatedForStrings()
         {
-            Assert.That(_simpleValue.GetLongestWordLength(4), Is.EqualTo("measuring".Length));
+            Assert.Equal("measuring".Length, _simpleValue.GetLongestWordLength(4));
         }
 
-        [Test]
+        [Fact]
         public void LengthOfFirstLineIsCalculatedForStrings()
         {
-            Assert.That(_multiLineValue.GetFirstWordLength(4, 0), Is.EqualTo("Simple".Length));
+            Assert.Equal("Simple".Length, _multiLineValue.GetFirstWordLength(4, 0));
         }
 
-        [Test]
+        [Fact]
         public void HangingIndentIsIncludedInFirstLineOfStrings()
         {
-            Assert.That(_multiLineValue.GetFirstWordLength(4, 5), Is.EqualTo("Simple".Length + 5));
+            Assert.Equal("Simple".Length + 5, _multiLineValue.GetFirstWordLength(4, 5));
         }
 
-        [Test]
+        [Fact]
         public void LongestWordIsCalculatedForRenderable()
         {
-            Assert.That(_renderableValue.GetLongestWordLength(4), Is.EqualTo("measuring".Length));
+            Assert.Equal("measuring".Length, _renderableValue.GetLongestWordLength(4));
         }
 
-        [Test]
+        [Fact]
         public void FirstWordLengthIsCalculatedForRenderable()
         {
-            Assert.That(_renderableValue.GetFirstWordLength(4, 0), Is.EqualTo("Simple".Length));
+            Assert.Equal("Simple".Length, _renderableValue.GetFirstWordLength(4, 0));
         }
 
-        [Test]
+        [Fact]
         public void LongestWordIsCalculatedForRenderableTable()
         {
-            Assert.That(_renderableTableValue.GetLongestWordLength(4), Is.EqualTo("Index three".Length));
+            Assert.Equal("Index three".Length, _renderableTableValue.GetLongestWordLength(4));
         }
 
-        [Test]
+        [Fact]
         public void FirstWordLengthIsCalculatedForRenderableTable()
         {
-            Assert.That(_renderableTableValue.GetFirstWordLength(4, 0), Is.EqualTo("Index three".Length));
+            Assert.Equal("Index three".Length, _renderableTableValue.GetFirstWordLength(4, 0));
         }
 
-        [Test]
+        [Fact]
         public void WidthIsTakenFromString()
         {
-            Assert.That(_simpleValue.Width, Is.EqualTo(56));
+            Assert.Equal(56, _simpleValue.Width);
         }
 
-        [Test]
+        [Fact]
         public void WidthIsLongestWidthFromRenderable()
         {
-            Assert.That(_renderableTableValue.Width, Is.EqualTo("Index three".Length));
+            Assert.Equal("Index three".Length, _renderableTableValue.Width);
         }
     }
 }

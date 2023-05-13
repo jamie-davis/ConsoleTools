@@ -1,14 +1,13 @@
-﻿using ApprovalTests.Reporters;
+using ApprovalTests.Reporters;
 using ConsoleToolkit.ApplicationStyles;
 using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.Exceptions;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ApplicationStyles.Internals
 {
-    [TestFixture]
     [UseReporter(typeof(CustomReporter))]
     public class TestHandlerParameterValidator
     {
@@ -32,14 +31,9 @@ namespace ConsoleToolkitTests.ApplicationStyles.Internals
         private class ParamType
         {
         }
-
-        // ReSharper restore UnusedParameter.Local
-        // ReSharper restore UnusedMember.Local
-
         #endregion
 
-        [SetUp]
-        public void SetUp()
+        public TestHandlerParameterValidator()
         {
             _injector = new MethodParameterInjector(new object[]
             {
@@ -47,7 +41,7 @@ namespace ConsoleToolkitTests.ApplicationStyles.Internals
             });
         }
 
-        [Test]
+        [Fact]
         public void CommandsMayOnlyAcceptSupportedParameterTypes()
         {
             //Arrange
@@ -58,7 +52,7 @@ namespace ConsoleToolkitTests.ApplicationStyles.Internals
             Assert.Throws<CommandHandlerMethodHasUnsupportedParameter>(() => HandlerParameterValidator.ValidateHandlers(methods, _injector));
         }
 
-        [Test]
+        [Fact]
         public void NoExceptionIsThrownIfAllParameterTypesAreValid()
         {
             //Arrange

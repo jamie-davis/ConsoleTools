@@ -1,27 +1,24 @@
-﻿using System;
+using System;
 using System.Linq;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using ApprovalUtilities.Utilities;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestRecordingConsoleAdapter
     {
         private RecordingConsoleAdapter _adapter;
-
-        [SetUp]
-        public void SetUp()
+        public TestRecordingConsoleAdapter()
         {
             _adapter = new RecordingConsoleAdapter();
         }
 
-        [Test]
+        [Fact]
         public void AdapterPlaysBackWrite()
         {
             _adapter.Write("text");
@@ -30,7 +27,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output.JoinWith(Environment.NewLine));
         }
 
-        [Test]
+        [Fact]
         public void AdapterPlaysBackWriteWithArgs()
         {
             _adapter.Write("text {0}", "with insert");
@@ -39,7 +36,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output.JoinWith(Environment.NewLine));
         }
 
-        [Test]
+        [Fact]
         public void AdapterPlaysBackWriteLineWithArgs()
         {
             _adapter.WriteLine("text {0}", "with insert");
@@ -49,7 +46,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output.JoinWith(Environment.NewLine));
         }
 
-        [Test]
+        [Fact]
         public void AdapterPlaysBackWriteLine()
         {
             _adapter.WriteLine("text");
@@ -60,7 +57,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output.JoinWith(Environment.NewLine));
         }
 
-        [Test]
+        [Fact]
         public void AdapterPlaysBackTabularDataFormatting()
         {
             var data = Enumerable.Range(1, 10)
@@ -72,7 +69,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output.JoinWith(Environment.NewLine));
         }
 
-        [Test]
+        [Fact]
         public void AdapterPlaysBackWrap()
         {
             _adapter.Wrap("Demonstrate that wrapping \"wrap {0} up\" performs wrapping.", "it");
@@ -82,7 +79,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output.JoinWith(Environment.NewLine));
         }
 
-        [Test]
+        [Fact]
         public void AdapterPlaysBackWrapLine()
         {
             _adapter.WrapLine("Demonstrate that wrapping \"wrap {0} up\" performs wrapping.", "it");
@@ -92,7 +89,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output.JoinWith(Environment.NewLine));
         }
 
-        [Test]
+        [Fact]
         public void AdapterPlaysBackAllCommands()
         {
             var data = Enumerable.Range(1, 10)
@@ -108,7 +105,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output.JoinWith(Environment.NewLine));
         }
 
-        [Test]
+        [Fact]
         public void RecordedOperationsCanBeDisplayedInARecording()
         {
             var recorder = MakeRecording();
@@ -120,7 +117,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output.JoinWith(Environment.NewLine));
         }
 
-        [Test]
+        [Fact]
         public void RecordedOperationsStartOnANewLine()
         {
             var recorder = MakeRecording();
@@ -132,7 +129,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output.JoinWith(Environment.NewLine));
         }
 
-        [Test]
+        [Fact]
         public void RecordedOperationsCanBeDisplayedOnTheConsoleUsingWriteLine()
         {
             var recorder = MakeRecording();
@@ -144,7 +141,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output.JoinWith(Environment.NewLine));
         }
 
-        [Test]
+        [Fact]
         public void RecordedOperationsDisplayedWithWriteLineStartOnANewLine()
         {
             var recorder = MakeRecording();
@@ -157,27 +154,27 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output.JoinWith(Environment.NewLine));
         }
 
-        [Test]
+        [Fact]
         public void GetFirstWordLengthReturnsLengthFromFirstStep()
         {
             var recorder = MakeRecording();
-            Assert.That(recorder.GetFirstWordLength(4), Is.EqualTo("Write.".Length));
+            Assert.Equal("Write.".Length, recorder.GetFirstWordLength(4));
         }
 
-        [Test]
+        [Fact]
         public void GetLongestWordLengthReturnsLongestWordInAllSteps()
         {
             var recorder = MakeRecording();
-            Assert.That(recorder.GetLongestWordLength(4), Is.EqualTo("Number String".Length));
+            Assert.Equal("Number String".Length, recorder.GetLongestWordLength(4));
         }
 
-        [Test]
+        [Fact]
         public void WrappingLineBreaksAreCalculated()
         {
             var recorder = MakeRecording();
             int wrappedLines;
             Console.WriteLine(recorder.Render(20, out wrappedLines).JoinWith(Environment.NewLine));
-            Assert.That(recorder.CountWordWrapLineBreaks(20), Is.EqualTo(23));
+            Assert.Equal(23, recorder.CountWordWrapLineBreaks(20));
         }
 
         private static RecordingConsoleAdapter MakeRecording()

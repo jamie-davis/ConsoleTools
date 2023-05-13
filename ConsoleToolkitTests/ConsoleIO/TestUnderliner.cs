@@ -4,19 +4,16 @@ using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestUnderliner
     {
         private ConsoleInterfaceForTesting _consoleInterface;
         private ConsoleAdapter _adapter;
-
-        [SetUp]
-        public void SetUp()
+        public TestUnderliner()
         {
             _consoleInterface = new ConsoleInterfaceForTesting();
             _consoleInterface.BufferWidth = 80;
@@ -25,7 +22,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             _adapter = new ConsoleAdapter(_consoleInterface);
         }
 
-        [Test]
+        [Fact]
         public void UnderlinerGeneratesDashesByDefault()
         {
             //Arrange
@@ -39,7 +36,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(_consoleInterface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void UnderlinerIsCorrectLengthForColouredText()
         {
             //Arrange
@@ -53,7 +50,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(_consoleInterface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void UnderlinerUsesProvidedUnderlineString()
         {
             //Arrange
@@ -67,7 +64,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(_consoleInterface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void UnderlinerCanUseMultiCharacterUnderlineString()
         {
             //Arrange
@@ -81,7 +78,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(_consoleInterface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void ColouredTextUnderlinesWork()
         {
             //Arrange

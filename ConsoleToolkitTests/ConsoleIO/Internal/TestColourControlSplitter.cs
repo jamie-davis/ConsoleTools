@@ -5,24 +5,23 @@ using ApprovalTests.Reporters;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestColourControlSplitter
     {
-        [Test]
+        [Fact]
         public void StringWithoutControlCharactersIsReturnedWhole()
         {
             var data = "simple test string";
             var colourControlItems = ColourControlSplitter.Split(data).Select(t => t.ToString());
             var expected = new [] {new ColourControlItem(data).ToString()};
-            Assert.That(colourControlItems, Is.EqualTo(expected));
+            Assert.Equal(expected, colourControlItems);
         }
 
-        [Test]
+        [Fact]
         public void NewlineIsExtractedAsAnInstruction()
         {
             var data = Environment.NewLine + "simple test" + Environment.NewLine + "string";
@@ -35,10 +34,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
                 newLineControlItem.ToString(),
                 new ColourControlItem("string").ToString(), 
             };
-            Assert.That(colourControlItems, Is.EqualTo(expected));
+            Assert.Equal(expected, colourControlItems);
         }
 
-        [Test]
+        [Fact]
         public void StringWithControlCharactersIsReturned()
         {
             var data = "simple test string".Blue();
@@ -47,7 +46,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output);
         }
 
-        [Test]
+        [Fact]
         public void StringWithMultipleControlCharactersIsReturned()
         {
             var data = "simple test string".Yellow().BGCyan();
@@ -56,7 +55,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output);
         }
 
-        [Test]
+        [Fact]
         public void ComplexStringIsReturned()
         {
             var data = "More complicated".Red() + " test".Green().BGCyan() + " string".Yellow().BGRed();

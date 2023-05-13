@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +10,10 @@ using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.ConsoleIO.UnitTestUtilities;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.CommandLineInterpretation
 {
-    [TestFixture]
     [UseReporter(typeof(CustomReporter))]
     public class TestCommandAnalyser
     {
@@ -33,9 +32,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         {
             public static string Global { get; set; }
         }
-
-        [SetUp]
-        public void SetUp()
+        public TestCommandAnalyser()
         {
             _consoleOutInterface = new ConsoleInterfaceForTesting();
             _console = new ConsoleAdapter(_consoleOutInterface);
@@ -66,7 +63,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             _console.FormatTable(analysedOptions);
         }
 
-        [Test]
+        [Fact]
         public void GlobalOptionsAreCombinedWithCommandOptions()
         {
             var config = new CommandLineInterpreterConfiguration();
@@ -88,7 +85,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(_consoleOutInterface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void GlobalOptionsAreNotIncludedForInteractiveAnalyses()
         {
             var config = new CommandLineInterpreterConfiguration();
@@ -110,7 +107,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(_consoleOutInterface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void ClashesWithGlobalOptionNamesComeOutInCommandFavour()
         {
             var config = new CommandLineInterpreterConfiguration();
@@ -132,7 +129,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(_consoleOutInterface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void ClashesWithGlobalOptionAliasesComeOutInCommandFavour()
         {
             var config = new CommandLineInterpreterConfiguration();
@@ -154,7 +151,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(_consoleOutInterface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void GlobalOptionExcludedIfItHasNoUniqueNames()
         {
             var config = new CommandLineInterpreterConfiguration();

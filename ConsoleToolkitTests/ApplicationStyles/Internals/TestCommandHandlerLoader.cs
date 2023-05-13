@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using ApprovalTests.Reporters;
 using ApprovalUtilities.Utilities;
@@ -7,11 +7,10 @@ using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.Exceptions;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ApplicationStyles.Internals
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestCommandHandlerLoader
     {
@@ -114,13 +113,9 @@ namespace ConsoleToolkitTests.ApplicationStyles.Internals
                 
             }
         }
-
-        // ReSharper restore UnusedParameter.Local
-        // ReSharper restore UnusedMember.Local
         #endregion
 
-        [SetUp]
-        public void SetUp()
+        public TestCommandHandlerLoader()
         {
             _commandTypes = new[] {typeof (Command), typeof(Command2)};
             //The handlers in the injector are just doubling up as parameter fodder - the specific types in the injector do not matter a jot.
@@ -131,83 +126,83 @@ namespace ConsoleToolkitTests.ApplicationStyles.Internals
                                                         });
         }
 
-        [Test]
+        [Fact]
         public void CommandHandlerClassIsLoaded()
         {
             var handler = CommandHandlerLoader.Load(typeof (Handler), _commandTypes, _injector);
-            Assert.That(handler.CommandType, Is.EqualTo(typeof(Command)));
+            Assert.Equal(typeof(Command), handler.CommandType);
         }
 
-        [Test]
+        [Fact]
         public void SpecificCommandHandlerClassIsLoaded()
         {
             var handler = CommandHandlerLoader.Load(typeof(Handler5), _commandTypes, _injector);
-            Assert.That(handler.CommandType, Is.EqualTo(typeof(Command)));
+            Assert.Equal(typeof(Command), handler.CommandType);
         }
 
-        [Test]
+        [Fact]
         public void MultiHandlerRoutinesThrow()
         {
             Assert.Throws<AmbiguousCommandHandler>(() => CommandHandlerLoader.Load(typeof(Handler2), _commandTypes, _injector));
         }
 
-        [Test]
+        [Fact]
         public void MissingHandlerRoutineThrows()
         {
             Assert.Throws<NoCommandHandlerMethodFound>(() => CommandHandlerLoader.Load(typeof(Handler3), _commandTypes, _injector));
         }
 
-        [Test]
+        [Fact]
         public void NoHandlerAttributeThrows()
         {
             Assert.Throws<CommandHandlerDoesNotHaveAttribute>(() => CommandHandlerLoader.Load(typeof(Command), _commandTypes, _injector));
         }
 
-        [Test]
+        [Fact]
         public void NoDefaultConstructorThrows()
         {
             Assert.Throws<CommandHandlerMustHaveDefaultConstructor>(() => CommandHandlerLoader.Load(typeof(Handler4), _commandTypes, _injector));
         }
 
-        [Test]
+        [Fact]
         public void HandlerMethodsAreLoaded()
         {
             var handlers = CommandHandlerLoader.LoadHandlerMethods(typeof(Handler5), _commandTypes, _injector);
-            Assert.That(handlers.Select(h => h.CommandType.Name).JoinWith(","), Is.EqualTo("Command,Command2"));
+            Assert.Equal("Command,Command2", handlers.Select(h => h.CommandType.Name).JoinWith(","));
         }
         // ReSharper disable ReturnValueOfPureMethodIsNotUsed
 
-        [Test]
+        [Fact]
         public void MultipleHandlerMethodsForSameCommandThrows()
         {
             Assert.Throws<MultipleHandlersForCommand>(() => CommandHandlerLoader.LoadHandlerMethods(typeof(Handler6), _commandTypes, _injector).Count());
         }
 
-        [Test]
+        [Fact]
         public void HandlersMayAcceptTheCommandTypeAsAnyParameter()
         {
             var handler = CommandHandlerLoader.Load(typeof(Handler7), _commandTypes, _injector);
-            Assert.That(handler.CommandType, Is.EqualTo(typeof(Command)));
+            Assert.Equal(typeof(Command), handler.CommandType);
         }
 
-        [Test]
+        [Fact]
         public void HandlerMethodsMayAcceptTheCommandTypeAsAnyParameter()
         {
             var handler = CommandHandlerLoader.LoadHandlerMethods(typeof(HandlerMethodTest), _commandTypes, _injector)
                 .First();
-            Assert.That(handler.CommandType, Is.EqualTo(typeof(Command)));
+            Assert.Equal(typeof(Command), handler.CommandType);
         }
 
-        [Test]
+        [Fact]
         public void CommandsMayContainTheirOwnHandlerMethod()
         {
             var commandTypes = new[] {typeof (SelfHandlingCommand)};
             var handler = CommandHandlerLoader.LoadHandlerMethods(typeof(SelfHandlingCommand), commandTypes, _injector)
                 .First();
-            Assert.That(handler.CommandType, Is.EqualTo(typeof(SelfHandlingCommand)));
+            Assert.Equal(typeof(SelfHandlingCommand), handler.CommandType);
         }
 
-        [Test]
+        [Fact]
         public void SelfHandlingCommandsMayOnlyDeclareOneHandler()
         {
             Assert.Throws<CommandsMayOnlyDeclareOneHandlerMethod>(() =>

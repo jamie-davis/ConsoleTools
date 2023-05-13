@@ -9,11 +9,11 @@ using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.Exceptions;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using FluentAssertions;
+using Xunit;
 
 namespace ConsoleToolkitTests.ApplicationStyles.Internals
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestConsoleApplicationBase
     {
@@ -47,7 +47,7 @@ namespace ConsoleToolkitTests.ApplicationStyles.Internals
 
         #endregion
 
-        [Test]
+        [Fact]
         public void MultiplePostInitsThrow()
         {
             Assert.Throws<CallOrderViolationException>(() =>
@@ -58,28 +58,28 @@ namespace ConsoleToolkitTests.ApplicationStyles.Internals
             });
         }
 
-        [Test]
+        [Fact]
         public void CommandsAreLocatedPostInit()
         {
             Program.XMain(new []{"one"});
             var commands = Program.LastProgram.GetConfig().Commands.Select(c => c.Name).JoinWith(",");
-            Assert.That(commands, Is.EqualTo("one,two,three,four,ione,itwo,none,ntwo"));
+            Assert.Equal("one,two,three,four,ione,itwo,none,ntwo", commands);
         }
 
-        [Test]
+        [Fact]
         public void CommandsHandlersAreLocatedPostInit()
         {
             Program.XMain(new []{"one"});
             var commands = Program.LastProgram.Handlers.Select(c => c.Value.CommandType.Name).JoinWith(",");
-            Assert.That(commands, Is.EqualTo("Command4,Command1,Command2,Command3"));
+            Assert.Equal("Command4,Command1,Command2,Command3", commands);
         }
 
-        [Test]
+        [Fact]
         public void HandlerShouldBeInvoked()
         {
             Program.XMain(new []{"three"});
             var result = Program.Executed3;
-            Assert.That(result, Is.True);
+            result.Should().BeTrue();
         }
     }
 }

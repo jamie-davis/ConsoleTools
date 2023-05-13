@@ -1,76 +1,73 @@
 using ConsoleToolkit;
 using ConsoleToolkit.CommandLineInterpretation;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests
 {
-    [TestFixture]
     public class TestToolkitOptions
     {
         private ToolkitOptions _options;
-
-        [SetUp]
-        public void SetUp()
+        public TestToolkitOptions()
         {
             _options = new ToolkitOptions();
         }
 
-        [Test]
+        [Fact]
         public void DefaultParserConventionsIsMicrosoftStandard()
         {
-            Assert.That(_options.ParsingConventions, Is.EqualTo(CommandLineParserConventions.MicrosoftStandard));
+            Assert.Equal(CommandLineParserConventions.MicrosoftStandard, _options.ParsingConventions);
         }
 
-        [Test]
+        [Fact]
         public void DefaultConfirmationTextIsY()
         {
-            Assert.That(_options.ConfirmationInfo.YesText, Is.EqualTo("Y"));
+            Assert.Equal("Y", _options.ConfirmationInfo.YesText);
         }
 
-        [Test]
+        [Fact]
         public void DefaultConfirmationPromptIsYes()
         {
-            Assert.That(_options.ConfirmationInfo.YesPrompt, Is.EqualTo("Yes"));
+            Assert.Equal("Yes", _options.ConfirmationInfo.YesPrompt);
         }
 
-        [Test]
+        [Fact]
         public void DefaultConfirmationTextIsN()
         {
-            Assert.That(_options.ConfirmationInfo.NoText, Is.EqualTo("N"));
+            Assert.Equal("N", _options.ConfirmationInfo.NoText);
         }
 
-        [Test]
+        [Fact]
         public void DefaultConfirmationPromptIsNo()
         {
-            Assert.That(_options.ConfirmationInfo.NoPrompt, Is.EqualTo("No"));
+            Assert.Equal("No", _options.ConfirmationInfo.NoPrompt);
         }
 
-        [Test]
+        [Fact]
         public void YesTextCanBeOverridden()
         {
             _options.OverrideConfirmOptions("T", "True", "F", "False");
-            Assert.That(_options.ConfirmationInfo.YesText, Is.EqualTo("T"));
+            Assert.Equal("T", _options.ConfirmationInfo.YesText);
         }
 
-        [Test]
+        [Fact]
         public void YesPromptCanBeOverridden()
         {
             _options.OverrideConfirmOptions("T", "True", "F", "False");
-            Assert.That(_options.ConfirmationInfo.YesPrompt, Is.EqualTo("True"));
+            Assert.Equal("True", _options.ConfirmationInfo.YesPrompt);
         }
 
-        [Test]
+        [Fact]
         public void NoTextCanBeOverridden()
         {
             _options.OverrideConfirmOptions("T", "True", "F", "False");
-            Assert.That(_options.ConfirmationInfo.NoText, Is.EqualTo("F"));
+            Assert.Equal("F", _options.ConfirmationInfo.NoText);
         }
 
-        [Test]
+        [Fact]
         public void NoPromptCanBeOverridden()
         {
             _options.OverrideConfirmOptions("T", "True", "F", "False");
-            Assert.That(_options.ConfirmationInfo.NoPrompt, Is.EqualTo("False"));
+            Assert.Equal("False", _options.ConfirmationInfo.NoPrompt);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -12,13 +12,13 @@ using ConsoleToolkit.Exceptions;
 using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.ConsoleIO.UnitTestUtilities;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using FluentAssertions;
+using Xunit;
 
 // ReSharper disable once UnusedVariable
 
 namespace ConsoleToolkitTests.CommandLineInterpretation
 {
-    [TestFixture]
     [UseReporter(typeof(CustomReporter))]
     public class TestCommandLineInterpreterConfiguration
     {
@@ -69,8 +69,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         // ReSharper restore UnusedMember.Local
         // ReSharper restore UnusedAutoPropertyAccessor.Global
 
-        [SetUp]
-        public void SetUp()
+        public TestCommandLineInterpreterConfiguration()
         {
             _config = new CommandLineInterpreterConfiguration();
             _config.Command("first", s => new TestCommand())
@@ -140,7 +139,7 @@ a line break.")
             _console.WriteLine(RulerFormatter.MakeRuler(40));
         }
 
-        [Test]
+        [Fact]
         public void InvalidOptionParameterTypeThrows()
         {
             void Call() =>
@@ -151,7 +150,7 @@ a line break.")
             Assert.Throws<InvalidParameterType>(Call);
         }
     
-        [Test]
+        [Fact]
         public void OptionsCanHaveAliases()
         {
             new CommandLineInterpreterConfiguration()
@@ -160,7 +159,7 @@ a line break.")
                 .Alias("optalias");
         }
 
-        [Test]
+        [Fact]
         public void OptionsAliasSameAsOptionNameThrows()
         {
             void Call() =>
@@ -172,7 +171,7 @@ a line break.")
             Assert.Throws<DuplicateOptionName>(Call);
         }
 
-        [Test]
+        [Fact]
         public void DuplicateOptionAliasThrows()
         {
             void Call() =>
@@ -185,7 +184,7 @@ a line break.")
             Assert.Throws<DuplicateOptionName>(Call);
         }
 
-        [Test]
+        [Fact]
         public void AliasSameAsOtherOptionNameThrows()
         {
             void Call() =>
@@ -198,7 +197,7 @@ a line break.")
             Assert.Throws<DuplicateOptionName>(Call);
         }
 
-        [Test]
+        [Fact]
         public void AliasSameAsOtherOptionAliasThrows()
         {
             void Call() =>
@@ -212,7 +211,7 @@ a line break.")
             Assert.Throws<DuplicateOptionName>(Call);
         }
 
-        [Test]
+        [Fact]
         public void CommandAliasThrows()
         {
             void Call() =>
@@ -224,7 +223,7 @@ a line break.")
             Assert.Throws<AliasNotSupported>(Call);
         }
 
-        [Test]
+        [Fact]
         public void PositionalAliasThrows()
         {
             void Call() =>
@@ -237,7 +236,7 @@ a line break.")
             Assert.Throws<AliasNotSupported>(Call);
         }
 
-        [Test]
+        [Fact]
         public void ConfiguringTheSameCommandTwiceThrows()
         {
             var config = new CommandLineInterpreterConfiguration();
@@ -253,7 +252,7 @@ a line break.")
             Assert.Throws<CommandAlreadySpecified>(Call);
         }
 
-        [Test]
+        [Fact]
         public void InvalidCommandParameterTypeThrows()
         {
             void Call() =>
@@ -264,7 +263,7 @@ a line break.")
             Assert.Throws<InvalidParameterType>(Call);
         }
 
-        [Test]
+        [Fact]
         public void ConfiguringDefaultCommandTwiceThrows()
         {
             var config = new CommandLineInterpreterConfiguration();
@@ -280,7 +279,7 @@ a line break.")
             Assert.Throws<ProgramParametersAlreadySpecified>(Call);
         }
 
-        [Test]
+        [Fact]
         public void DescriptionOfCommandsIsFormatted()
         {
             CommandDescriber.Describe(_config, _console, _applicationName, CommandExecutionMode.CommandLine);
@@ -289,7 +288,7 @@ a line break.")
             Approvals.Verify(description);
         }
 
-        [Test]
+        [Fact]
         public void DefaultCommandHelpIsFormatted()
         {
             var config = new CommandLineInterpreterConfiguration();
@@ -305,7 +304,7 @@ a line break.")
             Approvals.Verify(description);
         }
 
-        [Test]
+        [Fact]
         public void ACustomConverterCanBeSpecifiedAndUsed()
         {
             CommandLineInterpreterConfiguration.AddCustomConverter(s => s.Length > 1 ? new CustomParamType(s.First(), s.Substring(1)) : null);
@@ -322,7 +321,7 @@ a line break.")
             Approvals.Verify(description);
         }
 
-        [Test]
+        [Fact]
         public void AValidationCanBeSpecified()
         {
             CommandLineInterpreterConfiguration.AddCustomConverter(s => s.Length > 1 ? new CustomParamType(s.First(), s.Substring(1)) : null);
@@ -340,7 +339,7 @@ a line break.")
             Approvals.Verify(description);
         }
 
-        [Test]
+        [Fact]
         public void AShortCircuitOptionCanBeSpecified()
         {
             var config = new CommandLineInterpreterConfiguration();
@@ -353,7 +352,7 @@ a line break.")
                 .ShortCircuitOption();
         }
 
-        [Test]
+        [Fact]
         public void ARepeatingOptionCanBeSpecified()
         {
             var config = new CommandLineInterpreterConfiguration();
@@ -366,7 +365,7 @@ a line break.")
                 .AllowMultiple();
         }
 
-        [Test]
+        [Fact]
         public void ShortCircuitOptionOnAPositionalThrows()
         {
             var config = new CommandLineInterpreterConfiguration();
@@ -380,7 +379,7 @@ a line break.")
             Assert.Throws<ShortCircuitInvalidOnPositionalParameter>(Call);
         }
 
-        [Test]
+        [Fact]
         public void ARepeatingPositionalCanBeSpecified()
         {
             var config = new CommandLineInterpreterConfiguration();
@@ -392,7 +391,7 @@ a line break.")
                     .AllowMultiple();
         }
 
-        [Test]
+        [Fact]
         public void AllowMultipleIsInvalidOnCommands()
         {
             var config = new CommandLineInterpreterConfiguration();
@@ -403,21 +402,21 @@ a line break.")
             Assert.Throws<AllowMultipleInvalid>(Call);
         }
 
-        [Test]
+        [Fact]
         public void ACustomParserCanBeSpecifiedOnTheConstructor()
         {
             var config = new CommandLineInterpreterConfiguration(_customParser);
-            Assert.That(config.CustomParser, Is.SameAs(_customParser));
+            config.CustomParser.Should().BeSameAs(_customParser);
         }
 
-        [Test]
+        [Fact]
         public void ACustomParserSetsTheSelectedConvention()
         {
             var config = new CommandLineInterpreterConfiguration(_customParser);
-            Assert.That(config.ParserConvention, Is.EqualTo(CommandLineParserConventions.CustomConventions));
+            Assert.Equal(CommandLineParserConventions.CustomConventions, config.ParserConvention);
         }
 
-        [Test]
+        [Fact]
         public void PositionalDefinedOnlyByNameMatchesPropertyAutomatically()
         {
             var config = new CommandLineInterpreterConfiguration();
@@ -425,10 +424,10 @@ a line break.")
                 .Positional("IntProp");
             var thePositional = config.DefaultCommand.Positionals[0];
             var thePositionalParameterType = thePositional.GetType().GetGenericArguments()[1];
-            Assert.That(thePositionalParameterType, Is.EqualTo(typeof(int)));
+            Assert.Equal(typeof(int), thePositionalParameterType);
         }
 
-        [Test]
+        [Fact]
         public void PositionalDefinedOnlyByNameMatchesIncorrectCasePropertyAutomatically()
         {
             var config = new CommandLineInterpreterConfiguration();
@@ -436,10 +435,10 @@ a line break.")
                 .Positional("intprop");
             var thePositional = config.DefaultCommand.Positionals[0];
             var thePositionalParameterType = thePositional.GetType().GetGenericArguments()[1];
-            Assert.That(thePositionalParameterType, Is.EqualTo(typeof(int)));
+            Assert.Equal(typeof(int), thePositionalParameterType);
         }
 
-        [Test]
+        [Fact]
         public void PositionalDefinedByNamePrefersCorrectCaseProperty()
         {
             var config = new CommandLineInterpreterConfiguration();
@@ -447,10 +446,10 @@ a line break.")
                 .Positional("AOne");
             var thePositional = config.DefaultCommand.Positionals[0];
             var thePositionalParameterType = thePositional.GetType().GetGenericArguments()[1];
-            Assert.That(thePositionalParameterType, Is.EqualTo(typeof(string)));
+            Assert.Equal(typeof(string), thePositionalParameterType);
         }
 
-        [Test]
+        [Fact]
         public void DefaultValueIsInvalidOnAnOption()
         {
             var config = new CommandLineInterpreterConfiguration();
@@ -462,22 +461,22 @@ a line break.")
             Assert.Throws<DefaultValueMayOnlyBeSpecifiedForPositionalParameters>(Call);
         }
 
-        [Test]
+        [Fact]
         public void PositionalWithDefaultValueIsOptional()
         {
             var config = new CommandLineInterpreterConfiguration();
             config.Parameters(() => new MultiCaseCommand())
                 .Positional("AOne").DefaultValue("X");
-            Assert.That(config.DefaultCommand.Positionals[0].IsOptional, Is.True);
+            config.DefaultCommand.Positionals[0].IsOptional.Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void DefaultValueIsStoredOnOptionalParameter()
         {
             var config = new CommandLineInterpreterConfiguration();
             config.Parameters(() => new MultiCaseCommand())
                 .Positional("AOne").DefaultValue("X");
-            Assert.That(config.DefaultCommand.Positionals[0].DefaultValue, Is.EqualTo("X"));
+            Assert.Equal("X", config.DefaultCommand.Positionals[0].DefaultValue);
         }
     }
 }

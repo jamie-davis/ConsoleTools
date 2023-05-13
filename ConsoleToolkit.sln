@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApprovalTestsKludge", "Appr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLoadTestAssembly", "CommandLoadTestAssembly\CommandLoadTestAssembly.csproj", "{730BBFDB-A7B4-4A2B-B0F4-0CE803329AD5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApprovalUtil", "ApprovalUtil\ApprovalUtil.csproj", "{80FD1421-CDC8-4DE0-8D26-AB83441C63E3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -157,6 +159,18 @@ Global
 		{730BBFDB-A7B4-4A2B-B0F4-0CE803329AD5}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{730BBFDB-A7B4-4A2B-B0F4-0CE803329AD5}.Release|x86.ActiveCfg = Release|Any CPU
 		{730BBFDB-A7B4-4A2B-B0F4-0CE803329AD5}.Release|x86.Build.0 = Release|Any CPU
+		{80FD1421-CDC8-4DE0-8D26-AB83441C63E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80FD1421-CDC8-4DE0-8D26-AB83441C63E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80FD1421-CDC8-4DE0-8D26-AB83441C63E3}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{80FD1421-CDC8-4DE0-8D26-AB83441C63E3}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{80FD1421-CDC8-4DE0-8D26-AB83441C63E3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{80FD1421-CDC8-4DE0-8D26-AB83441C63E3}.Debug|x86.Build.0 = Debug|Any CPU
+		{80FD1421-CDC8-4DE0-8D26-AB83441C63E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80FD1421-CDC8-4DE0-8D26-AB83441C63E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80FD1421-CDC8-4DE0-8D26-AB83441C63E3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{80FD1421-CDC8-4DE0-8D26-AB83441C63E3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{80FD1421-CDC8-4DE0-8D26-AB83441C63E3}.Release|x86.ActiveCfg = Release|Any CPU
+		{80FD1421-CDC8-4DE0-8D26-AB83441C63E3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -172,5 +186,6 @@ Global
 		{1951D069-14DC-47AA-89A3-8C5E025A4EB0} = {6D911E80-1263-45BA-91FB-E172390C00C5}
 		{223E35E7-669E-4818-89F4-912FA947ACBC} = {5A0A62C9-CD4E-4602-BEB9-0589ACB4DB50}
 		{730BBFDB-A7B4-4A2B-B0F4-0CE803329AD5} = {5A0A62C9-CD4E-4602-BEB9-0589ACB4DB50}
+		{80FD1421-CDC8-4DE0-8D26-AB83441C63E3} = {5A0A62C9-CD4E-4602-BEB9-0589ACB4DB50}
 	EndGlobalSection
 EndGlobal

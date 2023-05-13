@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using ApprovalTests.Reporters;
 using ConsoleToolkit;
@@ -7,11 +7,10 @@ using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.Exceptions;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestToolkit
     {
@@ -79,25 +78,23 @@ namespace ConsoleToolkitTests
                 Toolkit.Execute<BadTestApp>(args);
             }
         }
-
+        
         #endregion
-
-        [SetUp]
-        public void SetUp()
+        public TestToolkit()
         {
             TestApp.LastTestApp = null;
         }
 
-        [Test]
+        [Fact]
         public void ContainingApplicationIsExecuted()
         {
             var args = new[] {"A"};
             TestApp.XMain(args);
 
-            Assert.That(TestApp.LastTestApp.Initialised, Is.EqualTo(true));
+            Assert.Equal(true, TestApp.LastTestApp.Initialised);
         }
 
-        [Test]
+        [Fact]
         public void ExcludedCommandsAreNotDiscovered()
         {
             //The test app applies a filter to exclude commands declared outside of itself. This allows us to test
@@ -105,10 +102,10 @@ namespace ConsoleToolkitTests
             var args = new[] {"A"};
             TestApp.XMain(args);
 
-            Assert.That(TestApp.LastTestApp.GetCommandTypesFromConfig(), Is.EqualTo(new[] { typeof(TestApp.TestAppCommand) }));
+            Assert.Equal(new[] { typeof(TestApp.TestAppCommand) }, TestApp.LastTestApp.GetCommandTypesFromConfig());
         }
 
-        [Test]
+        [Fact]
         public void ContainingApplicationMustBeAppDerived()
         {
             Assert.Throws<NoApplicationClassFound>(() =>
