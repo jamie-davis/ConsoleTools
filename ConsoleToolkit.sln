@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLoadTestAssembly", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApprovalUtil", "ApprovalUtil\ApprovalUtil.csproj", "{80FD1421-CDC8-4DE0-8D26-AB83441C63E3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApprovalUtilTests", "ApprovalUtilTests\ApprovalUtilTests.csproj", "{AC1668D3-D50C-4D76-A570-2C8559C8D832}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -171,6 +173,18 @@ Global
 		{80FD1421-CDC8-4DE0-8D26-AB83441C63E3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{80FD1421-CDC8-4DE0-8D26-AB83441C63E3}.Release|x86.ActiveCfg = Release|Any CPU
 		{80FD1421-CDC8-4DE0-8D26-AB83441C63E3}.Release|x86.Build.0 = Release|Any CPU
+		{AC1668D3-D50C-4D76-A570-2C8559C8D832}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC1668D3-D50C-4D76-A570-2C8559C8D832}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC1668D3-D50C-4D76-A570-2C8559C8D832}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{AC1668D3-D50C-4D76-A570-2C8559C8D832}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{AC1668D3-D50C-4D76-A570-2C8559C8D832}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AC1668D3-D50C-4D76-A570-2C8559C8D832}.Debug|x86.Build.0 = Debug|Any CPU
+		{AC1668D3-D50C-4D76-A570-2C8559C8D832}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC1668D3-D50C-4D76-A570-2C8559C8D832}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC1668D3-D50C-4D76-A570-2C8559C8D832}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{AC1668D3-D50C-4D76-A570-2C8559C8D832}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{AC1668D3-D50C-4D76-A570-2C8559C8D832}.Release|x86.ActiveCfg = Release|Any CPU
+		{AC1668D3-D50C-4D76-A570-2C8559C8D832}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -187,5 +201,6 @@ Global
 		{223E35E7-669E-4818-89F4-912FA947ACBC} = {5A0A62C9-CD4E-4602-BEB9-0589ACB4DB50}
 		{730BBFDB-A7B4-4A2B-B0F4-0CE803329AD5} = {5A0A62C9-CD4E-4602-BEB9-0589ACB4DB50}
 		{80FD1421-CDC8-4DE0-8D26-AB83441C63E3} = {5A0A62C9-CD4E-4602-BEB9-0589ACB4DB50}
+		{AC1668D3-D50C-4D76-A570-2C8559C8D832} = {5A0A62C9-CD4E-4602-BEB9-0589ACB4DB50}
 	EndGlobalSection
 EndGlobal

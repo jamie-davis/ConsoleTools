@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using ApprovalTests.Exceptions;
+using ApprovalTests.Tools;
 using ApprovalUtilities.Utilities;
 
 namespace ApprovalTests
@@ -25,8 +26,8 @@ namespace ApprovalTests
             var receivedFile = Path.Combine(path, receivedOutput);
             if (File.Exists(approvedFile))
             {
-                var approved = FixPlatformLineEndings(File.ReadAllText(approvedFile));
-                if (approved != FixPlatformLineEndings(text))
+                var approved = PlatformLineEndingFixer.Fix(File.ReadAllText(approvedFile));
+                if (approved != PlatformLineEndingFixer.Fix(text))
                 {
                     File.WriteAllText(receivedFile, text);
                     CompareUtil.CompareFiles(receivedFile, approvedFile);
@@ -53,19 +54,6 @@ namespace ApprovalTests
             return frames.Select(f => new { Frame = f, Method = f.GetMethod()})
                 .First(m => m.Method.DeclaringType != typeof(Approvals))
                 .Frame;
-        }
-
-        private static string FixPlatformLineEndings(string text)
-        {
-            var sb = new StringBuilder();
-            using (var reader = new StringReader(text))
-            {
-                string line;
-                while ((line = reader.ReadLine()) != null)
-                    sb.AppendLine(line);
-            }
-
-            return sb.ToString();
         }
 
         public static void Verify(StringBuilder text)

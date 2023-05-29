@@ -8,11 +8,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\ApprovalTestsKludge\ApprovalTestsKludge.csproj" />
       <ProjectReference Include="..\ConsoleToolkit\ConsoleToolkit.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="UnitTests\" />
+      <PackageReference Include="google-diff-match-patch" Version="1.3.76" />
     </ItemGroup>
 
 </Project>

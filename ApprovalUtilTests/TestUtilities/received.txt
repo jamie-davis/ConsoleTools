@@ -1,0 +1,2 @@
+This is a test received file
+It contains compare data for tests to find.

@@ -1,0 +1,10 @@
+Located 4 tests. 1 failure, 3 passes                        
+                                                            
+Interactive functions                                       
+                                                            
+1-View TestClass.TestThree failure                          
+A-Approve all and exit                                      
+X-Exit                                                      
+                                                            
+Select an option: X                                         
+                                                            

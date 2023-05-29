@@ -1,0 +1,2 @@
+This is a test approved file
+It contains compare data for tests to find.

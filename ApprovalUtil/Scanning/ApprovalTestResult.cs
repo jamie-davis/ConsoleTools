@@ -5,4 +5,12 @@ namespace ApprovalUtil.Scanning;
 /// </summary>
 public class ApprovalTestResult
 {
+    public ApprovalTestResult(ApprovalTestOutput test, bool passed)
+    {
+        Test = test;
+        Passed = passed;
+    }
+
+    public ApprovalTestOutput Test { get; }
+    public bool Passed { get; }
 }

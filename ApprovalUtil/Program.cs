@@ -1,9 +1,14 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using System.Runtime.CompilerServices;
+using ApprovalUtil;
+using ApprovalUtil.Commands;
 using ConsoleToolkit;
 using ConsoleToolkit.ApplicationStyles;
 
-public class Program : ConsoleApplication
+[assembly: InternalsVisibleTo("ApprovalUtilTests")] //allow the test suite to access our implementation code
+
+public class Program : CommandDrivenApplication
 {
     public static void Main(string[] args)
     {
@@ -14,7 +19,7 @@ public class Program : ConsoleApplication
 
     protected override void Initialise()
     {
-        HelpOption<Options>(o => o.Help);
+        HelpCommand<HelpCommand>(o => o.Topic);
         base.Initialise();
     }
 
