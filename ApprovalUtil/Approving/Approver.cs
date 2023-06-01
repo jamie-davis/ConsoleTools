@@ -1,4 +1,3 @@
-using ApprovalUtil.Commands;
 using ApprovalUtil.Scanning;
 using ConsoleToolkit.ConsoleIO;
 
@@ -31,7 +30,7 @@ public class Approver
             var tests = TestResultScanner.Scan(approverParams.PathToCode);
             if (approverParams.Interactive)
             {
-                return InteractiveApprover.Execute(console, error, tests, approverParams);
+                return InteractiveApprover.Execute(console, error, tests);
             }
 
             console.FormatTable(tests.Select(t => new {t.Test.TestName, t.Test.ReceivedFile, t.Passed}));
