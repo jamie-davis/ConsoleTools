@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using ApprovalTests.Tools;
 
 namespace ApprovalUtil.Scanning;
@@ -19,12 +18,12 @@ public static class TestResultScanner
         return tests.Select(t => new ApprovalTestResult(t, IsMatch(t))).ToList();
     }
 
-    private static bool IsMatch(ApprovalTestOutput test)
+    public static bool IsMatch(ApprovalTestOutput test)
     {
-        if (string.IsNullOrEmpty(test.ReceivedFile))
+        if (string.IsNullOrEmpty(test.ReceivedFile) || !File.Exists(test.ReceivedFile))
             return true;
 
-        if (string.IsNullOrEmpty(test.ApprovedFile))
+        if (string.IsNullOrEmpty(test.ApprovedFile) || !File.Exists(test.ApprovedFile))
             return false;
         
         var approved = PlatformLineEndingFixer.Fix(File.ReadAllText(test.ApprovedFile));

@@ -3,11 +3,12 @@ using ApprovalUtil.Scanning;
 using ApprovalUtilTests.TestUtilities;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.Testing;
+using FluentAssertions;
 using TestConsoleLib.Testing;
 
 namespace ApprovalUtilTests.Approving;
 
-public class InteractiveApproverTests : IDisposable
+public class InteractiveDifferenceDisplayTests : IDisposable
 {
     private readonly UnitTestConsole _testConsole;
     private readonly IConsoleAdapter _console;
@@ -15,7 +16,7 @@ public class InteractiveApproverTests : IDisposable
     private readonly IDisposable _testGenerator;
     private readonly List<ApprovalTestResult> _tests;
 
-    public InteractiveApproverTests()
+    public InteractiveDifferenceDisplayTests()
     {
         _testConsole = new UnitTestConsole(typeof(Program).Namespace);
         _console = _testConsole.Console;
@@ -25,55 +26,76 @@ public class InteractiveApproverTests : IDisposable
     }
 
     [Fact]
-    public void InteractiveApproverDescribesResultsAndShowsMenu()
+    public void DisplayShowsTestResult()
     {
         //Arrange
         var data = @"X
 ";
         using var stream = new StringReader(data);
         _testConsole.Interface.SetInputStream(stream);
+        var failure = _tests.First(t => t.Passed == false);
 
         //Act
-        var _ = InteractiveApprover.Execute(_console, _error, _tests);
+        InteractiveDifferenceDisplay.ShowDifferencesForFailure(_console, _error, failure.Test);
 
         //Assert
         _testConsole.Interface.GetBuffer().Verify();
     }
     
     [Fact]
-    public void InteractiveApproverShowsTestResults()
+    public void TestCanBeApproved()
     {
         //Arrange
-        var data = @"1
-X
+        var data = @"A
 X
 ";
         using var stream = new StringReader(data);
         _testConsole.Interface.SetInputStream(stream);
+        var failure = _tests.First(t => t.Passed == false);
 
         //Act
-        var _ = InteractiveApprover.Execute(_console, _error, _tests);
+        InteractiveDifferenceDisplay.ShowDifferencesForFailure(_console, _error, failure.Test);
 
         //Assert
         _testConsole.Interface.GetBuffer().Verify();
     }
-
+    
     [Fact]
-    public void ApprovedTestIsRemovedFromMenu()
+    public void ReceivedFileIsRemovedForApprovedTest()
     {
         //Arrange
-        var data = @"1
-A
+        var data = @"A
 X
 ";
         using var stream = new StringReader(data);
         _testConsole.Interface.SetInputStream(stream);
+        var test = _tests.First(t => t.Passed == false).Test;
 
         //Act
-        var _ = InteractiveApprover.Execute(_console, _error, _tests);
+        InteractiveDifferenceDisplay.ShowDifferencesForFailure(_console, _error, test);
 
         //Assert
-        _testConsole.Interface.GetBuffer().Verify();
+        File.Exists(test.ReceivedFile).Should().BeFalse();
+    }
+    
+    [Fact]
+    public void ApprovedFileIsReplacedForApprovedTest()
+    {
+        //Arrange
+        var data = @"A
+X
+";
+        using var stream = new StringReader(data);
+        _testConsole.Interface.SetInputStream(stream);
+        var test = _tests.First(t => t.Passed == false && File.Exists(t.Test.ApprovedFile)).Test;
+        var receivedText = File.ReadAllText(test.ReceivedFile!);
+
+        //Act
+        InteractiveDifferenceDisplay.ShowDifferencesForFailure(_console, _error, test);
+
+        //Assert
+        var approvedText = File.ReadAllText(test.ApprovedFile!);
+        approvedText.Should().Be(receivedText);
     }
 
     #region IDisposable

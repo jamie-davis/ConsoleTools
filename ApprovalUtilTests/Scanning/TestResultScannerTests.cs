@@ -1,5 +1,6 @@
 using ApprovalUtil.Scanning;
 using ApprovalUtilTests.TestUtilities;
+using FluentAssertions;
 using TestConsoleLib;
 using TestConsoleLib.Testing;
 
@@ -41,5 +42,99 @@ public class TestResultScannerTests
             .ThenBy(a => a.TestName);
         output.FormatTable(formattedResult);
         output.Report.Verify();
+    }
+    
+    [Fact]
+    public void IsMatchReturnsTrueForPass()
+    {
+        //Arrange
+        using var testData = new TestOutputGenerator();
+        testData.MakeTest("TestClass1", "TestOne");
+        var scans = TestResultScanner.Scan(testData.FolderPath);
+
+        //Act
+        var result = TestResultScanner.IsMatch(scans.First().Test);
+
+        //Assert
+        result.Should().BeTrue();
+    }
+    
+    [Fact]
+    public void IsMatchReturnsFalseForFail()
+    {
+        //Arrange
+        using var testData = new TestOutputGenerator();
+        testData.MakeTest("TestClass1", "TestOne", createFailed:true);
+        var scans = TestResultScanner.Scan(testData.FolderPath);
+
+        //Act
+        var result = TestResultScanner.IsMatch(scans.First().Test);
+
+        //Assert
+        result.Should().BeFalse();
+    }
+    
+    [Fact]
+    public void IsMatchReturnsFalseForNewTest()
+    {
+        //Arrange
+        using var testData = new TestOutputGenerator();
+        testData.MakeTest("TestClass1", "TestOne", createNew:true);
+        var scans = TestResultScanner.Scan(testData.FolderPath);
+
+        //Act
+        var result = TestResultScanner.IsMatch(scans.First().Test);
+
+        //Assert
+        result.Should().BeFalse();
+    }
+    
+    [Fact]
+    public void IsMatchReturnsTrueForTestWithNoReceivedFile()
+    {
+        //Arrange
+        using var testData = new TestOutputGenerator();
+        testData.MakeTest("TestClass1", "TestOne", createReceived:false);
+        var scans = TestResultScanner.Scan(testData.FolderPath);
+
+        //Act
+        var result = TestResultScanner.IsMatch(scans.First().Test);
+
+        //Assert
+        result.Should().BeTrue();
+    }
+    
+    [Fact]
+    public void IsMatchReturnsTrueForTestWhereReceivedFileWasDeleted()
+    {
+        //Arrange
+        using var testData = new TestOutputGenerator();
+        testData.MakeTest("TestClass1", "TestOne", createFailed:true);
+        var scans = TestResultScanner.Scan(testData.FolderPath);
+
+        //Act
+        var test = scans.First().Test;
+        File.Delete(test.ReceivedFile!);
+        var result = TestResultScanner.IsMatch(test);
+
+        //Assert
+        result.Should().BeTrue();
+    }
+    
+    [Fact]
+    public void IsMatchReturnsFalseForTestWhereApprovedFileWasDeleted()
+    {
+        //Arrange
+        using var testData = new TestOutputGenerator();
+        testData.MakeTest("TestClass1", "TestOne");
+        var scans = TestResultScanner.Scan(testData.FolderPath);
+
+        //Act
+        var test = scans.First().Test;
+        File.Delete(test.ApprovedFile!);
+        var result = TestResultScanner.IsMatch(test);
+
+        //Assert
+        result.Should().BeFalse();
     }
 }

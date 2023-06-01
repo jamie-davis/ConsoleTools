@@ -1,8 +1,10 @@
-Located 4 tests. 1 failure, 3 passes                        
+Located 7 tests. 3 failures, 4 passes                       
                                                             
 Interactive functions                                       
                                                             
-1-View TestClass.TestThree failure                          
+1-View TestClass1.TestFour failure                          
+2-View TestClass2.TestTwo failure                           
+3-View TestClass2.NewTest failure                           
 A-Approve all and exit                                      
 X-Exit                                                      
                                                             
