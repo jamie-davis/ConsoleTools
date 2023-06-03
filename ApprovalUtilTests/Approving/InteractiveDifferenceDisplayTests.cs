@@ -39,7 +39,7 @@ public class InteractiveDifferenceDisplayTests : IDisposable
         InteractiveDifferenceDisplay.ShowDifferencesForFailure(_console, _error, failure.Test);
 
         //Assert
-        _testConsole.Interface.GetBuffer().Verify();
+        Approvals.Verify(_testConsole.Interface.GetBuffer());
     }
     
     [Fact]
@@ -57,7 +57,7 @@ X
         InteractiveDifferenceDisplay.ShowDifferencesForFailure(_console, _error, failure.Test);
 
         //Assert
-        _testConsole.Interface.GetBuffer().Verify();
+        Approvals.Verify(_testConsole.Interface.GetBuffer());
     }
     
     [Fact]

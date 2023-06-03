@@ -1,6 +1,7 @@
 using ApprovalUtil.Scanning;
 using ApprovalUtilTests.Approving;
 using ApprovalUtilTests.TestUtilities;
+using FluentAssertions;
 using TestConsole.OutputFormatting;
 using TestConsoleLib;
 using TestConsoleLib.Testing;
@@ -32,6 +33,21 @@ public class TestOutputScannerTests
             .OrderBy(a => a.TestTypeName)
             .ThenBy(a => a.TestName);
         output.FormatTable(formattedResult, ReportFormattingOptions.UnlimitedBuffer);
-        output.Report.Verify();
+        Approvals.Verify(output.Report);
+    }
+    
+    [Fact]
+    public void UnitTestOutputIsDerivedFromTextFiles()
+    {
+        //Arrange
+        using var testData = TestResultObjectMother.GenerateTestsWithFailures();
+        var tests = TestOutputScanner.Scan(testData.FolderPath);
+        var failure = tests.FirstFailure(); 
+
+        //Act
+        var result = TestOutputScanner.OutputFromResultFiles(failure.ReceivedFile, failure.ApprovedFile);
+
+        //Assert
+        result.TestName.Should().NotBeEmpty();
     }
 }

@@ -20,10 +20,12 @@ public static class TestResultScanner
 
     public static bool IsMatch(ApprovalTestOutput test)
     {
-        if (string.IsNullOrEmpty(test.ReceivedFile) || !File.Exists(test.ReceivedFile))
-            return true;
+        var receivedMissing = string.IsNullOrEmpty(test.ReceivedFile) || !File.Exists(test.ReceivedFile);
+        var approvedMissing = string.IsNullOrEmpty(test.ApprovedFile) || !File.Exists(test.ApprovedFile);
+        if (receivedMissing)
+            return !approvedMissing; //received is missing but if approved is present, it's a match
 
-        if (string.IsNullOrEmpty(test.ApprovedFile) || !File.Exists(test.ApprovedFile))
+        if (approvedMissing)
             return false;
         
         var approved = PlatformLineEndingFixer.Fix(File.ReadAllText(test.ApprovedFile));

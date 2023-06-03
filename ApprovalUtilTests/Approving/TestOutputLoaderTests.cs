@@ -17,9 +17,7 @@ public class TestOutputLoaderTests
         var error = testConsole.Error;
 
         using var testData = TestResultObjectMother.GenerateTestsWithFailures(out var scanResult);
-        var failedTestResult = scanResult.First(t => !t.Passed 
-                                                     && File.Exists(t.Test.ReceivedFile) 
-                                                     && File.Exists(t.Test.ApprovedFile)).Test;
+        var failedTestResult = scanResult.FirstFailure().Test;
         
         //Act
         var (received, approved) = TestOutputLoader.LoadText(failedTestResult, error);
@@ -32,7 +30,7 @@ public class TestOutputLoaderTests
         output.WriteLine();
         output.WrapLine("Approved:");
         output.WrapLine(approved);
-        output.Report.Verify();
+        Approvals.Verify(output.Report);
 
     }
 
@@ -44,8 +42,7 @@ public class TestOutputLoaderTests
         var error = testConsole.Error;
 
         using var testData = TestResultObjectMother.GenerateTestsWithFailures(out var scanResult);
-        var failedTestResult = scanResult.First(t => !File.Exists(t.Test.ReceivedFile) 
-                                                     && File.Exists(t.Test.ApprovedFile)).Test;
+        var failedTestResult = scanResult.FirstApproved().Test;
         
         //Act
         var (received, _) = TestOutputLoader.LoadText(failedTestResult, error);
@@ -64,8 +61,7 @@ public class TestOutputLoaderTests
         var error = testConsole.Error;
 
         using var testData = TestResultObjectMother.GenerateTestsWithFailures(out var scanResult);
-        var failedTestResult = scanResult.First(t => File.Exists(t.Test.ReceivedFile) 
-                                                     && !File.Exists(t.Test.ApprovedFile)).Test;
+        var failedTestResult = scanResult.FirstNew().Test;
         
         //Act
         var (_, approved) = TestOutputLoader.LoadText(failedTestResult, error);
@@ -100,7 +96,7 @@ public class TestOutputLoaderTests
         var error = testConsole.Error;
 
         using var testData = TestResultObjectMother.GenerateTestsWithFailures(out var scanResult);
-        var testResult = scanResult.First(t => File.Exists(t.Test.ReceivedFile)).Test;
+        var testResult = scanResult.FirstFailure().Test;
         
         //Act
         using (var _ = File.OpenWrite(testResult.ReceivedFile!))

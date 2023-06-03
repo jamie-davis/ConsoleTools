@@ -9,7 +9,7 @@ internal static class TestResultObjectMother
         return GenerateSet(DefaultPassingTestsSet);
     }
 
-    public static IDisposable GenerateTests(out List<ApprovalTestResult> scanResult)
+    public static TestOutputGenerator GenerateTests(out List<ApprovalTestResult> scanResult)
     {
         return GenerateAndScanTests(DefaultPassingTestsSet, out scanResult);
     }
@@ -19,7 +19,7 @@ internal static class TestResultObjectMother
         return GenerateSet(DefaultFailingTestsSet);
     }
 
-    public static IDisposable GenerateTestsWithFailures(out List<ApprovalTestResult> scanResult)
+    public static TestOutputGenerator GenerateTestsWithFailures(out List<ApprovalTestResult> scanResult)
     {
         return GenerateAndScanTests(DefaultFailingTestsSet, out scanResult);
     }
@@ -43,7 +43,7 @@ internal static class TestResultObjectMother
         generator.MakeTest("TestClass2", "NewTest", createNew: true);
     }
 
-    private static IDisposable GenerateAndScanTests(Action<TestOutputGenerator> MakeTests, out List<ApprovalTestResult> scanResult)
+    private static TestOutputGenerator GenerateAndScanTests(Action<TestOutputGenerator> MakeTests, out List<ApprovalTestResult> scanResult)
     {
         TestOutputGenerator? generator = null;
         try

@@ -18,6 +18,23 @@ public static class TestOutputScanner
         return GetOutputsFromFolder(codePath).ToList();
     }
 
+    /// <summary>
+    /// Construct a single test output using only the paths for the received and approved files. The name of the test,
+    /// the test class and the source file location will be derived. In the event that these elements cannot be derived
+    /// then the output instance will be returned with as much useful data as possible. Any elements that cannot be
+    /// determined will be set to an empty string.
+    /// </summary>
+    /// <param name="receivedFilePath">The path to the received text file for the test. This need not exist.</param>
+    /// <param name="approvedFilePath">The path to the approved test file for the test. This need not exist.</param>
+    /// <returns>An approval test output instance. This will be returned regardless of the validity of the text files
+    /// but its content will be as useful as it can be made to be.</returns>
+    public static ApprovalTestOutput OutputFromResultFiles(string? receivedFilePath, string? approvedFilePath)
+    {
+        var (testClass, testMethod) = ApprovalFileNameDeconstructor.Deconstruct(receivedFilePath);
+        
+        return new ApprovalTestOutput(string.Empty, approvedFilePath, receivedFilePath, testClass ?? string.Empty, testMethod ?? string.Empty);
+    }
+
     private static IEnumerable<ApprovalTestOutput> GetOutputsFromFolder(string codePath)
     {
         foreach (var output in GetOutputs(codePath))
@@ -33,7 +50,7 @@ public static class TestOutputScanner
     private static IEnumerable<ApprovalTestOutput> GetOutputs(string codePath)
     {
         var approvalFiles = Directory.EnumerateFiles(codePath, "*.approved.txt").Concat(Directory.EnumerateFiles(codePath, "*.received.txt"));
-        var testTypesAndNames = approvalFiles.Select(f => new {Path = Path.GetDirectoryName(f), TestTypeAndName = GetTestAttributesFromFileName(Path.GetFileName(f))})
+        var testTypesAndNames = approvalFiles.Select(f => new {Path = Path.GetDirectoryName(f), TestTypeAndName = ApprovalFileNameDeconstructor.Deconstruct(Path.GetFileName(f))})
             .Where(t => t.TestTypeAndName is { TestTypeName: not null, TestName: not null })
             .Distinct()
             .ToList();
@@ -57,7 +74,7 @@ public static class TestOutputScanner
     {
         foreach (var codeFile in Directory.EnumerateFiles(codePath))
         {
-            if (GetTestAttributesFromFileName(codeFile).TestTypeName != null) continue; //exclude approval outputs
+            if (ApprovalFileNameDeconstructor.Deconstruct(codeFile).TestTypeName != null) continue; //exclude approval outputs
 
             var code = File.ReadAllText(codeFile);
             if (code.Contains(testTypeName) && code.Contains(testName))
@@ -65,13 +82,5 @@ public static class TestOutputScanner
         }
 
         return null;
-    }
-
-    private static (string? TestTypeName, string? TestName) GetTestAttributesFromFileName(string approvedFileName)
-    {
-        var match = Regex.Match(approvedFileName, @"([^.]*)\.([^.]*)\.(approved|received)\.txt");
-        if (!match.Success) return (null, null);
-
-        return (match.Result("$1"), match.Result("$2"));
     }
 }

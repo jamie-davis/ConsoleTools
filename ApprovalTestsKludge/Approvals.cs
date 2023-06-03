@@ -1,12 +1,9 @@
-using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using ApprovalTests.Exceptions;
 using ApprovalTests.Tools;
-using ApprovalUtilities.Utilities;
 
 namespace ApprovalTests
 {

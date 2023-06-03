@@ -1,21 +1,22 @@
-using ApprovalUtil.Approving;
+using ApprovalUtil.Commands;
 using ApprovalUtil.Scanning;
 using ApprovalUtilTests.TestUtilities;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.Testing;
+using FluentAssertions;
 using TestConsoleLib.Testing;
 
-namespace ApprovalUtilTests.Approving;
+namespace ApprovalUtilTests.Commands;
 
-public class InteractiveApproverTests : IDisposable
+public class ScanCommandTests : IDisposable
 {
     private readonly UnitTestConsole _testConsole;
     private readonly IConsoleAdapter _console;
     private readonly IErrorAdapter _error;
-    private readonly IDisposable _testGenerator;
+    private readonly TestOutputGenerator _testGenerator;
     private readonly List<ApprovalTestResult> _tests;
 
-    public InteractiveApproverTests()
+    public ScanCommandTests()
     {
         _testConsole = new UnitTestConsole(typeof(Program).Namespace);
         _console = _testConsole.Console;
@@ -25,52 +26,57 @@ public class InteractiveApproverTests : IDisposable
     }
 
     [Fact]
-    public void InteractiveApproverDescribesResultsAndShowsMenu()
+    public void ScanCommandWithInvalidFolderShowsAnError()
     {
         //Arrange
+        var scanCommand = new ScanCommand
+        {
+            Interactive = false,
+            PathToCode = "notapath"
+        };
+
+        //Act
+        scanCommand.Handle(_console, _error);
+
+        //Assert
+        Approvals.Verify(_testConsole.Interface.GetBuffer());
+    }
+
+    [Fact]
+    public void ScanCommandWithInvalidFolderSetsExitCode()
+    {
+        //Arrange
+        var scanCommand = new ScanCommand
+        {
+            Interactive = false,
+            PathToCode = "notapath"
+        };
+        Environment.ExitCode = 0;
+
+        //Act
+        scanCommand.Handle(_console, _error);
+
+        //Assert
+        Environment.ExitCode.Should().Be(-100);
+    }
+
+    [Fact]
+    public void ScanCommandShowsMenu()
+    {
+        //Arrange
+        var scanCommand = new ScanCommand
+        {
+            Interactive = true,
+            PathToCode = _testGenerator.FolderPath
+        };
+        
         var data = @"X
 ";
         using var stream = new StringReader(data);
         _testConsole.Interface.SetInputStream(stream);
 
         //Act
-        var _ = InteractiveApprover.Execute(_console, _error, _tests);
-
-        //Assert
-        Approvals.Verify(_testConsole.Interface.GetBuffer());
-    }
-    
-    [Fact]
-    public void InteractiveApproverShowsTestResults()
-    {
-        //Arrange
-        var data = @"1
-X
-X
-";
-        using var stream = new StringReader(data);
-        _testConsole.Interface.SetInputStream(stream);
-
-        //Act
-        var _ = InteractiveApprover.Execute(_console, _error, _tests);
-
-        //Assert
-        Approvals.Verify(_testConsole.Interface.GetBuffer());
-    }
-
-    [Fact]
-    public void ApprovedTestIsRemovedFromMenu()
-    {
-        //Arrange
-        var data = @"1
-A
-X
-";
-        using var stream = new StringReader(data);
-        _testConsole.Interface.SetInputStream(stream);
-
-        //Act
-        var _ = InteractiveApprover.Execute(_console, _error, _tests);
+        scanCommand.Handle(_console, _error);
 
         //Assert
         Approvals.Verify(_testConsole.Interface.GetBuffer());

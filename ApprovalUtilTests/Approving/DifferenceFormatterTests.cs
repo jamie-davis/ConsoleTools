@@ -1,7 +1,6 @@
 using ApprovalUtil.Approving;
-using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.Testing;
-using TestConsoleLib.Testing;
+using Approvals = ApprovalTests.Approvals;
 
 namespace ApprovalUtilTests.Approving;
 
@@ -22,6 +21,6 @@ public class DifferenceFormatterTests
         DifferenceFormatter.DisplayDiffs(received, approved, console, error);
 
         //Assert
-        testConsole.Interface.GetBuffer(ConsoleBufferFormat.TextOnly).Verify();
+        Approvals.Verify(testConsole.Interface.GetBuffer());
     }
 }

@@ -41,7 +41,7 @@ public class TestResultScannerTests
             .OrderBy(a => a.TestTypeName)
             .ThenBy(a => a.TestName);
         output.FormatTable(formattedResult);
-        output.Report.Verify();
+        Approvals.Verify(output.Report);
     }
     
     [Fact]
