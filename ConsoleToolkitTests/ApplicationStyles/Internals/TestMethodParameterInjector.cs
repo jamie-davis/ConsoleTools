@@ -1,12 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using ConsoleToolkit.ApplicationStyles.Internals;
-using NUnit.Framework;
+using FluentAssertions;
+using Xunit;
 
 namespace ConsoleToolkitTests.ApplicationStyles.Internals
 {
-    [TestFixture]
     public class TestMethodParameterInjector
     {
         private MethodInfo _method1;
@@ -31,73 +31,72 @@ namespace ConsoleToolkitTests.ApplicationStyles.Internals
         public void TestMethod2(TestMethodParameterInjector inj, int n, string s) {}
         public void TestMethod3(TestMethodParameterInjector inj, ITestInterface t) {}
         #endregion
-        // ReSharper restore UnusedMember.Global
 
-        [SetUp]
-        public void SetUp()
+        public TestMethodParameterInjector()
         {
             _method1 = GetType().GetMethod("TestMethod1");
             _method2 = GetType().GetMethod("TestMethod2");
             _method3 = GetType().GetMethod("TestMethod3");
         }
 
-        [Test]
+        [Fact]
         public void OneTimeInjectableIsUsed()
         {
             var injector = new MethodParameterInjector(new object[]{});
 
-            Assert.That(injector.GetParameters(_method1, new object[] {this}), Is.EqualTo(new object[] {this}));
+            Assert.Equal(new object[] { this }, injector.GetParameters(_method1, new object[] { this }));
         }
 
-        [Test]
+        [Fact]
         public void ConstructorProvidedInjectableIsUsed()
         {
             var injector = new MethodParameterInjector(new object[]{this});
 
-            Assert.That(injector.GetParameters(_method1, new object[] {}), Is.EqualTo(new object[] {this}));
+            Assert.Equal(new object[] { this }, injector.GetParameters(_method1, new object[] { }));
         }
 
-        [Test]
+        [Fact]
         public void MultipleParametersAreInjected()
         {
             var injector = new MethodParameterInjector(new object[]{5, "string"});
 
-            Assert.That(injector.GetParameters(_method2, new object[] {this}), Is.EqualTo(new object[] {this, 5, "string"}));
+            Assert.Equal(new object[] { this, 5, "string" }, injector.GetParameters(_method2, new object[] { this }));
         }
 
-        [Test]
+        [Fact]
         public void AnExceptionIsThrownIfTheParametersCannotBeInjected()
         {
-            Assert.That(() =>
+            var action = new Action(() =>
             {
                 var injector = new MethodParameterInjector(new object[] {5});
 
                 injector.GetParameters(_method2, new object[] {this});
-            }, Throws.InstanceOf(typeof(Exception)));
+            });
+            action.Should().Throw<Exception>();
         }
 
-        [Test]
+        [Fact]
         public void CanSupplyReturnsTrueForTypeThatCanBeProvided()
         {
             var injector = new MethodParameterInjector(new object[]{"string", 5, this});
-            Assert.That(injector.CanSupply(GetType()), Is.True);
+            injector.CanSupply(GetType()).Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void CanSupplyReturnsFalseForTypeThatCannotBeProvided()
         {
             var injector = new MethodParameterInjector(new object[]{"string", 5});
-            Assert.That(injector.CanSupply(GetType()), Is.False);
+            injector.CanSupply(GetType()).Should().BeFalse();
         }
 
-        [Test]
+        [Fact]
         public void CanSupplyReturnsTrueForTypesWithSpecifiedInstances()
         {
             var injector = new MethodParameterInjector(new object[]{"string", 5}, new [] {new KeyValuePair<Type, object>(typeof(ITestInterface), new TestImpl()) });
-            Assert.That(injector.CanSupply(typeof(ITestInterface)), Is.True);
+            injector.CanSupply(typeof(ITestInterface)).Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void CanSupplyASpecificInstanceForPredefinedParameterTypes()
         {
             var testImpl = new TestImpl();
@@ -105,10 +104,10 @@ namespace ConsoleToolkitTests.ApplicationStyles.Internals
                 new[] { new KeyValuePair<Type, object>(typeof(ITestInterface), testImpl) });
 
             injector.GetParameters(_method3, new object[] { this });
-            Assert.That(injector.GetParameters(_method3, new object[] { this })[1], Is.SameAs(testImpl));
+            injector.GetParameters(_method3, new object[] { this })[1].Should().BeSameAs(testImpl);
         }
 
-        [Test]
+        [Fact]
         public void SpecificInstancesCanBeInjectedAfterConstruction()
         {
             var testImpl = new TestImpl();
@@ -117,10 +116,10 @@ namespace ConsoleToolkitTests.ApplicationStyles.Internals
             injector.AddInstance<ITestInterface>(testImpl);
 
             injector.GetParameters(_method3, new object[] { this });
-            Assert.That(injector.GetParameters(_method3, new object[] { this })[1], Is.SameAs(testImpl));
+            injector.GetParameters(_method3, new object[] { this })[1].Should().BeSameAs(testImpl);
         }
 
-        [Test]
+        [Fact]
         public void GetParameterReturnsAnInstanceMatchingTheTypeRequested()
         {
             var testImpl = new TestImpl();
@@ -128,21 +127,21 @@ namespace ConsoleToolkitTests.ApplicationStyles.Internals
 
             injector.AddInstance<ITestInterface>(testImpl);
 
-            Assert.That(injector.GetParameter<ITestInterface>(), Is.SameAs(testImpl));
+            injector.GetParameter<ITestInterface>().Should().BeSameAs(testImpl);
         }
 
-        [Test]
+        [Fact]
         public void GetParameterReturnsNullForAnUnknownType()
         {
             var injector = new MethodParameterInjector(new object[] { "string", 5 });
-            Assert.That(injector.GetParameter<ITestInterface>(), Is.Null);
+            injector.GetParameter<ITestInterface>().Should().BeNull();
         }
 
-        [Test]
+        [Fact]
         public void GetParameterReturnsTheDefaultForAnUnknownValueType()
         {
             var injector = new MethodParameterInjector(new object[] { "string", 5 });
-            Assert.That(injector.GetParameter<DateTime>(), Is.EqualTo(default(DateTime)));
+            Assert.Equal(default(DateTime), injector.GetParameter<DateTime>());
         }
     }
 }

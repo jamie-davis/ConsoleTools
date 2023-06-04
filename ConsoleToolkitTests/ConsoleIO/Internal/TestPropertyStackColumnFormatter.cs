@@ -6,11 +6,10 @@ using ApprovalTests.Reporters;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkitTests.ConsoleIO.UnitTestUtilities;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestPropertyStackColumnFormatter
     {
@@ -25,9 +24,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             public double Double { get; set; }
             public DateTime DateTime { get; set; }
         }
-
-        [SetUp]
-        public void SetUp()
+        public TestPropertyStackColumnFormatter()
         {
             SetUpTests.OverrideCulture();
             _data = new TestType
@@ -40,7 +37,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             _cols = FormatAnalyser.Analyse(_data.GetType(), null, true);
         }
 
-        [Test]
+        [Fact]
         public void SingleColumnIsFormatted()
         {
             var report = PropertyStackColumnFormatter.Format(_cols.Take(1), _data, 30);
@@ -48,7 +45,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output);
         }
 
-        [Test]
+        [Fact]
         public void SingleColumnIsWrapped()
         {
             var report = PropertyStackColumnFormatter.Format(_cols.Take(1), _data, 15);
@@ -56,7 +53,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output);
         }
 
-        [Test]
+        [Fact]
         public void MultipleColumnsAreFormatted()
         {
             var report = PropertyStackColumnFormatter.Format(_cols, _data, 30);
@@ -64,7 +61,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output);
         }
 
-        [Test]
+        [Fact]
         public void MultipleColumnsAreWrapped()
         {
             var report = PropertyStackColumnFormatter.Format(_cols, _data, 15);
@@ -72,7 +69,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output);
         }
 
-        [Test]
+        [Fact]
         public void SingleColumnIsFormattedWithLiteralValue()
         {
             var report = PropertyStackColumnFormatter.Format(_cols.Take(1), new[] {"pre formatted string"}, 30);
@@ -80,7 +77,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output);
         }
 
-        [Test]
+        [Fact]
         public void SingleColumnIsWrappedWithLiteralValue()
         {
             var report = PropertyStackColumnFormatter.Format(_cols.Take(1), new[] { "pre formatted string" }, 15);
@@ -88,7 +85,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output);
         }
 
-        [Test]
+        [Fact]
         public void MultipleColumnsAreFormattedWithLiteralValues()
         {
             var preFormattedValues = new[]
@@ -103,7 +100,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output);
         }
 
-        [Test]
+        [Fact]
         public void MultipleColumnsAreWrappedWithLiteralValues()
         {
             var preFormattedValues = new[]
@@ -118,7 +115,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output);
         }
 
-        [Test]
+        [Fact]
         public void FirstLineHangingIndentAppliesToFirstPropertyOnly()
         {
             var preFormattedValues = new[]

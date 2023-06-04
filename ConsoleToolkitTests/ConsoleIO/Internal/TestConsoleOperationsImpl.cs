@@ -8,20 +8,18 @@ using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.ConsoleIO.UnitTestUtilities;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using FluentAssertions;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestConsoleOperationsImpl
     {
         private ConsoleInterfaceForTesting _consoleInterface;
         private ConsoleOperationsImpl _adapter;
         private ConsoleOperationsImpl _prefixAdapter;
-
-        [SetUp]
-        public void SetUp()
+        public TestConsoleOperationsImpl()
         {
             Toolkit.GlobalReset();
             _consoleInterface = new ConsoleInterfaceForTesting();
@@ -51,7 +49,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             _consoleInterface.Write("<--");
         }
 
-        [Test]
+        [Fact]
         public void LinesAreWrittenToTheConsole()
         {
             Action<ConsoleOperationsImpl> act = adapter =>
@@ -67,7 +65,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(buffer);
         }
 
-        [Test]
+        [Fact]
         public void ConsoleColourChangesArePassedToConsoleInterface()
         {
             Action<ConsoleOperationsImpl> act = adapter =>
@@ -82,7 +80,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_consoleInterface.GetBuffer(ConsoleBufferFormat.Interleaved));
         }
 
-        [Test]
+        [Fact]
         public void FullWidthTabularDataIsDisplayed()
         {
             _consoleInterface.WindowWidth = _consoleInterface.BufferWidth;
@@ -101,7 +99,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_consoleInterface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void ShortWidthTabularDataIsDisplayed()
         {
             Action<ConsoleOperationsImpl> act = adapter =>
@@ -117,7 +115,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_consoleInterface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void WrapLinesAreWordWrappedToConsole()
         {
             _consoleInterface.WindowWidth = _consoleInterface.BufferWidth;
@@ -134,7 +132,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_consoleInterface.GetBuffer(ConsoleBufferFormat.Interleaved));
         }
 
-        [Test]
+        [Fact]
         public void SingleLongDataLineIsWrappedCorrectly()
         {
             _consoleInterface.WindowWidth = _consoleInterface.BufferWidth;
@@ -151,7 +149,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_consoleInterface.GetBuffer(ConsoleBufferFormat.Interleaved));
         }
 
-        [Test]
+        [Fact]
         public void StringContainingBracesButNoSubstitutionsIsRenderedCorrectly()
         {
             _consoleInterface.WindowWidth = _consoleInterface.BufferWidth;
@@ -165,7 +163,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_consoleInterface.GetBuffer(ConsoleBufferFormat.Interleaved));
         }
 
-        [Test]
+        [Fact]
         public void PiecemealWritesAreWordWrappedToConsole()
         {
             Action<ConsoleOperationsImpl> act = adapter =>
@@ -186,7 +184,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(buffer);
         }
 
-        [Test]
+        [Fact]
         public void RecordedOperationsCanBeDisplayedOnTheConsole()
         {
             var recorder = MakeRecording();
@@ -201,7 +199,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_consoleInterface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void RecordedOperationsStartOnANewLine()
         {
             var recorder = MakeRecording();
@@ -217,7 +215,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_consoleInterface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void RecordedOperationsCanBeDisplayedOnTheConsoleUsingWriteLine()
         {
             var recorder = MakeRecording();
@@ -232,7 +230,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_consoleInterface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void RecordedOperationsDisplayedWithWriteLineStartOnANewLine()
         {
             var recorder = MakeRecording();
@@ -248,7 +246,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_consoleInterface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void ReportFormattedTableIsDisplayed()
         {
             Action<ConsoleOperationsImpl> act = adapter =>
@@ -267,7 +265,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_consoleInterface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void BadCodeInReportFormattingThrowsAnException()
         {
             _adapter.WriteLine(RulerFormatter.MakeRuler(_adapter.WindowWidth));
@@ -275,7 +273,8 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
                                  .Select(i => new { Number = i, String = string.Join(" ", Enumerable.Repeat("blah", i)) })
                                  .AsReport(p => p.AddColumn(t => t.String.Substring(0, 10), c => c.Heading("Bad"))
                                                  .AddColumn(t => t.Number / 2, c => c.Heading("Halves")));
-            Assert.That(() => _adapter.FormatTable(data), Throws.InstanceOf(typeof(Exception)));
+            var act = new Action(() => _adapter.FormatTable(data));
+            act.Should().Throw<Exception>();
         }
 
         private static RecordingConsoleAdapter MakeRecording()

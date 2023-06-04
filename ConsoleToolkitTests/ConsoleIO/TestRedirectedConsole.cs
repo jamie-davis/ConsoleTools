@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using ApprovalTests;
 using ApprovalTests.Reporters;
@@ -6,43 +6,39 @@ using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkitTests.ConsoleIO.UnitTestUtilities;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
-    public class TestRedirectedConsole
+    public class TestRedirectedConsole : IDisposable
     {
         private RedirectedConsole _consoleOut;
         private StringWriter _buffer;
         private TextWriter _oldOut;
-
-        [SetUp]
-        public void SetUp()
+        public TestRedirectedConsole()
         {
             _oldOut = Console.Out;
             _buffer = new StringWriter();
             Console.SetOut(_buffer);
 
-            _consoleOut = new RedirectedConsole(ConsoleStream.Out);
+            _consoleOut = new RedirectedConsole(ConsoleStream.Out, 80);
         }
 
-        [TearDown]
-        public void TearDown()
+        void IDisposable.Dispose()
         {
             Console.SetOut(_oldOut);
         }
 
 
-        [Test]
+        [Fact]
         public void TheCursorPositionAdvancesWhenTextIsOutput()
         {
             _consoleOut.Write("text");
-            Assert.That(_consoleOut.CursorLeft, Is.EqualTo(4));
+            Assert.Equal(4, _consoleOut.CursorLeft);
         }
 
-        [Test]
+        [Fact]
         public void TextWiderThanTheBufferFlowsToNextLine()
         {
             var longLine = new string('X', _consoleOut.BufferWidth + 10);
@@ -50,7 +46,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(RulerFormatter.MakeRuler(_consoleOut.BufferWidth) + Environment.NewLine + _buffer);
         }
 
-        [Test]
+        [Fact]
         public void TextAsWideAsTheBufferFlowsCreatesNewLine()
         {
             var longLine = new string('X', _consoleOut.BufferWidth);
@@ -58,20 +54,20 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(RulerFormatter.MakeRuler(_consoleOut.BufferWidth) + Environment.NewLine + _buffer);
         }
 
-        [Test]
+        [Fact]
         public void TextAsWideAsTheBufferMovesCursorDownOneLine()
         {
             var longLine = new string('X', _consoleOut.BufferWidth);
             _consoleOut.Write(longLine);
-            Assert.That(_consoleOut.CursorTop, Is.EqualTo(1));
+            Assert.Equal(1, _consoleOut.CursorTop);
         }
 
-        [Test]
+        [Fact]
         public void TextAsWideAsTheBufferMovesCursorToStartOfNewLine()
         {
             var longLine = new string('X', _consoleOut.BufferWidth);
             _consoleOut.Write(longLine);
-            Assert.That(_consoleOut.CursorLeft, Is.EqualTo(0));
+            Assert.Equal(0, _consoleOut.CursorLeft);
         }
     }
 }

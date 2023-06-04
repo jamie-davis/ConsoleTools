@@ -1,14 +1,14 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using ApprovalUtilities.Utilities;
 using ConsoleToolkit.ConsoleIO.Internal.ReportDefinitions;
-using NUnit.Framework;
+using FluentAssertions;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
 {
-    [TestFixture]
     public class TestReportQueryBuilder
     {
         private QueryType[] _testData;
@@ -26,11 +26,9 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
                 return "QueryType";
             }
         }
-
         #endregion
 
-        [SetUp]
-        public void SetUp()
+        public TestReportQueryBuilder()
         {
             _testData = new[]
                             {
@@ -52,7 +50,7 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
             return func;
         }
 
-        [Test]
+        [Fact]
         public void TypeGeneratedHasAppropriatePropertyTypes()
         {
             //Arrange
@@ -69,10 +67,10 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
 
             //Assert
             var properties = GetPropertyDesc(rowType);
-            Assert.That(properties, Is.EqualTo("Int32 exp1; String exp2; QueryType row;"));
+            Assert.Equal("Int32 exp1; String exp2; QueryType row;", properties);
         }
 
-        [Test]
+        [Fact]
         public void ExpectedValuesAreExtracted()
         {
             //Arrange
@@ -97,10 +95,10 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
                                 .JoinWith(" "));
             }
             var actual = sb.ToString();
-            Assert.That(actual, Is.EqualTo("[exp1 = 100 exp2 = ***alpha row = QueryType][exp1 = 200 exp2 = ****beta row = QueryType]"));
+            Assert.Equal("[exp1 = 100 exp2 = ***alpha row = QueryType][exp1 = 200 exp2 = ****beta row = QueryType]", actual);
         }
 
-        [Test]
+        [Fact]
         public void RowItemRetrieverReturnsTheOriginalRowObject()
         {
             //Arrange
@@ -116,7 +114,7 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
             var output = ReportQueryBuilder.Build(_testData, expressions, out rowType, out rowGetter);
 
             //Assert
-            Assert.That(rowGetter(output.Cast<object>().First()), Is.SameAs(_testData.First()));
+            rowGetter(output.Cast<object>().First()).Should().BeSameAs(_testData.First());
         }
     }
 }

@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Reflection;
 using ConsoleToolkit.Utilities;
-using NUnit.Framework;
+using FluentAssertions;
+using Xunit;
 
 namespace ConsoleToolkitTests.Utilities
 {
-    [TestFixture]
     public class TestMethodInvoker
     {
         #region Types for test
@@ -40,7 +40,7 @@ namespace ConsoleToolkitTests.Utilities
 
         #endregion
 
-        [Test]
+        [Fact]
         public void MemberMethodCanBeCalled()
         {
             //Arrange
@@ -51,10 +51,10 @@ namespace ConsoleToolkitTests.Utilities
             var result = MethodInvoker.Invoke(method, item, new object[] { 55, "bob" }) as string;
 
             //Assert
-            Assert.That(result, Is.EqualTo(item.StringMethod(55, "bob")));
+            Assert.Equal(item.StringMethod(55, "bob"), result);
         }
 
-        [Test]
+        [Fact]
         public void NoParamMethodCanBeCalledWithNoParameterArray()
         {
             //Arrange
@@ -65,10 +65,10 @@ namespace ConsoleToolkitTests.Utilities
             var result = MethodInvoker.Invoke(method, item, null) as string;
 
             //Assert
-            Assert.That(result, Is.EqualTo("No params"));
+            Assert.Equal("No params", result);
         }
 
-        [Test]
+        [Fact]
         public void VoidMethodCanBeCalled()
         {
             //Arrange
@@ -82,7 +82,7 @@ namespace ConsoleToolkitTests.Utilities
             //We expect no assertion
         }
 
-        [Test]
+        [Fact]
         public void StaticMethodCanBeCalled()
         {
             //Arrange
@@ -96,7 +96,7 @@ namespace ConsoleToolkitTests.Utilities
             //We expect no assertion
         }
 
-        [Test]
+        [Fact]
         public void ExceptionThrownInMethodEmergesIntact()
         {
             //Arrange
@@ -104,7 +104,8 @@ namespace ConsoleToolkitTests.Utilities
             var method = item.GetType().GetMethod("ThrowMethod");
 
             //Act
-            Assert.That(() => MethodInvoker.Invoke(method, item, 55, "bob"), Throws.TypeOf<ArgumentException>().With.Message.EqualTo("test"));
+            Action action = () => MethodInvoker.Invoke(method, item, 55, "bob");
+            action.Should().Throw<ArgumentException>().Where(e => e.Message == "test");
         }
     }
 }

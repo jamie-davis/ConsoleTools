@@ -1,16 +1,15 @@
-﻿using ApprovalTests.Reporters;
+using ApprovalTests.Reporters;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestConsoleIOExtensions
     {
-        private static readonly object[][] FGColourExtensionTestCases =
+        public static readonly object[][] FGColourExtensionTestCases =
         {
             new object[] {"Black".Black(), "{>PSk}Black{<p}"},
             new object[] {"DarkBlue".DarkBlue(), "{>PSB}DarkBlue{<p}"},
@@ -30,7 +29,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             new object[] {"White".White(), "{>PSw}White{<p}"}
         };
 
-        private static readonly object[][] BGColourExtensionTestCases =
+        public static readonly object[][] BGColourExtensionTestCases =
         {
             new object[] {"Black".BGBlack(), "{>Psk}Black{<p}"},
             new object[] {"DarkBlue".BGDarkBlue(), "{>PsB}DarkBlue{<p}"},
@@ -50,18 +49,19 @@ namespace ConsoleToolkitTests.ConsoleIO
             new object[] {"White".BGWhite(), "{>Psw}White{<p}"}
         };
 
-        [Test, TestCaseSource("FGColourExtensionTestCases")]
+        [Theory]
+        [MemberData("FGColourExtensionTestCases")]
         public void FGColourExtensionAddsControlSequenceToString(string testCase, string expected)
         {
             var text = SequenceVisualizer(testCase);
-            Assert.That(text, Is.EqualTo(expected));
+            Assert.Equal(expected, text);
         }
 
-        [Test, TestCaseSource("BGColourExtensionTestCases")]
+        [Theory, MemberData("BGColourExtensionTestCases")]
         public void BGColourExtensionAddsControlSequenceToString(string testCase, string expected)
         {
             var text = SequenceVisualizer(testCase);
-            Assert.That(text, Is.EqualTo(expected));
+            Assert.Equal(expected, text);
         }
 
         private string SequenceVisualizer(string data)

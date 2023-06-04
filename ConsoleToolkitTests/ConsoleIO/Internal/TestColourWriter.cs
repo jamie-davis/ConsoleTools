@@ -8,11 +8,10 @@ using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestColourWriter
     {
@@ -27,15 +26,13 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
                     {"back", ColourControlItem.ControlCode.SetBackground},
                     {"newline", ColourControlItem.ControlCode.NewLine},
                 };
-
-        [SetUp]
-        public void SetUp()
+        public TestColourWriter()
         {
             _consoleOut = new ConsoleInterfaceForTesting();
             _writer = new ColourWriter(_consoleOut);
         }
 
-        [Test]
+        [Fact]
         public void TextIsOutputToConsole()
         {
             var components = new List<ColourControlItem>
@@ -44,10 +41,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             };
             _writer.Write(components);    
         
-            Assert.That(_consoleOut.GetBuffer().TrimEnd(), Is.EqualTo("text"));
+            Assert.Equal("text", _consoleOut.GetBuffer().TrimEnd());
         }
 
-        [Test]
+        [Fact]
         public void TextIsOutputInCorrectColour()
         {
             var components = new List<ColourControlItem>
@@ -60,7 +57,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_consoleOut.GetBuffer(ConsoleBufferFormat.Interleaved));
         }
 
-        [Test]
+        [Fact]
         public void ColoursArePushedAndPopped()
         {
             var components = new List<ColourControlItem>
@@ -76,7 +73,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_consoleOut.GetBuffer(ConsoleBufferFormat.Interleaved));
         }
 
-        [Test]
+        [Fact]
         public void NewLineStartsANewLine()
         {
             var components = new List<ColourControlItem>
@@ -93,7 +90,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_consoleOut.GetBuffer(ConsoleBufferFormat.Interleaved));
         }
 
-        [Test]
+        [Fact]
         public void NewLineInstructionStartsANewLine()
         {
             var components = new List<ColourControlItem>
@@ -107,7 +104,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_consoleOut.GetBuffer(ConsoleBufferFormat.Interleaved));
         }
 
-        [Test]
+        [Fact]
         public void NewLineIsSuppressedIfThePrecedingLineEndedAtRightEdge()
         {
             //move cursor to 4 from edge.
@@ -124,7 +121,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_consoleOut.GetBuffer(ConsoleBufferFormat.Interleaved));
         }
 
-        [Test]
+        [Fact]
         public void NewLineIsCorreectlySuppressedIfTheBufferIsFull()
         {
             //fill the buffer
@@ -145,7 +142,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_consoleOut.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void OnlyOneNewLineIsSuppressedIfThePrecedingLineEndedAtRightEdge()
         {
             //move cursor to 4 from edge.
@@ -162,7 +159,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_consoleOut.GetBuffer(ConsoleBufferFormat.Interleaved));
         }
 
-        [Test]
+        [Fact]
         public void NewLineIsOnlySuppressedIfThePrecedingLineEndedAtRightEdge()
         {
             //move cursor to 4 from edge.
@@ -179,7 +176,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_consoleOut.GetBuffer(ConsoleBufferFormat.Interleaved));
         }
 
-        [Test]
+        [Fact]
         public void PrefixTextIsPrintedBeforeContent()
         {
             _writer.PrefixText = "prefix: ";
@@ -188,7 +185,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_consoleOut.GetBuffer(ConsoleBufferFormat.Interleaved));
         }
 
-        [Test]
+        [Fact]
         public void PrefixTextIsAddedWhenContentWraps()
         {
             _writer.PrefixText = "prefix: ";
@@ -198,7 +195,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_consoleOut.GetBuffer(ConsoleBufferFormat.Interleaved));
         }
 
-        [Test]
+        [Fact]
         public void TextColourDoesNotBleedIntoPrefix()
         {
             _writer.PrefixText = "prefix: ";

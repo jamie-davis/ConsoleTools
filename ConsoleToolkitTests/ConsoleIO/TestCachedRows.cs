@@ -6,12 +6,11 @@ using ApprovalUtilities.Utilities;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 using Approvals = ApprovalTests.Approvals;
 
 namespace ConsoleToolkitTests.ConsoleIO
 {
-    [TestFixture]
     [UseReporter(typeof(CustomReporter))]
     public class TestCachedRows
     {
@@ -40,14 +39,9 @@ namespace ConsoleToolkitTests.ConsoleIO
                 return new Simple(n);
             }
         }
-
-        // ReSharper restore UnusedAutoPropertyAccessor.Local
-        // ReSharper restore MemberCanBePrivate.Local
         #endregion
 
-
-        [SetUp]
-        public void SetUp()
+        public TestCachedRows()
         {
             SetUpTests.OverrideCulture();
             _dataSet = new List<Simple>
@@ -56,7 +50,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             };
         }
 
-        [Test]
+        [Fact]
         public void CachedDataCanBeRetrieved()
         {
             var data = new CachedRows<Simple>(_dataSet);

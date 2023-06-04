@@ -7,11 +7,10 @@ using ApprovalTests.Reporters;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestFormatAnalyser
     {
@@ -35,14 +34,14 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             public RecordingConsoleAdapter RenderCol { get; set; }
         }
 
-        [Test]
+        [Fact]
         public void NoColumnDefinitionReturnsAFullSetOfColumnFormats()
         {
             var propFormats = FormatAnalyser.Analyse(typeof (TestType), null, true);
             Approvals.Verify(ReportFormats(propFormats));
         }
 
-        [Test]
+        [Fact]
         public void ExtraColumnDefinitionsAreIgnored()
         {
             var cols = typeof (TestType).GetProperties()
@@ -52,7 +51,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(ReportFormats(propFormats));
         }
 
-        [Test]
+        [Fact]
         public void ColumnsWithNoDefinitionAreExtracted()
         {
             var intColProp = typeof (TestType).GetProperty("IntCol");
@@ -61,7 +60,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(ReportFormats(propFormats));
         }
 
-        [Test]
+        [Fact]
         public void ColumnsWithNoDefinitionAreOmittedWhenIncludeAllColumnsIsFalse()
         {
             var intColProp = typeof (TestType).GetProperty("IntCol");
@@ -70,7 +69,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(ReportFormats(propFormats));
         }
 
-        [Test]
+        [Fact]
         public void DefaultsAreProvidedForMissingFormats()
         {
             var cols = typeof (TestType).GetProperties().Take(2)
@@ -79,7 +78,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(ReportFormats(propFormats));
         }
 
-        [Test]
+        [Fact]
         public void DefaultsAreProvidedForSkippedFormats()
         {
             var cols = typeof (TestType).GetProperties()
@@ -88,7 +87,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(ReportFormats(propFormats));
         }
 
-        [Test]
+        [Fact]
         public void DefaultRenderColumnIsGenerated()
         {
             var cols = typeof (TestType).GetProperties()
@@ -97,7 +96,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(ReportFormats(propFormats));
         }
 
-        [Test]
+        [Fact]
         public void PrimitivesProduceASingleColumn()
         {
             var propFormats = FormatAnalyser.Analyse(typeof(int), null, true);

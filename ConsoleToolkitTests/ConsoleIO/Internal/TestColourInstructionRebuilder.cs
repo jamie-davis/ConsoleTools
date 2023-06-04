@@ -7,15 +7,14 @@ using ApprovalTests.Reporters;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestColourInstructionRebuilder
     {
-        [Test]
+        [Fact]
         public void ForegroundSetterIsRebuilt()
         {
             var source = "red".Red();
@@ -23,7 +22,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(Analyse(source, split));
         }
 
-        [Test]
+        [Fact]
         public void BackgroundSetterIsRebuilt()
         {
             var source = "red".BGRed();
@@ -31,7 +30,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(Analyse(source, split));
         }
 
-        [Test]
+        [Fact]
         public void EmbeddedNewlineIsNotRebuilt()
         {
             var source = ("red" + Environment.NewLine + "still").BGRed();
@@ -39,7 +38,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(Analyse(source, split));
         }
 
-        [Test]
+        [Fact]
         public void MultipleEmbeddedNewlinesAreNotRebuilt()
         {
             var source = ("red" + Environment.NewLine + "\r\n\r\n\r\nstill").BGRed();

@@ -7,13 +7,11 @@ using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.Exceptions;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
-using Description = ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.DescriptionAttribute;
+using FluentAssertions;
+using Xunit;
 
 namespace ConsoleToolkitTests.CommandLineInterpretation
 {
-
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestCommandAttributeLoader
     {
@@ -21,7 +19,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         private CommandConfig<DefaultName> _defaultNameCommand;
 
         #region Types for test
-#pragma warning disable 649
+        #pragma warning disable 649
 
         class InvalidBecauseNotACommand
         {
@@ -361,230 +359,226 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             [Option(ShortCircuit = true)]
             public static bool C { get; set; }
         }
-
-        // ReSharper restore UnusedField.Compiler
-        // ReSharper restore UnusedMember.Local
-#pragma warning restore 649
         #endregion
 
-        [SetUp]
-        public void SetUp()
+        public TestCommandAttributeLoader()
         {
             _defaultNameCommand = CommandAttributeLoader.Load(typeof (DefaultName)) as CommandConfig<DefaultName>;
         }
 
-        [Test]
+        [Fact]
         public void TypesThatAreNotCommandsCannotBeLoaded()
         {
-            Assert.That(() => CommandAttributeLoader.Load(typeof(InvalidBecauseNotACommand)), Throws.InstanceOf(typeof(Exception)));
+            var act = new Action(() => CommandAttributeLoader.Load(typeof(InvalidBecauseNotACommand)));
+            act.Should().Throw<Exception>();
         }
 
-        [Test]
+        [Fact]
         public void DefaultCommandNameIsDerivedFromClass()
         {
-            Assert.That(_defaultNameCommand.Name, Is.EqualTo("DefaultName".ToLower()));
+            Assert.Equal("DefaultName".ToLower(), _defaultNameCommand.Name);
         }
 
-        [Test]
+        [Fact]
         public void CommandIsDroppedFromDefaultCommandName()
         {
             var command = CommandAttributeLoader.Load(typeof (SuffixTestCommand));
-            Assert.That(command.Name, Is.EqualTo("SuffixTest".ToLower()));
+            Assert.Equal("SuffixTest".ToLower(), command.Name);
         }
 
-        [Test]
+        [Fact]
         public void CommandNameCanBeSpecified()
         {
             var over = CommandAttributeLoader.Load(typeof (CommandWithNameOverride)) as CommandConfig<CommandWithNameOverride>;
-            Assert.That(over.Name, Is.EqualTo("over"));
+            Assert.Equal("over", over.Name);
         }
 
-        [Test]
+        [Fact]
         public void CommandKeywordIsLoaded()
         {
             var keywordCommand = CommandAttributeLoader.Load(typeof (CommandWithKeyword)) as CommandConfig<CommandWithKeyword>;
-            Assert.That(keywordCommand.Keywords, Is.EqualTo(new [] {"keyword"}));
+            Assert.Equal(new[] { "keyword" }, keywordCommand.Keywords);
         }
 
-        [Test]
+        [Fact]
         public void MultipleCommandKeywordIsLoaded()
         {
             var keywordCommand = CommandAttributeLoader.Load(typeof (CommandWithMultipleKeywords)) as CommandConfig<CommandWithMultipleKeywords>;
-            Assert.That(keywordCommand.Keywords, Is.EqualTo(new [] {"keyword1", "keyword-2", "keyword3"}));
+            Assert.Equal(new[] { "keyword1", "keyword-2", "keyword3" }, keywordCommand.Keywords);
         }
 
-        [Test]
+        [Fact]
         public void CommandDescriptionIsExtracted()
         {
-            Assert.That((_defaultNameCommand as IContext).Description, Is.EqualTo("Command description"));
+            Assert.Equal("Command description", (_defaultNameCommand as IContext).Description);
         }
 
-        [Test]
+        [Fact]
         public void PositionalPropertyParametersAreExtracted()
         {
-            Assert.That(_defaultNameCommand.Positionals.Any(p => p.ParameterName == "prop"));
+            _defaultNameCommand.Positionals.Any(p => p.ParameterName == "prop").Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void PositionalFieldParametersAreExtracted()
         {
-            Assert.That(_defaultNameCommand.Positionals.Any(p => p.ParameterName == "posfield"));
+            _defaultNameCommand.Positionals.Any(p => p.ParameterName == "posfield").Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void PositionalDescriptionIsExtracted()
         {
             var positional = _defaultNameCommand.Positionals.First(p => p.ParameterName == "posfield");
-            Assert.That(positional.Description, Is.Not.Null);
+            positional.Description.Should().NotBeNull();
         }
 
-        [Test]
+        [Fact]
         public void UnattributedFieldsAndPropertiesAreNotExtracted()
         {
             var allNames = _defaultNameCommand.Positionals
                 .Select(p => p.ParameterName)
                 .Concat(_defaultNameCommand.Options.Select(o => o.Name))
                 .ToList();
-            Assert.That(allNames.Count(n => n.Contains("Normal")), Is.EqualTo(0));
+            allNames.Count(n => n.Contains("Normal")).Should().Be(0);
         }
 
-        [Test]
+        [Fact]
         public void OptionPropertyIsExtracted()
         {
-            Assert.That(_defaultNameCommand.Options.Any(o => o.Name == "optionprop"));
+            _defaultNameCommand.Options.Any(o => o.Name == "optionprop").Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void OptionFieldIsExtracted()
         {
-            Assert.That(_defaultNameCommand.Options.Any(o => o.Name == "optionfield"));
+            _defaultNameCommand.Options.Any(o => o.Name == "optionfield").Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void MultiParamOptionIsExtracted()
         {
-            Assert.That(_defaultNameCommand.Options.Any(o => o.Name == "Multi"));
+            _defaultNameCommand.Options.Any(o => o.Name == "Multi").Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void OptionNameCanBeOverridden()
         {
-            Assert.That(_defaultNameCommand.Options.Any(o => o.Name == "CustomName"));
+            _defaultNameCommand.Options.Any(o => o.Name == "CustomName").Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void OptionLongAndShortNamesCanBeSpecified()
         {
             var option = _defaultNameCommand.Options.First(o => o.Name == "LongName");
-            Assert.That(option.Aliases.Any(a => a == "S"));
+            option.Aliases.Any(a => a == "S").Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void OptionShortCircuitIsLoaded()
         {
             var cmd = CommandAttributeLoader.Load(typeof(CommandWithShortCircuitOption)) as CommandConfig<CommandWithShortCircuitOption>;
             var option = cmd.Options.First(o => o.Name == "c");
-            Assert.That(option.IsShortCircuit, Is.True);
+            option.IsShortCircuit.Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void OptionsDoNothaveShortCircuitByDefault()
         {
             var cmd = CommandAttributeLoader.Load(typeof(CommandWithShortCircuitOption)) as CommandConfig<CommandWithShortCircuitOption>;
             var option = cmd.Options.First(o => o.Name == "b");
-            Assert.That(option.IsShortCircuit, Is.False);
+            option.IsShortCircuit.Should().BeFalse();
         }
 
-        [Test]
+        [Fact]
         public void BooleanOptionHasIsBooleanSet()
         {
             var option = _defaultNameCommand.Options.First(o => o.Name == "switch");
-            Assert.That(option.IsBoolean, Is.True);
+            option.IsBoolean.Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void CommandWithDuplicateOptionNameThrowsOnLoad()
         {
             Assert.Throws<DuplicateOptionName>(() => CommandAttributeLoader.Load(typeof (CommandWithDuplicateOptionName)));
         }
 
-        [Test]
+        [Fact]
         public void PositionalWithoutDefaultSetIsNotOptional()
         {
             var deffo = CommandAttributeLoader.Load(typeof(CommandWithDefaultedPositional)) as CommandConfig<CommandWithDefaultedPositional>;
             var nonDefPositional = deffo.Positionals.First();
-            Assert.That(nonDefPositional.IsOptional, Is.False);
+            nonDefPositional.IsOptional.Should().BeFalse();
         }
 
-        [Test]
+        [Fact]
         public void PositionalWithDefaultSetIsOptional()
         {
             var deffo = CommandAttributeLoader.Load(typeof(CommandWithDefaultedPositional)) as CommandConfig<CommandWithDefaultedPositional>;
             var nonDefPositional = deffo.Positionals[1];
-            Assert.That(nonDefPositional.IsOptional, Is.True);
+            nonDefPositional.IsOptional.Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void PositionalWithDefaultSetHasDefaultValue()
         {
             var deffo = CommandAttributeLoader.Load(typeof(CommandWithDefaultedPositional)) as CommandConfig<CommandWithDefaultedPositional>;
             var nonDefPositional = deffo.Positionals[1];
-            Assert.That(nonDefPositional.DefaultValue, Is.EqualTo("deffo"));
+            Assert.Equal("deffo", nonDefPositional.DefaultValue);
         }
 
-        [Test]
+        [Fact]
         public void PositionalWithoutDefaultSetHasNoDefaultValue()
         {
             var deffo = CommandAttributeLoader.Load(typeof(CommandWithDefaultedPositional)) as CommandConfig<CommandWithDefaultedPositional>;
             var nonDefPositional = deffo.Positionals[0];
-            Assert.That(nonDefPositional.DefaultValue, Is.Null);
+            nonDefPositional.DefaultValue.Should().BeNull();
         }
 
-        [Test]
+        [Fact]
         public void PositionalWithNullDefaultIsOptional()
         {
             var deffo = CommandAttributeLoader.Load(typeof(CommandWithDefaultedPositional)) as CommandConfig<CommandWithDefaultedPositional>;
             var nonDefPositional = deffo.Positionals[2];
-            Assert.That(nonDefPositional.IsOptional, Is.True);
+            nonDefPositional.IsOptional.Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void PositionalWithNullDefaultHasCorrectDefaultValue()
         {
             var deffo = CommandAttributeLoader.Load(typeof(CommandWithDefaultedPositional)) as CommandConfig<CommandWithDefaultedPositional>;
             var nonDefPositional = deffo.Positionals[2];
-            Assert.That(nonDefPositional.DefaultValue, Is.Null);
+            nonDefPositional.DefaultValue.Should().BeNull();
         }
 
-        [Test]
+        [Fact]
         public void CommandImportsOptionSet()
         {
             var set = CommandAttributeLoader.Load(typeof(ExtendedCommand)) as CommandConfig<ExtendedCommand>;
             var options = set.Options.Select(o => o.Name).JoinWith(",");
-            Assert.That(options, Is.EqualTo("showprogress,dbname,dbserver"));
+            Assert.Equal("showprogress,dbname,dbserver", options);
         }
 
-        [Test]
+        [Fact]
         public void RepeatingPositionalIsDetected()
         {
             var set = CommandAttributeLoader.Load(typeof(RepeatingPositionalCommand)) as CommandConfig<RepeatingPositionalCommand>;
             var positionals = set.Positionals
                 .Select(pos => string.Format("{0}({1})", pos.ParameterName, pos.AllowMultiple))
                 .JoinWith(",");
-            Assert.That(positionals, Is.EqualTo("normal(False),repeating(True)"));
+            Assert.Equal("normal(False),repeating(True)", positionals);
         }
 
-        [Test]
+        [Fact]
         public void RepeatingPositionalsHaveListType()
         {
             var set = CommandAttributeLoader.Load(typeof(RepeatingPositionalCommand)) as CommandConfig<RepeatingPositionalCommand>;
             var positionals = set.Positionals
                 .Select(pos => string.Format("{0}({1})", pos.ParameterName, pos.ParameterType))
                 .JoinWith(",");
-            Assert.That(positionals, Is.EqualTo("normal(System.String),repeating(System.String)"));
+            Assert.Equal("normal(System.String),repeating(System.String)", positionals);
         }
 
-        [Test]
+        [Fact]
         public void RepeatingPositionalsInsertValues()
         {
             var set = CommandAttributeLoader.Load(typeof(RepeatingPositionalCommand)) as CommandConfig<RepeatingPositionalCommand>;
@@ -595,20 +589,20 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             positional.Accept(command, "Third");
 
             var result = command.Repeating.JoinWith(",");
-            Assert.That(result, Is.EqualTo("First,Second,Third"));
+            Assert.Equal("First,Second,Third", result);
         }
 
-        [Test]
+        [Fact]
         public void RepeatingOptionIsDetected()
         {
             var config = CommandAttributeLoader.Load(typeof(RepeatingOptionCommand)) as CommandConfig<RepeatingOptionCommand>;
             var positionals = config.Options
                 .Select(pos => string.Format("{0}({1})", pos.Name, pos.AllowMultiple))
                 .JoinWith(",");
-            Assert.That(positionals, Is.EqualTo("normal(False),repeating(True)"));
+            Assert.Equal("normal(False),repeating(True)", positionals);
         }
 
-        [Test]
+        [Fact]
         public void RepeatingOptionsInsertValues()
         {
             var config = CommandAttributeLoader.Load(typeof(RepeatingOptionCommand)) as CommandConfig<RepeatingOptionCommand>;
@@ -620,16 +614,17 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             option.Apply(command, new[] { "Third" }, out error);
 
             var result = command.Repeating.JoinWith(",");
-            Assert.That(result, Is.EqualTo("First,Second,Third"));
+            Assert.Equal("First,Second,Third", result);
         }
 
-        [Test]
+        [Fact]
         public void RepeatingOptionTypeCannotBeCollection()
         {
-            Assert.That(() => CommandAttributeLoader.Load(typeof(RepeatingListCommand)), Throws.InstanceOf(typeof(Exception)));
+            var act = new Action(() => CommandAttributeLoader.Load(typeof(RepeatingListCommand)));
+            act.Should().Throw<Exception>();
         }
 
-        [Test]
+        [Fact]
         public void RepeatingComplexTypeInsertsValues()
         {
             var config = CommandAttributeLoader.Load(typeof(RepeatingStructureCommand)) as CommandConfig<RepeatingStructureCommand>;
@@ -641,10 +636,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             option.Apply(command, new [] {"key3", "three"}, out error);
 
             var result = command.Repeating.Select(r => string.Format("[{0},{1}]", r.Key, r.Value)).JoinWith(",");
-            Assert.That(result, Is.EqualTo("[key1,one],[key2,two],[key3,three]"));
+            Assert.Equal("[key1,one],[key2,two],[key3,three]", result);
         }
 
-        [Test]
+        [Fact]
         public void RepeatingOptionSetOptionAcceptsValues()
         {
             var config = CommandAttributeLoader.Load(typeof(RepeatingOptionSetCommand)) as CommandConfig<RepeatingOptionSetCommand>;
@@ -656,40 +651,40 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             option.Apply(command, new [] {"three"}, out error);
 
             var result = command.CommandOptions.DbNames.JoinWith(",");
-            Assert.That(result, Is.EqualTo("one,two,three"));
+            Assert.Equal("one,two,three", result);
         }
 
-        [Test]
+        [Fact]
         public void ValidationMethodCanBeSpecified()
         {
             var config = CommandAttributeLoader.Load(typeof(ValidatedCommand)) as CommandConfig<ValidatedCommand>;
             var command = config.Create(null) as ValidatedCommand;
             var errors = new List<string>();
             config.Validate(command, errors);
-            Assert.That(errors, Is.EqualTo(new [] {"error message"}));
+            Assert.Equal(new[] { "error message" }, errors);
         }
 
-        [Test]
+        [Fact]
         public void ValidationMethodCanThrowErrors()
         {
             var config = CommandAttributeLoader.Load(typeof(ThrowingValidatorCommand)) as CommandConfig<ThrowingValidatorCommand>;
             var command = config.Create(null) as ThrowingValidatorCommand;
             var errors = new List<string>();
             config.Validate(command, errors);
-            Assert.That(errors, Is.EqualTo(new [] {"Thrown error message."}));
+            Assert.Equal(new[] { "Thrown error message." }, errors);
         }
 
-        [Test]
+        [Fact]
         public void MultipleValidationMethodsCanBeSpecified()
         {
             var config = CommandAttributeLoader.Load(typeof(MultiValidatorCommand)) as CommandConfig<MultiValidatorCommand>;
             var command = config.Create(null) as MultiValidatorCommand;
             var errors = new List<string>();
             config.Validate(command, errors);
-            Assert.That(command.ErrorListValidatorCalled && command.NoParamValidatorCalled, Is.True);
+            (command.ErrorListValidatorCalled && command.NoParamValidatorCalled).Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void ValidatorCallsShortCircuit()
         {
             var config = CommandAttributeLoader.Load(typeof(MultiValidatorCommand)) as CommandConfig<MultiValidatorCommand>;
@@ -697,83 +692,83 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var errors = new List<string>();
             command.FailNoParamValidation();
             config.Validate(command, errors);
-            Assert.That(command.ErrorListValidatorCalled, Is.False);
+            command.ErrorListValidatorCalled.Should().BeFalse();
         }
 
-        [Test]
+        [Fact]
         public void GlobalOptionsAreLoaded()
         {
             var config = CommandAttributeLoader.LoadGlobalOptions(typeof(GlobalOptionsDefinition));
-            Assert.That(config, Is.Not.Null);
+            config.Should().NotBeNull();
         }
 
-        [Test]
+        [Fact]
         public void GlobalOptionsMustBeStatic()
         {
             Assert.Throws<ArgumentException>(() => CommandAttributeLoader.LoadGlobalOptions(typeof(InstanceGlobalOptionsDefinition)));
         }
 
-        [Test]
+        [Fact]
         public void GlobalOptionPropertyIsExtracted()
         {
             var config = CommandAttributeLoader.LoadGlobalOptions(typeof(GlobalOptionsDefinition));
-            Assert.That(config.Options.Any(o => o.Name == "optionprop"));
+            config.Options.Any(o => o.Name == "optionprop").Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void GlobalOptionFieldIsExtracted()
         {
             var config = CommandAttributeLoader.LoadGlobalOptions(typeof(GlobalOptionsDefinition));
-            Assert.That(config.Options.Any(o => o.Name == "optionfield"));
+            config.Options.Any(o => o.Name == "optionfield").Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void GlobalMultiParamOptionIsExtracted()
         {
             var config = CommandAttributeLoader.LoadGlobalOptions(typeof(GlobalOptionsDefinition));
-            Assert.That(config.Options.Any(o => o.Name == "Multi"));
+            config.Options.Any(o => o.Name == "Multi").Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void GlobalOptionNameCanBeOverridden()
         {
             var config = CommandAttributeLoader.LoadGlobalOptions(typeof(GlobalOptionsDefinition));
-            Assert.That(config.Options.Any(o => o.Name == "CustomName"));
+            config.Options.Any(o => o.Name == "CustomName").Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void GlobalOptionLongAndShortNamesCanBeSpecified()
         {
             var config = CommandAttributeLoader.LoadGlobalOptions(typeof(GlobalOptionsDefinition));
             var option = config.Options.First(o => o.Name == "LongName");
-            Assert.That(option.Aliases.Any(a => a == "S"));
+            option.Aliases.Any(a => a == "S").Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void GlobalOptionShortCircuitIsLoaded()
         {
             var config = CommandAttributeLoader.LoadGlobalOptions(typeof(GlobalOptionsWithShortCircuitOption));
             var option = config.Options.First(o => o.Name == "c");
-            Assert.That(option.IsShortCircuit, Is.True);
+            option.IsShortCircuit.Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void GlobalOptionsDoNothaveShortCircuitByDefault()
         {
             var config = CommandAttributeLoader.LoadGlobalOptions(typeof(GlobalOptionsDefinition));
             var option = config.Options.First(o => o.Name == "LongName");
-            Assert.That(option.IsShortCircuit, Is.False);
+            option.IsShortCircuit.Should().BeFalse();
         }
 
-        [Test]
+        [Fact]
         public void GlobalBooleanOptionHasIsBooleanSet()
         {
             var config = CommandAttributeLoader.LoadGlobalOptions(typeof(GlobalOptionsDefinition));
             var option = config.Options.First(o => o.Name == "switch");
-            Assert.That(option.IsBoolean, Is.True);
+            option.IsBoolean.Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void GlobalConfigWithDuplicateOptionNameThrowsOnLoad()
         {
             Assert.Throws<DuplicateOptionName>(() => CommandAttributeLoader.LoadGlobalOptions(typeof(GlobalOptionsWithDuplicateOptionName)));

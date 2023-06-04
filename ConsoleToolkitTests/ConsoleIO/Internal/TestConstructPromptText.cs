@@ -4,11 +4,10 @@ using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestConstructPromptText
     {
@@ -18,9 +17,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
 
         private static readonly PropertyInfo StringProp = typeof(TestReadInputItem).GetProperty("StringVal");
         private static readonly PropertyInfo IntProp = typeof(TestReadInputItem).GetProperty("IntVal");
-
-        [SetUp]
-        public void SetUp()
+        public TestConstructPromptText()
         {
             _interface = new ConsoleInterfaceForTesting();
 
@@ -28,7 +25,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             IntVal = 0;
         }
 
-        [Test]
+        [Fact]
         public void PromptIsAutomaticallyDerivedFromPropertyName()
         {
             //Arrange
@@ -43,10 +40,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             var result = ConstructPromptText.FromItem(inputItem);
 
             //Assert
-            Assert.That(result, Is.EqualTo("Int Val: "));
+            Assert.Equal("Int Val: ", result);
         }
 
-        [Test]
+        [Fact]
         public void PromptIsTakenFromPropertyInfo()
         {
             //Arrange
@@ -62,10 +59,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             var result = ConstructPromptText.FromItem(inputItem);
 
             //Assert
-            Assert.That(result, Is.EqualTo("My prompt: "));
+            Assert.Equal("My prompt: ", result);
         }
 
-        [Test]
+        [Fact]
         public void PromptIncludesSelection()
         {
             //Arrange
@@ -81,10 +78,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             var result = ConstructPromptText.FromItem(inputItem);
 
             //Assert
-            Assert.That(result, Is.EqualTo("Int Val [A-Four, B-Ten]: "));
+            Assert.Equal("Int Val [A-Four, B-Ten]: ", result);
         }
 
-        [Test]
+        [Fact]
         public void NoPropertyInfoGivesNoPromptText()
         {
             //Arrange
@@ -99,10 +96,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             var result = ConstructPromptText.FromItem(inputItem);
 
             //Assert
-            Assert.That(result, Is.EqualTo(": "));
+            Assert.Equal(": ", result);
         }
 
-        [Test]
+        [Fact]
         public void NoPropertyInfoOnSelectionGivesSelectionText()
         {
             //Arrange
@@ -118,10 +115,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             var result = ConstructPromptText.FromItem(inputItem);
 
             //Assert
-            Assert.That(result, Is.EqualTo("[A-Four, B-Ten]: "));
+            Assert.Equal("[A-Four, B-Ten]: ", result);
         }
 
-        [Test]
+        [Fact]
         public void PromptCanDisplaySelectionAsMenu()
         {
             //Arrange
@@ -144,10 +141,10 @@ A-Four
 B-Ten
 
 Int Val: ";
-            Assert.That(result, Is.EqualTo(expected));
+            Assert.Equal(expected, result);
         }
 
-        [Test]
+        [Fact]
         public void NoPropertyInfoOnMenuGivesMenuText()
         {
             //Arrange
@@ -169,7 +166,7 @@ A-Four
 B-Ten
 
 : ";
-            Assert.That(result, Is.EqualTo(expected));
+            Assert.Equal(expected, result);
         }
 
     }

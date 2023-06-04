@@ -32,4 +32,7 @@ Comprehensive library documentation is available from the project website, but t
   <ItemGroup>
     <PackageReference Include="System.Reflection.Emit" Version="4.3.0" />
   </ItemGroup>
+    <ItemGroup>
+        <InternalsVisibleTo Include="ConsoleToolkitTests" />
+    </ItemGroup>
 </Project>

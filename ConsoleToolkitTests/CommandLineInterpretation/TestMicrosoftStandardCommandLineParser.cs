@@ -1,15 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using FluentAssertions;
+using Xunit;
 
 namespace ConsoleToolkitTests.CommandLineInterpretation
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestMicrosoftStandardCommandLineParser
     {
@@ -30,8 +30,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             public int ParameterCount { get; set; }
         }
 
-        [SetUp]
-        public void SetUp()
+        public TestMicrosoftStandardCommandLineParser()
         {
             _positionals = new[] {"pos1", "pos2", "pos3"}.Select(Positional).ToList();
             _options = new[] {"opt", "opt1", "opt2"}.Select(Option).ToList();
@@ -39,7 +38,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             _parser = new MicrosoftStandardCommandLineParser();
         }
 
-        [Test]
+        [Fact]
         public void PositionalParametersAreExtracted()
         {
             
@@ -50,7 +49,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(_result.Log);
         }
 
-        [Test]
+        [Fact]
         public void ParsingStopsWhenPositionalReturnsHalt()
         {
             
@@ -62,7 +61,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(_result.Log);
         }
 
-        [Test]
+        [Fact]
         public void NoParameterOptionsAreExtracted()
         {
             
@@ -73,7 +72,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(_result.Log);
         }
 
-        [Test]
+        [Fact]
         public void NamedParametersAreExtractedAsOptions()
         {
             var args = CommandLineTokeniser.Tokenise("-parameter2 parameter1 ");
@@ -83,7 +82,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(_result.Log);
         }
 
-        [Test]
+        [Fact]
         public void NamedParametersAreNotSubjectedToArgSplitting()
         {
             var args = CommandLineTokeniser.Tokenise("-pos2 ,");
@@ -93,7 +92,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(_result.Log);
         }
 
-        [Test]
+        [Fact]
         public void OptionAndParameterNamesAreNotCaseSensitive()
         {
             
@@ -104,7 +103,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(_result.Log);
         }
 
-        [Test]
+        [Fact]
         public void UnrecognisedOptionsArePassedThroughVerbatim()
         {
             
@@ -115,7 +114,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(_result.Log);
         }
 
-        [Test]
+        [Fact]
         public void ConjoinedOptionParametersAreExtracted()
         {
             
@@ -126,7 +125,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(_result.Log);
         }
 
-        [Test]
+        [Fact]
         public void OptionParametersInNextTokenAreExtracted()
         {
             
@@ -137,7 +136,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(_result.Log);
         }
 
-        [Test]
+        [Fact]
         public void MultipleOptionParametersInNextTokenAreExtracted()
         {
             
@@ -148,7 +147,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(_result.Log);
         }
 
-        [Test]
+        [Fact]
         public void MultipleConjoinedOptionParametersAreExtracted()
         {
             _options.First(o => o.Name == "opt1").ParameterCount = 3;
@@ -159,7 +158,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(_result.Log);
         }
 
-        [Test]
+        [Fact]
         public void DoubleDashTokenEndsOptionProcessing()
         {
             
@@ -170,17 +169,17 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(_result.Log);
         }
 
-        [Test]
+        [Fact]
         public void ParserIsAlsoAnOptionAdorner()
         {
-            Assert.That(_parser, Is.InstanceOf(typeof(IOptionNameHelpAdorner)));
+            _parser.Should().BeAssignableTo<IOptionNameHelpAdorner>();
         }
 
-        [Test]
+        [Fact]
         public void OptionNameIsAdorned()
         {
             var adorner = _parser as IOptionNameHelpAdorner;
-            Assert.That(adorner.Adorn("X"), Is.EqualTo("-X"));
+            Assert.Equal("-X", adorner.Adorn("X"));
         }
 
         private PositionalArg Positional(string name)

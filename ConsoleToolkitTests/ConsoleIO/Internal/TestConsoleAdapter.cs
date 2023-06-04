@@ -7,11 +7,11 @@ using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using FluentAssertions;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestConsoleAdapter
     {
@@ -38,16 +38,14 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         }
 
         #endregion
-
-        [SetUp]
-        public void SetUp()
+        public TestConsoleAdapter()
         {
             Toolkit.GlobalReset();
             _consoleInterface = new ConsoleInterfaceForTesting();
             _adapter = new ConsoleAdapter(_consoleInterface);
         }
 
-        [Test]
+        [Fact]
         public void LinesAreWrittenToTheConsole()
         {
             _adapter.WriteLine("Console {0}", "output");
@@ -56,7 +54,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_consoleInterface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void AnAnonymousTypeIsFilledFromStdIn()
         {
             const string data = @"String line
@@ -66,11 +64,11 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             {
                 _consoleInterface.SetInputStream(s);
                 var item = _adapter.ReadInput(template);
-                Assert.That(item, Is.EqualTo(template));
+                Assert.Equal(template, item);
             }
         }
 
-        [Test]
+        [Fact]
         public void ATupleIsFilledFromStdInByTemplate()
         {
             const string data = @"String line
@@ -80,11 +78,11 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             {
                 _consoleInterface.SetInputStream(s);
                 var item = _adapter.ReadInput(template);
-                Assert.That(item, Is.EqualTo(template));
+                Assert.Equal(template, item);
             }
         }
 
-        [Test]
+        [Fact]
         public void ACustomTypeIsFilledFromStdInByTemplate()
         {
             const string data = @"String line
@@ -94,11 +92,11 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             {
                 _consoleInterface.SetInputStream(s);
                 var item = _adapter.ReadInput(template);
-                Assert.That(item.ToString(), Is.EqualTo(template.ToString()));
+                Assert.Equal(template.ToString(), item.ToString());
             }
         }
 
-        [Test]
+        [Fact]
         public void ATupleIsFilledFromStdIn()
         {
             const string data = @"String line
@@ -108,11 +106,11 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             {
                 _consoleInterface.SetInputStream(s);
                 var item = _adapter.ReadInput<Tuple<string, int>>();
-                Assert.That(item, Is.EqualTo(template));
+                Assert.Equal(template, item);
             }
         }
 
-        [Test]
+        [Fact]
         public void ACustomTypeIsFilledFromStdIn()
         {
             const string data = @"String line
@@ -122,22 +120,22 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             {
                 _consoleInterface.SetInputStream(s);
                 var item = _adapter.ReadInput<StringIntType>();
-                Assert.That(item.ToString(), Is.EqualTo(template.ToString()));
+                Assert.Equal(template.ToString(), item.ToString());
             }
         }
 
-        [Test]
+        [Fact]
         public void DefaultConfirmAcceptsY()
         {
             const string data = @"Y";
             using (var s = new StringReader(data))
             {
                 _consoleInterface.SetInputStream(s);
-                Assert.That(_adapter.Confirm("Accepts Y"), Is.True);
+                _adapter.Confirm("Accepts Y").Should().BeTrue();
             }
         }
 
-        [Test]
+        [Fact]
         public void ConfirmDisplaysPrompt()
         {
             const string data = @"Y";
@@ -149,18 +147,18 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             }
         }
 
-        [Test]
+        [Fact]
         public void DefaultConfirmAcceptsN()
         {
             const string data = @"N";
             using (var s = new StringReader(data))
             {
                 _consoleInterface.SetInputStream(s);
-                Assert.That(_adapter.Confirm("Accepts N"), Is.False);
+                _adapter.Confirm("Accepts N").Should().BeFalse();
             }
         }
 
-        [Test]
+        [Fact]
         public void ConfirmationYesOptionCanBeOverridden()
         {
             Toolkit.Options.OverrideConfirmOptions("T", "True", "F", "False");
@@ -168,11 +166,11 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             using (var s = new StringReader(data))
             {
                 _consoleInterface.SetInputStream(s);
-                Assert.That(_adapter.Confirm("Accepts T"), Is.True);
+                _adapter.Confirm("Accepts T").Should().BeTrue();
             }
         }
 
-        [Test]
+        [Fact]
         public void ConfirmationNoOptionCanBeOverridden()
         {
             Toolkit.Options.OverrideConfirmOptions("T", "True", "F", "False");
@@ -180,7 +178,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             using (var s = new StringReader(data))
             {
                 _consoleInterface.SetInputStream(s);
-                Assert.That(_adapter.Confirm("Accepts F"), Is.False);
+                _adapter.Confirm("Accepts F").Should().BeFalse();
             }
         }
     }

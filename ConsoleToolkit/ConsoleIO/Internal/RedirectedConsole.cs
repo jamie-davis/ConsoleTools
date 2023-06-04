@@ -18,8 +18,19 @@ namespace ConsoleToolkit.ConsoleIO.Internal
         /// </summary>
         private TextWriter _stream;
 
-        public RedirectedConsole(ConsoleStream stream)
+        public RedirectedConsole(ConsoleStream stream) : this(stream, null)
         {
+            
+        }
+        
+        /// <summary>
+        /// Specialised constructor allowing specification of the stream being redirected and am optional default width if the buffer width is not available. 
+        /// </summary>
+        /// <param name="stream">The stream being redirected, i.e. stdout or stderr</param>
+        /// <param name="overrideDefaultWidth">The default width to use when a specific buffer width is not available.</param>
+        public RedirectedConsole(ConsoleStream stream, int? overrideDefaultWidth = null)
+        {
+            var defaultWidth = overrideDefaultWidth ?? DefaultWidth;
             try
             {
                 //this may throw if there is no real console.
@@ -28,12 +39,12 @@ namespace ConsoleToolkit.ConsoleIO.Internal
             }
             catch (Exception)
             {
-                _width = DefaultWidth;
+                _width = defaultWidth;
                 Encoding = Encoding.Default;
             }
 
             if (_width == 0)
-                _width = DefaultWidth;
+                _width = defaultWidth;
 
             _stream = stream == ConsoleStream.Out ? Console.Out : Console.Error;
         }

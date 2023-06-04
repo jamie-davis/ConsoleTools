@@ -1,27 +1,24 @@
-﻿using System;
+using System;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using ApprovalUtilities.Utilities;
 using ConsoleToolkit.ConsoleIO.Internal.RecordedCommands;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal.RecordedCommands
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestNewLineCommand
     {
         private ReplayBuffer _buffer;
         private const int TestBufferWidth = 20;
-
-        [SetUp]
-        public void SetUp()
+        public TestNewLineCommand()
         {
             _buffer = new ReplayBuffer(TestBufferWidth);
         }
 
-        [Test]
+        [Fact]
         public void WriteCommandReplaysWriteOperation()
         {
             var command = new NewLineCommand();
@@ -33,18 +30,18 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal.RecordedCommands
             Approvals.Verify(_buffer.ToLines().JoinWith(Environment.NewLine));
         }
 
-        [Test]
+        [Fact]
         public void FirstWordLengthIsZero()
         {
             var command = new NewLineCommand();
-            Assert.That(command.GetFirstWordLength(4), Is.EqualTo(0));            
+            Assert.Equal(0, command.GetFirstWordLength(4));            
         }
 
-        [Test]
+        [Fact]
         public void LongestWordLengthIsZero()
         {
             var command = new NewLineCommand();
-            Assert.That(command.GetLongestWordLength(4), Is.EqualTo(0));            
+            Assert.Equal(0, command.GetLongestWordLength(4));            
         }
     }
 }

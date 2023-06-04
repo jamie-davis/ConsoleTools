@@ -1,17 +1,14 @@
-﻿using ApprovalTests;
+using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAcceptanceTests
 {
-    // ReSharper disable UnusedAutoPropertyAccessor.Local
-    // ReSharper disable UnusedMember.Local
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class Config1AcceptanceTests
     {
@@ -49,9 +46,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             public int OverrunLength { get; set; }
             public bool Kidding { get; set; }
         }
-
-        [SetUp]
-        public void SetUp()
+        public Config1AcceptanceTests()
         {
             _posix = new CommandLineInterpreterConfiguration(CommandLineParserConventions.PosixConventions);
             _msDos = new CommandLineInterpreterConfiguration(CommandLineParserConventions.MsDosConventions);
@@ -102,7 +97,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                     .Description("Run in just kidding mode.");
         }
 
-        [Test]
+        [Fact]
         public void ConfigurationShouldBeDescribed()
         {
             CommandDescriber.Describe(_posix, _console,  "POSIX", CommandExecutionMode.CommandLine);
@@ -119,7 +114,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             Approvals.Verify(description);
         }
 
-        [Test]
+        [Fact]
         public void PosixStyleCommand1()
         {
             var commands = new[]
@@ -141,7 +136,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             Approvals.Verify(CommandExecutorUtil.Do(_posix, commands, 50, false));
         }
 
-        [Test]
+        [Fact]
         public void MsDosStyleCommand1()
         {
             var commands = new[]
@@ -167,7 +162,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             Approvals.Verify(CommandExecutorUtil.Do(_msDos, commands, 50, false));
         }
 
-        [Test]
+        [Fact]
         public void MsStdStyleCommand1()
         {
             var commands = new[]

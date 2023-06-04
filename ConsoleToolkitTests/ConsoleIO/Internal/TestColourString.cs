@@ -1,74 +1,73 @@
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
-    [TestFixture]
     public class TestColourString
     {
         const string SimpleString = "normal data with no colour";
         static readonly string ColouredString = "annotated".Red() + " data".Yellow() + " with".Green() + " colour".BGCyan();
         static readonly string Control = "annotated" + " data" + " with" + " colour"; //same as coloured string, but without colour
 
-        [Test]
+        [Fact]
         public void SimpleStringIsMeasured()
         {
-            Assert.That(ColourString.Length(SimpleString), Is.EqualTo(SimpleString.Length));
+            Assert.Equal(SimpleString.Length, ColourString.Length(SimpleString));
         }
 
-        [Test]
+        [Fact]
         public void ColouredStringIsMeasured()
         {
-            Assert.That(ColourString.Length(ColouredString), Is.EqualTo(Control.Length));
+            Assert.Equal(Control.Length, ColourString.Length(ColouredString));
         }
 
-        [Test]
+        [Fact]
         public void CompletelyEmptyStringHasZeroLength()
         {
-            Assert.That(ColourString.Length(string.Empty), Is.EqualTo(0));
+            Assert.Equal(0, ColourString.Length(string.Empty));
         }
 
-        [Test]
+        [Fact]
         public void EmptyStringWithColoursHasZeroLength()
         {
-            Assert.That(ColourString.Length(string.Empty.Red().BGBlack()), Is.EqualTo(0));
+            Assert.Equal(0, ColourString.Length(string.Empty.Red().BGBlack()));
         }
 
-        [Test]
+        [Fact]
         public void SubstringReturnsStringBeginning()
         {
-            Assert.That(ColourString.Substring(SimpleString, 0, 5), Is.EqualTo(SimpleString.Substring(0, 5)));
+            Assert.Equal(SimpleString.Substring(0, 5), ColourString.Substring(SimpleString, 0, 5));
         }
 
-        [Test]
+        [Fact]
         public void SubtringReturnsColouredStringBeginning()
         {
-            Assert.That(ColourString.Substring(ColouredString, 0, 5), Is.EqualTo("annot".Red() + "".Yellow() + "".Green() + "".BGCyan()));
+            Assert.Equal("annot".Red() + "".Yellow() + "".Green() + "".BGCyan(), ColourString.Substring(ColouredString, 0, 5));
         }
 
-        [Test]
+        [Fact]
         public void SubstringReturnsSectionFromString()
         {
-            Assert.That(ColourString.Substring(SimpleString, 5, 3), Is.EqualTo(SimpleString.Substring(5, 3)));
+            Assert.Equal(SimpleString.Substring(5, 3), ColourString.Substring(SimpleString, 5, 3));
         }
 
-        [Test]
+        [Fact]
         public void SubstringReturnsSectionFromColouredString()
         {
-            Assert.That(ColourString.Substring(ColouredString, 8, 3), Is.EqualTo("d".Red()+" d".Yellow()+"".Green()+"".BGCyan()));
+            Assert.Equal("d".Red() + " d".Yellow() + "".Green() + "".BGCyan(), ColourString.Substring(ColouredString, 8, 3));
         }
 
-        [Test]
+        [Fact]
         public void SubstringReturnsStringEnd()
         {
-            Assert.That(ColourString.Substring(SimpleString, 20), Is.EqualTo(SimpleString.Substring(20)));
+            Assert.Equal(SimpleString.Substring(20), ColourString.Substring(SimpleString, 20));
         }
 
-        [Test]
+        [Fact]
         public void SubstringReturnsColouredStringEnd()
         {
-            Assert.That(ColourString.Substring(ColouredString, 22), Is.EqualTo("".Red() + "".Yellow() + "".Green() + "lour".BGCyan()));
+            Assert.Equal("".Red() + "".Yellow() + "".Green() + "lour".BGCyan(), ColourString.Substring(ColouredString, 22));
         }
     }
 }

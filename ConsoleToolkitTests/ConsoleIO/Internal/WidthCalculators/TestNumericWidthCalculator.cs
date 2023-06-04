@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ApprovalTests;
@@ -7,19 +7,16 @@ using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.ConsoleIO.Internal.WidthCalculators;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal.WidthCalculators
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestNumericWidthCalculator
     {
         private List<ColumnFormat> _formats;
         private List<ColumnFormat> _templatedFormats;
-
-        [SetUp]
-        public void SetUp()
+        public TestNumericWidthCalculator()
         {
             _formats = new List<ColumnFormat>
             {
@@ -60,7 +57,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal.WidthCalculators
             return new ColumnFormat("A", typeof(T), format: template);
         }
 
-        [Test]
+        [Fact]
         public void WithoutTemplatesMinAndMaxAreSetToWidestForType()
         {
             var reportLines =
@@ -72,7 +69,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal.WidthCalculators
             Approvals.Verify(output);
         }
 
-        [Test]
+        [Fact]
         public void WithTemplatesMinAndMaxAreSetToWidestForType()
         {
             var reportLines =

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using ApprovalTests;
 using ApprovalTests.Reporters;
@@ -8,11 +8,10 @@ using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.ConsoleIO.UnitTestUtilities;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.CommandLineInterpretation
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestCommandDescriber
     {
@@ -40,9 +39,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
                 return "**" + name;
             }
         }
-
-        [SetUp]
-        public void SetUp()
+        public TestCommandDescriber()
         {
             _config = new CommandLineInterpreterConfiguration();
             _config.GlobalOption(typeof(GlobalOptions))
@@ -139,7 +136,7 @@ a line break.")
             _console = new ConsoleAdapter(_consoleOutInterface);
         }
 
-        [Test]
+        [Fact]
         public void DescriptionOfCommandsIsFormatted()
         {
             _console.WriteLine(RulerFormatter.MakeRuler(_console.WindowWidth));
@@ -147,7 +144,7 @@ a line break.")
             Approvals.Verify(_consoleOutInterface.GetBuffer() );
         }
 
-        [Test]
+        [Fact]
         public void DescriptionOfInteractiveCommandsIsFormatted()
         {
             _console.WriteLine(RulerFormatter.MakeRuler(_console.WindowWidth));
@@ -155,7 +152,7 @@ a line break.")
             Approvals.Verify(_consoleOutInterface.GetBuffer() );
         }
 
-        [Test]
+        [Fact]
         public void SelectedCommandDescriptionIsFormatted()
         {
             _console.WriteLine(RulerFormatter.MakeRuler(_console.WindowWidth));
@@ -163,7 +160,7 @@ a line break.")
             Approvals.Verify(_consoleOutInterface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void SelectedInteractiveCommandDescriptionIsFormatted()
         {
             _console.WriteLine(RulerFormatter.MakeRuler(_console.WindowWidth));
@@ -171,7 +168,7 @@ a line break.")
             Approvals.Verify(_consoleOutInterface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void DefaultCommandHelpIsFormatted()
         {
             var config = new CommandLineInterpreterConfiguration();
@@ -190,7 +187,7 @@ a line break.")
             Approvals.Verify(buffer);
         }
 
-        [Test]
+        [Fact]
         public void KeywordQueryResultIsFormatted()
         {
             var config = new CommandLineInterpreterConfiguration();
@@ -212,7 +209,7 @@ a line break.")
             Approvals.Verify(_consoleOutInterface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void PartialKeywordQueryResultIsFormatted()
         {
             var config = new CommandLineInterpreterConfiguration();
@@ -235,7 +232,7 @@ a line break.")
             Approvals.Verify(_consoleOutInterface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void KeywordsAreDisplayedInCommandHelp()
         {
             var config = new CommandLineInterpreterConfiguration();
@@ -253,7 +250,7 @@ a line break.")
             Approvals.Verify(_consoleOutInterface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void ClashesWithGlobalOptionNamesComeOutInCommandFavour()
         {
             var config = new CommandLineInterpreterConfiguration();
@@ -275,7 +272,7 @@ a line break.")
             Approvals.Verify(_consoleOutInterface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void ClashesWithGlobalOptionAliasesComeOutInCommandFavour()
         {
             var config = new CommandLineInterpreterConfiguration();
@@ -297,7 +294,7 @@ a line break.")
             Approvals.Verify(_consoleOutInterface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void GlobalOptionExcludedIfItHasNoUniqueNames()
         {
             var config = new CommandLineInterpreterConfiguration();

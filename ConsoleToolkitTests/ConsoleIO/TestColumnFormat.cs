@@ -5,11 +5,11 @@ using ApprovalTests.Reporters;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using FluentAssertions;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO
 {
-    [TestFixture]
     [UseReporter(typeof(CustomReporter))]
     public class TestColumnFormat
     {
@@ -38,7 +38,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             typeof(object),
         };
 
-        [Test]
+        [Fact]
         public void NumericTypesAreRightAligned()
         {
             var sb = new StringBuilder();
@@ -61,7 +61,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(sb.ToString());
         }
 
-        [Test]
+        [Fact]
         public void DefaultColumnRequiresWidthCalculatedFromData()
         {
             //Arrange
@@ -71,10 +71,10 @@ namespace ConsoleToolkitTests.ConsoleIO
             var result = format.DetermineWidthFromData();
 
             //Assert
-            Assert.That(result, Is.True);
+            result.Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void FixedWidthColumnDoesNotRequireWidthCalculation()
         {
             //Arrange
@@ -85,7 +85,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             var result = format.DetermineWidthFromData();
 
             //Assert
-            Assert.That(result, Is.False);
+            result.Should().BeFalse();
         }
     }
 }

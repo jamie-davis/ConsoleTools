@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit;
@@ -10,12 +10,11 @@ using ConsoleToolkit.Properties;
 using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.ConsoleIO.UnitTestUtilities;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace ConsoleToolkitTests.ConsoleIO
 {
-    [TestFixture]
     [UseReporter(typeof(CustomReporter))]
     public class ConsoleOutputAcceptanceTests
     {
@@ -91,11 +90,9 @@ namespace ConsoleToolkitTests.ConsoleIO
                 Toolkit.Execute<ConsoleInputAcceptanceTests.Program1>(args);
             }
         }
-
+        
         #endregion
-
-        [SetUp]
-        public void SetUp()
+        public ConsoleOutputAcceptanceTests()
         {
             _console = new ConsoleInterfaceForTesting();
         }
@@ -112,7 +109,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             _console.Write(RulerFormatter.MakeRuler(width));
         }
 
-        [Test]
+        [Fact]
         public void SimpleReportIsFormatted()
         {
             //Arrange
@@ -125,7 +122,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(_console.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void MinWidthDoesNotFitColumnsAreStacked()
         {
             //Arrange
@@ -138,7 +135,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(_console.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void MinWidthThatFillsWholeLineIsFormatted()
         {
             //Arrange
@@ -151,7 +148,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(_console.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void FixedColumnsThatDoNotFitAreStacked()
         {
             //Arrange

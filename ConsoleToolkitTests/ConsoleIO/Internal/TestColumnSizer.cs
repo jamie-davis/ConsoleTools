@@ -7,16 +7,16 @@ using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkitTests.ConsoleIO.UnitTestUtilities;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using FluentAssertions;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestColumnSizer
     {
 
-        [Test]
+        [Fact]
         public void ZeroLineBreaksReturnsWidestLength()
         {
             var sizer = new ColumnSizer(typeof(int));
@@ -24,10 +24,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             for (var n = 0; n <= 100; ++n)
                 sizer.ColumnValue(n.ToString());
 
-            Assert.That(sizer.MinWidth(0), Is.EqualTo(3));
+            Assert.Equal(3, sizer.MinWidth(0));
         }
 
-        [Test]
+        [Fact]
         public void IntDataDoesNotAllowLineBreaks()
         {
             var sizer = new ColumnSizer(typeof(int));
@@ -35,10 +35,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             for (var n = 0; n <= 100; ++n)
                 sizer.ColumnValue(n.ToString());
 
-            Assert.That(sizer.MinWidth(10), Is.EqualTo(3));
+            Assert.Equal(3, sizer.MinWidth(10));
         }
 
-        [Test]
+        [Fact]
         public void DecimalDataDoesNotAllowLineBreaks()
         {
             var sizer = new ColumnSizer(typeof(decimal));
@@ -46,10 +46,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             for (decimal n = 0; n <= 100; ++n)
                 sizer.ColumnValue(n.ToString());
 
-            Assert.That(sizer.MinWidth(10), Is.EqualTo(3));
+            Assert.Equal(3, sizer.MinWidth(10));
         }
 
-        [Test]
+        [Fact]
         public void DateTimeDataDoesNotAllowLineBreaks()
         {
             var sizer = new ColumnSizer(typeof(double));
@@ -57,10 +57,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             for (var n = 0; n <= 100; ++n)
                 sizer.ColumnValue((DateTime.Parse("2014-04-28") + new TimeSpan(n, 0, 0, 0)).ToString("yyyy-MM-dd"));
 
-            Assert.That(sizer.MinWidth(10), Is.EqualTo(10));
+            Assert.Equal(10, sizer.MinWidth(10));
         }
 
-        [Test]
+        [Fact]
         public void StringValuesAllowLineBreaks()
         {
             var sizer = new ColumnSizer(typeof(string));
@@ -75,10 +75,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Console.WriteLine(RulerFormatter.MakeRuler(minWidth));
             Console.WriteLine(string.Join(Environment.NewLine, formatted));
 
-            Assert.That(minWidth, Is.EqualTo(33));
+            Assert.Equal(33, minWidth);
         }
 
-        [Test]
+        [Fact]
         public void FittingToLineBreaksStopsIfTheMaximumPossibleNumberOfLineBreaksIsReached()
         {
             var sizer = new ColumnSizer(typeof(string));
@@ -88,20 +88,20 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             sizer.ColumnValue(testValue);
 
             var minWidth = sizer.MinWidth(200);
-            Assert.That(minWidth, Is.EqualTo(1));
+            Assert.Equal(1, minWidth);
         }
 
-        [Test]
+        [Fact]
         public void IdealMinWidthIsCalculated()
         {
             var sizer = new ColumnSizer(typeof(string));
             sizer.ColumnValue("XXXX XXXX");
             sizer.ColumnValue("YYYYYY XXXXX");
             
-            Assert.That(sizer.GetIdealMinimumWidth(), Is.EqualTo(6));
+            Assert.Equal(6, sizer.GetIdealMinimumWidth());
         }
 
-        [Test]
+        [Fact]
         public void IdealMinWidthIsReCalculated()
         {
             var sizer = new ColumnSizer(typeof(string));
@@ -111,10 +111,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             var oldWidth = sizer.GetIdealMinimumWidth();
             sizer.ColumnValue("YYYYYYY");
 
-            Assert.That(sizer.GetIdealMinimumWidth(), Is.EqualTo(7));
+            Assert.Equal(7, sizer.GetIdealMinimumWidth());
         }
 
-        [Test]
+        [Fact]
         public void FixedColumnIdealMinWidthIsAlwaysFixed()
         {
             var sizer = new ColumnSizer(typeof(string), new ColumnFormat(type: typeof(string))  { FixedWidth = 4});
@@ -124,10 +124,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             var oldWidth = sizer.GetIdealMinimumWidth();
             sizer.ColumnValue("YYYYYYY");
 
-            Assert.That(sizer.GetIdealMinimumWidth(), Is.EqualTo(4));
+            Assert.Equal(4, sizer.GetIdealMinimumWidth());
         }
 
-        [Test]
+        [Fact]
         public void FixedColumnMinWidthIsAlwaysFixed()
         {
             var sizer = new ColumnSizer(typeof(string), new ColumnFormat(type: typeof(string))  { FixedWidth = 4});
@@ -135,10 +135,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             sizer.ColumnValue("YYYYYY XXXXX");
 
             var width = sizer.MinWidth(0);
-            Assert.That(width, Is.EqualTo(4));
+            Assert.Equal(4, width);
         }
 
-        [Test]
+        [Fact]
         public void MinWidthColumnIdealMinWidthIsAlwaysMinimum()
         {
             var sizer = new ColumnSizer(typeof(string), new ColumnFormat(type: typeof(string))  { MinWidth = 6});
@@ -148,10 +148,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             var oldWidth = sizer.GetIdealMinimumWidth();
             sizer.ColumnValue("YYYYYYY");
 
-            Assert.That(sizer.GetIdealMinimumWidth(), Is.EqualTo(6));
+            Assert.Equal(6, sizer.GetIdealMinimumWidth());
         }
 
-        [Test]
+        [Fact]
         public void MinWidthColumnMinWidthIsAlwaysMinimum()
         {
             var sizer = new ColumnSizer(typeof(string), new ColumnFormat(type: typeof(string)) { MinWidth = 6 });
@@ -159,10 +159,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             sizer.ColumnValue("YYYYYY XXXXX");
 
             var width = sizer.MinWidth(0);
-            Assert.That(width, Is.EqualTo(6));
+            Assert.Equal(6, width);
         }
 
-        [Test]
+        [Fact]
         public void RenderableColumnValuesAreNotConvertedToText()
         {
             var sizer = new ColumnSizer(typeof(string));
@@ -173,10 +173,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             renderable.FormatTable(Enumerable.Range(0, 3).Select(i => new {String = "blah blah blah blah", Number = i}));
             sizer.ColumnValue(renderable);
 
-            Assert.That(sizer.GetSizeValue(1).RenderableValue, Is.Not.Null);
+            sizer.GetSizeValue(1).RenderableValue.Should().NotBeNull();
         }
 
-        [Test]
+        [Fact]
         public void MaxLineBreaksIsCalculated()
         {
             var columnFormat = new ColumnFormat("", typeof(string));

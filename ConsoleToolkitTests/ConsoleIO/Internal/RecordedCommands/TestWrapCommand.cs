@@ -1,28 +1,25 @@
-﻿using System;
+using System;
 using System.Linq;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using ApprovalUtilities.Utilities;
 using ConsoleToolkit.ConsoleIO.Internal.RecordedCommands;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal.RecordedCommands
 {
-    [TestFixture]
     [UseReporter(typeof(CustomReporter))]
     public class TestWrapCommand
     {
         private ReplayBuffer _buffer;
         private const int TestBufferWidth = 20;
-
-        [SetUp]
-        public void SetUp()
+        public TestWrapCommand()
         {
             _buffer = new ReplayBuffer(TestBufferWidth);
         }
 
-        [Test]
+        [Fact]
         public void WrapCommandReplaysWrapOperation()
         {
             var command = new WrapCommand("XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXX");
@@ -34,32 +31,32 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal.RecordedCommands
             Approvals.Verify(_buffer.ToLines().JoinWith(Environment.NewLine));
         }
 
-        [Test]
+        [Fact]
         public void LongestWordLengthIsReturned()
         {
             var command = new WrapCommand("Test text with one longer word.");
-            Assert.That(command.GetLongestWordLength(4), Is.EqualTo("longer".Length));
+            Assert.Equal("longer".Length, command.GetLongestWordLength(4));
         }
 
-        [Test]
+        [Fact]
         public void FirstWordLengthIsReturned()
         {
             var command = new WrapCommand("Test text with one longer word.");
-            Assert.That(command.GetFirstWordLength(4), Is.EqualTo("Test".Length));
+            Assert.Equal("Test".Length, command.GetFirstWordLength(4));
         }
 
-        [Test]
+        [Fact]
         public void LongestWordLengthIsZeroForEmptyString()
         {
             var command = new WrapCommand(string.Empty);
-            Assert.That(command.GetLongestWordLength(4), Is.EqualTo(0));
+            Assert.Equal(0, command.GetLongestWordLength(4));
         }
 
-        [Test]
+        [Fact]
         public void FirstWordLengthIsZeroForEmptyString()
         {
             var command = new WrapCommand(string.Empty);
-            Assert.That(command.GetFirstWordLength(4), Is.EqualTo(0));
+            Assert.Equal(0, command.GetFirstWordLength(4));
         }
 
     }

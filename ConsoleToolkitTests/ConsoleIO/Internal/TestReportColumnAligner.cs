@@ -4,15 +4,14 @@ using ApprovalTests.Reporters;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestReportColumnAligner
     {
-        [Test]
+        [Fact]
         public void SingleLineIsFormatted()
         {
             var output = ReportColumnAligner.AlignColumns(new[] {10, 3, 5},
@@ -21,7 +20,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output);
         }
 
-        [Test]
+        [Fact]
         public void ExcessiveDataIsTrimmed()
         {
             var output = ReportColumnAligner.AlignColumns(new[] { 8, 2, 4 }, 
@@ -30,7 +29,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output);
         }
 
-        [Test]
+        [Fact]
         public void ShortDataIsPadded()
         {
             var output = ReportColumnAligner.AlignColumns(new[] { 14, 6, 7 }, 
@@ -39,7 +38,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output);
         }
 
-        [Test]
+        [Fact]
         public void MultiRowDataIsFormattedInColumns()
         {
             var output = ReportColumnAligner.AlignColumns(new[] { 14, 6, 7 }, 
@@ -48,7 +47,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output);
         }
 
-        [Test]
+        [Fact]
         public void InconsistentRowsAreTopAligned()
         {
             var output = ReportColumnAligner.AlignColumns(new[] { 10, 3, 5 }, 
@@ -57,7 +56,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output);
         }
 
-        [Test]
+        [Fact]
         public void InconsistentRowsAreBottomAligned()
         {
             var output = ReportColumnAligner.AlignColumns(new[] { 10, 3, 5 }, 
@@ -67,7 +66,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(output);
         }
 
-        [Test]
+        [Fact]
         public void ColourDataIsNotCountedInTheWidth()
         {
             var output = ReportColumnAligner.AlignColumns(new[] {14, 6, 7},

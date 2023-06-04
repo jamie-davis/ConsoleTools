@@ -12,21 +12,19 @@ using ConsoleToolkit.ConsoleIO.ReportDefinitions;
 using ConsoleToolkit.Utilities;
 using ConsoleToolkitTests.ConsoleIO.UnitTestUtilities;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestTabularReport
     {
-        [SetUp]
-        public void SetUp()
+        public TestTabularReport()
         {
             SetUpTests.OverrideCulture();
         }
 
-        [Test]
+        [Fact]
         public void TabularReportWithoutWrappingIsFormatted()
         {
             SetUpTests.OverrideCulture();
@@ -44,7 +42,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(report);
         }
 
-        [Test]
+        [Fact]
         public void TabularReportWithWrappingIsFormatted()
         {
             var data = Enumerable.Range(0, 10)
@@ -61,7 +59,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(report);
         }
 
-        [Test]
+        [Fact]
         public void ColumnHeadingsCanBeOmitted()
         {
             var data = Enumerable.Range(0, 10)
@@ -78,7 +76,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(report);
         }
 
-        [Test]
+        [Fact]
         public void TabularReportWithTwoWrappingTextColumnsIsFormatted()
         {
             var data = Enumerable.Range(0, 10)
@@ -96,7 +94,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(report);
         }
 
-        [Test]
+        [Fact]
         public void TabularReportCanFormatFromCachedData()
         {
             var data = Enumerable.Range(0, 10)
@@ -116,7 +114,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(report);
         }
 
-        [Test]
+        [Fact]
         public void HeadingsCanBeOmittedFromCachedData()
         {
             var data = Enumerable.Range(0, 10)
@@ -136,7 +134,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(report);
         }
 
-        [Test]
+        [Fact]
         public void TabularReportCanFormatRenderableData()
         {
             var data = Enumerable.Range(3, 7)
@@ -156,7 +154,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(report);
         }
 
-        [Test]
+        [Fact]
         public void IdealMinimumWidthIsAppliedToStringColumns()
         {
             var data = Enumerable.Range(0, 1)
@@ -174,7 +172,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(report);
         }
 
-        [Test]
+        [Fact]
         public void LastColumnIsStackedWhenColumnsDoNotFit()
         {
             var data = Enumerable.Range(0, 1)
@@ -192,7 +190,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(report);
         }
 
-        [Test]
+        [Fact]
         public void AllColumnsCanBeStacked()
         {
             var data = Enumerable.Range(0, 1)
@@ -209,7 +207,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(report);
         }
 
-        [Test]
+        [Fact]
         public void FormattingSucceedsWhenAvailableSpaceIsTooSmall()
         {
             var data = Enumerable.Range(0, 1)
@@ -226,7 +224,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(report);
         }
 
-        [Test]
+        [Fact]
         public void SizesAreOnlyCalculatedFromSpecifiedRows()
         {
             var data = Enumerable.Range(0, 20)
@@ -241,7 +239,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(report);
         }
 
-        [Test]
+        [Fact]
         public void ReportDegradesGracefully()
         {
             var data = Enumerable.Range(0, 1)
@@ -265,7 +263,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(sb.ToString());
         }
 
-        [Test]
+        [Fact]
         public void ReportWithFixedWidthColumnDegradesGracefully()
         {
             var data = Enumerable.Range(0, 1)
@@ -293,7 +291,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(sb.ToString());
         }
 
-        [Test]
+        [Fact]
         public void ReportWithProportionalWidthColumnsDegradesGracefully()
         {
             var data = Enumerable.Range(0, 1)
@@ -324,7 +322,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(sb.ToString());
         }
 
-        [Test]
+        [Fact]
         public void ColumnsCanBeDividedWithCustomText()
         {
             var data = Enumerable.Range(0, 1)
@@ -345,7 +343,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(sb.ToString());
         }
 
-        [Test]
+        [Fact]
         public void ColumnWidthsDoNotTakeHeadingIntoAccountIfHeadingsSkipped()
         {
             var data = Enumerable.Range(0, 1)
@@ -372,7 +370,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(sb.ToString());
         }
 
-        [Test]
+        [Fact]
         public void AChildReportsIsRendered()
         {
             var data = Enumerable.Range(0, 1)
@@ -387,7 +385,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(sb.ToString());
         }
 
-        [Test]
+        [Fact]
         public void ChildReportsCanHaveChildren()
         {
             var data = Enumerable.Range(0, 1)
@@ -405,7 +403,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(sb.ToString());
         }
 
-        [Test]
+        [Fact]
         public void HeadingRepeatsCanBeSuppressed()
         {
             var data = Enumerable.Range(0, 1)
@@ -425,7 +423,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(sb.ToString());
         }
 
-        [Test]
+        [Fact]
         public void APrimitiveProducesAOneColumnReport()
         {
             var data = Enumerable.Range(0, 15);
@@ -437,7 +435,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(sb.ToString());
         }
 
-        [Test]
+        [Fact]
         public void APrimitiveOneColumnReportCanHaveAColumnFormat()
         {
             var data = Enumerable.Range(0, 15)
@@ -450,7 +448,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(sb.ToString());
         }
 
-        [Test]
+        [Fact]
         public void RenderableInObjectColumnShouldBeRendered()
         {
             var renderTableData = new[]

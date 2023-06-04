@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,15 +6,14 @@ using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.Utilities;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.Utilities
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestPrefixLines
     {
-        [Test]
+        [Fact]
         public void SingleLineIsPrefixedWithNoNewLine()
         {
             //Arrange
@@ -24,10 +23,10 @@ namespace ConsoleToolkitTests.Utilities
             var output = PrefixLines.Do(line, "test:");
 
             //Assert
-            Assert.That(output, Is.EqualTo("test:just this"));
+            Assert.Equal("test:just this", output);
         }
 
-        [Test]
+        [Fact]
         public void SetOfLinesIsPrefixed()
         {
             //Arrange
@@ -43,7 +42,7 @@ namespace ConsoleToolkitTests.Utilities
             Approvals.Verify(output);
         }
 
-        [Test]
+        [Fact]
         public void NoExtraNewLineIsAddedToSetOfLinesWithNoTrailingNewLine()
         {
             //Arrange
@@ -59,14 +58,14 @@ namespace ConsoleToolkitTests.Utilities
             Approvals.Verify(output);
         }
 
-        [Test]
+        [Fact]
         public void EmptyStringRemainsEmpty()
         {
             //Act
             var output = PrefixLines.Do(string.Empty, "test:");
 
             //Assert
-            Assert.That(output, Is.EqualTo(string.Empty));
+            Assert.Equal(string.Empty, output);
         }
     }
 }

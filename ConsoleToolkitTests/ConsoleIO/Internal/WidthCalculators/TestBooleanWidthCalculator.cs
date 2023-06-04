@@ -4,26 +4,25 @@ using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.ConsoleIO.Internal.WidthCalculators;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal.WidthCalculators
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestBooleanWidthCalculator
     {
-        [Test]
+        [Fact]
         public void DefaultFormatReturnsExpectedMaxWidth()
         {
             var format = new ColumnFormat("A", typeof (bool));
-            Assert.That(BooleanWidthCalculator.Max(format), Is.EqualTo(Math.Max(true.ToString().Length, false.ToString().Length)));
+            Assert.Equal(Math.Max(true.ToString().Length, false.ToString().Length), BooleanWidthCalculator.Max(format));
         }
 
-        [Test]
+        [Fact]
         public void DefaultFormatReturnsExpectedMinWidth()
         {
             var format = new ColumnFormat("A", typeof (bool));
-            Assert.That(BooleanWidthCalculator.Min(format), Is.EqualTo(Math.Min(true.ToString().Length, false.ToString().Length)));
+            Assert.Equal(Math.Min(true.ToString().Length, false.ToString().Length), BooleanWidthCalculator.Min(format));
         }
     }
 }

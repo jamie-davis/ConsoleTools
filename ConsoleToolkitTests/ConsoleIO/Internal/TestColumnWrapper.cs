@@ -1,21 +1,21 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 using Approvals = ApprovalTests.Approvals;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestColumnWrapper
     {
-        [Test]
+        [Fact]
         public void StringIsWrappedAtWordBreaks()
         {
             var c = new ColumnFormat("h", typeof (string));
@@ -26,7 +26,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(result);
         }
 
-        [Test]
+        [Fact]
         public void NoTrailingSpacesAreIncludedOnLineWrap()
         {
             var c = new ColumnFormat("h", typeof (string));
@@ -37,7 +37,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(result);
         }
 
-        [Test]
+        [Fact]
         public void WordsLongerThanOneLineAreBroken()
         {
             var c = new ColumnFormat("h", typeof (string));
@@ -48,7 +48,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(result);
         }
 
-        [Test]
+        [Fact]
         public void VeryLongInitialWordisBroken()
         {
             var c = new ColumnFormat("h", typeof (string));
@@ -59,7 +59,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(result);
         }
 
-        [Test]
+        [Fact]
         public void LineBreaksArePreserved()
         {
             var c = new ColumnFormat("h", typeof (string));
@@ -70,7 +70,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(result);
         }
 
-        [Test]
+        [Fact]
         public void ColourInstructionsAreIncluded()
         {
             var c = new ColumnFormat("h", typeof (string));
@@ -81,7 +81,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(result);
         }
 
-        [Test]
+        [Fact]
         public void LineBreaksWithinColouredTextAreFormatted()
         {
             var c = new ColumnFormat("h", typeof (string));
@@ -92,7 +92,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(result);
         }
 
-        [Test]
+        [Fact]
         public void ColouredSpacesAreSkippedAtTheEndOfTheLineButInstructionsArePreserved()
         {
             var c = new ColumnFormat("h", typeof (string));
@@ -103,7 +103,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(result);
         }
 
-        [Test]
+        [Fact]
         public void ColourInstructionsForLastWordAreIncluded()
         {
             var c = new ColumnFormat("h", typeof (string));
@@ -114,17 +114,17 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(result);
         }
 
-        [Test]
+        [Fact]
         public void WordBreaksAreCounted()
         {
             var c = new ColumnFormat("h", typeof (string));
             const string value = "One two three four five six seven eight nine ten eleven.";
             var addedBreaks = ColumnWrapper.CountWordwrapLineBreaks(value, c, 20);
             Console.WriteLine(string.Join("\r\n", ColumnWrapper.WrapValue(value, c, 20)));
-            Assert.That(addedBreaks, Is.EqualTo(2));
+            Assert.Equal(2, addedBreaks);
         }
 
-        [Test]
+        [Fact]
         public void TrailingSpacesDoNotCauseAdditionalLineBreaks()
         {
             var c = new ColumnFormat("h", typeof (string));
@@ -132,50 +132,50 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             var addedBreaks = ColumnWrapper.CountWordwrapLineBreaks(value, c, 20);
             Console.WriteLine("----+----|----+----|");
             Console.WriteLine(string.Join("\r\n", ColumnWrapper.WrapValue(value, c, 20)));
-            Assert.That(addedBreaks, Is.EqualTo(3));
+            Assert.Equal(3, addedBreaks);
         }
 
-        [Test]
+        [Fact]
         public void BreaksInVeryLongWordsAreCounted()
         {
             var c = new ColumnFormat("h", typeof (string));
             const string value = "One two three four fivesixseveneightnineteneleven.";
             var addedBreaks = ColumnWrapper.CountWordwrapLineBreaks(value, c, 20);
             Console.WriteLine(string.Join("\r\n", ColumnWrapper.WrapValue(value, c, 20)));
-            Assert.That(addedBreaks, Is.EqualTo(2));
+            Assert.Equal(2, addedBreaks);
         }
 
-        [Test]
+        [Fact]
         public void BreaksInVeryLongInitialWordAreCounted()
         {
             var c = new ColumnFormat("h", typeof (string));
             const string value = "Onetwothreefourfivesixseveneightnineten eleven.";
             var addedBreaks = ColumnWrapper.CountWordwrapLineBreaks(value, c, 20);
             Console.WriteLine(string.Join("\r\n", ColumnWrapper.WrapValue(value, c, 20)));
-            Assert.That(addedBreaks, Is.EqualTo(2));
+            Assert.Equal(2, addedBreaks);
         }
 
-        [Test]
+        [Fact]
         public void DataLineBreaksAreNotCounted()
         {
             var c = new ColumnFormat("h", typeof (string));
             const string value = "One two three\r\nfour five six seven eight\r\n\r\n\r\nnine\r\nten\r\neleven.";
             var addedBreaks = ColumnWrapper.CountWordwrapLineBreaks(value, c, 20);
             Console.WriteLine(string.Join("\r\n", ColumnWrapper.WrapValue(value, c, 20)));
-            Assert.That(addedBreaks, Is.EqualTo(1));
+            Assert.Equal(1, addedBreaks);
         }
 
-        [Test]
+        [Fact]
         public void SingleLineDataAddsNoLineBreaks()
         {
             var c = new ColumnFormat("h", typeof (string));
             const string value = "One two three.";
             var addedBreaks = ColumnWrapper.CountWordwrapLineBreaks(value, c, 20);
             Console.WriteLine(string.Join("\r\n", ColumnWrapper.WrapValue(value, c, 20)));
-            Assert.That(addedBreaks, Is.EqualTo(0));
+            Assert.Equal(0, addedBreaks);
         }
 
-        [Test]
+        [Fact]
         public void NestedColourChangesArePreserved()
         {
             var c = new ColumnFormat("h", typeof (string));
@@ -186,7 +186,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(result);
         }
 
-        [Test]
+        [Fact]
         public void LinesWithColourAreExpandedToCorrectLength()
         {
             var c = new ColumnFormat("h", typeof (string));
@@ -198,7 +198,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(result);
         }
 
-        [Test]
+        [Fact]
         public void LinesAreExpandedToCorrectLength()
         {
             var c = new ColumnFormat("h", typeof (string));
@@ -210,7 +210,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(result);
         }
 
-        [Test]
+        [Fact]
         public void RightAlignedLinesAreExpandedToCorrectLength()
         {
             var c = new ColumnFormat("h", typeof (string), ColumnAlign.Right);
@@ -222,7 +222,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(result);
         }
 
-        [Test]
+        [Fact]
         public void RightAlignedLinesWithColourAreExpandedToCorrectLength()
         {
             var c = new ColumnFormat("h", typeof (string), ColumnAlign.Right);
@@ -234,7 +234,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(result);
         }
 
-        [Test]
+        [Fact]
         public void RightAlignedLinesWithExcessiveColumnWidthAreExpandedToCorrectLength()
         {
             var c = new ColumnFormat("h", typeof (string), ColumnAlign.Right);
@@ -246,7 +246,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(result);
         }
 
-        [Test]
+        [Fact]
         public void ColouredWordsTooLongForALineAreCorrectlyChunked()
         {
             var c = new ColumnFormat("h", typeof (string));
@@ -257,7 +257,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(result);
         }
 
-        [Test]
+        [Fact]
         public void FirstLineIndentShortensFirstLine()
         {
             var c = new ColumnFormat("h", typeof(string));
@@ -268,7 +268,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(result);
         }
 
-        [Test]
+        [Fact]
         public void LeadingSpacesArePreserved()
         {
             var c = new ColumnFormat("h", typeof(string));
@@ -279,7 +279,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(result);
         }
 
-        [Test]
+        [Fact]
         public void TrailingSpacesArePreserved()
         {
             var c = new ColumnFormat("h", typeof(string));
@@ -290,7 +290,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(result);
         }
 
-        [Test]
+        [Fact]
         public void WrapAndMeasureWordsCanWorkWithSplitData()
         {
             //Arrange
@@ -310,11 +310,11 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(result);
         }
 
-        private string FormatResult(string value, IEnumerable<string> wrapped, int guideWidth, int indent = 0)
+        private string FormatResult(string value, IEnumerable<string> wrapped, int guideWidth, int indent = 0, [CallerMemberName] string callerMethodName = "")
         {
             var indentString = new string(' ', indent);
             var sb = new StringBuilder();
-            sb.AppendLine(TestContext.CurrentContext.Test.Name);
+            sb.AppendLine(callerMethodName);
             sb.AppendLine();
 
             sb.AppendLine("Original:");

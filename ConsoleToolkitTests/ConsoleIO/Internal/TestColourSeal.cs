@@ -5,15 +5,14 @@ using ApprovalTests.Reporters;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestColourSeal
     {
-        [Test]
+        [Fact]
         public void ColourChangeIsPoppedOutAtLineEndAndRestoredAtLineStart()
         {
             var original =
@@ -26,7 +25,7 @@ line 2".Red();
             Approvals.Verify(result);
         }
 
-        [Test]
+        [Fact]
         public void ForegroundAndBackgroundColoursAreRestored()
         {
             var original =
@@ -39,7 +38,7 @@ line 2".Red().BGCyan() + Environment.NewLine + "line 3 (plain)";
             Approvals.Verify(result);
         }
 
-        [Test]
+        [Fact]
         public void MultipleColourChangesAreRestoredCorrectly()
         {
             var original = (("Red" + Environment.NewLine + "Lines").Cyan() + Environment.NewLine + "lines").BGDarkRed() + "Clear";
@@ -50,7 +49,7 @@ line 2".Red().BGCyan() + Environment.NewLine + "line 3 (plain)";
             Approvals.Verify(result);
         }
 
-        [Test]
+        [Fact]
         public void NoExtraInstructionsAreGeneratedIfThereIsNoColourInTheText()
         {
             const string original = "Simple plain text with no colour annotations.";
