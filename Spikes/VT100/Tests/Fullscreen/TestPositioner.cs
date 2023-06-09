@@ -1,10 +1,7 @@
-using System.Linq;
 using TestConsoleLib.Testing;
 using VT100.Attributes;
-using VT100.ControlPropertyAnalysis;
 using VT100.FullScreen;
 using VT100.FullScreen.ControlBehaviour;
-using VT100.FullScreen.ScreenLayers;
 using VT100.Tests.Fakes;
 using Xunit;
 
@@ -35,6 +32,10 @@ namespace VT100.Tests.Fullscreen
             [InputBackground(VtColour.Red)]
             public string NickName { get; set; }
 
+            [TextBox("Favourite Colour")]
+            [InputBackground(VtColour.Red)]
+            public string Colour { get; set; }
+
             [Button("Default")]
             public void SetDefaults()
             {
@@ -56,7 +57,7 @@ namespace VT100.Tests.Fullscreen
         public void ControlsArePositioned()
         {
             //Arrange
-            var layout = new Layout() { Name = "Test", NickName = "Wolf" };
+            var layout = new Layout() { Name = "Test", NickName = "Wolf", Colour = "Red" };
             var app = new FakeFullScreenApplication(layout, 50, 20);
     
             //Act

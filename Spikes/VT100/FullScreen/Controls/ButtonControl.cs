@@ -16,12 +16,16 @@ namespace VT100.FullScreen.Controls
         private Func<object, bool> _method;
         private ILayout _dataContainer;
         private IFullScreenApplication _app;
-        private int _column;
-        private int _row;
-        private int _width;
-        private int _height;
         private int _captionRow;
         private int _captionColumn;
+
+        public int Column { get; private set; }
+
+        public int Row { get; private set; }
+
+        public int Width { get; private set; }
+
+        public int Height { get; private set; }
 
         public void PropertyBind(IFullScreenApplication app, ILayout layout, Func<object, object> getter, Action<object, object> setter)
         {
@@ -39,23 +43,23 @@ namespace VT100.FullScreen.Controls
 
         public void Render(IFullScreenConsole console)
         {
-            var captionAvailableWidth = _width - 2;
+            var captionAvailableWidth = Width - 2;
             string caption;
             if (captionAvailableWidth > Caption.Length)
             {
-                _captionColumn = _column + (captionAvailableWidth - Caption.Length) / 2;
+                _captionColumn = Column + (captionAvailableWidth - Caption.Length) / 2;
                 caption = Caption;
             }
             else
             {
-                _captionColumn = _column + 1;
+                _captionColumn = Column + 1;
                 caption = Caption.Substring(0, captionAvailableWidth);
             }
 
-            if (_height > 2)
-                _captionRow = _row + (_height - 1) / 2;
+            if (Height > 2)
+                _captionRow = Row + (Height - 1) / 2;
             else
-                _captionRow = _row;
+                _captionRow = Row;
 
             var format = new DisplayFormat()
             {
@@ -63,9 +67,9 @@ namespace VT100.FullScreen.Controls
                 Foreground = Format?.ButtonForeground ?? VtColour.NoColourChange,
             };
 
-            if (_width > Caption.Length + 1 && _height > 2)
+            if (Width > Caption.Length + 1 && Height > 2)
             {
-                var regions = new[] { new BoxRegion(_column, _row, _width, _height, LineWeight.Heavy) };
+                var regions = new[] { new BoxRegion(Column, Row, Width, Height, LineWeight.Heavy) };
                 var map = BoxMapMaker.Map(regions, console.WindowWidth, console.WindowHeight);
                 BoxRenderer.RenderMapToConsole(map, console, format);
             }
@@ -81,10 +85,10 @@ namespace VT100.FullScreen.Controls
 
         public void Position(int column, int row, int width, int height)
         {
-            _column = column;
-            _row = row;
-            _width = width;
-            _height = height;
+            Column = column;
+            Row = row;
+            Width = width;
+            Height = height;
         }
 
         public void SetFocus(IFullScreenConsole console)
@@ -129,6 +133,7 @@ internal class ButtonFormat
 {
     [DefaultFrom(typeof(BackgroundAttribute))]
     public VtColour ButtonBackground { get; set; }
+    
     [DefaultFrom(typeof(ForegroundAttribute))]
     public VtColour ButtonForeground { get; set; }
 }

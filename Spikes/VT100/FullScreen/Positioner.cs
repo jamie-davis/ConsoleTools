@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection.Metadata;
 using VT100.ControlPropertyAnalysis;
 using VT100.FullScreen.ControlBehaviour;
 using VT100.FullScreen.Controls;
+using VT100.FullScreen.ScreenLayers;
 
 namespace VT100.FullScreen
 {
@@ -15,6 +17,15 @@ namespace VT100.FullScreen
         class LayoutProperties
         {
             public IBorderStyle Border { get; set; }
+
+            public bool HasBorder()
+            {
+                return Border != null
+                       && (Border.TopBorder != BorderType.None
+                           || Border.BottomBorder != BorderType.None
+                           || Border.LeftBorder != BorderType.None
+                           || Border.RightBorder != BorderType.None);
+            }
         }
 
         private class ControlContainer
@@ -36,6 +47,30 @@ namespace VT100.FullScreen
             public LayoutProperties LayoutProperties { get; }
 
             public ILayoutControl Control => _control;
+
+            public int Column => LayoutProperties.HasBorder() ? Label.Column - 1 : Label.Column;
+            public int Row => LayoutProperties.HasBorder() ? Label.Row - 1 : Label.Row;
+            public int Width
+            {
+                get
+                {
+                    var controlWidth = Control.Column - Label.Column + Control.Width;
+                    return LayoutProperties.HasBorder() ? controlWidth + 2 : controlWidth;
+                }
+            }
+            public int Height => LayoutProperties.HasBorder() ? Control.Height + 2 : Control.Height;
+
+            public void RenderBorder(IFullScreenConsole console)
+            {
+                var regions = new[] { new BoxRegion(Column, Row, Width, Height, LineWeight.Light) };
+                var map = BoxMapMaker.Map(regions, console.WindowWidth, console.WindowHeight);
+                DisplayFormat format = new ()
+                {
+                    Foreground = VtColour.NoColourChange,
+                    Background = VtColour.NoColourChange,
+                };
+                BoxRenderer.RenderMapToConsole(map, console, format);
+            }
         }
 
         public int Row { get; }
@@ -68,7 +103,7 @@ namespace VT100.FullScreen
 
             int GetLongestCaptionLength()
             {
-                var captionedContainers = _controls.Where(c => c.LayoutProperties.Border == null);
+                var captionedContainers = _controls.Where(c => !c.LayoutProperties.HasBorder());
                 return Math.Min(captionedContainers.Max(c => c.CaptionText.Length), maxAllowableCaption);
             }
 
@@ -76,17 +111,18 @@ namespace VT100.FullScreen
             foreach (var container in _controls)
             {
                 container.Label.Caption = container.CaptionText;
-                if (container.LayoutProperties.Border != null)
-                {
-                    
-                }
-                
-                container.Label.Position(Column, Row, maxCaption, 1);
+                var inBorder = container.LayoutProperties.HasBorder();
 
-                var controlX = Column + maxCaption + 2;
-                container.Control.Position(controlX, Row, Width - controlX - 1, 1);
+                var captionLength = inBorder ? container.Label.Caption.Length : maxCaption;
+                var captionCol = inBorder ? Column + 1 : Column;
+                var captionRow = inBorder ? Row + 1 : Row;
+                container.Label.Position(captionCol, captionRow, captionLength, 1);
 
-                Row += 2;
+                var controlX = captionCol + captionLength + 2;
+                var controlWidth = Width - controlX - (inBorder ? 2 : 1);
+                container.Control.Position(controlX, captionRow, controlWidth, 1);
+
+                Row += inBorder ? 4 : 2;
             }
 
             var space = _buttons.Select(b => b.Control.GetRequestedSize()).ToList();
@@ -101,6 +137,11 @@ namespace VT100.FullScreen
                 var controlX = column;
                 column += requestedSize.Width + 1;
                 container.Control.Position(controlX, controlY, requestedSize.Width, requestedSize.Height);
+            }
+
+            foreach (var borderedContainer in _controls.Where(c => c.LayoutProperties.HasBorder()))
+            {
+                borderedContainer.RenderBorder(console);
             }
         }
 
