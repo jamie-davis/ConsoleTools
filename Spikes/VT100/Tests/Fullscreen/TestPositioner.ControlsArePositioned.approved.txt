@@ -1,7 +1,11 @@
 |                                                  
-> Real Name  Test                                  
+| ┌──────────────────────────────────────────────┐ 
+> │Real Name  Test                               │ 
+| └──────────────────────────────────────────────┘ 
 |                                                  
-| Nickname   Wolf                                  
+| Nickname          Wolf                           
+|                                                  
+| Favourite Colour  Red                            
 |                                                  
 |             ┏━━━━━━━┓ ┏━━┓ ┏━━━━━━┓              
 |             ┃Default┃ ┃OK┃ ┃Cancel┃              
@@ -14,10 +18,6 @@
 |                                                  
 |                                                  
 |                                                  
-|                                                  
-|                                                  
-|                                                  
-|                                                  
  --------------------------------------------------
-             ^
-Cursor position: Row 1, Column 12
+              ^
+Cursor position: Row 2, Column 13

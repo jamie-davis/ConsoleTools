@@ -15,10 +15,6 @@ namespace VT100.FullScreen.Controls
 
         private string _value;
         private TextBoxAttribute _attribute;
-        private int _column;
-        private int _row;
-        private int _width;
-        private int _height;
         private IFullScreenApplication _app;
         private CursorController _cursorControl;
         private readonly BorderBorderStyle _borderBorderStyle = new();
@@ -30,6 +26,14 @@ namespace VT100.FullScreen.Controls
         }
         
         #region Implementation of ILayoutControl
+
+        public int Column { get; private set; }
+
+        public int Row { get; private set; }
+
+        public int Width { get; private set; }
+
+        public int Height { get; private set; }
 
         public void PropertyBind(IFullScreenApplication app, ILayout layout, Func<object, object> getter, Action<object, object> setter)
         {
@@ -52,7 +56,7 @@ namespace VT100.FullScreen.Controls
 
         public void Render(IFullScreenConsole console)
         {
-            console.SetCursorPosition(_column, _row);
+            console.SetCursorPosition(Column, Row);
             var visibleValue = _value;
             if (CharacterOffset > 0)
             {
@@ -60,10 +64,10 @@ namespace VT100.FullScreen.Controls
                     visibleValue = _value.Substring(CharacterOffset);
             }
             
-            if (visibleValue.Length > _width)
-                visibleValue = visibleValue.Substring(0, _width);
-            else if (visibleValue.Length < _width)
-                visibleValue = visibleValue.PadRight(_width);
+            if (visibleValue.Length > Width)
+                visibleValue = visibleValue.Substring(0, Width);
+            else if (visibleValue.Length < Width)
+                visibleValue = visibleValue.PadRight(Width);
 
             var format = new DisplayFormat()
             {
@@ -76,17 +80,17 @@ namespace VT100.FullScreen.Controls
 
         public void Position(int column, int row, int width, int height)
         {
-            _column = column;
-            _row = row;
-            _width = width;
-            _height = height;
+            Column = column;
+            Row = row;
+            Width = width;
+            Height = height;
         }
 
         public void SetFocus(IFullScreenConsole console)
         {
-            console.SetCursorPosition(_column, _row);
-            var maxCharacterOffset = _value.Length - _width + 1;
-            _cursorControl = new CursorController(0, 0, _width - 1, _column, _row, maxCharacterOffset > 0 ? maxCharacterOffset : 0, _value.Length);
+            console.SetCursorPosition(Column, Row);
+            var maxCharacterOffset = _value.Length - Width + 1;
+            _cursorControl = new CursorController(0, 0, Width - 1, Column, Row, maxCharacterOffset > 0 ? maxCharacterOffset : 0, _value.Length);
             _cursorControl.MoveCursor += OnMoveCursor;
             _app.GotFocus(this);
         }

@@ -12,12 +12,16 @@ namespace VT100.FullScreen.Controls
         private ILayout _dataContainer;
         private Func<object, object> _getter;
         private string _value;
-        private int _column;
-        private int _row;
-        private int _width;
-        private int _height;
 
         #region Implementation of ILayoutControl
+
+        public int Column { get; private set; }
+
+        public int Row { get; private set; }
+
+        public int Width { get; private set; }
+
+        public int Height { get; private set; }
 
         public void PropertyBind(IFullScreenApplication app, ILayout layout, Func<object, object> getter, Action<object, object> _)
         {
@@ -44,12 +48,12 @@ namespace VT100.FullScreen.Controls
 
         public void Render(IFullScreenConsole console)
         {
-            console.SetCursorPosition(_column, _row);
+            console.SetCursorPosition(Column, Row);
             var visibleValue = _value;
-            if (visibleValue.Length > _width)
-                visibleValue = visibleValue.Substring(0, _width);
-            else if (visibleValue.Length < _width)
-                visibleValue = visibleValue.PadRight(_width);
+            if (visibleValue.Length > Width)
+                visibleValue = visibleValue.Substring(0, Width);
+            else if (visibleValue.Length < Width)
+                visibleValue = visibleValue.PadRight(Width);
             var format = new DisplayFormat()
             {
                 Background = Format?.LabelBackground ?? VtColour.NoColourChange,
@@ -61,10 +65,10 @@ namespace VT100.FullScreen.Controls
 
         public void Position(int column, int row, int width, int height)
         {
-            _column = column;
-            _row = row;
-            _width = width;
-            _height = height;
+            Column = column;
+            Row = row;
+            Width = width;
+            Height = height;
         }
 
         public void SetFocus(IFullScreenConsole console)

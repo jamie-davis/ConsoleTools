@@ -12,6 +12,14 @@ namespace VT100.Tests.Fakes
 
         #region Implementation of ILayoutControl
 
+        public int Column { get; }
+
+        public int Row { get; }
+
+        public int Width { get; }
+
+        public int Height { get; }
+
         public void PropertyBind(IFullScreenApplication app, ILayout layout, Func<object, object> getter, Action<object, object> setter)
         {
             throw new NotImplementedException();
