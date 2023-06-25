@@ -4,7 +4,7 @@ namespace VT100.FullScreen.Controls
 {
     internal static class ControlValueLoader
     {
-        public static string GetString(Func<object,object> getter, ILayout dataContainer)
+        public static string GetString(Func<object,object> getter, object dataContainer)
         {
             if (dataContainer == null || getter == null)
                 return null;

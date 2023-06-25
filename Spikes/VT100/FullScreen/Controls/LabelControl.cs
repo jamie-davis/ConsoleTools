@@ -1,17 +1,22 @@
 using System;
+using System.Collections.Generic;
+using VT100.Attributes;
 using VT100.FullScreen.ControlBehaviour;
+using VT100.FullScreen.ScreenLayers;
 using VT100.Utilities.ReadConsole;
 
 namespace VT100.FullScreen.Controls
 {
+    [Control(typeof(LabelAttribute))]
     internal class Label : IFormattedLayoutControl<LabelFormat>
     {
         private BorderBorderStyle _borderBorderStyle;
         private LabelFormat _format;
         private IFullScreenApplication _app;
-        private ILayout _dataContainer;
+        private object _dataContainer;
         private Func<object, object> _getter;
         private string _value;
+        private IEnumerable<BoxRegion> _boxRegions;
 
         #region Implementation of ILayoutControl
 
@@ -23,7 +28,10 @@ namespace VT100.FullScreen.Controls
 
         public int Height { get; private set; }
 
-        public void PropertyBind(IFullScreenApplication app, ILayout layout, Func<object, object> getter, Action<object, object> _)
+        public IEnumerable<BoxRegion> BoxRegions => _boxRegions;
+
+        public void PropertyBind(IFullScreenApplication app, object layout, Func<object, object> getter,
+            Action<object, object> _)
         {
             _getter = getter;
             _dataContainer = layout;
@@ -36,10 +44,10 @@ namespace VT100.FullScreen.Controls
             if (_dataContainer != null && _getter != null)
                 _value = ControlValueLoader.GetString(_getter, _dataContainer);
             else
-                _value = Caption;
+                _value = Caption ?? string.Empty;
         }
 
-        public void MethodBind(IFullScreenApplication app, ILayout layout, Func<object, bool> method)
+        public void MethodBind(IFullScreenApplication app, object layout, Func<object, bool> method)
         {
             //Not possible for a label
         }

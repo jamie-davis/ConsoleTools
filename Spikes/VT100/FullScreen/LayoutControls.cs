@@ -17,7 +17,7 @@ namespace VT100.FullScreen
         private static Dictionary<Type, Type> _controlLookup;
         private static object[] noParams = {};
 
-        public static IEnumerable<LayedOutControl> Extract(IFullScreenApplication app, ILayout layout)
+        public static IEnumerable<LayedOutControl> Extract(IFullScreenApplication app, object layout)
         {
             if (layout == null)
                 yield break;
@@ -48,7 +48,7 @@ namespace VT100.FullScreen
 
         }
 
-        private static LayedOutControl MakeCancelButton(IFullScreenApplication app, ILayout layout,
+        private static LayedOutControl MakeCancelButton(IFullScreenApplication app, object layout,
             string caption)
         {
             var button = new ButtonControl();
@@ -57,7 +57,7 @@ namespace VT100.FullScreen
             return new (button, new List<PropertySetting>());
         }
 
-        private static bool CancelRequired(ILayout layout, out string cancelCaption)
+        private static bool CancelRequired(object layout, out string cancelCaption)
         {
             var attribute = layout.GetType().GetCustomAttribute<ScreenAttribute>();
             if (attribute == null)
@@ -70,7 +70,7 @@ namespace VT100.FullScreen
             return true;
         }
 
-        private static ILayoutControl GetControl(IFullScreenApplication app, ILayout layout, PropertyInfo propertyInfo = null, MethodInfo methodInfo = null)
+        private static ILayoutControl GetControl(IFullScreenApplication app, object layout, PropertyInfo propertyInfo = null, MethodInfo methodInfo = null)
         {
             if (_controlLookup == null) LoadControls();
 
@@ -151,7 +151,7 @@ namespace VT100.FullScreen
 
         private static void LoadControls()
         {
-            var sampleControlType = typeof(TextBox);
+            var sampleControlType = typeof(TextBoxControl);
             var controlTypes = sampleControlType.Assembly.GetTypes()
                 .Where(t => t.Namespace == sampleControlType.Namespace)
                 .Select(t => new {Type = t, ControlAttribute = t.GetCustomAttribute<ControlAttribute>()})

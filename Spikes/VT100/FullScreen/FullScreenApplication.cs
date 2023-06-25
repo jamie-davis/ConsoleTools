@@ -15,7 +15,7 @@ namespace VT100.FullScreen
         private ScreenCapture _screenCapture;
         private ILayoutControl _focus;
         private bool _exit;
-        private Positioner _positioner;
+        private ControlSet _controls;
         private ScreenProps _screenProperties = new();
 
         public FullScreenApplication(ILayout layout, IVTModeControl vtModeControl, IFullScreenConsole console = null)
@@ -60,7 +60,7 @@ namespace VT100.FullScreen
         {
             using (new CursorHider())
             {
-                _positioner?.ReRender(Console);
+                _controls?.ReRender(Console);
                 _focus.SetFocus(Console);
             }
         }
@@ -84,11 +84,13 @@ namespace VT100.FullScreen
             ControlPropertySetter.Set(_screenProperties, props);
                 
             var plateInterface = new PlateFullScreenConsole(Console.WindowWidth, Console.WindowHeight, _screenProperties.MakeBaseFormat());
-            _positioner = new Positioner(Console.WindowWidth, Console.WindowHeight, CaptionAlignment.Left, layoutControls, plateInterface);
-            _positioner.Render(props);
+            var regionProps = new LayoutProperties();
+            ControlPropertySetter.Set(regionProps, props);
+            _controls = Positioner.Position(0, 0, Console.WindowWidth, Console.WindowHeight, CaptionAlignment.Left, layoutControls, regionProps);
+            _controls.Render(props, plateInterface);
             var plateStack = new PlateStack(plateInterface.Plate);
             plateStack.Render(Console);
-            _positioner.SetFocus(Console);
+            _controls.FocusController.SetFocus(Console);
             _exit = false;
 
             var reader = new ConsoleInputReader(CodeAnalyserSettings.PreferPF3Modifiers);
@@ -111,13 +113,13 @@ namespace VT100.FullScreen
                 
                 if (NextFocusKey(item))
                 {
-                    _positioner.NextFocus(Console, _focus);
+                    _controls.FocusController.NextFocus(Console, _focus);
                     continue;
                 }
                 
                 if (PrevFocusKey(item))
                 {
-                    _positioner.PrevFocus(Console, _focus);
+                    _controls.FocusController.PrevFocus(Console, _focus);
                     continue;
                 }
                 _focus?.Accept(Console, item);
@@ -128,7 +130,7 @@ namespace VT100.FullScreen
                 }
             }
 
-            _positioner = null;
+            _controls = null;
         }
 
         private bool ExitKey(ControlSequence next)

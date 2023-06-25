@@ -16,4 +16,18 @@ namespace VT100.FullScreen
             };
         }
     }
+    
+    internal class LayoutProperties
+    {
+        public IBorderStyle Border { get; set; }
+
+        public bool HasBorder()
+        {
+            return Border != null
+                   && (Border.TopBorder != BorderType.None
+                       || Border.BottomBorder != BorderType.None
+                       || Border.LeftBorder != BorderType.None
+                       || Border.RightBorder != BorderType.None);
+        }
+    }
 }

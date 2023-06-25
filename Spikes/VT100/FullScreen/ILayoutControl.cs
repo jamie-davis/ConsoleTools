@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using VT100.ControlPropertyAnalysis;
 using VT100.FullScreen.ControlBehaviour;
+using VT100.FullScreen.ScreenLayers;
 using VT100.Utilities.ReadConsole;
 
 namespace VT100.FullScreen
@@ -12,8 +14,11 @@ namespace VT100.FullScreen
         int Width { get; }
         int Height { get; }
         
-        void PropertyBind(IFullScreenApplication app, ILayout layout, Func<object, object> getter, Action<object, object> setter);
-        void MethodBind(IFullScreenApplication app, ILayout layout, Func<object, bool> method);
+        IEnumerable<BoxRegion> BoxRegions { get; }
+        
+        void PropertyBind(IFullScreenApplication app, object layout, Func<object, object> getter,
+            Action<object, object> setter);
+        void MethodBind(IFullScreenApplication app, object layout, Func<object, bool> method);
         string Caption { get; }
         void Render(IFullScreenConsole console);
 

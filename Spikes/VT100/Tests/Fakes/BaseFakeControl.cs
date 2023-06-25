@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using VT100.FullScreen;
 using VT100.FullScreen.ControlBehaviour;
+using VT100.FullScreen.ScreenLayers;
 using VT100.Utilities.ReadConsole;
 
 namespace VT100.Tests.Fakes
@@ -9,6 +11,7 @@ namespace VT100.Tests.Fakes
     {
         private string _caption;
         private BorderBorderStyle _borderBorderStyle;
+        private BoxRegion[] _boxRegions = {};
 
         #region Implementation of ILayoutControl
 
@@ -20,12 +23,15 @@ namespace VT100.Tests.Fakes
 
         public int Height { get; }
 
-        public void PropertyBind(IFullScreenApplication app, ILayout layout, Func<object, object> getter, Action<object, object> setter)
+        public IEnumerable<BoxRegion> BoxRegions => _boxRegions;
+
+        public void PropertyBind(IFullScreenApplication app, object layout, Func<object, object> getter,
+            Action<object, object> setter)
         {
             throw new NotImplementedException();
         }
 
-        public void MethodBind(IFullScreenApplication app, ILayout layout, Func<object, bool> method)
+        public void MethodBind(IFullScreenApplication app, object layout, Func<object, bool> method)
         {
             throw new NotImplementedException();
         }

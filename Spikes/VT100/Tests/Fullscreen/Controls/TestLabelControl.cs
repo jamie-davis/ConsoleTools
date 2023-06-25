@@ -11,7 +11,7 @@ namespace VT100.Tests.Fullscreen.Controls
         public void ValueIsDisplayed()
         {
             //Arrange
-            var label = new Label();
+            var label = new LabelControl();
             label.Position(0,0,5,1);
             var valueWrapper = new ValueWrapper<string>("Test");
             var data = new object[] {};
@@ -28,7 +28,7 @@ namespace VT100.Tests.Fullscreen.Controls
         public void ValueIsTruncated()
         {
             //Arrange
-            var textBox = new Label();
+            var textBox = new LabelControl();
             textBox.Position(0,0,5,1);
             var valueWrapper = new ValueWrapper<string>("1234567890");
             var data = new object[] {};

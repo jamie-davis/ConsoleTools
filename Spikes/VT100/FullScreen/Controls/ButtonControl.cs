@@ -14,10 +14,11 @@ namespace VT100.FullScreen.Controls
     {
         private ButtonAttribute _attribute;
         private Func<object, bool> _method;
-        private ILayout _dataContainer;
+        private object _dataContainer;
         private IFullScreenApplication _app;
         private int _captionRow;
         private int _captionColumn;
+        private BoxRegion _boxRegion;
 
         public int Column { get; private set; }
 
@@ -27,12 +28,15 @@ namespace VT100.FullScreen.Controls
 
         public int Height { get; private set; }
 
-        public void PropertyBind(IFullScreenApplication app, ILayout layout, Func<object, object> getter, Action<object, object> setter)
+        public IEnumerable<BoxRegion> BoxRegions => _boxRegion == null ? new BoxRegion[] {} : new [] { _boxRegion };
+
+        public void PropertyBind(IFullScreenApplication app, object layout, Func<object, object> getter,
+            Action<object, object> setter)
         {
             //Not possible for a button
         }
 
-        public void MethodBind(IFullScreenApplication app, ILayout layout, Func<object, bool> method)
+        public void MethodBind(IFullScreenApplication app, object layout, Func<object, bool> method)
         {
             _app = app;
             _method = method;
@@ -66,13 +70,6 @@ namespace VT100.FullScreen.Controls
                 Background = Format?.ButtonBackground ?? VtColour.NoColourChange,
                 Foreground = Format?.ButtonForeground ?? VtColour.NoColourChange,
             };
-
-            if (Width > Caption.Length + 1 && Height > 2)
-            {
-                var regions = new[] { new BoxRegion(Column, Row, Width, Height, LineWeight.Heavy) };
-                var map = BoxMapMaker.Map(regions, console.WindowWidth, console.WindowHeight);
-                BoxRenderer.RenderMapToConsole(map, console, format);
-            }
             
             console.SetCursorPosition(_captionColumn, _captionRow);
             console.Write(caption, format);
@@ -89,6 +86,12 @@ namespace VT100.FullScreen.Controls
             Row = row;
             Width = width;
             Height = height;
+            
+            if (Width > Caption.Length + 1 && Height > 2)
+            {
+                _boxRegion = new BoxRegion(Column, Row, Width, Height, LineWeight.Heavy);
+            }
+
         }
 
         public void SetFocus(IFullScreenConsole console)

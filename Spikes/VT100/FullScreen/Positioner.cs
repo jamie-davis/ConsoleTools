@@ -1,216 +1,121 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reflection.Metadata;
-using VT100.ControlPropertyAnalysis;
-using VT100.FullScreen.ControlBehaviour;
 using VT100.FullScreen.Controls;
 using VT100.FullScreen.ScreenLayers;
 
 namespace VT100.FullScreen
 {
-    internal class Positioner
+    internal static class Positioner
     {
-        private readonly IFullScreenConsole _console;
 
-        class LayoutProperties
+        public static ControlSet Position(int regionColumn, int regionRow, int regionWidth, int regionHeight, CaptionAlignment captionAlignment,
+            IEnumerable<LayedOutControl> inputControls, LayoutProperties layoutProperties)
         {
-            public IBorderStyle Border { get; set; }
-
-            public bool HasBorder()
-            {
-                return Border != null
-                       && (Border.TopBorder != BorderType.None
-                           || Border.BottomBorder != BorderType.None
-                           || Border.LeftBorder != BorderType.None
-                           || Border.RightBorder != BorderType.None);
-            }
+            var (boxRegions, controls, width, height) = CalculatePositions(regionColumn, regionRow, regionWidth, regionHeight, captionAlignment, inputControls, layoutProperties);
+            return new ControlSet(controls, boxRegions, width, height);
         }
 
-        private class ControlContainer
+        private static (List<BoxRegion> BoxRegions, List<ControlContainer> Controls, int TotalWidth, int TotalHeight) CalculatePositions(int regionColumn, int regionRow, int regionWidth, int regionHeight,
+            CaptionAlignment captionAlignment, IEnumerable<LayedOutControl> inControls, LayoutProperties layoutProperties)
         {
-            public ReadOnlyCollection<PropertySetting> PropertySettings { get; }
-            private readonly ILayoutControl _control;
+            List<BoxRegion> _boxRegions = new();
 
-            public string CaptionText => _control.Caption ?? string.Empty;
-            public ControlContainer(ILayoutControl control, ReadOnlyCollection<PropertySetting> propertySettings)
-            {
-                PropertySettings = propertySettings;
-                _control = control;
-                Label = new Label();
-                LayoutProperties = new LayoutProperties();
-                ControlPropertySetter.Set(LayoutProperties, propertySettings);
-            }
-            
-            public Label Label { get; }
-            public LayoutProperties LayoutProperties { get; }
+            List<ControlContainer> orignalControls;
+            List<ControlContainer> buttons;
 
-            public ILayoutControl Control => _control;
+            var hasBorder = layoutProperties.HasBorder();
 
-            public int Column => LayoutProperties.HasBorder() ? Label.Column - 1 : Label.Column;
-            public int Row => LayoutProperties.HasBorder() ? Label.Row - 1 : Label.Row;
-            public int Width
-            {
-                get
-                {
-                    var controlWidth = Control.Column - Label.Column + Control.Width;
-                    return LayoutProperties.HasBorder() ? controlWidth + 2 : controlWidth;
-                }
-            }
-            public int Height => LayoutProperties.HasBorder() ? Control.Height + 2 : Control.Height;
+            var width = hasBorder ? regionWidth - 2 : regionWidth;
+            var height = hasBorder ? regionHeight - 2 : regionHeight;
 
-            public void RenderBorder(IFullScreenConsole console)
-            {
-                var regions = new[] { new BoxRegion(Column, Row, Width, Height, LineWeight.Light) };
-                var map = BoxMapMaker.Map(regions, console.WindowWidth, console.WindowHeight);
-                DisplayFormat format = new ()
-                {
-                    Foreground = VtColour.NoColourChange,
-                    Background = VtColour.NoColourChange,
-                };
-                BoxRenderer.RenderMapToConsole(map, console, format);
-            }
-        }
+            var row = hasBorder ? regionRow + 2 : regionRow + 1;
+            var column = hasBorder ? regionColumn + 2 : regionColumn + 1;
 
-        public int Row { get; }
-        public int Column { get; }
+            var allControls = inControls.Select(c => new ControlContainer(c.Control, c.PropertySettings)).ToList();
+            orignalControls = allControls.Where(c => c.Control is not ButtonControl).ToList();
+            buttons = allControls.Where(c => c.Control is ButtonControl).ToList();
 
-        public int Width { get; }
-        public int Height { get; }
-        public CaptionAlignment CaptionAlignment { get; }
-
-        private List<ControlContainer> _combinedControls;
-        private List<ControlContainer> _controls;
-        private List<ControlContainer> _buttons;
-
-        public Positioner(int width, int height, CaptionAlignment captionAlignment, IEnumerable<LayedOutControl> controls, IFullScreenConsole console)
-        {
-            _console = console;
-            Width = width;
-            Height = height;
-            CaptionAlignment = captionAlignment;
-
-            Row = 1;
-            Column = 1;
-
-            var allControls = controls.Select(c => new ControlContainer(c.Control, c.PropertySettings)).ToList();
-            _controls = allControls.Where(c => !(c.Control is ButtonControl)).ToList();
-            _buttons = allControls.Where(c => c.Control is ButtonControl).ToList();
-            _combinedControls = _controls.Concat(_buttons).ToList();
-
-            var maxAllowableCaption = width - 4;
+            var maxAllowableCaption = regionWidth - 4;
 
             int GetLongestCaptionLength()
             {
-                var captionedContainers = _controls.Where(c => !c.LayoutProperties.HasBorder());
-                return Math.Min(captionedContainers.Max(c => c.CaptionText.Length), maxAllowableCaption);
+                var captionedContainers = orignalControls.Where(c => !c.LayoutProperties.HasBorder());
+                return Math.Min(captionedContainers.Max(c => (int?)c.CaptionText.Length) ?? 0, maxAllowableCaption);
             }
 
             var maxCaption = GetLongestCaptionLength();
-            foreach (var container in _controls)
+            foreach (var container in orignalControls.ToList())
             {
-                container.Label.Caption = container.CaptionText;
                 var inBorder = container.LayoutProperties.HasBorder();
 
-                var captionLength = inBorder ? container.Label.Caption.Length : maxCaption;
-                var captionCol = inBorder ? Column + 1 : Column;
-                var captionRow = inBorder ? Row + 1 : Row;
-                container.Label.Position(captionCol, captionRow, captionLength, 1);
+                if (container.Control is IRegionControl)
+                    RenderRegion();
+                else
+                    RenderControl();
 
-                var controlX = captionCol + captionLength + 2;
-                var controlWidth = Width - controlX - (inBorder ? 2 : 1);
-                container.Control.Position(controlX, captionRow, controlWidth, 1);
+                row += container.Height + 1;
 
-                Row += inBorder ? 4 : 2;
+                //Rendering for a region
+                void RenderRegion()
+                {
+                    var controlCol = inBorder ? column + 1 : column;
+                    var controlRow = inBorder ? row + 1 : row;
+                    var controlWidth = width - controlCol - (inBorder ? 4 : 3);
+
+                    var controlSet = ((IRegionControl)container.Control).ComputePosition(container, controlCol, controlRow, controlWidth, height);
+                    allControls.AddRange(controlSet.ExportControls());
+                    _boxRegions.AddRange(controlSet.ExportBoxRegions()); 
+                }
+                
+                //Rendering for a standard control
+                void RenderControl()
+                {
+                    container.LabelControl.Caption = container.CaptionText;
+                    var captionLength = inBorder ? container.LabelControl.Caption.Length : maxCaption;
+                    var captionCol = inBorder ? column + 1 : column;
+                    var captionRow = inBorder ? row + 1 : row;
+                    container.LabelControl.Position(captionCol, captionRow, captionLength, 1);
+
+                    var controlX = captionCol + captionLength + 2;
+                    var controlWidth = width - controlX - (inBorder ? 1 : 0);
+                    container.Control.Position(controlX, captionRow, controlWidth, 1);
+                }
             }
 
-            var space = _buttons.Select(b => b.Control.GetRequestedSize()).ToList();
+            var space = buttons.Select(b => b.Control.GetRequestedSize()).ToList();
             var maxHeight = space.Max(m => (int?)m.Height) ?? 0;
             var fullWidth = (space.Sum(m => (int?)m.Width) ?? 0) + space.Count - 1;
-            Row += maxHeight;
-            var column = (Width - fullWidth)/2;
-            foreach (var container in _buttons) 
+            row += maxHeight;
+            var buttonColumn = (width - fullWidth) / 2;
+            foreach (var container in buttons)
             {
                 var requestedSize = container.Control.GetRequestedSize();
-                var controlY = Row - requestedSize.Height;
-                var controlX = column;
-                column += requestedSize.Width + 1;
+                var controlY = row - requestedSize.Height;
+                var controlX = buttonColumn;
+                buttonColumn += requestedSize.Width + 1;
                 container.Control.Position(controlX, controlY, requestedSize.Width, requestedSize.Height);
             }
 
-            foreach (var borderedContainer in _controls.Where(c => c.LayoutProperties.HasBorder()))
+            foreach (var borderedContainer in allControls.Where(c => c.LayoutProperties.HasBorder()))
             {
-                borderedContainer.RenderBorder(console);
-            }
-        }
-
-        public void Render(List<PropertySetting> settings)
-        {
-            using (new CursorHider())
-            {
-                foreach (var container in _controls)
-                {
-                    ControlSettingsUpdater.Update(container.Control, settings, container.PropertySettings);
-                    container.Label.Refresh(_console);
-                    container.Control.Refresh(_console);
-                }
-                
-                foreach (var container in _buttons)
-                {
-                    ControlSettingsUpdater.Update(container.Control, settings, container.PropertySettings);
-                    container.Control.Refresh(_console);
-                }
-            }
-        }
-
-        public void SetFocus(IFullScreenConsole console)
-        {
-            _controls.FirstOrDefault()?.Control?.SetFocus(console);
-        }
-
-        public void NextFocus(IFullScreenConsole console, ILayoutControl layoutControl)
-        {
-            var focusContainer = _combinedControls.FirstOrDefault(c => ReferenceEquals(c.Control, layoutControl));
-            if (focusContainer == null)
-            {
-                SetFocus(console);
-                return;
-            }
-            var index = _combinedControls.IndexOf(focusContainer);
-            if (index + 1 >= _combinedControls.Count)
-            {
-                SetFocus(console);
-                return;
+                _boxRegions.Add(borderedContainer.RenderBorder());
             }
 
-            var control = _combinedControls[index + 1];
-            control.Control?.SetFocus(console);
-        }
-
-        public void PrevFocus(IFullScreenConsole console, ILayoutControl layoutControl)
-        {
-            var focusContainer = _combinedControls.FirstOrDefault(c => ReferenceEquals(c.Control, layoutControl));
-            if (focusContainer == null)
+            var baseHeight = (allControls.Any() ? row : row - 1) - regionRow;
+            var totalHeight = baseHeight + (buttons.Any() ? 1 : 0); //add a row below the buttons
+            if (hasBorder)
             {
-                SetFocus(console);
-                return;
+                _boxRegions.Add(new BoxRegion(regionColumn, regionRow, regionWidth, totalHeight, LineWeight.Light));
             }
-            var index = _combinedControls.IndexOf(focusContainer);
-            var newIndex = index - 1;
-            if (newIndex < 0 && _combinedControls.Count > 0) newIndex = _combinedControls.Count - 1;
-            if (newIndex < 0) return;
 
-            var control = _combinedControls[newIndex];
-            control.Control?.SetFocus(console);
+            return (_boxRegions, allControls, regionWidth, totalHeight);
         }
+    }
 
-        public void ReRender(IFullScreenConsole console)
-        {
-            foreach (var control in _combinedControls)
-            {
-                control.Control.Refresh(console);
-            }
-        }
+    internal interface IRegionControl
+    {
+        ControlSet ComputePosition(ControlContainer controlContainer, int regionCol, int regionRow, int width,
+            int height);
     }
 }

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using VT100.Attributes;
 using VT100.FullScreen.ControlBehaviour;
+using VT100.FullScreen.ScreenLayers;
 using VT100.Utilities.ReadConsole;
 
 namespace VT100.FullScreen.Controls
@@ -9,7 +11,7 @@ namespace VT100.FullScreen.Controls
     [Control(typeof(TextBoxAttribute))]
     internal class TextBox : IFormattedLayoutControl<TextBoxFormat>
     {
-        private ILayout _dataContainer;
+        private object _dataContainer;
         private Func<object, object> _getter;
         private Action<object, object> _setter;
 
@@ -18,6 +20,7 @@ namespace VT100.FullScreen.Controls
         private IFullScreenApplication _app;
         private CursorController _cursorControl;
         private readonly BorderBorderStyle _borderBorderStyle = new();
+        private BoxRegion[] _boxRegions = {};
 
         // ReSharper disable once UnusedMember.Global
         internal void AcceptConfig(TextBoxAttribute attribute)
@@ -35,7 +38,10 @@ namespace VT100.FullScreen.Controls
 
         public int Height { get; private set; }
 
-        public void PropertyBind(IFullScreenApplication app, ILayout layout, Func<object, object> getter, Action<object, object> setter)
+        public IEnumerable<BoxRegion> BoxRegions => _boxRegions;
+
+        public void PropertyBind(IFullScreenApplication app, object layout, Func<object, object> getter,
+            Action<object, object> setter)
         {
             _app = app;
             _dataContainer = layout;
@@ -44,7 +50,7 @@ namespace VT100.FullScreen.Controls
             LoadValue();
         }
 
-        public void MethodBind(IFullScreenApplication app, ILayout layout, Func<object, bool> method)
+        public void MethodBind(IFullScreenApplication app, object layout, Func<object, bool> method)
         {
             //Not possible for a textbox
         }

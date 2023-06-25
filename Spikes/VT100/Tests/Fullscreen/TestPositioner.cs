@@ -15,8 +15,23 @@ namespace VT100.Tests.Fullscreen
         [Border(BorderType.Normal)]
         [Background(VtColour.Blue)]
         [InputBackground(VtColour.Yellow)]
-        class Layout : ILayout
+        class LayoutForTest : ILayout
         {
+            public class NestedHeaderLayout
+            {
+                [Label("Nested label")]
+                public string Header => "nested label value";
+
+                [TextBox("Nested text box")]
+                public string Value { get; set; } = "nested value";
+            }
+
+            [Region]
+            [Border(BorderType.Normal)]
+            [Background(VtColour.Black)]
+            [Foreground(VtColour.BrightCyan)]
+            public NestedHeaderLayout Header { get; set; } = new();
+            
             #region Implementation of ILayout
 
             public event LayoutUpdated LayoutUpdated;
@@ -57,8 +72,8 @@ namespace VT100.Tests.Fullscreen
         public void ControlsArePositioned()
         {
             //Arrange
-            var layout = new Layout() { Name = "Test", NickName = "Wolf", Colour = "Red" };
-            var app = new FakeFullScreenApplication(layout, 50, 20);
+            var layout = new LayoutForTest() { Name = "Test", NickName = "Wolf", Colour = "Red" };
+            var app = new FakeFullScreenApplication(layout, 50, 25);
     
             //Act
             app.Start();
