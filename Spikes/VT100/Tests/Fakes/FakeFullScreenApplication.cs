@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using VT100.ControlPropertyAnalysis;
 using VT100.FullScreen;
 using VT100.FullScreen.ScreenLayers;
@@ -109,6 +110,29 @@ namespace VT100.Tests.Fakes
             
         }
 
+        public string GetFocusChain()
+        {
+            var sb = new StringBuilder();
+
+            var current = _focus;
+            if (current == null)
+            {
+                sb.AppendLine("**No start focus.**");
+                Controls.FocusController.SetFocus(Console);
+                current = _focus;
+            }
+
+            while (current != null)
+            {
+                var container = Controls.ExportControls().FirstOrDefault(c => ReferenceEquals(c.Control, _focus));
+                sb.AppendLine($"Focus {_focus.GetType().Name} \"{container?.CaptionText ?? _focus.Caption ?? "[No Caption]"}\" (col {_focus.Column}, row {_focus.Row})");
+                Controls.FocusController.NextFocus(Console, _focus);
+                if (ReferenceEquals(_focus, current))
+                    break;
+            }
+
+            return sb.ToString();
+        }
         public FakeFullScreenConsole Console { get; }
 
         public bool InsertModeOn { get; set; } = true;

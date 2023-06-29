@@ -1,3 +1,7 @@
+using System.Globalization;
+using System.Text;
+using TestConsole.OutputFormatting;
+using TestConsoleLib;
 using TestConsoleLib.Testing;
 using VT100.Attributes;
 using VT100.FullScreen;
@@ -59,7 +63,7 @@ namespace VT100.Tests.Fullscreen
             }
             
             [Button("OK", ExitMode.ExitOnSuccess)]
-            public bool OK()
+            public bool Ok()
             {
                 return true;
             }
@@ -80,6 +84,25 @@ namespace VT100.Tests.Fullscreen
 
             //Assert
             app.Console.GetDisplayReport().Verify();
+        }
+        
+        [Fact]
+        public void FocusIsInCorrectOrder()
+        {
+            //Arrange
+            var layout = new LayoutForTest() { Name = "Test", NickName = "Wolf", Colour = "Red" };
+            var app = new FakeFullScreenApplication(layout, 50, 25);
+    
+            //Act
+            app.Start();
+
+            //Assert
+            var output = new Output();
+            var displayReport = app.Console.GetDisplayReport();
+            var focusChain = app.GetFocusChain();
+            output.FormatTable(new [] { new {InitialDisplay = displayReport, FocusChain = focusChain} }, ReportFormattingOptions.UnlimitedBuffer);
+            output.Report.Verify();
+
         }
     }
 }

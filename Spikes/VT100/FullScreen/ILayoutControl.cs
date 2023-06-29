@@ -28,6 +28,8 @@ namespace VT100.FullScreen
         }
         
         void Position(int column, int row, int width, int height);
+
+        bool CanAcceptFocus => true;
         void SetFocus(IFullScreenConsole console);
         void Accept(IFullScreenConsole console, ControlSequence next);
         

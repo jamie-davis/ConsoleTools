@@ -9,7 +9,7 @@ using VT100.Utilities.ReadConsole;
 namespace VT100.FullScreen.Controls
 {
     [Control(typeof(TextBoxAttribute))]
-    internal class TextBox : IFormattedLayoutControl<TextBoxFormat>
+    internal class TextBoxControl : IFormattedLayoutControl<TextBoxFormat>
     {
         private object _dataContainer;
         private Func<object, object> _getter;

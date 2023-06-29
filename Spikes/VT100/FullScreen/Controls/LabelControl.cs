@@ -8,15 +8,17 @@ using VT100.Utilities.ReadConsole;
 namespace VT100.FullScreen.Controls
 {
     [Control(typeof(LabelAttribute))]
-    internal class Label : IFormattedLayoutControl<LabelFormat>
+    internal class LabelControl : IFormattedLayoutControl<LabelFormat>
     {
         private BorderBorderStyle _borderBorderStyle;
         private LabelFormat _format;
         private IFullScreenApplication _app;
         private object _dataContainer;
+        private LabelAttribute _attribute;
         private Func<object, object> _getter;
         private string _value;
-        private IEnumerable<BoxRegion> _boxRegions;
+        private string _caption;
+        private List<BoxRegion> _boxRegions = new();
 
         #region Implementation of ILayoutControl
 
@@ -38,6 +40,12 @@ namespace VT100.FullScreen.Controls
             _app = app;
             LoadValue();
         }
+        
+        // ReSharper disable once UnusedMember.Global
+        internal void AcceptConfig(LabelAttribute attribute)
+        {
+            _attribute = attribute;
+        }
 
         private void LoadValue()
         {
@@ -52,7 +60,11 @@ namespace VT100.FullScreen.Controls
             //Not possible for a label
         }
 
-        public string Caption { get; set; }
+        public string Caption
+        {
+            get => _caption ?? _attribute?.Caption;
+            set => _caption = value;
+        }
 
         public void Render(IFullScreenConsole console)
         {
@@ -78,6 +90,8 @@ namespace VT100.FullScreen.Controls
             Width = width;
             Height = height;
         }
+
+        public bool CanAcceptFocus => false;
 
         public void SetFocus(IFullScreenConsole console)
         {

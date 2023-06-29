@@ -1,0 +1,31 @@
+Initial Display                                     Focus Chain                                             
+--------------------------------------------------- --------------------------------------------------------
+|┌────────────────────────────────────────────────┐ Focus TextBoxControl "Nested text box" (col 21, row 6)  
+|│                                                │ Focus TextBoxControl "Real Name" (col 14, row 11)       
+|│ ┌────────────────────────────────────────────┐ │ Focus TextBoxControl "Nickname" (col 20, row 14)        
+|│ │                                            │ │ Focus TextBoxControl "Favourite Colour" (col 20, row 16)
+|│ │ Nested label     nested label value        │ │ Focus ButtonControl "Default" (col 12, row 18)          
+|│ │                                            │ │ Focus ButtonControl "OK" (col 22, row 18)               
+>│ │ Nested text box  nested value              │ │ Focus ButtonControl "Cancel" (col 27, row 18)           
+|│ │                                            │ │                                                         
+|│ └────────────────────────────────────────────┘ │                                                         
+|│                                                │                                                         
+|│ ┌────────────────────────────────────────────┐ │                                                         
+|│ │Real Name  Test                             │ │                                                         
+|│ └────────────────────────────────────────────┘ │                                                         
+|│                                                │                                                         
+|│ Nickname          Wolf                         │                                                         
+|│                                                │                                                         
+|│ Favourite Colour  Red                          │                                                         
+|│                                                │                                                         
+|│           ┏━━━━━━━┓ ┏━━┓ ┏━━━━━━┓              │                                                         
+|│           ┃Default┃ ┃OK┃ ┃Cancel┃              │                                                         
+|│           ┗━━━━━━━┛ ┗━━┛ ┗━━━━━━┛              │                                                         
+|└────────────────────────────────────────────────┘                                                         
+|                                                                                                           
+|                                                                                                           
+|                                                                                                           
+ --------------------------------------------------                                                         
+                      ^                                                                                     
+Cursor position: Row 6, Column 21                                                                           
+                                                                                               

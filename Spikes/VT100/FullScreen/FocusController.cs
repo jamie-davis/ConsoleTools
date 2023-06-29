@@ -13,7 +13,7 @@ namespace VT100.FullScreen
         }
         public void SetFocus(IFullScreenConsole console)
         {
-            _controls.FirstOrDefault()?.SetFocus(console);
+            _controls.FirstOrDefault(c => c.CanAcceptFocus)?.SetFocus(console);
         }
 
         public void NextFocus(IFullScreenConsole console, ILayoutControl layoutControl)
@@ -24,14 +24,20 @@ namespace VT100.FullScreen
                 SetFocus(console);
                 return;
             }
-            var index = _controls.IndexOf(focusContainer);
-            if (index + 1 >= _controls.Count)
-            {
-                SetFocus(console);
-                return;
-            }
 
-            var control = _controls[index + 1];
+            ILayoutControl control;
+            var index = _controls.IndexOf(focusContainer);
+            do
+            {
+                if (++index >= _controls.Count)
+                {
+                    SetFocus(console);
+                    return;
+                }
+
+                control = _controls[index];
+            } while (!control.CanAcceptFocus);
+
             control?.SetFocus(console);
         }
 

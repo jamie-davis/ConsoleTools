@@ -76,6 +76,8 @@ namespace VT100.FullScreen.Controls
         {
             Debug.WriteLine($"Position region @{column},{row} {width}x{height}");
         }
+        
+        public bool CanAcceptFocus => false;
 
         public void SetFocus(IFullScreenConsole console)
         {

@@ -4,7 +4,7 @@
 |│ │                                            │ │
 |│ │ Nested label     nested label value        │ │
 |│ │                                            │ │
-|│ │ Nested text box  nested value              │ │
+>│ │ Nested text box  nested value              │ │
 |│ │                                            │ │
 |│ └────────────────────────────────────────────┘ │
 |│                                                │
@@ -22,7 +22,7 @@
 |└────────────────────────────────────────────────┘
 |                                                  
 |                                                  
->                                                  
+|                                                  
  --------------------------------------------------
-                                                   ^
-Cursor position: Row 24, Column 50
+                      ^
+Cursor position: Row 6, Column 21

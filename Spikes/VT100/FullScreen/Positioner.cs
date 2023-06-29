@@ -45,6 +45,7 @@ namespace VT100.FullScreen
             }
 
             var maxCaption = GetLongestCaptionLength();
+
             foreach (var container in orignalControls.ToList())
             {
                 var inBorder = container.LayoutProperties.HasBorder();
@@ -64,8 +65,15 @@ namespace VT100.FullScreen
                     var controlWidth = width - controlCol - (inBorder ? 4 : 3);
 
                     var controlSet = ((IRegionControl)container.Control).ComputePosition(container, controlCol, controlRow, controlWidth, height);
-                    allControls.AddRange(controlSet.ExportControls());
+                   MergeContainerControls();
                     _boxRegions.AddRange(controlSet.ExportBoxRegions()); 
+
+                    void MergeContainerControls()
+                    {
+                        var controlContainers = controlSet.ExportControls().Reverse();
+                        var index = allControls.IndexOf(container);
+                        foreach (var nestedContainer in controlContainers) allControls.Insert(index, nestedContainer);
+                    }
                 }
                 
                 //Rendering for a standard control

@@ -5,7 +5,7 @@ using Xunit;
 
 namespace VT100.Tests.Fullscreen.Controls
 {
-    public class TestLabel
+    public class TestLabelControl
     {
         [Fact]
         public void ValueIsDisplayed()

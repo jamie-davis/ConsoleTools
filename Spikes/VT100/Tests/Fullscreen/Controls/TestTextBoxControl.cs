@@ -8,7 +8,7 @@ using Xunit;
 
 namespace VT100.Tests.Fullscreen.Controls
 {
-    public class TestTextBox
+    public class TestTextBoxControl
     {
         [Fact]
         public void TextEntryIsDisplayed()
