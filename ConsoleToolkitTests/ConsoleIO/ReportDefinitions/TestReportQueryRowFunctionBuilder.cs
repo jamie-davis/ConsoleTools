@@ -1,14 +1,13 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Linq.Expressions;
 using ApprovalUtilities.Utilities;
 using ConsoleToolkit.ConsoleIO.Internal.ReportDefinitions;
 using ConsoleToolkit.Exceptions;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
 {
-    [TestFixture]
     public class TestReportQueryRowFunctionBuilder
     {
         private QueryType[] _testData;
@@ -38,11 +37,9 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
             public int IntResult { get; set; }
             public string StringResult { get; set; }
         }
-
         #endregion
 
-        [SetUp]
-        public void SetUp()
+        public TestReportQueryRowFunctionBuilder()
         {
             _testData = new[]
                             {
@@ -64,7 +61,7 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
             };
         }
 
-        [Test]
+        [Fact]
         public void QueryFunctionIsGenerated()
         {
             //Arrange
@@ -82,10 +79,10 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
                 .Select(i => func(i)).Cast<ResultType>()
                 .Select(r => string.Format("[{0}, {1}]", r.IntResult, r.StringResult))
                 .JoinWith(" ");
-            Assert.That(result, Is.EqualTo("[100, alpha] [200, beta]"));
+            Assert.Equal("[100, alpha] [200, beta]", result);
         }
 
-        [Test]
+        [Fact]
         public void CalculatedFieldExpressionsWork()
         {
             //Arrange
@@ -103,10 +100,10 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
                 .Select(i => func(i)).Cast<ResultType>()
                 .Select(r => string.Format("[{0}, {1}]", r.IntResult, r.StringResult))
                 .JoinWith(" ");
-            Assert.That(result, Is.EqualTo("[10, 1.5] [20, 3.5]"));
+            Assert.Equal("[10, 1.5] [20, 3.5]", result);
         }
 
-        [Test]
+        [Fact]
         public void MoreExpressionsThanPropertiesThrows()
         {
             //Arrange
@@ -120,7 +117,7 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
             Assert.Throws<ResultTypeCannotAcceptQuery>(() => ReportQueryRowFunctionBuilder.MakeQueryFunction<ResultType>(expressions));
         }
 
-        [Test]
+        [Fact]
         public void MixedTargetTypeThrows()
         {
             //Arrange

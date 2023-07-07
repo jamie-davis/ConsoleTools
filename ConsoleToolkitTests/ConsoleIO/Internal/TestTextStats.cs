@@ -1,44 +1,43 @@
-﻿using System.Linq;
+using System.Linq;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestTextStats
     {
-        [Test]
+        [Fact]
         public void MaximumLengthIsMeasured()
         {
             var stats = new TextStats();
             ProcessNumberStrings(stats);
 
-            Assert.That(stats.MaxWidth, Is.EqualTo(5));
+            Assert.Equal(5, stats.MaxWidth);
         }
 
-        [Test]
+        [Fact]
         public void MinimumLengthIsMeasured()
         {
             var stats = new TextStats();
             ProcessNumberStrings(stats);
 
-            Assert.That(stats.MinWidth, Is.EqualTo(3));
+            Assert.Equal(3, stats.MinWidth);
         }
 
-        [Test]
+        [Fact]
         public void MinimumLengthCanBeZero()
         {
             var stats = new TextStats();
             stats.Add(string.Empty);
             ProcessNumberStrings(stats);
 
-            Assert.That(stats.MinWidth, Is.EqualTo(0));
+            Assert.Equal(0, stats.MinWidth);
         }
 
-        [Test]
+        [Fact]
         public void AverageLengthIsMeasured()
         {
             var stats = new TextStats();
@@ -46,10 +45,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             stats.Add(new string('*',100));
             stats.Add(new string('*',50));
 
-            Assert.That(stats.AvgWidth, Is.EqualTo(75.0));
+            Assert.Equal(75.0, stats.AvgWidth);
         }
 
-        [Test]
+        [Fact]
         public void LengthTalliesAreMaintained()
         {
             var stats = new TextStats();
@@ -58,7 +57,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
 
             var tallies = stats.LengthTallies.Select(t => string.Format("[{0} = {1}]", t.Length, t.Count)).Aggregate((t, i) => t + i);
 
-            Assert.That(tallies, Is.EqualTo("[3 = 4][5 = 3][4 = 3]"));
+            Assert.Equal("[3 = 4][5 = 3][4 = 3]", tallies);
         }
 
         private static void ProcessNumberStrings(TextStats stats)

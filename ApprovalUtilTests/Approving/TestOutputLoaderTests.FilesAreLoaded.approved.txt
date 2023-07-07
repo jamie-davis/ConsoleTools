@@ -1,0 +1,9 @@
+Received:                                                                                      
+This is a test received file                                                                   
+It contains compare data for tests to find.                                                    
+                                                                                               
+                                                                                               
+Approved:                                                                                      
+This is a test approved file                                                                   
+It contains compare data for tests to find.                                                    
+                                                                                               

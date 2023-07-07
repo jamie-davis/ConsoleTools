@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ApprovalTests;
@@ -6,11 +6,11 @@ using ApprovalTests.Reporters;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using FluentAssertions;
+using Xunit;
 
 namespace ConsoleToolkitTests.CommandLineInterpretation
 {
-    [TestFixture]
     [UseReporter(typeof(CustomReporter))]
     public class TestCommandSelector
     {
@@ -46,7 +46,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             
         #endregion
 
-        [Test]
+        [Fact]
         public void SingleCommandWithNoKeywordsIsMatched()
         {
             //Arrange
@@ -57,10 +57,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var result = CommandSelector.Select(args, commands);
 
             //Assert
-            Assert.That(result.Matched, Is.True);
+            result.Matched.Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void IncorrectCommandIsNotMatched()
         {
             //Arrange
@@ -71,10 +71,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var result = CommandSelector.Select(args, commands);
 
             //Assert
-            Assert.That(result.Matched, Is.False);
+            result.Matched.Should().BeFalse();
         }
 
-        [Test]
+        [Fact]
         public void CommandWithKeywordIsMatched()
         {
             //Arrange
@@ -85,10 +85,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var result = CommandSelector.Select(args, commands);
 
             //Assert
-            Assert.That(result.Matched, Is.True);
+            result.Matched.Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void CommandWithMultipleKeywordsIsMatched()
         {
             //Arrange
@@ -99,10 +99,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var result = CommandSelector.Select(args, commands);
 
             //Assert
-            Assert.That(result.Matched, Is.True);
+            result.Matched.Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void CommandWithWrongKeywordIsNotMatched()
         {
             //Arrange
@@ -113,10 +113,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var result = CommandSelector.Select(args, commands);
 
             //Assert
-            Assert.That(result.Matched, Is.False);
+            result.Matched.Should().BeFalse();
         }
 
-        [Test]
+        [Fact]
         public void CommandIsSelectedFromList()
         {
             //Arrange
@@ -127,10 +127,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var result = CommandSelector.Select(args, commands);
 
             //Assert
-            Assert.That(result.Matched, Is.True);
+            result.Matched.Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void SelectedCommandIsReturned()
         {
             //Arrange
@@ -141,10 +141,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var result = CommandSelector.Select(args, commands);
 
             //Assert
-            Assert.That(result.Command, Is.SameAs(commands[1]));
+            result.Command.Should().BeSameAs(commands[1]);
         }
 
-        [Test]
+        [Fact]
         public void KeywordsAreMandatory()
         {
             //Arrange
@@ -161,10 +161,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var result = CommandSelector.Select(args, commands);
 
             //Assert
-            Assert.That(result.Command, Is.Null);
+            result.Command.Should().BeNull();
         }
 
-        [Test]
+        [Fact]
         public void SelectedCommandIsNullIsNotMatched()
         {
             //Arrange
@@ -175,10 +175,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var result = CommandSelector.Select(args, commands);
 
             //Assert
-            Assert.That(result.Command, Is.Null);
+            result.Command.Should().BeNull();
         }
 
-        [Test]
+        [Fact]
         public void NumberOfUsedArgumentsIsReturned()
         {
             //Arrange
@@ -189,10 +189,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var result = CommandSelector.Select(args, commands);
 
             //Assert
-            Assert.That(result.UsedArgumentCount, Is.EqualTo(2));
+            Assert.Equal(2, result.UsedArgumentCount);
         }
 
-        [Test]
+        [Fact]
         public void NumberOfUsedArgumentsIsOneIfNoKeywords()
         {
             //Arrange
@@ -203,10 +203,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var result = CommandSelector.Select(args, commands);
 
             //Assert
-            Assert.That(result.UsedArgumentCount, Is.EqualTo(1));
+            Assert.Equal(1, result.UsedArgumentCount);
         }
 
-        [Test]
+        [Fact]
         public void NumberOfUsedArgumentsIsZeroIfNoMatch()
         {
             //Arrange
@@ -217,10 +217,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var result = CommandSelector.Select(args, commands);
 
             //Assert
-            Assert.That(result.UsedArgumentCount, Is.EqualTo(0));
+            Assert.Equal(0, result.UsedArgumentCount);
         }
 
-        [Test]
+        [Fact]
         public void NoMatchesGivesError()
         {
             //Arrange
@@ -231,10 +231,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var result = CommandSelector.Select(args, commands);
 
             //Assert
-            Assert.That(result.Error, Is.EqualTo("Command not recognised."));
+            Assert.Equal("Command not recognised.", result.Error);
         }
 
-        [Test]
+        [Fact]
         public void PartMatchListsContinuations()
         {
             //Arrange
@@ -245,10 +245,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var result = CommandSelector.Select(args, commands);
 
             //Assert
-            Assert.That(result.Error, Is.EqualTo("config must be followed by add, delete or get."));
+            Assert.Equal("config must be followed by add, delete or get.", result.Error);
         }
 
-        [Test]
+        [Fact]
         public void PartMatchListsSingleContinuation()
         {
             //Arrange
@@ -259,10 +259,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var result = CommandSelector.Select(args, commands);
 
             //Assert
-            Assert.That(result.Error, Is.EqualTo("config must be followed by add."));
+            Assert.Equal("config must be followed by add.", result.Error);
         }
 
-        [Test]
+        [Fact]
         public void FindPartialMatchesContainsAllPartialMatches()
         {
             //Arrange
@@ -280,7 +280,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(output.Interface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void FindPartialMatchesReturnsExactMatchAlone()
         {
             //Arrange

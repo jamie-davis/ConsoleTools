@@ -6,11 +6,10 @@ using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAcceptanceTests.AcceptanceTestConfig4Commands;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAcceptanceTests
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class Config5AcceptanceTests
     {
@@ -19,9 +18,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
         private CommandLineInterpreterConfiguration _msStd;
         private ConsoleInterfaceForTesting _consoleOutInterface;
         private ConsoleAdapter _console;
-
-        [SetUp]
-        public void SetUp()
+        public Config5AcceptanceTests()
         {
             _posix = new CommandLineInterpreterConfiguration(CommandLineParserConventions.PosixConventions);
             _msDos = new CommandLineInterpreterConfiguration(CommandLineParserConventions.MsDosConventions);
@@ -48,7 +45,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             config.Load(typeof (StorageTableCommand));
         }
 
-        [Test]
+        [Fact]
         public void ConfigurationShouldBeDescribed()
         {
             CommandConfigDescriber.Describe(_posix, _console, "POSIX", CommandLineParserConventions.PosixConventions, CommandExecutionMode.CommandLine);
@@ -56,7 +53,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             Approvals.Verify(description);
         }
 
-        [Test]
+        [Fact]
         public void ConfigurationKeywordsShouldBeDescribed()
         {
             var keywords = new [] {"account", "monitor", "storage"};
@@ -70,7 +67,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             Approvals.Verify(description);
         }
 
-        [Test]
+        [Fact]
         public void PosixStyle()
         {
             var commands = new[]
@@ -92,7 +89,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             Approvals.Verify(CommandExecutorUtil.Do(_posix, commands, 50, false));
         }
 
-        [Test]
+        [Fact]
         public void MsDosStyleCommand1()
         {
             var commands = new[]
@@ -114,7 +111,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             Approvals.Verify(CommandExecutorUtil.Do(_msDos, commands, 50, false));
         }
 
-        [Test]
+        [Fact]
         public void MsStdStyleCommand1()
         {
             var commands = new[]

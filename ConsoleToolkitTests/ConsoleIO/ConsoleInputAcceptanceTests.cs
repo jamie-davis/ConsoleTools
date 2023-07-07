@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using ApprovalTests;
@@ -12,11 +12,10 @@ using ConsoleToolkit.Properties;
 using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.ApplicationStyles;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class ConsoleInputAcceptanceTests
     {
@@ -58,11 +57,9 @@ namespace ConsoleToolkitTests.ConsoleIO
                 Toolkit.Execute<Program1>(args);
             }
         }
-
         #endregion
 
-        [SetUp]
-        public void SetUp()
+        public ConsoleInputAcceptanceTests()
         {
             _console = new ConsoleInterfaceForTesting();
         }
@@ -72,7 +69,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             _console.SetInputStream(new StringReader(strings.JoinWith(Environment.NewLine)));
         }
 
-        [Test]
+        [Fact]
         public void ValidInputIsAccepted()
         {
             AttachInput(new []
@@ -84,7 +81,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(_console.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void TheUserMustEnterAValidValue()
         {
             AttachInput(new []
@@ -100,7 +97,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(buffer);
         }
 
-        [Test]
+        [Fact]
         public void BadInputResultsInNullObjectWhenInpoutRedirected()
         {
             AttachInput(new []

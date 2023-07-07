@@ -4,11 +4,11 @@ using System.Reflection;
 using ApprovalUtilities.Utilities;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
-using NUnit.Framework;
+using FluentAssertions;
+using Xunit;
 
 namespace ConsoleToolkitTests.CommandLineInterpretation
 {
-    [TestFixture]
     public class TestCommandConstructionLambdaGenerator
     {
         #region Types for test
@@ -111,54 +111,54 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             return string.Format("{0} = {1}", optionSetProp.Name, valueText);
         }
 
-        [Test]
+        [Fact]
         public void SimpleCommandIsConstructed()
         {
             var lambda = CommandConstructionLambdaGenerator<SimpleCommand>.Generate();
             var item = lambda();
-            Assert.That(item, Is.InstanceOf<SimpleCommand>());
+            item.Should().BeOfType<SimpleCommand>();
         }
 
-        [Test]
+        [Fact]
         public void CommandWithOpionSetIsConstructed()
         {
             var lambda = CommandConstructionLambdaGenerator<CommandWithOptionSet>.Generate();
             var item = lambda();
             var description = Describe(item);
-            Assert.That(description, Is.EqualTo("SimpleOptions = instance of OptionSet1"));
+            Assert.Equal("SimpleOptions = instance of OptionSet1", description);
         }
 
-        [Test]
+        [Fact]
         public void CommandWithMultipleOpionSetsIsConstructed()
         {
             var lambda = CommandConstructionLambdaGenerator<CommandWithOptionSets>.Generate();
             var item = lambda();
             var description = Describe(item);
-            Assert.That(description, Is.EqualTo("SimpleOptions1 = instance of OptionSet1,SimpleOptions2 = instance of OptionSet2"));
+            Assert.Equal("SimpleOptions1 = instance of OptionSet1,SimpleOptions2 = instance of OptionSet2", description);
         }
 
-        [Test]
+        [Fact]
         public void ListPositionalIsConstructed()
         {
             var lambda = CommandConstructionLambdaGenerator<CommandWithList>.Generate();
             var item = lambda();
-            Assert.That(item.Repeating, Is.Not.Null);
+            item.Repeating.Should().NotBeNull();
         }
 
-        [Test]
+        [Fact]
         public void ListOptionIsConstructed()
         {
             var lambda = CommandConstructionLambdaGenerator<CommandWithList>.Generate();
             var item = lambda();
-            Assert.That(item.RepeatingOpt, Is.Not.Null);
+            item.RepeatingOpt.Should().NotBeNull();
         }
 
-        [Test]
+        [Fact]
         public void ListOptionInOptionSetIsConstructed()
         {
             var lambda = CommandConstructionLambdaGenerator<CommandWithListOptionSet>.Generate();
             var item = lambda();
-            Assert.That(item.ListOptionSet.StringList, Is.Not.Null);
+            item.ListOptionSet.StringList.Should().NotBeNull();
         }
     }
 }

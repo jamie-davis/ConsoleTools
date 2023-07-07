@@ -1,38 +1,35 @@
-﻿using System;
+using System;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.ConsoleIO.Internal.WidthCalculators;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal.WidthCalculators
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestTimeSpanWidthCalculator
     {
         private TimeSpan _testValue;
-
-        [SetUp]
-        public void SetUp()
+        public TestTimeSpanWidthCalculator()
         {
             _testValue = TimeSpan.MinValue;
         }
 
-        [Test]
+        [Fact]
         public void DefaultFormatReturnsExpectedWidth()
         {
             var format = new ColumnFormat("A", typeof (TimeSpan));
-            Assert.That(TimeSpanWidthCalculator.Calculate(format), Is.EqualTo(_testValue.ToString().Length));
+            Assert.Equal(_testValue.ToString().Length, TimeSpanWidthCalculator.Calculate(format));
         }
 
-        [Test]
+        [Fact]
         public void TemplatedFormatReturnsExpectedWidth()
         {
             const string template = @"hh\:mm\:ss";
             var format = new ColumnFormat("A", typeof (TimeSpan), format: template);
-            Assert.That(TimeSpanWidthCalculator.Calculate(format), Is.EqualTo(_testValue.ToString(template).Length));
+            Assert.Equal(_testValue.ToString(template).Length, TimeSpanWidthCalculator.Calculate(format));
         }
     }
 }

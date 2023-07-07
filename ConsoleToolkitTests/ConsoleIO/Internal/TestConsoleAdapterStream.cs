@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using ApprovalTests;
 using ApprovalTests.Reporters;
@@ -7,34 +9,31 @@ using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestConsoleAdapterStream
     {
         private ConsoleInterfaceForTesting _outInterface;
         private ConsoleAdapter _adapter;
         private ConsoleAdapterStream _stream;
-
-        [SetUp]
-        public void SetUp()
+        public TestConsoleAdapterStream()
         {
             _outInterface = new ConsoleInterfaceForTesting();
             _adapter = new ConsoleAdapter(_outInterface);
             _stream = new ConsoleAdapterStream(_adapter);
         }
 
-        [Test]
+        [Fact]
         public void TextIsWritten()
         {
             _stream.Write("blah");
             Approvals.Verify(_outInterface.GetBuffer());
         }
 
-        public static Action<TextWriter>[] WriteTests = new Action<TextWriter>[]
+        public static Action<TextWriter>[] WriteTestArray = new Action<TextWriter>[]
         {
             t => t.Write(true),
             t => t.Write('c'),
@@ -57,7 +56,9 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             t => t.Write("value"),
         };
 
-        public static Action<TextWriter>[] WriteLineTests = new Action<TextWriter>[]
+        public static object[][] WriteTests = WriteTestArray.Select(a => new object[]{a}).ToArray();
+
+        public static Action<TextWriter>[] WriteLineTestsArray = new Action<TextWriter>[]
         {
             t => t.WriteLine(true),
             t => t.WriteLine('q'),
@@ -79,8 +80,9 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             t => t.WriteLine("{0},{1},{2},{3}", "first", "second", "third", "fourth"),
             t => t.WriteLine("value"),
         };
+        public static object[][] WriteLineTests = WriteLineTestsArray.Select(a => new object[]{a}).ToArray();
 
-        [Test, TestCaseSource("WriteTests")]
+        [Theory, MemberData(nameof(WriteTests))]
         public void TextWriteMethodsWork(Action<TextWriter> fn)
         {
             fn(_stream);
@@ -89,11 +91,11 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             {
                 fn(writer);
                 fn(writer);
-                Assert.That(_outInterface.GetBuffer().TrimEnd(), Is.EqualTo(writer.ToString()));
+                Assert.Equal(writer.ToString(), _outInterface.GetBuffer().TrimEnd());
             }
         }
 
-        [Test, TestCaseSource("WriteLineTests")]
+        [Theory, MemberData(nameof(WriteLineTests))]
         public void TextWriteLineMethodsWork(Action<TextWriter> fn)
         {
             fn(_stream);
@@ -102,7 +104,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             {
                 fn(writer);
                 fn(writer);
-                Assert.That(TrimLines(_outInterface.GetBuffer()), Is.EqualTo(writer.ToString()));
+                Assert.Equal(writer.ToString(), TrimLines(_outInterface.GetBuffer()));
             }
         }
 

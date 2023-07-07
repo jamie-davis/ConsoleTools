@@ -6,11 +6,10 @@ using ApprovalTests.Reporters;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
-    [TestFixture]
     [UseReporter(typeof(CustomReporter))]
     public class TestValueFormatter
     {
@@ -34,42 +33,40 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
                 return "Custom formatter called with " + format;
             }
         }
-
-        [SetUp]
-        public void SetUp()
+        public TestValueFormatter()
         {
             SetUpTests.OverrideCulture();
         }
 
-        [Test]
+        [Fact]
         public void DecimalValuesAreDisplayedToTwoDpByDefault()
         {
             var format = new ColumnFormat("decimal", type: typeof(Decimal));
-            Assert.That(ValueFormatter.Format(format, 1.456m), Is.EqualTo("1.46"));
+            Assert.Equal("1.46", ValueFormatter.Format(format, 1.456m));
         }
 
-        [Test]
+        [Fact]
         public void FloatValuesAreDisplayedToTwoDpByDefault()
         {
             var format = new ColumnFormat("float", type: typeof(float));
-            Assert.That(ValueFormatter.Format(format, 1.456F), Is.EqualTo("1.46"));
+            Assert.Equal("1.46", ValueFormatter.Format(format, 1.456F));
         }
 
-        [Test]
+        [Fact]
         public void DoubleValuesAreDisplayedToTwoDpByDefault()
         {
             var format = new ColumnFormat("double", type: typeof(float));
-            Assert.That(ValueFormatter.Format(format, 1.456D), Is.EqualTo("1.46"));
+            Assert.Equal("1.46", ValueFormatter.Format(format, 1.456D));
         }
 
-        [Test]
+        [Fact]
         public void NullIsFormattedAsEmptyString()
         {
             var format = new ColumnFormat("double", type: typeof(float));
-            Assert.That(ValueFormatter.Format(format, null), Is.EqualTo(string.Empty));
+            Assert.Equal(string.Empty, ValueFormatter.Format(format, null));
         }
 
-        [Test]
+        [Fact]
         public void FloatingPointNumbersAreFormattedToTheSpecifiedDp()
         {
             var formatters = new[]
@@ -99,7 +96,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(result);
         }
 
-        [Test]
+        [Fact]
         public void FormatStringIsApplied()
         {
             var data = new[]

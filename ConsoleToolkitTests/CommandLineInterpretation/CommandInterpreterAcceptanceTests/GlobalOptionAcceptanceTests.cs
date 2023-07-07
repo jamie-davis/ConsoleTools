@@ -6,11 +6,10 @@ using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAcceptanceTests.GlobalOptionAcceptanceTestCommands;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAcceptanceTests
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class GlobalOptionAcceptanceTests
     {
@@ -19,9 +18,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
         private CommandLineInterpreterConfiguration _msStd;
         private ConsoleInterfaceForTesting _consoleOutInterface;
         private ConsoleAdapter _console;
-
-        [SetUp]
-        public void SetUp()
+        public GlobalOptionAcceptanceTests()
         {
             _posix = new CommandLineInterpreterConfiguration(CommandLineParserConventions.PosixConventions);
             _msDos = new CommandLineInterpreterConfiguration(CommandLineParserConventions.MsDosConventions);
@@ -44,7 +41,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             GlobalOptions.Environment = null;
         }
 
-        [Test]
+        [Fact]
         public void ConfigurationShouldBeDescribed()
         {
             CommandConfigDescriber.Describe(_posix, _console, "POSIX", CommandLineParserConventions.PosixConventions, CommandExecutionMode.CommandLine);
@@ -52,7 +49,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             Approvals.Verify(description);
         }
 
-        [Test]
+        [Fact]
         public void InteractiveModeConfigurationShouldBeDescribed()
         {
             CommandConfigDescriber.Describe(_posix, _console, "POSIX", CommandLineParserConventions.PosixConventions, CommandExecutionMode.Interactive);
@@ -60,7 +57,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             Approvals.Verify(description);
         }
 
-        [Test]
+        [Fact]
         public void ClientKeywordShouldBeDescribed()
         {
             _console.WrapLine($"Description of client:");
@@ -71,7 +68,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             Approvals.Verify(description);
         }
 
-        [Test]
+        [Fact]
         public void PosixStyle()
         {
             var commands = new[]
@@ -86,7 +83,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             Approvals.Verify(CommandExecutorUtil.Do(_posix, commands, 50, false, () => $"GlobalOptions.Environment = {GlobalOptions.Environment}"));
         }
 
-        [Test]
+        [Fact]
         public void MsDosStyleCommand1()
         {
             var commands = new[]
@@ -101,7 +98,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             Approvals.Verify(CommandExecutorUtil.Do(_msDos, commands, 50, false, () => $"GlobalOptions.Environment = {GlobalOptions.Environment}"));
         }
 
-        [Test]
+        [Fact]
         public void MsStdStyleCommand1()
         {
             var commands = new[]
@@ -115,7 +112,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             Approvals.Verify(CommandExecutorUtil.Do(_msStd, commands, 50, false, () => $"GlobalOptions.Environment = {GlobalOptions.Environment}"));
         }
 
-        [Test]
+        [Fact]
         public void PosixStyleInteractive()
         {
             var commands = new[]
@@ -130,7 +127,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             Approvals.Verify(CommandExecutorUtil.Do(_posix, commands, 50, true, () => $"GlobalOptions.Environment = {GlobalOptions.Environment}"));
         }
 
-        [Test]
+        [Fact]
         public void MsDosStyleCommand1Interactive()
         {
             var commands = new[]
@@ -145,7 +142,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
             Approvals.Verify(CommandExecutorUtil.Do(_msDos, commands, 50, true, () => $"GlobalOptions.Environment = {GlobalOptions.Environment}"));
         }
 
-        [Test]
+        [Fact]
         public void MsStdStyleCommand1Interactive()
         {
             var commands = new[]

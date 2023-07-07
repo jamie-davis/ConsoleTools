@@ -1,13 +1,12 @@
-﻿using ConsoleToolkit.ConsoleIO;
+using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal.ReportDefinitions;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
 {
-    [TestFixture]
     public class TestReportParameterDetails
     {
-        [Test]
+        [Fact]
         public void OmitHeadingsSetsReportOptions()
         {
             //Arrange
@@ -17,10 +16,10 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
             details.OmitHeadings = true;
 
             //Assert
-            Assert.That(details.Options, Is.EqualTo(ReportFormattingOptions.OmitHeadings));
+            Assert.Equal(ReportFormattingOptions.OmitHeadings, details.Options);
         }
 
-        [Test]
+        [Fact]
         public void StretchColumnsSetsReportOptions()
         {
             //Arrange
@@ -30,10 +29,10 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
             details.StretchColumns = true;
 
             //Assert
-            Assert.That(details.Options, Is.EqualTo(ReportFormattingOptions.StretchColumns));
+            Assert.Equal(ReportFormattingOptions.StretchColumns, details.Options);
         }
 
-        [Test]
+        [Fact]
         public void SuppressHeadingRepetitionSetsReportOptions()
         {
             //Arrange
@@ -43,10 +42,10 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
             details.SuppressHeadingRepetition = true;
 
             //Assert
-            Assert.That(details.Options, Is.EqualTo(ReportFormattingOptions.SuppressHeadingsAfterChildReport));
+            Assert.Equal(ReportFormattingOptions.SuppressHeadingsAfterChildReport, details.Options);
         }
 
-        [Test]
+        [Fact]
         public void AllOptionsCanBeCombined()
         {
             //Arrange
@@ -58,9 +57,7 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
             details.SuppressHeadingRepetition = true;
 
             //Assert
-            Assert.That(details.Options, Is.EqualTo(ReportFormattingOptions.StretchColumns 
-                                                    | ReportFormattingOptions.OmitHeadings 
-                                                    | ReportFormattingOptions.SuppressHeadingsAfterChildReport));
+            Assert.Equal(ReportFormattingOptions.StretchColumns | ReportFormattingOptions.OmitHeadings | ReportFormattingOptions.SuppressHeadingsAfterChildReport, details.Options);
         }
     }
 }

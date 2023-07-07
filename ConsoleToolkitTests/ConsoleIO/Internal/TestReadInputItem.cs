@@ -9,11 +9,11 @@ using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using FluentAssertions;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestReadInputItem
     {
@@ -29,9 +29,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
 
         public string StringVal { get; set; }
         public int IntVal { get; set; }
-
-        [SetUp]
-        public void SetUp()
+        public TestReadInputItem()
         {
             _interface = new ConsoleInterfaceForTesting();
             _adapter = new ConsoleAdapter(_interface);
@@ -50,7 +48,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             return new StringReader(input.JoinWith(Environment.NewLine));
         }
 
-        [Test]
+        [Fact]
         public void StringCanBeRead()
         {
             _interface.SetInputStream(_goodStream);
@@ -62,10 +60,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             };
 
             ReadInputItem.GetValue(item, _interface, _adapter);
-            Assert.That(item.Value, Is.EqualTo("text"));
+            Assert.Equal("text", item.Value);
         }
 
-        [Test]
+        [Fact]
         public void ValidReadReturnsTrue()
         {
             _interface.SetInputStream(_stringOnlyStream);
@@ -76,10 +74,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
                 Type = typeof(string)
             };
 
-            Assert.That(ReadInputItem.GetValue(item, _interface, _adapter), Is.True);
+            ReadInputItem.GetValue(item, _interface, _adapter).Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void InvalidReadReturnsFalse()
         {
             _interface.SetInputStream(_stringOnlyStream);
@@ -91,10 +89,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
                 Type = typeof(int)
             };
 
-            Assert.That(ReadInputItem.GetValue(item, _interface, _adapter), Is.False);
+            ReadInputItem.GetValue(item, _interface, _adapter).Should().BeFalse();
         }
 
-        [Test]
+        [Fact]
         public void TextIsConvertedToRequiredType()
         {
             _interface.SetInputStream(_goodStream);
@@ -106,10 +104,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             };
 
             ReadInputItem.GetValue(item, _interface, _adapter);
-            Assert.That(item.Value, Is.EqualTo(45));
+            Assert.Equal(45, item.Value);
         }
 
-        [Test]
+        [Fact]
         public void PromptIsDisplayed()
         {
             _interface.SetInputStream(_goodStream);
@@ -125,7 +123,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_interface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void ErrorIsDisplayedWhenInputIsInvalid()
         {
             _interface.SetInputStream(_goodStream);
@@ -142,7 +140,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_interface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void InteractiveInputContinuesUntilGoodInputReceived()
         {
             _interface.SetInputStream(_goodStream);
@@ -158,7 +156,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_interface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void OptionsCanBeSpecified()
         {
             _interface.SetInputStream(_selectStream);
@@ -177,7 +175,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_interface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void OptionsCanBeDisplayedAsAMenu()
         {
             _interface.SetInputStream(_selectStream);
@@ -197,7 +195,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_interface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void OptionIsSelected()
         {
             _interface.SetInputStream(_selectStream);
@@ -214,10 +212,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
 
             ReadInputItem.GetValue(item, _interface, _adapter);
             var value = ((Read<int>)item.Value).Value;
-            Assert.That(value, Is.EqualTo(200));
+            Assert.Equal(200, value);
         }
 
-        [Test]
+        [Fact]
         public void ValidationsAreApplied()
         {
             _interface.SetInputStream(_validationStream);
@@ -231,10 +229,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
 
             ReadInputItem.GetValue(item, _interface, _adapter);
             var value = ((Read<int>)item.Value).Value;
-            Assert.That(value, Is.EqualTo(11));
+            Assert.Equal(11, value);
         }
 
-        [Test]
+        [Fact]
         public void ValidationErrorMessageIsDisplayed()
         {
             _interface.SetInputStream(_validationStream);

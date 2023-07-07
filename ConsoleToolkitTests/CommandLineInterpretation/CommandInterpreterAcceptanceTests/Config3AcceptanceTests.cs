@@ -1,26 +1,18 @@
-using System;
 using System.Collections.Generic;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.ApplicationStyles.Internals;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
-using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
-using Description = ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes.DescriptionAttribute;
+using Xunit;
 
 // ReSharper disable UnusedMember.Local
 
 namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAcceptanceTests
 {
-    /// <summary>
-    /// This test implements the arguments of the git add and clone commands, as a proof that relatively complex command options
-    /// can be specified. (i.e. its not just a made up example.)
-    /// </summary>
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class Config3AcceptanceTests
     {
@@ -194,9 +186,7 @@ NOTE: see the NOTE for the --shared option.")]
             [Description(@"Instead of placing the cloned repository where it is supposed to be, place the cloned repository at the specified directory, then make a filesytem-agnostic git symbolic link to there. The result is git repository can be separated from working tree.")]
             public string SeperateGitDir  { get; set; }
         }
-
-        [SetUp]
-        public void SetUp()
+        public Config3AcceptanceTests()
         {
             _posix = new CommandLineInterpreterConfiguration(CommandLineParserConventions.PosixConventions);
             _msDos = new CommandLineInterpreterConfiguration(CommandLineParserConventions.MsDosConventions);
@@ -217,7 +207,7 @@ NOTE: see the NOTE for the --shared option.")]
             config.Load(typeof(CloneCommand));
         }
 
-        [Test]
+        [Fact]
         public void ConfigurationShouldBeDescribed()
         {
             CommandConfigDescriber.Describe(_posix, _console, "POSIX", CommandLineParserConventions.PosixConventions, CommandExecutionMode.CommandLine);
@@ -225,7 +215,7 @@ NOTE: see the NOTE for the --shared option.")]
             Approvals.Verify(description);
         }
 
-        [Test]
+        [Fact]
         public void PosixStyle()
         {
             var commands = new[]
@@ -241,7 +231,7 @@ NOTE: see the NOTE for the --shared option.")]
             Approvals.Verify(CommandExecutorUtil.Do(_posix, commands, 50, false));
         }
 
-        [Test]
+        [Fact]
         public void MsDosStyleCommand1()
         {
             var commands = new[]
@@ -256,7 +246,7 @@ NOTE: see the NOTE for the --shared option.")]
             Approvals.Verify(CommandExecutorUtil.Do(_msDos, commands, 50, false));
         }
 
-        [Test]
+        [Fact]
         public void MsStdStyleCommand1()
         {
             var commands = new[]

@@ -1,77 +1,76 @@
-﻿using System.Text;
+using System.Text;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.CommandLineInterpretation
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestCommandLineTokeniser
     {
-        [Test]
+        [Fact]
         public void SimpleArgsAreExtracted()
         {
             Approvals.Verify(Tokenise("simple args are space delimited"));
         }
 
-        [Test]
+        [Fact]
         public void ArgsWithStringDelimiterAreExtracted()
         {
             Approvals.Verify(Tokenise("simple \"this one is delimited\""));
         }
 
-        [Test]
+        [Fact]
         public void EscapedStringDelimitersArePartOfTheToken()
         {
             Approvals.Verify(Tokenise("simple \"containing \\\"embedded speech\\\"\""));
         }
 
-        [Test]
+        [Fact]
         public void ForcedStringDelimitersArePartOfTheToken()
         {
             Approvals.Verify(Tokenise("simple \"containing \"\"embedded speech\"\"\""));
         }
 
-        [Test]
+        [Fact]
         public void CommaSeperatedValuesAreTheSameToken()
         {
             Approvals.Verify(Tokenise("a b c,d,e"));
         }
 
-        [Test]
+        [Fact]
         public void SpeechMarksAreRemovedFromCsvText()
         {
             Approvals.Verify(Tokenise("a b c,\"text\""));
         }
 
-        [Test]
+        [Fact]
         public void EmbeddedSpacesRemainInSpeechMarkTextInCsvToken()
         {
             Approvals.Verify(Tokenise("a b c,\"text with space\""));
         }
 
-        [Test]
+        [Fact]
         public void CommaInEmbeddedSpeechMarkDelimitedCsvTextIsAProblem()
         {
             Approvals.Verify(Tokenise("a b c,\"text with space, and a comma\""));
         }
 
-        [Test]
+        [Fact]
         public void EmbeddedSpeechMarksAreUsedToExtendTheTokenButDropped()
         {
             Approvals.Verify(Tokenise("a b c\"text with a space, and a comma\""));
         }
 
-        [Test]
+        [Fact]
         public void EmbeddedSpeechMarksInMultipleArgsBehaveCorrectly()
         {
             Approvals.Verify(Tokenise("a b c\"text with a space, and a comma\" e\"more text with a space, and a comma\""));
         }
 
-        [Test]
+        [Fact]
         public void EmptyTokensAreExtracted()
         {
             Approvals.Verify(Tokenise("\"\""));

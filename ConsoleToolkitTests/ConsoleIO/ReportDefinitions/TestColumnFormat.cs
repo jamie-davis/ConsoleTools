@@ -1,9 +1,9 @@
-﻿using ConsoleToolkit.ConsoleIO.ReportDefinitions;
-using NUnit.Framework;
+using ConsoleToolkit.ConsoleIO.ReportDefinitions;
+using FluentAssertions;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
 {
-    [TestFixture]
     public class TestColumnFormat
     {
         #region Test types
@@ -15,7 +15,7 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
 
         #endregion
 
-        [Test]
+        [Fact]
         public void DefaultColumnFormatHasNoHeading()
         {
             //Arrange
@@ -23,10 +23,10 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
             format.MakeFormat<int>();
 
             //Assert
-            Assert.That(format.ColumnFormat.Heading, Is.Null);
+            format.ColumnFormat.Heading.Should().BeNull();
         }
 
-        [Test]
+        [Fact]
         public void DefaultColumnFormatCorrectColumnType()
         {
             //Arrange
@@ -34,10 +34,10 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
             format.MakeFormat<int>();
 
             //Assert
-            Assert.That(format.ColumnFormat.Type, Is.EqualTo(typeof(int)));
+            Assert.Equal(typeof(int), format.ColumnFormat.Type);
         }
 
-        [Test]
+        [Fact]
         public void DefaultColumnFormatHasNoFixedWidth()
         {
             //Arrange
@@ -45,7 +45,7 @@ namespace ConsoleToolkitTests.ConsoleIO.ReportDefinitions
             format.MakeFormat<int>();
 
             //Assert
-            Assert.That(format.ColumnFormat.FixedWidth, Is.EqualTo(0));
+            Assert.Equal(0, format.ColumnFormat.FixedWidth);
         }
     }
 }

@@ -1,24 +1,21 @@
-﻿using ApprovalTests;
+using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Testing
 {
-    [TestFixture]
     [UseReporter(typeof(CustomReporter))]
     public class TestUnitTestConsole
     {
         private UnitTestConsole _testInstance;
-
-        [SetUp]
-        public void SetUp()
+        public TestUnitTestConsole()
         {
             _testInstance = new UnitTestConsole("testapp");
         }
 
-        [Test]
+        [Fact]
         public void ConsoleOutputIsWrittenToTestInterface()
         {
             //Act
@@ -28,7 +25,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Testing
             Approvals.Verify(_testInstance.Interface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void ErrorOutputIsWrittenToTestInterface()
         {
             //Act
@@ -38,7 +35,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Testing
             Approvals.Verify(_testInstance.Interface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void AllOutputIsWrittenToTestInterface()
         {
             //Act

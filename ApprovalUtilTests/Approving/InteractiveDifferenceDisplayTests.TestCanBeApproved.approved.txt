@@ -1,0 +1,20 @@
+=================                                           
+>> ---                                                      
+This·is·a·test·approved·file¶                               
+It·contains·compare·data·for·tests·to·fi                    
+nd.¶                                                        
+                                                            
+~~~~~~~~~~~~~~~~~~~~                                        
+>> +++                                                      
+This·is·a·test·received·file¶                               
+It·contains·compare·data·for·tests·to·fi                    
+nd.¶                                                        
+=================                                           
+Approval functions                                          
+                                                            
+A-Approve                                                   
+X-Done                                                      
+                                                            
+Select an option: A                                         
+Test approved.                                              
+                                                            

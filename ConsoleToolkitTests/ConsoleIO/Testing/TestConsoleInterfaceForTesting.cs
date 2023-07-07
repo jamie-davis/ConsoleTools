@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using ApprovalTests;
@@ -7,30 +7,28 @@ using ApprovalUtilities.Utilities;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using FluentAssertions;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Testing
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestConsoleInterfaceForTesting
     {
         private ConsoleInterfaceForTesting _console;
-
-        [SetUp]
-        public void SetUp()
+        public TestConsoleInterfaceForTesting()
         {
             _console = new ConsoleInterfaceForTesting();
         }
 
-        [Test]
+        [Fact]
         public void TheCursorPositionAdvancesWhenTextIsOutput()
         {
             _console.Write("text");
-            Assert.That(_console.CursorLeft, Is.EqualTo(4));
+            Assert.Equal(4, _console.CursorLeft);
         }
 
-        [Test]
+        [Fact]
         public void TextWiderThanTheBufferFlowsToNextLine()
         {
             var longLine = new string('X', _console.BufferWidth + 10);
@@ -38,7 +36,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Testing
             Approvals.Verify(_console.GetBuffer(ConsoleBufferFormat.Interleaved));
         }
 
-        [Test]
+        [Fact]
         public void TextAsWideAsTheBufferFlowsCreatesNewLine()
         {
             var longLine = new string('X', _console.BufferWidth);
@@ -46,29 +44,30 @@ namespace ConsoleToolkitTests.ConsoleIO.Testing
             Approvals.Verify(_console.GetBuffer(ConsoleBufferFormat.Interleaved));
         }
 
-        [Test]
+        [Fact]
         public void TextAsWideAsTheBufferMovesCursorDownOneLine()
         {
             var longLine = new string('X', _console.BufferWidth);
             _console.Write(longLine);
-            Assert.That(_console.CursorTop, Is.EqualTo(1));
+            Assert.Equal(1, _console.CursorTop);
         }
 
-        [Test]
+        [Fact]
         public void TextAsWideAsTheBufferMovesCursorToStartOfNewLine()
         {
             var longLine = new string('X', _console.BufferWidth);
             _console.Write(longLine);
-            Assert.That(_console.CursorLeft, Is.EqualTo(0));
+            Assert.Equal(0, _console.CursorLeft);
         }
 
-        [Test]
+        [Fact]
         public void ReadLineThrowsWhenNoInputIsSet()
         {
-            Assert.That(() => _console.ReadLine(), Throws.InstanceOf(typeof(Exception)));
+            Action act = () => _console.ReadLine();
+            act.Should().Throw<Exception>();
         }
 
-        [Test]
+        [Fact]
         public void ReadLineCanReadInputFromAStream()
         {
             var data = @"First line.
@@ -83,17 +82,17 @@ Third line.";
                 {
                     lines.Add(line);
                 }
-                Assert.That(lines.JoinWith(Environment.NewLine), Is.EqualTo(data));
+                Assert.Equal(data, lines.JoinWith(Environment.NewLine));
             }
         }
 
-        [Test]
+        [Fact]
         public void InterfaceIsInValidStateAfterWidthChange()
         {
             _console.BufferWidth = 132;
             _console.WindowWidth = 132;
             _console.Write("text text text");
-            Assert.That(_console.CursorLeft, Is.EqualTo(14));
+            Assert.Equal(14, _console.CursorLeft);
         }
     }
 }

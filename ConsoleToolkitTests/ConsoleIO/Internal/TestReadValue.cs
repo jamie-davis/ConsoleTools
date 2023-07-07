@@ -9,11 +9,11 @@ using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using FluentAssertions;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
-    [TestFixture]
     [UseReporter(typeof(CustomReporter))]
     public class TestReadValue
     {
@@ -25,9 +25,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
 
         public string StringVal { get; set; }
         public int IntVal { get; set; }
-
-        [SetUp]
-        public void SetUp()
+        public TestReadValue()
         {
             _interface = new ConsoleInterfaceForTesting();
             _adapter = new ConsoleAdapter(_interface);
@@ -41,7 +39,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             return new StringReader(input.JoinWith(Environment.NewLine));
         }
 
-        [Test]
+        [Fact]
         public void StringCanBeRead()
         {
             //Arrange
@@ -58,10 +56,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             ReadValue.UsingReadLine(item, _interface, _adapter, out value);
 
             //Assert
-            Assert.That(value, Is.EqualTo("text"));
+            Assert.Equal("text", value);
         }
 
-        [Test]
+        [Fact]
         public void ValidReadReturnsTrue()
         {
             //Arrange
@@ -78,10 +76,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             var result = ReadValue.UsingReadLine(item, _interface, _adapter, out value);
 
             //Assert
-            Assert.That(result, Is.True);
+            result.Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void InvalidReadReturnsFalse()
         {
             //Arrange
@@ -99,10 +97,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             var result = ReadValue.UsingReadLine(item, _interface, _adapter, out value);
 
             //Assert
-            Assert.That(result, Is.False);
+            result.Should().BeFalse();
         }
 
-        [Test]
+        [Fact]
         public void TextIsConvertedToRequiredType()
         {
             //Arrange
@@ -119,10 +117,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             ReadValue.UsingReadLine(item, _interface, _adapter, out value);
 
             //Assert
-            Assert.That(value, Is.EqualTo(45));
+            Assert.Equal(45, value);
         }
 
-        [Test]
+        [Fact]
         public void ErrorIsDisplayedWhenInputIsInvalid()
         {
             //Arrange
@@ -144,7 +142,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_interface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void OptionIsSelected()
         {
             //Arrange
@@ -165,10 +163,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             ReadValue.UsingReadLine(item, _interface, _adapter, out value);
 
             //Assert
-            Assert.That(value, Is.EqualTo(200));
+            Assert.Equal(200, value);
         }
 
-        [Test]
+        [Fact]
         public void OptionInputIsNotCaseSensitive()
         {
             //Arrange
@@ -189,10 +187,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             ReadValue.UsingReadLine(item, _interface, _adapter, out value);
 
             //Assert
-            Assert.That(value, Is.EqualTo(200));
+            Assert.Equal(200, value);
         }
 
-        [Test]
+        [Fact]
         public void OptionsCanBeDifferentiatedByCase()
         {
             //Arrange
@@ -213,10 +211,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             ReadValue.UsingReadLine(item, _interface, _adapter, out value2);
 
             //Assert
-            Assert.That(string.Format("Value1 = {0}, Value2 = {1}", value1, value2), Is.EqualTo("Value1 = 100, Value2 = 200"));
+            Assert.Equal("Value1 = 100, Value2 = 200", string.Format("Value1 = {0}, Value2 = {1}", value1, value2));
         }
 
-        [Test]
+        [Fact]
         public void ValidationErrorMessageIsDisplayed()
         {
             //Arrange
@@ -237,7 +235,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             Approvals.Verify(_interface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void ValidationErrorCausesFalseReturn()
         {
             //Arrange
@@ -255,10 +253,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             var result = ReadValue.UsingReadLine(item, _interface, _adapter, out value);
 
             //Assert
-            Assert.That(result, Is.False);
+            result.Should().BeFalse();
         }
 
-        [Test]
+        [Fact]
         public void ValidationPassReturnsTrue()
         {
             //Arrange
@@ -276,10 +274,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             var result = ReadValue.UsingReadLine(item, _interface, _adapter, out value);
 
             //Assert
-            Assert.That(result, Is.True);
+            result.Should().BeTrue();
         }
 
-        [Test]
+        [Fact]
         public void ValidationPassSetsValue()
         {
             //Arrange
@@ -297,7 +295,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             ReadValue.UsingReadLine(item, _interface, _adapter, out value);
 
             //Assert
-            Assert.That(value, Is.EqualTo(11));
+            Assert.Equal(11, value);
         }
     }
 }

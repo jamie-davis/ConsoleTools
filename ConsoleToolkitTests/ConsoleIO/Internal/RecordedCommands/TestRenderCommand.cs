@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using ApprovalUtilities.Utilities;
@@ -6,24 +6,21 @@ using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.ConsoleIO.Internal.RecordedCommands;
 using ConsoleToolkitTests.ConsoleIO.UnitTestUtilities;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal.RecordedCommands
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestRenderCommand
     {
         private ReplayBuffer _buffer;
         private const int TestBufferWidth = 20;
-
-        [SetUp]
-        public void SetUp()
+        public TestRenderCommand()
         {
             _buffer = new ReplayBuffer(TestBufferWidth);
         }
 
-        [Test]
+        [Fact]
         public void RenderCommandReplaysRenderableData()
         {
             var renderer = new RecordingConsoleAdapter();

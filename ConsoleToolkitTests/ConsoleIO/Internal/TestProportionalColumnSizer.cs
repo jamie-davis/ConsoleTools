@@ -3,17 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
-    [TestFixture]
     public class TestProportionalColumnSizer
     {
         private ColumnSizingParameters _parameters;
-
-        [SetUp]
-        public void SetUp()
+        public TestProportionalColumnSizer()
         {
             _parameters = new ColumnSizingParameters();
             _parameters.TabLength = 4;
@@ -31,7 +28,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             _parameters.Sizers = _parameters.Columns.Select(f => new ColumnWidthNegotiator.ColumnSizerInfo(f, 4)).ToList();
         }
 
-        [Test]
+        [Fact]
         public void EqualProportionsGenerateEqualWidths()
         {
             //Arrange
@@ -50,10 +47,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
 
             //Assert
             var result = GetWidths();
-            Assert.That(result, Is.EqualTo(new[] {5, 5, 5, 5, 5}));
+            Assert.Equal(new[] { 5, 5, 5, 5, 5 }, result);
         }
 
-        [Test]
+        [Fact]
         public void ColumnsGetCorrectProportion()
         {
             //Arrange
@@ -70,10 +67,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
 
             //Assert
             var result = GetWidths();
-            Assert.That(result, Is.EqualTo(new[] {5, 5, 15}));
+            Assert.Equal(new[] { 5, 5, 15 }, result);
         }
 
-        [Test]
+        [Fact]
         public void SpareCharacterIsAllocatedToWidestProportionalColumn()
         {
             //Arrange
@@ -92,10 +89,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
 
             //Assert
             var result = GetWidths();
-            Assert.That(result, Is.EqualTo(new[] {5, 5, 5, 5, 6}));
+            Assert.Equal(new[] { 5, 5, 5, 5, 6 }, result);
         }
 
-        [Test]
+        [Fact]
         public void ExtraCharactersAreSharedEqually()
         {
             //Arrange
@@ -114,10 +111,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
 
             //Assert
             var result = GetWidths();
-            Assert.That(result, Is.EqualTo(new[] {6, 6, 6, 5, 6}));
+            Assert.Equal(new[] { 6, 6, 6, 5, 6 }, result);
         }
 
-        [Test]
+        [Fact]
         public void LowProportionColumnLosesInSpareCharacterDistrbution()
         {
             //Arrange
@@ -136,10 +133,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
 
             //Assert
             var result = GetWidths();
-            Assert.That(result, Is.EqualTo(new[] {5, 6, 6, 6, 6}));
+            Assert.Equal(new[] { 5, 6, 6, 6, 6 }, result);
         }
 
-        [Test]
+        [Fact]
         public void AllColumnsGetAtLeastOneCharacter()
         {
             //Arrange
@@ -159,10 +156,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             //Assert
             var result = GetWidths();
             Console.WriteLine(string.Join(", ", result));
-            Assert.That(result, Is.EqualTo(new[] {1, 1, 1, 1, 25}));
+            Assert.Equal(new[] { 1, 1, 1, 1, 25 }, result);
         }
 
-        [Test]
+        [Fact]
         public void ColumnMinWidthLimitsShortestProportionalWidth()
         {
             //Arrange
@@ -182,10 +179,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             //Assert
             var result = GetWidths();
             Console.WriteLine(string.Join(", ", result));
-            Assert.That(result, Is.EqualTo(new[] { 7, 1, 1, 1, 19 }));
+            Assert.Equal(new[] { 7, 1, 1, 1, 19 }, result);
         }
 
-        [Test]
+        [Fact]
         public void MinWidthDoesNotIncreaseProportionalAllocation()
         {
             //Arrange
@@ -205,10 +202,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             //Assert
             var result = GetWidths();
             Console.WriteLine(string.Join(", ", result));
-            Assert.That(result, Is.EqualTo(new[] { 6, 6, 6, 6, 5 }));
+            Assert.Equal(new[] { 6, 6, 6, 6, 5 }, result);
         }
 
-        [Test]
+        [Fact]
         public void ColumnMaxWidthLimitsLongestProportionalWidth()
         {
             //Arrange
@@ -228,10 +225,10 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             //Assert
             var result = GetWidths();
             Console.WriteLine(string.Join(", ", result));
-            Assert.That(result, Is.EqualTo(new[] { 5, 5, 5, 5, 9 }));
+            Assert.Equal(new[] { 5, 5, 5, 5, 9 }, result);
         }
 
-        [Test]
+        [Fact]
         public void ColumnMinAndMaxWidthLimitsAreAppliedTogether()
         {
             //Arrange
@@ -251,7 +248,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
             //Assert
             var result = GetWidths();
             Console.WriteLine(string.Join(", ", result));
-            Assert.That(result, Is.EqualTo(new[] { 7, 7, 3, 3, 9 }));
+            Assert.Equal(new[] { 7, 7, 3, 3, 9 }, result);
         }
     }
 }

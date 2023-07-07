@@ -1,24 +1,21 @@
-﻿using System.Linq;
+using System.Linq;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestReport
     {
         private ConsoleInterfaceForTesting _consoleInterface;
         private ConsoleAdapter _adapter;
         private string _longText;
-
-        [SetUp]
-        public void SetUp()
+        public TestReport()
         {
             _longText = "ABCDEF GHIJKLM NOPQRST UVWXYZ ABCDEF GHIJKLM NOPQRST UVWXYZ ABCDEF GHIJKLM NOPQRST UVWXYZ ABCDEF GHIJKLM NOPQRST UVWXYZ ABCDEF GHIJKLM NOPQRST UVWXYZ ABCDEF GHIJKLM NOPQRST UVWXYZ";
 
@@ -29,7 +26,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             _adapter = new ConsoleAdapter(_consoleInterface);
         }
 
-        [Test]
+        [Fact]
         public void AReportIsGenerated()
         {
             //Arrange
@@ -40,10 +37,10 @@ namespace ConsoleToolkitTests.ConsoleIO
                                                             col => col.RightAlign()));
 
             //Assert
-            Assert.That(report.Columns.Count(), Is.EqualTo(1));
+            Assert.Equal(1, report.Columns.Count());
         }
 
-        [Test]
+        [Fact]
         public void ReportIsDisplayedWithDefaultOptions()
         {
             //Arrange
@@ -60,7 +57,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(_consoleInterface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void TheOmitHeadingsOptionSetsTheReportOptions()
         {
             //Arrange
@@ -72,10 +69,10 @@ namespace ConsoleToolkitTests.ConsoleIO
                                                  .OmitHeadings());
 
             //Assert
-            Assert.That(report.Options, Is.EqualTo(ReportFormattingOptions.OmitHeadings));
+            Assert.Equal(ReportFormattingOptions.OmitHeadings, report.Options);
         }
 
-        [Test]
+        [Fact]
         public void TheOmitHeadingsOptionIsApplied()
         {
             //Arrange
@@ -91,7 +88,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(_consoleInterface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void TheStretchColumnsOptionSetsTheReportOptions()
         {
             //Arrange
@@ -103,10 +100,10 @@ namespace ConsoleToolkitTests.ConsoleIO
                                                  .StretchColumns());
 
             //Assert
-            Assert.That(report.Options, Is.EqualTo(ReportFormattingOptions.StretchColumns));
+            Assert.Equal(ReportFormattingOptions.StretchColumns, report.Options);
         }
 
-        [Test]
+        [Fact]
         public void TheStretchColumnsOptionIsApplied()
         {
             //Arrange
@@ -122,7 +119,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(_consoleInterface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void TheReportCanBeIndented()
         {
             //Arrange
@@ -143,7 +140,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(_consoleInterface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void ReportWithChildReportCanBeIndented()
         {
             //Arrange
@@ -166,7 +163,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(_consoleInterface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void ColourChildReportCanBeIndented()
         {
             //Arrange
@@ -188,7 +185,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(_consoleInterface.GetBuffer(ConsoleBufferFormat.Interleaved));
         }
 
-        [Test]
+        [Fact]
         public void ReportTitleIsPrinted()
         {
             //Arrange
@@ -206,7 +203,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(_consoleInterface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void ReportTitleIsWrapped()
         {
             //Arrange
@@ -224,7 +221,7 @@ namespace ConsoleToolkitTests.ConsoleIO
             Approvals.Verify(_consoleInterface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void AllOptionsCanBeSetAtOnce()
         {
             //Arrange
@@ -240,10 +237,10 @@ namespace ConsoleToolkitTests.ConsoleIO
 
             //Assert
             var expected = ReportFormattingOptions.StretchColumns | ReportFormattingOptions.OmitHeadings;
-            Assert.That(report.Options, Is.EqualTo(expected));
+            Assert.Equal(expected, report.Options);
         }
 
-        [Test]
+        [Fact]
         public void ChildReportsCanBeAdded()
         {
             //Arrange

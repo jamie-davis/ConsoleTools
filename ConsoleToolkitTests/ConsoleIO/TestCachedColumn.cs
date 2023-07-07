@@ -4,11 +4,10 @@ using ApprovalTests.Reporters;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestCachedColumn
     {
@@ -43,13 +42,13 @@ namespace ConsoleToolkitTests.ConsoleIO
         // ReSharper restore MemberCanBePrivate.Local
         #endregion
 
-        [Test]
+        [Fact]
         public void ValueIsFormatted()
         {
             var format = new ColumnFormat("Num", Simple.NumberProp.PropertyType);
             format.SetActualWidth(5);
             var col = new CachedColumn(Simple.NumberProp, 50);
-            Assert.That(col.Format(format), Is.EqualTo("50"));
+            Assert.Equal("50", col.Format(format));
         }
     }
 }

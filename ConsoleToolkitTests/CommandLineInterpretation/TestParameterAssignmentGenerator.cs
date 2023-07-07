@@ -1,14 +1,13 @@
-﻿using System;
+using System;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.Exceptions;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.CommandLineInterpretation
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestParameterAssignmentGenerator
     {
@@ -118,7 +117,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
         #pragma warning restore 649
         #endregion
 
-        [Test]
+        [Fact]
         public void IntPropAssignmentIsGenerated()
         {
             Type[] parameterTypes;
@@ -126,10 +125,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var assignment = (Action<TestType, int>)ParameterAssignmentGenerator<TestType>.Generate(propertyInfo, out parameterTypes);
             var item = new TestType();
             assignment(item, 10);
-            Assert.That(item.IntProp, Is.EqualTo(10));
+            Assert.Equal(10, item.IntProp);
         }
 
-        [Test]
+        [Fact]
         public void IntFieldAssignmentIsGenerated()
         {
             Type[] parameterTypes;
@@ -137,28 +136,28 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var assignment = (Action<TestType, int>)ParameterAssignmentGenerator<TestType>.Generate(fieldInfo, out parameterTypes);
             var item = new TestType();
             assignment(item, 10);
-            Assert.That(item.IntField, Is.EqualTo(10));
+            Assert.Equal(10, item.IntField);
         }
 
-        [Test]
+        [Fact]
         public void IntAssignmentGenerationReturnsIntParameterType()
         {
             Type[] parameterTypes;
             var fieldInfo = typeof(TestType).GetField("IntField");
             ParameterAssignmentGenerator<TestType>.Generate(fieldInfo, out parameterTypes);
-            Assert.That(parameterTypes[0], Is.EqualTo(typeof(int)));
+            Assert.Equal(typeof(int), parameterTypes[0]);
         }
 
-        [Test]
+        [Fact]
         public void IntAssignmentGenerationReturnsSingleParameterType()
         {
             Type[] parameterTypes;
             var fieldInfo = typeof(TestType).GetField("IntField");
             ParameterAssignmentGenerator<TestType>.Generate(fieldInfo, out parameterTypes);
-            Assert.That(parameterTypes.Length, Is.EqualTo(1));
+            Assert.Equal(1, parameterTypes.Length);
         }
 
-        [Test]
+        [Fact]
         public void StringPropAssignmentIsGenerated()
         {
             Type[] parameterTypes;
@@ -166,10 +165,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var assignment = (Action<TestType, string>)ParameterAssignmentGenerator<TestType>.Generate(propertyInfo, out parameterTypes);
             var item = new TestType();
             assignment(item, "string value");
-            Assert.That(item.StringProp, Is.EqualTo("string value"));
+            Assert.Equal("string value", item.StringProp);
         }
 
-        [Test]
+        [Fact]
         public void StringFieldAssignmentIsGenerated()
         {
             Type[] parameterTypes;
@@ -177,10 +176,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             var assignment = (Action<TestType, string>)ParameterAssignmentGenerator<TestType>.Generate(fieldInfo, out parameterTypes);
             var item = new TestType();
             assignment(item, "string value");
-            Assert.That(item.StringField, Is.EqualTo("string value"));
+            Assert.Equal("string value", item.StringField);
         }
 
-        [Test]
+        [Fact]
         public void NestedClassAssignmentIsGenerated()
         {
             Type[] parameterTypes;
@@ -189,10 +188,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
                 .Generate(propertyInfo, out parameterTypes);
             var item = new TestType();
             assignment(item, 10, "string value");
-            Assert.That(item.NestedProp.ToString(), Is.EqualTo("10, string value"));
+            Assert.Equal("10, string value", item.NestedProp.ToString());
         }
 
-        [Test]
+        [Fact]
         public void MixedNestedFieldsAndPropertiesAreInvalid()
         {
             Type[] parameterTypes;
@@ -200,7 +199,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Assert.Throws<NestedOptionTypeInvalid>(() => ParameterAssignmentGenerator<TestTypeMixedNested>.Generate(propertyInfo, out parameterTypes));
         }
 
-        [Test]
+        [Fact]
         public void NestedClassMustHaveDefaultConstructor()
         {
             Type[] parameterTypes;
@@ -208,34 +207,34 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Assert.Throws<NestedOptionTypeInvalid>(() => ParameterAssignmentGenerator<TestTypeBadNewNested>.Generate(propertyInfo, out parameterTypes));
         }
 
-        [Test]
+        [Fact]
         public void NumberOfParameterTypesCorrectInNestedClassGeneration()
         {
             Type[] parameterTypes;
             var propertyInfo = typeof(TestType).GetProperty("NestedProp");
             ParameterAssignmentGenerator<TestType>.Generate(propertyInfo, out parameterTypes);
-            Assert.That(parameterTypes.Length, Is.EqualTo(2));
+            Assert.Equal(2, parameterTypes.Length);
         }
 
-        [Test]
+        [Fact]
         public void PositionalAttributesDetermineParameterOrder()
         {
             Type[] parameterTypes;
             var propertyInfo = typeof(TestTypeFixedOrderNested).GetProperty("NestedProp");
             ParameterAssignmentGenerator<TestTypeFixedOrderNested>.Generate(propertyInfo, out parameterTypes);
-            Assert.That(parameterTypes, Is.EqualTo(new []{ typeof(double), typeof(string), typeof(int)}));
+            Assert.Equal(new[] { typeof(double), typeof(string), typeof(int) }, parameterTypes);
         }
 
-        [Test]
+        [Fact]
         public void ParameterTypesCorrectInNestedClassGeneration()
         {
             Type[] parameterTypes;
             var propertyInfo = typeof(TestType).GetProperty("NestedProp");
             ParameterAssignmentGenerator<TestType>.Generate(propertyInfo, out parameterTypes);
-            Assert.That(parameterTypes, Is.EqualTo(new [] {typeof(int), typeof(string)}));
+            Assert.Equal(new[] { typeof(int), typeof(string) }, parameterTypes);
         }
 
-        [Test]
+        [Fact]
         public void AssignmentToMemberOfNestedTypeIsGenerated()
         {
             var parent = typeof (NestedMemberAssignment).GetProperty("Nested");
@@ -246,10 +245,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
 
             var item = new NestedMemberAssignment {Nested = new NestedMemberAssignment.NestedType()};
             fn(item, "value");
-            Assert.That(item.Nested.String1, Is.EqualTo("value"));
+            Assert.Equal("value", item.Nested.String1);
         }
 
-        [Test]
+        [Fact]
         public void AssignmentToComplexMemberOfNestedTypeIsGenerated()
         {
             var parent = typeof (NestedMemberAssignment).GetProperty("Nested");
@@ -260,7 +259,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
 
             var item = new NestedMemberAssignment {Nested = new NestedMemberAssignment.NestedType()};
             fn(item, "P1", 55);
-            Assert.That(item.Nested.Complex.ToString(), Is.EqualTo("P1,55"));
+            Assert.Equal("P1,55", item.Nested.Complex.ToString());
         }
     }
 }

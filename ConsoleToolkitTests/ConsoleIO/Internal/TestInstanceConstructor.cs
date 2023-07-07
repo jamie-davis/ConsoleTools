@@ -1,12 +1,13 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using ConsoleToolkit.ConsoleIO.Internal;
-using NUnit.Framework;
+using FluentAssertions;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
-    [TestFixture]
     public class TestInstanceConstructor
     {
         #region Types for test
@@ -49,77 +50,77 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
         }
         #endregion
 
-        [Test]
+        [Fact]
         public void MakeUsingConstructorReturnsCorrectType()
         {
             var props = MakeProps<TargetTypeWithConstructor>(new object[] {"A", 10, 45.5});
             var instance = InstanceConstructor<TargetTypeWithConstructor>.MakeInstanceUsingConstructor(props);
-            Assert.That(instance, Is.InstanceOf<TargetTypeWithConstructor>());
+            instance.Should().BeOfType<TargetTypeWithConstructor>();
         }
 
-        [Test]
+        [Fact]
         public void MakeUsingConstructorCreatesInstance()
         {
             var props = MakeProps<TargetTypeWithConstructor>(new object[] {"A", 10, 45.5});
             var instance = InstanceConstructor<TargetTypeWithConstructor>.MakeInstanceUsingConstructor(props);
-            Assert.That(instance.ToString(), Is.EqualTo("A,10,45.5"));
+            Assert.Equal("A,10,45.5", instance.ToString());
         }
 
-        [Test]
+        [Fact]
         public void MakeUsingPropertySettersCreatesInstance()
         {
             var props = MakeProps<TargetTypeWithSetters>(new object[] {"A", 10, 45.5});
             var instance = InstanceConstructor<TargetTypeWithSetters>.MakeInstanceUsingMemberSetters(props);
-            Assert.That(instance.ToString(), Is.EqualTo("A,10,45.5"));
+            Assert.Equal("A,10,45.5", instance.ToString());
         }
 
-        [Test]
+        [Fact]
         public void MakeUsingPropertySettersReturnsCorrectType()
         {
             var props = MakeProps<TargetTypeWithSetters>(new object[] {"A", 10, 45.5});
             var instance = InstanceConstructor<TargetTypeWithSetters>.MakeInstanceUsingMemberSetters(props);
-            Assert.That(instance, Is.InstanceOf<TargetTypeWithSetters>());
+            instance.Should().BeOfType<TargetTypeWithSetters>();
         }
 
-        [Test]
+        [Fact]
         public void MakeUsingConstructorThrowsIfConstructorNotFound()
         {
             var bogusProp = typeof (TargetTypeWithConstructor).GetProperty("V1");
             var props = MakeProps<TargetTypeWithConstructor>(new object[] { "A", 10, 45.5 }).Concat(new [] {new PropertySource {Property = bogusProp, Value = 45}});
-            TestDelegate call = () => InstanceConstructor<TargetTypeWithConstructor>.MakeInstanceUsingConstructor(props);
+            Action call = () => InstanceConstructor<TargetTypeWithConstructor>.MakeInstanceUsingConstructor(props);
             Assert.Throws<InstanceConstructor<TargetTypeWithConstructor>.NoConstructorWithParametersMathingPropertyFound>(call);
         }
 
-        [Test]
+        [Fact]
         public void MakeInstanceWithConstructorReturnsCorrectType()
         {
             var props = MakeProps<TargetTypeWithConstructor>(new object[] { "A", 10, 45.5 });
             var instance = InstanceConstructor<TargetTypeWithConstructor>.MakeInstance(props);
-            Assert.That(instance, Is.InstanceOf<TargetTypeWithConstructor>());
+            instance.Should().BeOfType<TargetTypeWithConstructor>();
         }
 
-        [Test]
+        [Fact]
         public void MakeInstanceWithConstructorCreatesInstance()
         {
             var props = MakeProps<TargetTypeWithConstructor>(new object[] { "A", 10, 45.5 });
             var instance = InstanceConstructor<TargetTypeWithConstructor>.MakeInstance(props);
-            Assert.That(instance.ToString(), Is.EqualTo("A,10,45.5"));
+            Assert.Equal("A,10,45.5", instance.ToString());
         }
 
-        [Test]
+        [Fact]
         public void MakeInstanceWithSettersReturnsCorrectType()
         {
             var props = MakeProps<TargetTypeWithSetters>(new object[] { "A", 10, 45.5 });
             var instance = InstanceConstructor<TargetTypeWithSetters>.MakeInstance(props);
-            Assert.That(instance, Is.InstanceOf<TargetTypeWithSetters>());
+            instance.Should().BeOfType<TargetTypeWithSetters>();
         }
 
-        [Test]
+        [Fact]
         public void MakeInstanceWithSettersCreatesInstance()
         {
             var props = MakeProps<TargetTypeWithSetters>(new object[] { "A", 10, 45.5 });
             var instance = InstanceConstructor<TargetTypeWithSetters>.MakeInstance(props);
-            Assert.That(instance.ToString(), Is.EqualTo("A,10,45.5"));
+            Assert.Equal("A,10,45.5", instance.ToString());
         }
 
         private IEnumerable<PropertySource> MakeProps<T>(object[] objects)

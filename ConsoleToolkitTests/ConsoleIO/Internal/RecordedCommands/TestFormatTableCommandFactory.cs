@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,12 +7,11 @@ using ApprovalUtilities.Utilities;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal.RecordedCommands;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 using Approvals = ApprovalTests.Approvals;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal.RecordedCommands
 {
-    [TestFixture]
     [UseReporter(typeof(CustomReporter))]
     public class TestFormatTableCommandFactory
     {
@@ -57,16 +56,14 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal.RecordedCommands
             Console.WriteLine(output);
             return output;
         }
-
-        [SetUp]
-        public void SetUp()
+        public TestFormatTableCommandFactory()
         {
             _data = Enumerable.Range(0, 10)
                 .Select(n => new TestType(n))
                 .ToList();
         }
 
-        [Test]
+        [Fact]
         public void FormatTableCommandIsCreatedFromReport()
         {
             //Arrange

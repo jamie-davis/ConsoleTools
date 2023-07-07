@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,11 +6,11 @@ using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit.CommandLineInterpretation;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.CommandLineInterpretation
 {
-    [TestFixture, SetCulture("en-gb")]
+    //[SetCulture("en-gb")]
     [UseReporter(typeof(CustomReporter))]
     public class TestCommandLineInterpreter
     {
@@ -144,8 +144,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
 
         #endregion
 
-        [SetUp]
-        public void SetUp()
+        public TestCommandLineInterpreter()
         {
             _failureMessage = null;
             MakeConfig();
@@ -178,7 +177,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             CommandLineInterpreterConfiguration.AddCustomConverter(s => s.Length > 1 ? new CustomParamType(s.First(), s.Substring(1)) : null);
         }
 
-        [Test]
+        [Fact]
         public void CommandWithPositionalParameterIsExtracted()
         {
             var args = CommandLineTokeniser.Tokenise("positionalTest parameter");
@@ -187,7 +186,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(Describe(args, command, errors));
         }
 
-        [Test]
+        [Fact]
         public void MissingPositionalParameterIsAnError()
         {
             var args = CommandLineTokeniser.Tokenise("positionalTest");
@@ -196,7 +195,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(Describe(args, command, errors));
         }
 
-        [Test]
+        [Fact]
         public void ExtraPositionalParameterIsAnError()
         {
             var args = CommandLineTokeniser.Tokenise("positionalTest one two");
@@ -205,7 +204,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(Describe(args, command, errors));
         }
 
-        [Test]
+        [Fact]
         public void CommandWithOptionIsExtracted()
         {
             var args = CommandLineTokeniser.Tokenise("positionalTest parameter -opt");
@@ -214,7 +213,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(Describe(args, command, errors));
         }
 
-        [Test]
+        [Fact]
         public void CommandWithParameterisedOptionIsExtracted()
         {
             var args = CommandLineTokeniser.Tokenise("positionalTest parameter -opt2 fish");
@@ -223,7 +222,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(Describe(args, command, errors));
         }
 
-        [Test]
+        [Fact]
         public void CommandWithOptionWithMissingParameterIsAnError()
         {
             var args = CommandLineTokeniser.Tokenise("positionalTest parameter -opt2 -opt");
@@ -232,7 +231,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(Describe(args, command, errors));
         }
 
-        [Test]
+        [Fact]
         public void CommandWithOptionWithMissingParameterLastIsAnError()
         {
             var args = CommandLineTokeniser.Tokenise("positionalTest parameter -opt2");
@@ -241,7 +240,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(Describe(args, command, errors));
         }
 
-        [Test]
+        [Fact]
         public void InvalidCommandIsAnError()
         {
             var args = CommandLineTokeniser.Tokenise("nothing parameter -opt2");
@@ -250,7 +249,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(Describe(args, command, errors));
         }
 
-        [Test]
+        [Fact]
         public void DefaultCommandIsUsedWhenNoOtherCommandsAreDefined()
         {
             var args = CommandLineTokeniser.Tokenise("parameter -opt2:value");
@@ -267,7 +266,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(Describe(args, command, errors));
         }
 
-        [Test]
+        [Fact]
         public void CommandLineInterpreterSupportsDefaultCommand()
         {
             _config = new CommandLineInterpreterConfiguration();
@@ -295,7 +294,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             new Tuple<Type, string, string>(typeof(DateTime),"2014-02-05", "X")
         };
 
-        [Test]
+        [Fact]
         public void OptionParametersAreConverted()
         {
             var sb = new StringBuilder();
@@ -315,7 +314,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(sb);
         }
 
-        [Test]
+        [Fact]
         public void CommandParametersAreConverted()
         {
             var sb = new StringBuilder();
@@ -335,7 +334,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(sb);
         }
 
-        [Test]
+        [Fact]
         public void OptionParametersThatCannotBeConvertedGenerateErrors()
         {
             var sb = new StringBuilder();
@@ -361,7 +360,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(sb.Replace("\0", ""));
         }
 
-        [Test]
+        [Fact]
         public void PositionalParametersThatCannotBeConvertedGenerateErrors()
         {
             var sb = new StringBuilder();
@@ -387,7 +386,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(sb.Replace("\0", ""));
         }
 
-        [Test]
+        [Fact]
         public void CustomParameterTypesCanBeExtracted()
         {
             GenericCommand<CustomParamType>.AddCommand(_config);
@@ -398,7 +397,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(string.Format("{0} : {1}", commandLine, command));
         }
 
-        [Test]
+        [Fact]
         public void CustomParameterTypeConversionFailureIsDetected()
         {
             GenericCommand<CustomParamType>.AddCommand(_config);
@@ -409,7 +408,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(string.Format("{0} : {1}", commandLine, errors.Aggregate((t, i) => t + ", " + i)));
         }
 
-        [Test]
+        [Fact]
         public void ValidationsAreExecuted()
         {
             GenericCommand<CustomParamType>.AddCommand(_config);
@@ -420,7 +419,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(string.Format("{0} : {1}", commandLine, command));
         }
 
-        [Test]
+        [Fact]
         public void ValidationFailuresAreDetected()
         {
             FailValidation("Validation Failed.");
@@ -433,7 +432,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(Describe(args, command, errors));
         }
 
-        [Test]
+        [Fact]
         public void OptionNamesAreSuppliedToParser()
         {
             var customParser = new MockParser();
@@ -448,10 +447,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             string[] errors;
             interpreter.Interpret(new [] { "x" }, out errors, false);
 
-            Assert.That(customParser.Options.Select(o => o.Name), Is.EqualTo(new [] { "opt", "opt2", "optInt"}));
+            Assert.Equal(new[] { "opt", "opt2", "optInt" }, customParser.Options.Select(o => o.Name));
         }
 
-        [Test]
+        [Fact]
         public void OptionAliasNamesAreSuppliedToParser()
         {
             var customParser = new MockParser();
@@ -468,10 +467,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             string[] errors;
             interpreter.Interpret(new [] { "x" }, out errors, false);
 
-            Assert.That(customParser.Options.Select(o => o.Name), Is.EqualTo(new [] { "opt", "opt2", "opt2Alias", "optInt", "optintalias"}));
+            Assert.Equal(new[] { "opt", "opt2", "opt2Alias", "optInt", "optintalias" }, customParser.Options.Select(o => o.Name));
         }
 
-        [Test]
+        [Fact]
         public void PositionalNamesAreSuppliedToParser()
         {
             var customParser = new MockParser();
@@ -487,10 +486,10 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             string[] errors;
             interpreter.Interpret(new [] { "x", "y" }, out errors, false);
 
-            Assert.That(customParser.Positionals.Select(o => o.ParameterName), Is.EqualTo(new[] { "firstParam", "secondParam" }));
+            Assert.Equal(new[] { "firstParam", "secondParam" }, customParser.Positionals.Select(o => o.ParameterName));
         }
 
-        [Test]
+        [Fact]
         public void ShortCircuitOptionsHaltParsing()
         {
             var config = new CommandLineInterpreterConfiguration(CommandLineParserConventions.MicrosoftStandard);
@@ -508,7 +507,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(Describe(args, command, errors));
         }
 
-        [Test]
+        [Fact]
         public void EmptyCommandStringGeneratesMissingParametersError()
         {
             var customParser = new MockParser();
@@ -528,7 +527,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(Describe(args, result, errors));
         }
 
-        [Test]
+        [Fact]
         public void RepeatablePositionalsAreAccepted()
         {
             var config = new CommandLineInterpreterConfiguration();
@@ -545,7 +544,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(Describe(args, result, errors));
         }
 
-        [Test]
+        [Fact]
         public void RepeatablePositionalsMustBeSpecifiedAtLeastOnce()
         {
             var config = new CommandLineInterpreterConfiguration();
@@ -562,7 +561,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(Describe(args, result, errors));
         }
 
-        [Test]
+        [Fact]
         public void OptionalRepeatablePositionalsGetDefaultValue()
         {
             var config = new CommandLineInterpreterConfiguration();
@@ -579,7 +578,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(Describe(args, result, errors));
         }
 
-        [Test]
+        [Fact]
         public void OptionalRepeatablePositionalsGetSpecifiedValues()
         {
             var config = new CommandLineInterpreterConfiguration();
@@ -596,7 +595,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(Describe(args, result, errors));
         }
 
-        [Test]
+        [Fact]
         public void RepeatableOptionsMayBeSpecifiedMultipleTimes()
         {
             var config = new CommandLineInterpreterConfiguration();
@@ -613,7 +612,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(Describe(args, result, errors));
         }
 
-        [Test]
+        [Fact]
         public void CommandsWithKeywordsAreRecognised()
         {
             var config = new CommandLineInterpreterConfiguration();
@@ -628,7 +627,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(Describe(args, result, errors));
         }
 
-        [Test]
+        [Fact]
         public void GlobalOptionsAreValid()
         {
             GlobalOptions.Opt = false;
@@ -647,7 +646,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(Describe(args, result, errors, new {gopt = GlobalOptions.Opt}));
         }
 
-        [Test]
+        [Fact]
         public void GlobalOptionsAreIgnoredIfTheyClashWithCommandOptionNames()
         {
             GlobalOptions.Opt = false;
@@ -666,7 +665,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(Describe(args, result, errors, new {gopt = GlobalOptions.Opt}));
         }
 
-        [Test]
+        [Fact]
         public void GlobalOptionsAreInvalidInInteractiveMode()
         {
             GlobalOptions.Opt = false;
@@ -685,7 +684,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation
             Approvals.Verify(Describe(args, result, errors, new {gopt = GlobalOptions.Opt}));
         }
 
-        [Test]
+        [Fact]
         public void GlobalOptionsDefaultIfNotSet()
         {
             GlobalOptions.Opt = false; //initialise the global option - this value should be carried through.

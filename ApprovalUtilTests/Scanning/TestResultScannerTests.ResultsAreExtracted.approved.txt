@@ -1,0 +1,17 @@
+"Passed" indicates the result returned by TestResultScanner. "File Exact Match" indicates      
+whether the received file exactly matches the approved file on disk.                           
+                                                                                               
+The scanner's comparison is line-ending agnostic, so it will report a match even if the line   
+endings are different. One of the test files has deliberately been written with line ending    
+differences to test this, and should show up as a pass but not an exact match.                 
+                                                                                               
+Test Type                                                                           File Exact 
+Name       Test Name            Approved                                     Passed Match      
+---------- -------------------- -------------------------------------------- ------ -----------
+TestClass1 TestOne              TestClass1.TestOne.approved.txt              True              
+TestClass1 TestThree            TestClass1.TestThree.approved.txt            True              
+TestClass1 TestTwo              TestClass1.TestTwo.approved.txt              True   True       
+TestClass2 MixedLineEndingsPass TestClass2.MixedLineEndingsPass.approved.txt True   False      
+TestClass2 TestFailed           TestClass2.TestFailed.approved.txt           False  False      
+TestClass2 TestOne              TestClass2.TestOne.approved.txt              True   True       
+                                                                                               

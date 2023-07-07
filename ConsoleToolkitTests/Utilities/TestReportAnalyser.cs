@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ApprovalTests;
@@ -7,20 +7,17 @@ using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.Testing;
 using ConsoleToolkit.Utilities;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.Utilities
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
     public class TestReportAnalyser
     {
         private Tuple<int, string>[] _data;
         private Report<Tuple<int, string>> _report;
         private UnitTestConsole _utc;
-
-        [SetUp]
-        public void SetUp()
+        public TestReportAnalyser()
         {
             _data = Enumerable.Range(0, 10)
                 .Select(x => Tuple.Create(x, string.Format("Num = {0}", x)))
@@ -35,7 +32,7 @@ namespace ConsoleToolkitTests.Utilities
             _utc.Interface.WindowWidth = 133;
         }
 
-        [Test]
+        [Fact]
         public void ColumnsAreAvailable()
         {
             //Arrange
@@ -45,10 +42,10 @@ namespace ConsoleToolkitTests.Utilities
             var columns = string.Join(", ", analysis.Columns);
 
             //Assert
-            Assert.That(columns, Is.EqualTo("Number, Text"));
+            Assert.Equal("Number, Text", columns);
         }
 
-        [Test]
+        [Fact]
         public void ColumnValuesFromEachRowAreAvailable()
         {
             //Arrange

@@ -5,11 +5,10 @@ using ApprovalUtilities.Utilities;
 using ConsoleToolkit.ConsoleIO;
 using ConsoleToolkit.ConsoleIO.Internal;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO
 {
-    [TestFixture]
     [UseReporter(typeof(CustomReporter))]
     public class TestCachedRow
     {
@@ -37,29 +36,25 @@ namespace ConsoleToolkitTests.ConsoleIO
                 return new Simple(n);
             }
         }
-
-        // ReSharper restore UnusedAutoPropertyAccessor.Local
-        // ReSharper restore MemberCanBePrivate.Local
         #endregion
 
-        [SetUp]
-        public void SetUp()
+        public TestCachedRow()
         {
             SetUpTests.OverrideCulture();
         }
 
-        [Test]
+        [Fact]
         public void RowContainsAllColumns()
         {
             var row = new CachedRow<Simple>(10);
-            Assert.That(row.Columns.Select(c => c.Property.Name).JoinWith(","), Is.EqualTo("Number,StringData,Date"));
+            Assert.Equal("Number,StringData,Date", row.Columns.Select(c => c.Property.Name).JoinWith(","));
         }
 
-        [Test]
+        [Fact]
         public void ColumnsHaveExpectedData()
         {
             var row = new CachedRow<Simple>(10);
-            Assert.That(Format(row), Is.EqualTo("Number = 10,StringData = string 10,Date = 11/06/2014 20:36:00"));
+            Assert.Equal("Number = 10,StringData = string 10,Date = 11/06/2014 20:36:00", Format(row));
         }
 
         private string Format<T>(CachedRow<T> row)

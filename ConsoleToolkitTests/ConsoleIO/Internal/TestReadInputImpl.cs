@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -13,13 +13,12 @@ using ConsoleToolkit.Exceptions;
 using ConsoleToolkit.Properties;
 using ConsoleToolkit.Testing;
 using ConsoleToolkitTests.TestingUtilities;
-using NUnit.Framework;
+using Xunit;
 
 namespace ConsoleToolkitTests.ConsoleIO.Internal
 {
-    [TestFixture]
     [UseReporter(typeof (CustomReporter))]
-    public class TestReadInputImpl
+    public class TestReadInputImpl : IDisposable
     {
         private ConsoleInterfaceForTesting _interface;
         private StringReader _intStringData;
@@ -42,11 +41,9 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
                 String = new Read<string>().Prompt("string prompt: ");
             }
         }
-
         #endregion
 
-        [SetUp]
-        public void SetUp()
+        public TestReadInputImpl()
         {
             _interface = new ConsoleInterfaceForTesting();
             _adapter = new ConsoleAdapter(_interface);
@@ -55,8 +52,7 @@ namespace ConsoleToolkitTests.ConsoleIO.Internal
 some text");
         }
 
-        [TearDown]
-        public void TearDown()
+        void IDisposable.Dispose()
         {
             foreach (var readerField in GetType().GetFields(BindingFlags.NonPublic).Where(t => t.FieldType == typeof(TextReader)))
             {
@@ -87,73 +83,73 @@ some text");
         }
 
 
-        [Test]
+        [Fact]
         public void ClassPropertiesAreIdentified()
         {
             _interface.SetInputStream(_intStringData);
             var impl = new ReadInputImpl<IntString>(_interface, _adapter);
             var props = impl.Properties.Select(p => p.TypeDescription()).JoinWith(",");
-            Assert.That(props, Is.EqualTo("Int32 Int,String String"));
+            Assert.Equal("Int32 Int,String String", props);
         }
 
-        [Test]
+        [Fact]
         public void ClassPropertiesAreReadFromStream()
         {
             _interface.SetInputStream(_intStringData);
             var impl = new ReadInputImpl<IntString>(_interface, _adapter);
             var result = impl.Result.WritePropertiesToString();
             var expected = new IntString { Int = 45, String = "some text" }.WritePropertiesToString();
-            Assert.That(result, Is.EqualTo(expected));
+            Assert.Equal(expected, result);
         }
 
-        [Test]
+        [Fact]
         public void TuplePropertiesAreIdentified()
         {
             _interface.SetInputStream(_intStringData);
             var impl = new ReadInputImpl<Tuple<int, string>>(_interface, _adapter);
             var props = impl.Properties.Select(p => p.TypeDescription()).JoinWith(",");
-            Assert.That(props, Is.EqualTo("Int32 Item1,String Item2"));
+            Assert.Equal("Int32 Item1,String Item2", props);
         }
 
-        [Test]
+        [Fact]
         public void TuplePropertiesAreReadFromStream()
         {
             _interface.SetInputStream(_intStringData);
             var impl = new ReadInputImpl<Tuple<int,string>>(_interface, _adapter);
             var result = impl.Result.WritePropertiesToString();
             var expected = new Tuple<int, string>(45, "some text").WritePropertiesToString();
-            Assert.That(result, Is.EqualTo(expected));
+            Assert.Equal(expected, result);
         }
 
-        [Test]
+        [Fact]
         public void AnonymousTypePropertiesAreIdentified()
         {
             _interface.SetInputStream(_intStringData);
             var impl = GetImplByTemplate(new {Int = 4509, String = "ddd"});
             var props = impl.Properties.Select(p => p.TypeDescription()).JoinWith(",");
-            Assert.That(props, Is.EqualTo("Int32 Int,String String"));
+            Assert.Equal("Int32 Int,String String", props);
         }
 
-        [Test]
+        [Fact]
         public void AnonymousTypePropertiesAreReadFromStream()
         {
             _interface.SetInputStream(_intStringData);
             var impl = GetImplByTemplate(new { Int = 4509, String = "ddd" });
             var result = impl.Result.WritePropertiesToString();
             var expected = new { Int = 45, String = "some text" }.WritePropertiesToString();
-            Assert.That(result, Is.EqualTo(expected));
+            Assert.Equal(expected, result);
         }
 
-        [Test]
+        [Fact]
         public void CustomReadMembersAreReadFromStream()
         {
             _interface.SetInputStream(_intStringData);
             var impl = GetImplByTemplate(new {Int = Read.Int().Prompt("age"), String = Read.String()});
             var props = impl.Properties.Select(p => p.TypeDescription()).JoinWith(",");
-            Assert.That(props, Is.EqualTo("Int32 Int,String String"));
+            Assert.Equal("Int32 Int,String String", props);
         }
 
-        [Test]
+        [Fact]
         public void CustomReadMemberInfoIsLoadedFromTemplate()
         {
             _interface.SetInputStream(_intStringData);
@@ -161,10 +157,10 @@ some text");
             var prop = impl.Properties.FirstOrDefault(p => p.Name == "Int");
             Debug.Assert(prop != null, "prop != null");
 
-            Assert.That(prop.ReadInfo.Prompt, Is.EqualTo("age"));
+            Assert.Equal("age", prop.ReadInfo.Prompt);
         }
 
-        [Test]
+        [Fact]
         public void AnExceptionIsThrownIfReadPropertiesAreUsedWithoutATemplate()
         {
             Assert.Throws<ReadPropertyInvalidWithoutTemplate>(() =>
@@ -175,14 +171,14 @@ some text");
             });
         }
 
-        [Test]
+        [Fact]
         public void ReadPropertiesCanBeUsedWithoutATemplateIfTheTypeHasADefaultConstructor()
         {
             _interface.SetInputStream(_intStringData);
             var impl = new ReadInputImpl<Constructable>(_interface, _adapter).Result;
         }
 
-        [Test]
+        [Fact]
         public void AnExceptionIsThrownIfReadPropertiesAreNullInTemplate()
         {
             Assert.Throws<ReadPropertyMustBeInitialised>(() =>
@@ -193,7 +189,7 @@ some text");
             });
         }
 
-        [Test]
+        [Fact]
         public void CustomReadPropertiesAreLoadedFromStream()
         {
             _interface.SetInputStream(_intStringData);
@@ -201,10 +197,10 @@ some text");
             var instance = string.Format("Int = {0}, String = {1}", impl.Result.Int.Value, impl.Result.String.Value);
             const string expected = "Int = 45, String = some text";
 
-            Assert.That(instance, Is.EqualTo(expected));
+            Assert.Equal(expected, instance);
         }
 
-        [Test]
+        [Fact]
         public void PromptsAreDisplayedIfInputIsNotRedirected()
         {
             _interface.SetInputStream(_intStringData);
@@ -221,7 +217,7 @@ some text");
             Approvals.Verify(_interface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void PromptsAreDisplayedIfInputIsRedirected()
         {
             _interface.SetInputStream(_intStringData);
@@ -238,7 +234,7 @@ some text");
             Approvals.Verify(_interface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void ErrorsAreDisplayedWhenTheInputIsInvalid()
         {
             var input = new[]
@@ -260,7 +256,7 @@ some text");
             Approvals.Verify(_interface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void BadValuesMustBeReInput()
         {
             var input = new[]
@@ -285,7 +281,7 @@ some text");
             Approvals.Verify(_interface.GetBuffer());
         }
 
-        [Test]
+        [Fact]
         public void PopulatedObjectIsReturnedAfterBadInputIsCorrected()
         {
             var input = new[]
@@ -309,10 +305,10 @@ some text");
             var instance = string.Format("Int = {0}, String = {1}", impl.Result.Int.Value, impl.Result.String.Value);
             const string expected = "Int = 45, String = string";
 
-            Assert.That(instance, Is.EqualTo(expected));
+            Assert.Equal(expected, instance);
         }
 
-        [Test]
+        [Fact]
         public void ReadObjectsCanBeInputDirectly()
         {
             var input = new[]
@@ -328,10 +324,10 @@ some text");
             var readObject = Read.Int().Prompt("Enter a number: ");
             var impl = GetImplForRead(readObject);
 
-            Assert.That(impl.Result.Value, Is.EqualTo(45));
+            Assert.Equal(45, impl.Result.Value);
         }
 
-        [Test]
+        [Fact]
         public void DirectReadObjectsDisplayPrompt()
         {
             var input = new[]
