@@ -12,11 +12,17 @@ namespace VT100.FullScreen.ControlBehaviour
         public VtColour Foreground;
         public VtColour Background;
 
-        private static readonly DisplayFormat Default;
+        public static readonly DisplayFormat Default;
+        public static readonly DisplayFormat NoChange = new() { Background = VtColour.NoColourChange, Foreground = VtColour.NoColourChange };
 
         public bool IsDefault()
         {
             return Foreground == Default.Foreground && Background == Default.Background;
+        }
+
+        public bool IsNoChange()
+        {
+            return Foreground == VtColour.NoColourChange && Background == VtColour.NoColourChange;
         }
 
         internal void Apply(DisplayFormat[] array, int start, int length)

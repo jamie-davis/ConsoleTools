@@ -11,15 +11,18 @@ namespace VT100.FullScreen
         private readonly ILayoutControl _control;
 
         public string CaptionText => _control.Caption ?? string.Empty;
-        public ControlContainer(ILayoutControl control, ReadOnlyCollection<PropertySetting> propertySettings)
+        public ControlContainer(ILayoutControl control, ReadOnlyCollection<PropertySetting> propertySettings,
+            Viewport containingViewport)
         {
             PropertySettings = propertySettings;
             _control = control;
             LabelControl = new LabelControl();
-            LayoutProperties = new LayoutProperties();
+            LayoutProperties = new LayoutProperties {ContainingViewport = containingViewport};
+            ContainingViewPort = containingViewport;
             ControlPropertySetter.Set(LayoutProperties, propertySettings);
         }
-            
+
+        public Viewport ContainingViewPort { get; set; }
         public LabelControl LabelControl { get; }
         public LayoutProperties LayoutProperties { get; }
 

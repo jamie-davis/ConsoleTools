@@ -58,6 +58,11 @@ namespace VT100.FullScreen.ScreenLayers
         public int WindowWidth => _windowWidth;
 
         public int WindowHeight => _windowHeight;
+        public void SetCharacter(int column, int row, char character, DisplayFormat format)
+        {
+            if (column >= WindowHeight || column < 0 || row >= WindowWidth || row < 0) return;
+            Plate.WriteText(column, row, character.ToString(), format);
+        }
 
         #endregion
     }

@@ -35,6 +35,20 @@ namespace VT100.FullScreen
 
         public int WindowWidth => Console.WindowWidth;
         public int WindowHeight => Console.WindowHeight;
+        public void SetCharacter(int column, int row, char character, DisplayFormat format)
+        {
+            if (column >= WindowHeight || column < 0 || row >= WindowWidth || row < 0) return;
+            using (new CursorHider())
+            {
+                var oldPosX = Console.CursorLeft;
+                var oldPosY = Console.CursorTop;
+
+                Console.SetCursorPosition(column, row);
+                Console.Write(character);
+
+                Console.SetCursorPosition(oldPosX, oldPosY);
+            }
+        }
 
         #endregion
     }

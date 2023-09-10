@@ -1,4 +1,5 @@
 using VT100.FullScreen.ControlBehaviour;
+using VT100.FullScreen.ScreenLayers;
 
 namespace VT100.FullScreen
 {
@@ -20,6 +21,7 @@ namespace VT100.FullScreen
     internal class LayoutProperties
     {
         public IBorderStyle Border { get; set; }
+        public Viewport ContainingViewport { get; set; }
 
         public bool HasBorder()
         {

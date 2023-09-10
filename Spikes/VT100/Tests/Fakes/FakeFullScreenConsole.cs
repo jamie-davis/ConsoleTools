@@ -1,10 +1,12 @@
 using System;
+using System.Diagnostics;
 using System.Text;
 using VT100.FullScreen;
 using VT100.FullScreen.ControlBehaviour;
 
 namespace VT100.Tests.Fakes
 {
+    [DebuggerDisplay("{GetDisplayReport(DisplayReportOptions.NoDiagnostics)}")]
     internal class FakeFullScreenConsole : IFullScreenConsole
     {
         private readonly int _windowWidth;
@@ -58,6 +60,18 @@ namespace VT100.Tests.Fakes
         public int WindowWidth => _windowWidth;
 
         public int WindowHeight => _windowHeight;
+        public void SetCharacter(int column, int row, char character, DisplayFormat format)
+        {
+            if (column >= _windowWidth || column < 0 || row >= _windowHeight || row < 0) return;
+
+            var oldCol = _cursorX;
+            var oldRow = _cursorY;
+            _cursorX = column;
+            _cursorY = row;
+            Write(character, format);
+            _cursorX = oldCol;
+            _cursorY = oldRow;
+        }
 
         #endregion
 
@@ -82,7 +96,7 @@ namespace VT100.Tests.Fakes
             }
         }
 
-        public string GetDisplayReport()
+        public string GetDisplayReport(DisplayReportOptions options = DisplayReportOptions.Default)
         {
             var sb = new StringBuilder();
             var lineArray = new char[_windowWidth]; 
@@ -90,18 +104,38 @@ namespace VT100.Tests.Fakes
             {
                 var sourceOffset = row * _windowWidth;
                 Buffer.BlockCopy(_screenBuffer, sourceOffset * sizeof(char), lineArray, 0, _windowWidth * sizeof(char));
-                if (row == _cursorY)
+                if (row == _cursorY && options == DisplayReportOptions.Default)
                     sb.Append('>');
-                else
+                else if (options == DisplayReportOptions.Default)
                     sb.Append('|');
                 sb.AppendLine(new string(lineArray));
             }
 
-            sb.AppendLine(" " + new string('-', _windowWidth));
-            sb.AppendLine(" " + new string(' ', _cursorX) + "^");
-            sb.AppendLine($"Cursor position: Row {_cursorY}, Column {_cursorX}");
-            
+            if (options == DisplayReportOptions.Default)
+            {
+                sb.AppendLine(" " + new string('-', _windowWidth));
+                sb.AppendLine(" " + new string(' ', _cursorX) + "^");
+                sb.AppendLine($"Cursor position: Row {_cursorY}, Column {_cursorX}");
+            }
+
             return sb.ToString();
         }
+    }
+
+    internal static class DebugConsole
+    {
+        public static string Render(IFullScreenConsole console)
+        {
+            if (!(console is FakeFullScreenConsole fake)) return "Not a fake.";
+
+            return fake.GetDisplayReport();
+        }
+
+    }
+    
+    internal enum DisplayReportOptions
+    {
+        Default,
+        NoDiagnostics
     }
 }

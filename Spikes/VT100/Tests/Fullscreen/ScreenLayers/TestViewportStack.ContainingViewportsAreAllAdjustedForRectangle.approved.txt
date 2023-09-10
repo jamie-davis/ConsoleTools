@@ -1,0 +1,141 @@
+Bring inner bottom right into view                                                             
+(Location marked with A)                                                                       
+                                                                                               
+|stack 12345678901234567890123456789012345678901234                                            
+|                                                                                              
+|                                                                                              
+|                                                                                              
+|    ++++++++++++++++++++++++++++++++                                                          
+|    +                              +                                                          
+|    +                              +                                                          
+|    +                              +                                                          
+|    +                       AAAAAAA+                                                          
+|    +                       AAAAAAA+                                                          
+|    +                       AAAAAAA+                                                          
+|    +                       AAA@AAA+                                                          
+|    +                       AAAAAAA+                                                          
+|    +                       AAAAAAA+                                                          
+>    +                       AAAAAAA+                                                          
+|    ++++++++++++++++++++++++++++++++                                                          
+|                                                                                              
+|                                                                                              
+|                                                                                              
+|                                                                                              
+ --------------------------------------------------                                            
+                                    ^                                                          
+Cursor position: Row 14, Column 35                                                             
+                                                                                               
+                                                                                               
+Bring inner top left into view                                                                 
+(Location marked with B)                                                                       
+                                                                                               
+|stack 12345678901234567890123456789012345678901234                                            
+|                                                                                              
+|                                                                                              
+|                                                                                              
+|    ++++++++++++++++++++++++++++++++                                                          
+|    +BBBBBBB23456789012345678901234+                                                          
+|    +BBBBBBB                       +                                                          
+|    +BBBBBBB                       +                                                          
+|    +BBB@BBB                       +                                                          
+|    +BBBBBBB                       +                                                          
+|    +BBBBBBB                       +                                                          
+|    +BBBBBBB                       +                                                          
+|    +                              +                                                          
+|    +                              +                                                          
+>    +                              +                                                          
+|    ++++++++++++++++++++++++++++++++                                                          
+|                                                                                              
+|                                                                                              
+|                                                                                              
+|                                                                                              
+ --------------------------------------------------                                            
+                                    ^                                                          
+Cursor position: Row 14, Column 35                                                             
+                                                                                               
+                                                                                               
+Bring inner top right into view                                                                
+(Location marked with C)                                                                       
+                                                                                               
+|stack 12345678901234567890123456789012345678901234                                            
+|                                                                                              
+|                                                                                              
+|                                                                                              
+|    ++++++++++++++++++++++++++++++++                                                          
+|    +45678901234567890123456CCCCCCC+                                                          
+|    +                       CCCCCCC+                                                          
+|    +                       CCCCCCC+                                                          
+|    +                       CCC@CCC+                                                          
+|    +                       CCCCCCC+                                                          
+|    +                       CCCCCCC+                                                          
+|    +                       CCCCCCC+                                                          
+|    +                              +                                                          
+|    +                              +                                                          
+>    +                              +                                                          
+|    ++++++++++++++++++++++++++++++++                                                          
+|                                                                                              
+|                                                                                              
+|                                                                                              
+|                                                                                              
+ --------------------------------------------------                                            
+                                    ^                                                          
+Cursor position: Row 14, Column 35                                                             
+                                                                                               
+                                                                                               
+Bring inner bottom left into view                                                              
+(Location marked with D)                                                                       
+                                                                                               
+|stack 12345678901234567890123456789012345678901234                                            
+|                                                                                              
+|                                                                                              
+|                                                                                              
+|    ++++++++++++++++++++++++++++++++                                                          
+|    +                              +                                                          
+|    +                              +                                                          
+|    +                              +                                                          
+|    +DDDDDDD                       +                                                          
+|    +DDDDDDD                       +                                                          
+|    +DDDDDDD                       +                                                          
+|    +DDD@DDD                       +                                                          
+|    +DDDDDDD                       +                                                          
+|    +DDDDDDD                       +                                                          
+>    +DDDDDDD                       +                                                          
+|    ++++++++++++++++++++++++++++++++                                                          
+|                                                                                              
+|                                                                                              
+|                                                                                              
+|                                                                                              
+ --------------------------------------------------                                            
+                                    ^                                                          
+Cursor position: Row 14, Column 35                                                             
+                                                                                               
+                                                                                               
+Bring inner already visible into view (no move is required)                                    
+(Location marked with E)                                                                       
+                                                                                               
+|stack 12345678901234567890123456789012345678901234                                            
+|                                                                                              
+|                                                                                              
+|                                                                                              
+|    ++++++++++++++++++++++++++++++++                                                          
+|    +                              +                                                          
+|    +       EEEEEEE                +                                                          
+|    +       EEEEEEE                +                                                          
+|    +DDDDDDDEEEEEEE                +                                                          
+|    +DDDDDDDEEE@EEE                +                                                          
+|    +DDDDDDDEEEEEEE                +                                                          
+|    +DDD@DDDEEEEEEE                +                                                          
+|    +DDDDDDDEEEEEEE                +                                                          
+|    +DDDDDDD                       +                                                          
+>    +DDDDDDD                       +                                                          
+|    ++++++++++++++++++++++++++++++++                                                          
+|                                                                                              
+|                                                                                              
+|                                                                                              
+|                                                                                              
+ --------------------------------------------------                                            
+                                    ^                                                          
+Cursor position: Row 14, Column 35                                                             
+                                                                                               
+                                                                                               
+                                                                                               

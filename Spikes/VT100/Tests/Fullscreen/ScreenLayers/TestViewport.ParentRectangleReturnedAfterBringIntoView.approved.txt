@@ -1,0 +1,115 @@
+Note that when the test rectangle is bigger than the viewport, its border may not be visible,  
+while the console rectangle will always have a visible border in the diagrams below.           
+---------------------------                                                                    
+Before bringing rectangle @(3,2) (W:3 H:3) K(4,3) into view:                                   
+Viewport origin = (1,3)                                                                        
+************                                                                                   
+*  +++     *                                                                                   
+*  +++     *                                                                                   
+*          *                                                                                   
+*          *                                                                                   
+*          *                                                                                   
+************                                                                                   
+After bringing rectangle @(3,2) (W:3 H:3) K(4,3) into view:                                    
+Viewport origin = (1,2)                                                                        
+************                                                                                   
+*  +++     *                                                                                   
+*  +++     *                                                                                   
+*  +++     *                                                                                   
+*          *                                                                                   
+*          *                                                                                   
+************                                                                                   
+Returned console rectangle overlayed:                                                          
+************                                                                                   
+*  ===     *                                                                                   
+*  ===     *                                                                                   
+*  ===     *                                                                                   
+*          *                                                                                   
+*          *                                                                                   
+************                                                                                   
+                                                                                               
+---------------------------                                                                    
+Before bringing rectangle @(1,11) (W:3 H:3) K(2,12) into view:                                 
+Viewport origin = (10,3)                                                                       
+************                                                                                   
+*          *                                                                                   
+*          *                                                                                   
+*          *                                                                                   
+*          *                                                                                   
+*          *                                                                                   
+************                                                                                   
+After bringing rectangle @(1,11) (W:3 H:3) K(2,12) into view:                                  
+Viewport origin = (1,9)                                                                        
+************                                                                                   
+*          *                                                                                   
+*          *                                                                                   
+*+++       *                                                                                   
+*+++       *                                                                                   
+*+++       *                                                                                   
+************                                                                                   
+Returned console rectangle overlayed:                                                          
+************                                                                                   
+*          *                                                                                   
+*          *                                                                                   
+*===       *                                                                                   
+*===       *                                                                                   
+*===       *                                                                                   
+************                                                                                   
+                                                                                               
+---------------------------                                                                    
+Before bringing rectangle @(3,2) (W:13 H:13) K(10,9) into view:                                
+Viewport origin = (1,3)                                                                        
+************                                                                                   
+*  +       *                                                                                   
+*  +       *                                                                                   
+*  +       *                                                                                   
+*  +       *                                                                                   
+*  +       *                                                                                   
+************                                                                                   
+After bringing rectangle @(3,2) (W:13 H:13) K(10,9) into view:                                 
+Viewport origin = (5,7)                                                                        
+************                                                                                   
+*          *                                                                                   
+*          *                                                                                   
+*     +    *                                                                                   
+*          *                                                                                   
+*          *                                                                                   
+************                                                                                   
+Returned console rectangle overlayed:                                                          
+************                                                                                   
+*==========*                                                                                   
+*=        =*                                                                                   
+*=    =   =*                                                                                   
+*=        =*                                                                                   
+*==========*                                                                                   
+************                                                                                   
+                                                                                               
+---------------------------                                                                    
+Before bringing rectangle @(3,2) (W:13 H:5) K(10,4) into view:                                 
+Viewport origin = (1,3)                                                                        
+************                                                                                   
+*  +       *                                                                                   
+*  +      +*                                                                                   
+*  +       *                                                                                   
+*  ++++++++*                                                                                   
+*          *                                                                                   
+************                                                                                   
+After bringing rectangle @(3,2) (W:13 H:5) K(10,4) into view:                                  
+Viewport origin = (5,2)                                                                        
+************                                                                                   
+*++++++++++*                                                                                   
+*          *                                                                                   
+*     +    *                                                                                   
+*          *                                                                                   
+*++++++++++*                                                                                   
+************                                                                                   
+Returned console rectangle overlayed:                                                          
+************                                                                                   
+*==========*                                                                                   
+*=        =*                                                                                   
+*=    =   =*                                                                                   
+*=        =*                                                                                   
+*==========*                                                                                   
+************                                                                                   
+                                                                                               
+                                                                                               

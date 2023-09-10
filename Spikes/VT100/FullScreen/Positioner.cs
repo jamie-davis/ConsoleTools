@@ -8,20 +8,25 @@ namespace VT100.FullScreen
 {
     internal static class Positioner
     {
-
         public static ControlSet Position(int regionColumn, int regionRow, int regionWidth, int regionHeight, CaptionAlignment captionAlignment,
             IEnumerable<LayedOutControl> inputControls, LayoutProperties layoutProperties)
         {
-            var (boxRegions, controls, width, height) = CalculatePositions(regionColumn, regionRow, regionWidth, regionHeight, captionAlignment, inputControls, layoutProperties);
-            return new ControlSet(controls, boxRegions, width, height);
+            var (boxRegions, controls, viewports, width, height) = CalculatePositions(regionColumn, regionRow, regionWidth, regionHeight, captionAlignment, inputControls, layoutProperties);
+            return new ControlSet(controls, boxRegions, viewports, width, height);
         }
 
-        private static (List<BoxRegion> BoxRegions, List<ControlContainer> Controls, int TotalWidth, int TotalHeight) CalculatePositions(int regionColumn, int regionRow, int regionWidth, int regionHeight,
-            CaptionAlignment captionAlignment, IEnumerable<LayedOutControl> inControls, LayoutProperties layoutProperties)
+        private static (List<BoxRegion> BoxRegions,
+            List<ControlContainer> Controls,
+            List<Viewport> Viewports,
+            int TotalWidth,
+            int TotalHeight) CalculatePositions(int regionColumn, int regionRow, int regionWidth, int regionHeight,
+                CaptionAlignment captionAlignment, IEnumerable<LayedOutControl> inControls,
+                LayoutProperties layoutProperties)
         {
-            List<BoxRegion> _boxRegions = new();
+            List<BoxRegion> boxRegions = new();
+            List<Viewport> viewports = new();
 
-            List<ControlContainer> orignalControls;
+            List<ControlContainer> originalControls;
             List<ControlContainer> buttons;
 
             var hasBorder = layoutProperties.HasBorder();
@@ -32,21 +37,21 @@ namespace VT100.FullScreen
             var row = hasBorder ? regionRow + 2 : regionRow + 1;
             var column = hasBorder ? regionColumn + 2 : regionColumn + 1;
 
-            var allControls = inControls.Select(c => new ControlContainer(c.Control, c.PropertySettings)).ToList();
-            orignalControls = allControls.Where(c => c.Control is not ButtonControl).ToList();
+            var allControls = inControls.Select(c => new ControlContainer(c.Control, c.PropertySettings, layoutProperties.ContainingViewport)).ToList();
+            originalControls = allControls.Where(c => c.Control is not ButtonControl).ToList();
             buttons = allControls.Where(c => c.Control is ButtonControl).ToList();
 
             var maxAllowableCaption = regionWidth - 4;
 
             int GetLongestCaptionLength()
             {
-                var captionedContainers = orignalControls.Where(c => !c.LayoutProperties.HasBorder());
+                var captionedContainers = originalControls.Where(c => !c.LayoutProperties.HasBorder());
                 return Math.Min(captionedContainers.Max(c => (int?)c.CaptionText.Length) ?? 0, maxAllowableCaption);
             }
 
             var maxCaption = GetLongestCaptionLength();
 
-            foreach (var container in orignalControls.ToList())
+            foreach (var container in originalControls.ToList())
             {
                 var inBorder = container.LayoutProperties.HasBorder();
 
@@ -65,9 +70,10 @@ namespace VT100.FullScreen
                     var controlWidth = width - controlCol - (inBorder ? 4 : 3);
 
                     var controlSet = ((IRegionControl)container.Control).ComputePosition(container, controlCol, controlRow, controlWidth, height);
-                   MergeContainerControls();
-                    _boxRegions.AddRange(controlSet.ExportBoxRegions()); 
-
+                    MergeContainerControls();
+                    boxRegions.AddRange(controlSet.ExportBoxRegions());
+                    viewports.AddRange(controlSet.ExportViewports());
+                    
                     void MergeContainerControls()
                     {
                         var controlContainers = controlSet.ExportControls().Reverse();
@@ -76,7 +82,7 @@ namespace VT100.FullScreen
                     }
                 }
                 
-                //Rendering for a standard control
+                //Rendering for a standard control (note that standard controls may not contain viewports)
                 void RenderControl()
                 {
                     container.LabelControl.Caption = container.CaptionText;
@@ -107,17 +113,18 @@ namespace VT100.FullScreen
 
             foreach (var borderedContainer in allControls.Where(c => c.LayoutProperties.HasBorder()))
             {
-                _boxRegions.Add(borderedContainer.RenderBorder());
+                boxRegions.Add(borderedContainer.RenderBorder());
             }
 
             var baseHeight = (allControls.Any() ? row : row - 1) - regionRow;
             var totalHeight = baseHeight + (buttons.Any() ? 1 : 0); //add a row below the buttons
             if (hasBorder)
             {
-                _boxRegions.Add(new BoxRegion(regionColumn, regionRow, regionWidth, totalHeight, LineWeight.Light));
+                boxRegions.Add(new BoxRegion(regionColumn, regionRow, regionWidth, totalHeight, LineWeight.Light));
             }
 
-            return (_boxRegions, allControls, regionWidth, totalHeight);
+            foreach (var viewport in viewports) viewport.Container = layoutProperties.ContainingViewport;
+            return (boxRegions, allControls, viewports, regionWidth, totalHeight);
         }
     }
 

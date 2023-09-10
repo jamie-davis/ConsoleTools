@@ -10,5 +10,6 @@ namespace VT100.FullScreen
         void SetCursorPosition(int column, int row);
         int WindowWidth { get; }
         int WindowHeight { get; }
+        void SetCharacter(int column, int row, char character, DisplayFormat format);
     }
 }

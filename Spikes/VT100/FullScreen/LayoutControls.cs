@@ -148,7 +148,10 @@ namespace VT100.FullScreen
             prop.SetValue(instance, value);
         }
 
-
+        /// <summary>
+        /// Find all control types defined in the toolkit assembly and put them into the <see cref="_controlLookup"/>
+        /// dictionary.
+        /// </summary>
         private static void LoadControls()
         {
             var sampleControlType = typeof(TextBoxControl);

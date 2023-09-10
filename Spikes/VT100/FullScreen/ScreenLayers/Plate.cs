@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using VT100.FullScreen.ControlBehaviour;
@@ -20,6 +21,7 @@ namespace VT100.FullScreen.ScreenLayers
     /// confusing visual the UI should be constructed such that any controls that can get focus are not covered by
     /// content from other plates.</remarks> 
     /// </summary>
+    [DebuggerDisplay("{Dump()}")]
     internal class Plate
     {
         private readonly int _windowWidth;
@@ -52,8 +54,11 @@ namespace VT100.FullScreen.ScreenLayers
         //formatting like underline
         public void WriteText(int x, int y, string text, DisplayFormat format = default)
         {
+            var textLength = text.Length;
+            if (x >= _windowWidth || y < 0 || y >= _windowHeight || textLength + x < 0) return;
+            
             var offset = (y * _windowWidth) + x;
-            Array.Copy(text.ToCharArray(), 0, _content, offset, text.Length);
+            Array.Copy(text.ToCharArray(), 0, _content, offset, textLength + x > _windowWidth ? _windowWidth - x : textLength);
             if (!format.IsDefault())
                 format.Apply(_format, offset, text.Length);
         }
@@ -146,16 +151,33 @@ namespace VT100.FullScreen.ScreenLayers
         public string GetCharacter(int index, int line)
         {
             var indexPos = _windowWidth * line + index;
-            var foreground = _format[indexPos].Foreground;
-            var background = _format[indexPos].Background;
+            if (indexPos >= _format.Length) return null;
+            
+            var displayFormat = _format[indexPos];
             var content = _content[indexPos];
-            if (content == 0 && foreground == VtColour.NoColourChange && background == VtColour.NoColourChange)
-                return " ";
+            if (content == 0 && displayFormat.IsNoChange())
+                return null;
 
             if (content == 0)
                 content = ' ';
 
-            return $"{ColourAttribute.GetColourAttribute(_format[indexPos])}{content}";
+            return $"{ColourAttribute.GetColourAttribute(displayFormat)}{content}";
+        }
+
+        public (char character, DisplayFormat format) GetCharacterAndFormat(int index, int line)
+        {
+            var indexPos = _windowWidth * line + index;
+            if (index >= Width || line >= Height || indexPos >= _format.Length) return ((char)0, DisplayFormat.NoChange);
+            
+            var format = _format[indexPos];
+            var content = _content[indexPos];
+            if (content == 0 && format.IsNoChange())
+                return (content, format);
+
+            if (content == 0)
+                content = ' ';
+
+            return (content, format);
         }
     }
 }

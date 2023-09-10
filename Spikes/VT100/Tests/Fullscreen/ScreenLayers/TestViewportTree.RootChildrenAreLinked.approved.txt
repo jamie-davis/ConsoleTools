@@ -1,0 +1,7 @@
+Tree expected to consist of a root and four children:                                          
+@(0,0) (W:50 H:50)  Parent: null                                                               
+    @(0,0) (W:50 H:2)  Parent:     @(0,0) (W:50 H:50)                                          
+    @(0,3) (W:50 H:2)  Parent:     @(0,0) (W:50 H:50)                                          
+    @(0,6) (W:50 H:2)  Parent:     @(0,0) (W:50 H:50)                                          
+    @(0,9) (W:50 H:2)  Parent:     @(0,0) (W:50 H:50)                                          
+                                                                                               

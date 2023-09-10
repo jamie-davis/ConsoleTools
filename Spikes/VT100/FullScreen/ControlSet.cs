@@ -15,15 +15,17 @@ namespace VT100.FullScreen
         private List<ControlContainer> _combinedControls;
         private List<ControlContainer> _controls;
         private List<ControlContainer> _buttons;
+        private List<Viewport> _viewports;
         
         public FocusController FocusController { get; private set; }
 
-        public ControlSet(IEnumerable<ControlContainer> controls, IEnumerable<BoxRegion> boxRegions, int totalWidth, int totalHeight)
+        public ControlSet(IEnumerable<ControlContainer> controls, IEnumerable<BoxRegion> boxRegions, IEnumerable<Viewport> viewports, int totalWidth, int totalHeight)
         {
             TotalWidth = totalWidth;
             TotalHeight = totalHeight;
             _regions = boxRegions.ToList();
             _combinedControls = controls.ToList();
+            _viewports = viewports.ToList();
             _controls = _combinedControls.Where(c => c.Control is not ButtonControl).ToList();
             _buttons = _combinedControls.Where(c => c.Control is ButtonControl).ToList();
             FocusController = new FocusController(_combinedControls.Select(c => c.Control));
@@ -72,6 +74,11 @@ namespace VT100.FullScreen
         public IEnumerable<BoxRegion> ExportBoxRegions()
         {
             return _regions.ToList();
+        }
+
+        public List<Viewport> ExportViewports()
+        {
+            return _viewports.ToList();
         }
     }
 }

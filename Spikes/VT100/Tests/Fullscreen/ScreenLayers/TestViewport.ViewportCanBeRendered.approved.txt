@@ -1,0 +1,23 @@
+|                              
+|                              
+|                              
+|                              
+|    **********************    
+|    *00: ABCDEFGHIJKLMNOP*    
+|    *01: ABCDEFGHIJKLMNOP*    
+|    *02: ABCDEFGHIJKLMNOP*    
+|    *03: ABCDEFGHIJKLMNOP*    
+|    *04: ABCDEFGHIJKLMNOP*    
+|    *05: ABCDEFGHIJKLMNOP*    
+|    *06: ABCDEFGHIJKLMNOP*    
+|    *07: ABCDEFGHIJKLMNOP*    
+|    *08: ABCDEFGHIJKLMNOP*    
+>    *09: ABCDEFGHIJKLMNOP*    
+|    **********************    
+|                              
+|                              
+|                              
+|                              
+ ------------------------------
+                          ^
+Cursor position: Row 14, Column 25

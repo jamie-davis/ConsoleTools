@@ -1,0 +1,45 @@
+Origin: 0, 0
+************
+*00: ABCDEF*
+*01: ABCDEF*
+*02: ABCDEF*
+*03: ABCDEF*
+*04: ABCDEF*
+************
+
+Origin: 2, 1
+************
+*: ABCDEFGH*
+*: ABCDEFGH*
+*: ABCDEFGH*
+*: ABCDEFGH*
+*: ABCDEFGH*
+************
+
+Origin: 4, 2
+************
+*ABCDEFGHIJ*
+*ABCDEFGHIJ*
+*ABCDEFGHIJ*
+*ABCDEFGHIJ*
+*ABCDEFGHIJ*
+************
+
+Origin: 6, 3
+************
+*CDEFGHIJKL*
+*CDEFGHIJKL*
+*CDEFGHIJKL*
+*CDEFGHIJKL*
+*CDEFGHIJKL*
+************
+
+Origin: 8, 4
+************
+*EFGHIJKLMN*
+*EFGHIJKLMN*
+*EFGHIJKLMN*
+*EFGHIJKLMN*
+*EFGHIJKLMN*
+************
+
