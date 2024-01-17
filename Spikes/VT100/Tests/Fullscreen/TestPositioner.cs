@@ -1,5 +1,3 @@
-using System.Globalization;
-using System.Text;
 using TestConsole.OutputFormatting;
 using TestConsoleLib;
 using TestConsoleLib.Testing;
@@ -23,11 +21,9 @@ namespace VT100.Tests.Fullscreen
         {
             public class NestedHeaderLayout
             {
-                [Label("Nested label")]
-                public string Header => "nested label value";
+                [Label("Nested label")] public string Header => "nested label value";
 
-                [TextBox("Nested text box")]
-                public string Value { get; set; } = "nested value";
+                [TextBox("Nested text box")] public string Value { get; set; } = "nested value";
             }
 
             [Region]
@@ -35,7 +31,7 @@ namespace VT100.Tests.Fullscreen
             [Background(VtColour.Black)]
             [Foreground(VtColour.BrightCyan)]
             public NestedHeaderLayout Header { get; set; } = new();
-            
+
             #region Implementation of ILayout
 
             public event LayoutUpdated LayoutUpdated;
@@ -61,7 +57,7 @@ namespace VT100.Tests.Fullscreen
                 Name = "Default name";
                 NickName = "Defaulty";
             }
-            
+
             [Button("OK", ExitMode.ExitOnSuccess)]
             public bool Ok()
             {
@@ -71,28 +67,28 @@ namespace VT100.Tests.Fullscreen
 
 
         #endregion
-        
+
         [Fact]
         public void ControlsArePositioned()
         {
             //Arrange
             var layout = new LayoutForTest() { Name = "Test", NickName = "Wolf", Colour = "Red" };
             var app = new FakeFullScreenApplication(layout, 50, 25);
-    
+
             //Act
             app.Start();
 
             //Assert
             app.Console.GetDisplayReport().Verify();
         }
-        
+
         [Fact]
         public void FocusIsInCorrectOrder()
         {
             //Arrange
             var layout = new LayoutForTest() { Name = "Test", NickName = "Wolf", Colour = "Red" };
             var app = new FakeFullScreenApplication(layout, 50, 25);
-    
+
             //Act
             app.Start();
 
@@ -100,7 +96,8 @@ namespace VT100.Tests.Fullscreen
             var output = new Output();
             var displayReport = app.Console.GetDisplayReport();
             var focusChain = app.GetFocusChain();
-            output.FormatTable(new [] { new {InitialDisplay = displayReport, FocusChain = focusChain} }, ReportFormattingOptions.UnlimitedBuffer);
+            output.FormatTable(new[] { new { InitialDisplay = displayReport, FocusChain = focusChain } },
+                ReportFormattingOptions.UnlimitedBuffer);
             output.Report.Verify();
 
         }

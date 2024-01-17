@@ -9,6 +9,7 @@ namespace VT100.FullScreen
     {
         public ReadOnlyCollection<PropertySetting> PropertySettings { get; }
         private readonly ILayoutControl _control;
+        private int _additionalHeight;
 
         public string CaptionText => _control.Caption ?? string.Empty;
         public ControlContainer(ILayoutControl control, ReadOnlyCollection<PropertySetting> propertySettings,
@@ -54,11 +55,16 @@ namespace VT100.FullScreen
                 return LayoutProperties.HasBorder() ? controlWidth + 2 : controlWidth;
             }
         }
-        public int Height => LayoutProperties.HasBorder() ? Control.Height + 2 : Control.Height;
+        public int Height => _additionalHeight + (LayoutProperties.HasBorder() ? Control.Height + 2 : Control.Height);
 
         public BoxRegion RenderBorder()
         {
             return new BoxRegion(Column, Row, Width, Height, LineWeight.Light);
+        }
+
+        public void AdditionalControlHeight(int additionalSpace)
+        {
+            _additionalHeight += additionalSpace;
         }
     }
 }

@@ -247,5 +247,33 @@ namespace VT100.Tests.Fullscreen.Controls
             //Assert
             testRig.GetReport().Verify();
         }
+        
+        [Fact]
+        public void MinSizeIsComputed()
+        {
+            //Arrange
+            var textBox = new TextBoxControl();
+            textBox.Position(0,0,5,1);
+            
+            //Act
+            var result = textBox.GetMinSize();
+
+            //Assert
+            result.Should().Be((1, 1));
+        }
+        
+        [Fact]
+        public void MaxSizeIsComputed()
+        {
+            //Arrange
+            var textBox = new TextBoxControl();
+            textBox.Position(0,0,5,1);
+            
+            //Act
+            var result = textBox.GetMaxSize(100,100);
+
+            //Assert
+            result.Should().Be((100, 1));
+        }
     }
 }

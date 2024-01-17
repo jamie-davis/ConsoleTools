@@ -22,6 +22,8 @@ namespace VT100.FullScreen
     {
         public IBorderStyle Border { get; set; }
         public Viewport ContainingViewport { get; set; }
+        
+        public CaptionPosition CaptionPosition { get; set; }
 
         public bool HasBorder()
         {

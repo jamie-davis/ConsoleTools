@@ -1,0 +1,10 @@
+Initial display:
+|      
+|      
+> test 
+|      
+|      
+ ------
+  ^
+Cursor position: Row 2, Column 1
+

@@ -1,5 +1,4 @@
 ﻿using System;
-using VT100;
 using VT100.Attributes;
 using VT100.FullScreen;
 using VT100.FullScreen.ControlBehaviour;
@@ -25,6 +24,7 @@ namespace VT100
         [Border(BorderType.Normal)]
         [Background(VtColour.Blue)]
         [InputBackground(VtColour.Yellow)]
+        [CaptionPosition(CaptionPosition.Left)]
         public class Layout : ILayout
         {
             #region Implementation of ILayout

@@ -35,6 +35,16 @@ namespace VT100.Tests.ControlPropertyAnalysis
                 set => _format = value;
             }
 
+            public (int Width, int Height) GetMinSize()
+            {
+                throw new NotImplementedException();
+            }
+
+            public (int Width, int Height) GetMaxSize(int visibleWidth, int visibleHeight)
+            {
+                throw new NotImplementedException();
+            }
+
             #endregion
         }
         

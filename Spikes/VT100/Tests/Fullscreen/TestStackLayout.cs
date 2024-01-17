@@ -37,6 +37,8 @@ namespace VT100.Tests.Fullscreen
             public string Colour { get; set; }
         }
         
+        #endregion
+
         [Fact]
         public void ControlsArePositioned()
         {
@@ -50,9 +52,5 @@ namespace VT100.Tests.Fullscreen
             //Assert
             app.Console.GetDisplayReport().Verify();
         }
-
-
-        #endregion
-
     }
 }

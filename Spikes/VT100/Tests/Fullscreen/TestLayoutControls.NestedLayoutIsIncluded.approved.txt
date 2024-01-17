@@ -1,0 +1,76 @@
+Type           Caption                                                                         
+-------------- ----------------                                                                
+RegionControl                                                                                  
+                                                                                               
+    Properties                                                                                 
+    ----------                                                                                 
+    Property   Value Type   Value                                                              
+    ---------- ------------ ---------------------------------------------------                
+    Border     IBorderStyle VT100.FullScreen.ControlBehaviour.BorderBorderStyle                
+    Background VtColour     Black                                                              
+    Foreground VtColour     BrightCyan                                                         
+                                                                                               
+Type           Caption                                                                         
+-------------- ----------------                                                                
+TextBoxControl Real Name                                                                       
+                                                                                               
+    Properties                                                                                 
+    ----------                                                                                 
+    Property        Value Type   Value                                                         
+    --------------- ------------ ---------------------------------------------------           
+    Border          IBorderStyle VT100.FullScreen.ControlBehaviour.BorderBorderStyle           
+    InputForeground VtColour     Black                                                         
+                                                                                               
+Type           Caption                                                                         
+-------------- ----------------                                                                
+TextBoxControl Nickname                                                                        
+                                                                                               
+    Properties                                                                                 
+    ----------                                                                                 
+                    Value                                                                      
+    Property        Type     Value                                                             
+    --------------- -------- ------------                                                      
+    InputBackground VtColour Red                                                               
+                                                                                               
+Type           Caption                                                                         
+-------------- ----------------                                                                
+TextBoxControl Favourite Colour                                                                
+                                                                                               
+    Properties                                                                                 
+    ----------                                                                                 
+                    Value                                                                      
+    Property        Type     Value                                                             
+    --------------- -------- ------------                                                      
+    InputBackground VtColour Red                                                               
+                                                                                               
+Type           Caption                                                                         
+-------------- ----------------                                                                
+ButtonControl  Default                                                                         
+                                                                                               
+    Properties                                                                                 
+    ----------                                                                                 
+             Value                                                                             
+    Property Type  Value                                                                       
+    -------- ----- ------------                                                                
+                                                                                               
+Type           Caption                                                                         
+-------------- ----------------                                                                
+ButtonControl  OK                                                                              
+                                                                                               
+    Properties                                                                                 
+    ----------                                                                                 
+             Value                                                                             
+    Property Type  Value                                                                       
+    -------- ----- ------------                                                                
+                                                                                               
+Type           Caption                                                                         
+-------------- ----------------                                                                
+ButtonControl  Cancel                                                                          
+                                                                                               
+    Properties                                                                                 
+    ----------                                                                                 
+             Value                                                                             
+    Property Type  Value                                                                       
+    -------- ----- ------------                                                                
+                                                                                               
+                                                                                               

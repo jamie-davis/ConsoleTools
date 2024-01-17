@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using VT100.Attributes;
 using VT100.FullScreen;
@@ -128,6 +127,15 @@ namespace VT100.FullScreen.Controls
         #region Implementation of IFormattedLayoutControl<ButtonFormat>
 
         public ButtonFormat Format { get; set; }
+        public (int Width, int Height) GetMinSize()
+        {
+            return ((_attribute?.Caption?.Length ?? 0) + 2, 1);
+        }
+
+        public (int Width, int Height) GetMaxSize(int visibleWidth, int visibleHeight)
+        {
+            return GetMinSize();
+        }
 
         #endregion
     }

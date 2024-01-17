@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Reflection.Metadata.Ecma335;
 using VT100.Attributes;
 using VT100.ControlPropertyAnalysis;
 using VT100.FullScreen.Controls;
+using VT100.FullScreen.ScreenLayers;
 
 namespace VT100.FullScreen
 {
@@ -17,7 +16,7 @@ namespace VT100.FullScreen
         private static Dictionary<Type, Type> _controlLookup;
         private static object[] noParams = {};
 
-        public static IEnumerable<LayedOutControl> Extract(IFullScreenApplication app, object layout)
+        public static IEnumerable<LayedOutControl> Extract(IFullScreenApplication app, object layout, Viewport containingViewport)
         {
             if (layout == null)
                 yield break;

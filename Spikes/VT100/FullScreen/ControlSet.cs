@@ -35,7 +35,10 @@ namespace VT100.FullScreen
         {
             using (new CursorHider())
             {
-                var boxRegions = _regions.Concat(_combinedControls.SelectMany(c => c.Control.BoxRegions));
+                var combinedBoxRegions = _combinedControls
+                    .Where(c => c.Control.BoxRegions != null)
+                    .SelectMany(c => c.Control.BoxRegions);
+                var boxRegions = _regions.Concat(combinedBoxRegions);
                 var map = BoxMapMaker.Map(boxRegions, console.WindowWidth, console.WindowHeight);
                 DisplayFormat format = new ()
                 {
@@ -79,6 +82,17 @@ namespace VT100.FullScreen
         public List<Viewport> ExportViewports()
         {
             return _viewports.ToList();
+        }
+
+        /// <summary>
+        /// Convenience function to convert the result of some positioning into a control set.
+        /// </summary>
+        /// <param name="outcome">The positioning result</param>
+        /// <returns>The intialised <see cref="ControlSet"/>.</returns>
+        internal static ControlSet FromPositioningOutcome(PositioningOutcome outcome)
+        {
+            return new ControlSet(outcome.Controls, outcome.BoxRegions, outcome.Viewports,
+                outcome.TotalWidth, outcome.TotalHeight);
         }
     }
 }

@@ -204,6 +204,15 @@ namespace VT100.FullScreen.Controls
         #region Implementation of IFormattedLayoutControl<TextBoxFormat>
 
         public TextBoxFormat Format { get; set; }
+        public (int Width, int Height) GetMinSize()
+        {
+            return (1, 1);
+        }
+
+        public (int Width, int Height) GetMaxSize(int visibleWidth, int visibleHeight)
+        {
+            return (visibleWidth, 1);
+        }
 
         #endregion
     }

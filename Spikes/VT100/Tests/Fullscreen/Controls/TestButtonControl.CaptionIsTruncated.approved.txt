@@ -1,0 +1,6 @@
+Initial display:
+> long 
+ ------
+  ^
+Cursor position: Row 0, Column 1
+

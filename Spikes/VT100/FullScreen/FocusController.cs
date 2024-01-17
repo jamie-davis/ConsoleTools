@@ -16,9 +16,31 @@ namespace VT100.FullScreen
             _controls.FirstOrDefault(c => c.CanAcceptFocus)?.SetFocus(console);
         }
 
+        private IEnumerable<ILayoutControl> AllFocusControls()
+        {
+            IEnumerable<ILayoutControl> Enumerate(IEnumerable<ILayoutControl> controls)
+            {
+                foreach (var layoutControl in controls)
+                {
+                    if (layoutControl is IRegionControl region)
+                    {
+                        foreach (var child in Enumerate(region.GetLayoutControls()))
+                        {
+                            yield return child;
+                        }
+                    }
+                    else
+                        yield return layoutControl;
+                }
+            }
+
+            foreach (var focusControl in Enumerate(_controls)) yield return focusControl;
+        } 
+        
         public void NextFocus(IFullScreenConsole console, ILayoutControl layoutControl)
         {
-            var focusContainer = _controls.FirstOrDefault(c => ReferenceEquals(c, layoutControl));
+            var allControls = AllFocusControls().ToList();
+            var focusContainer = allControls.FirstOrDefault(c => ReferenceEquals(c, layoutControl));
             if (focusContainer == null)
             {
                 SetFocus(console);
@@ -26,16 +48,16 @@ namespace VT100.FullScreen
             }
 
             ILayoutControl control;
-            var index = _controls.IndexOf(focusContainer);
+            var index = allControls.IndexOf(focusContainer);
             do
             {
-                if (++index >= _controls.Count)
+                if (++index >= allControls.Count)
                 {
                     SetFocus(console);
                     return;
                 }
 
-                control = _controls[index];
+                control = allControls[index];
             } while (!control.CanAcceptFocus);
 
             control?.SetFocus(console);

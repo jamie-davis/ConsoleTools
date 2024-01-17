@@ -1,0 +1,44 @@
+Type           Caption                                                                         
+-------------- ----------------                                                                
+TextBoxControl Real Name                                                                       
+                                                                                               
+    Properties                                                                                 
+    ----------                                                                                 
+                    Value                                                                      
+    Property        Type     Value                                                             
+    --------------- -------- ------------                                                      
+    InputForeground VtColour Black                                                             
+                                                                                               
+Type           Caption                                                                         
+-------------- ----------------                                                                
+TextBoxControl Nickname                                                                        
+                                                                                               
+    Properties                                                                                 
+    ----------                                                                                 
+                    Value                                                                      
+    Property        Type     Value                                                             
+    --------------- -------- ------------                                                      
+    InputBackground VtColour Red                                                               
+                                                                                               
+Type           Caption                                                                         
+-------------- ----------------                                                                
+TextBoxControl Favourite Colour                                                                
+                                                                                               
+    Properties                                                                                 
+    ----------                                                                                 
+                    Value                                                                      
+    Property        Type     Value                                                             
+    --------------- -------- ------------                                                      
+    InputBackground VtColour Red                                                               
+                                                                                               
+Type           Caption                                                                         
+-------------- ----------------                                                                
+ButtonControl  Cancel                                                                          
+                                                                                               
+    Properties                                                                                 
+    ----------                                                                                 
+             Value                                                                             
+    Property Type  Value                                                                       
+    -------- ----- ------------                                                                
+                                                                                               
+                                                                                               

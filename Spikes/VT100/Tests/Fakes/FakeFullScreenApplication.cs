@@ -7,6 +7,9 @@ using VT100.FullScreen.ScreenLayers;
 
 namespace VT100.Tests.Fakes
 {
+    /// <summary>
+    /// A full unit test full screen application 
+    /// </summary>
     internal class FakeFullScreenApplication : IFullScreenApplication
     {
         private readonly ILayout _layout;
@@ -19,6 +22,8 @@ namespace VT100.Tests.Fakes
         public ScreenProps ScreenProps { get; private set; }
         public List<PropertySetting>Props { get; private set; }
         public PlateFullScreenConsole PlateInterface { get; private set; }
+        
+        public ViewportStack ViewportStack { get; private set; }
 
         public FakeFullScreenApplication(ILayout layout, int columns = 80, int rows = 25)
         {
@@ -56,8 +61,21 @@ namespace VT100.Tests.Fakes
         /// </summary>
         public void PositionOnPlate()
         {
-            Controls = Positioner.Position(0, 0, Console.WindowWidth, Console.WindowHeight, CaptionAlignment.Left,
-                LayedOutControls, LayoutProperties);
+            var controlSet = Positioner.Position(0, 0, Console.WindowWidth, Console.WindowHeight, CaptionPosition.Left,
+                LayedOutControls, LayoutProperties, ViewportStack.RootViewport);
+            UseControlSet(controlSet);
+        }
+
+        /// <summary>
+        /// Set up a provided control set in the display. This can be called in place of <see cref="PositionOnPlate"/>
+        /// by a unit test. Once called, <see cref="RenderToConsole"/> can be used to get a rendered version of the
+        /// control set. 
+        /// </summary>
+        /// <param name="controlSet">The provided control set.</param>
+        public void UseControlSet(ControlSet controlSet)
+        {
+            Controls = controlSet;
+            ViewportStack.AddViewports(Controls.ExportViewports());
             Controls.Render(Props, PlateInterface);
         }
 
@@ -69,8 +87,7 @@ namespace VT100.Tests.Fakes
         /// </summary>
         public void RenderToConsole()
         {
-            PlateStack = new PlateStack(PlateInterface.Plate);
-            PlateStack.Render(Console);
+            ViewportStack.Render();
             Controls.FocusController.SetFocus(Console);
         }
 
@@ -81,13 +98,18 @@ namespace VT100.Tests.Fakes
         /// </summary>
         public void PrepareForLayout()
         {
-            LayedOutControls = LayoutControls.Extract(this, _layout).ToList();
-            Props = ControlPropertyExtractor.Extract(_layout?.GetType());
             ScreenProps = new ScreenProps();
-            PlateInterface =
-                new PlateFullScreenConsole(Console.WindowWidth, Console.WindowHeight, ScreenProps.MakeBaseFormat());
+            PlateInterface = new PlateFullScreenConsole(Console.WindowWidth, Console.WindowHeight, ScreenProps.MakeBaseFormat());
             LayoutProperties = new LayoutProperties();
+            PlateStack = new PlateStack(PlateInterface.Plate);
+            ViewportStack = new ViewportStack(Console, PlateStack);
+
+            LayedOutControls = LayoutControls.Extract(this, _layout, ViewportStack.RootViewport).ToList();
+            Props = ControlPropertyExtractor.Extract(_layout?.GetType());
+            LayoutProperties = new LayoutProperties();
+
             ControlPropertySetter.Set(LayoutProperties, Props);
+            ControlPropertySetter.Set(ScreenProps, Props);
         }
 
         public void GotFocus(ILayoutControl focusControl)

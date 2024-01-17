@@ -9,6 +9,7 @@ namespace VT100.Attributes
     public class TextBoxAttribute : Attribute
     {
         public string Caption { get; }
+        public int MaxWidth { get; }
 
         public TextBoxAttribute(string caption)
         {

@@ -189,6 +189,8 @@ Global
 		{FA10306E-6249-4B01-A229-2CDEA525FBB5}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{FA10306E-6249-4B01-A229-2CDEA525FBB5}.Release|x86.ActiveCfg = Release|Any CPU
 		{FA10306E-6249-4B01-A229-2CDEA525FBB5}.Release|x86.Build.0 = Release|Any CPU
+		{9153184F-0731-4C88-9CDC-D9C44FFC12A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9153184F-0731-4C88-9CDC-D9C44FFC12A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

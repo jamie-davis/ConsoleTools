@@ -121,6 +121,16 @@ namespace VT100.FullScreen.Controls
             set => _format = value;
         }
 
+        public (int Width, int Height) GetMinSize()
+        {
+            return (1, 1);
+        }
+
+        public (int Width, int Height) GetMaxSize(int visibleWidth, int visibleHeight)
+        {
+            return (visibleWidth, 1);
+        }
+
         #endregion
     }
     

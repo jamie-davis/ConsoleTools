@@ -100,18 +100,23 @@ namespace VT100.FullScreen.Controls
         #region Implementation of IRegionControl
 
         public ControlSet ComputePosition(ControlContainer controlContainer, int regionCol, int regionRow, int width,
-            int height)
+            int height, Viewport containingViewport)
         {
-            var layoutControls = LayoutControls.Extract(_app, _value).ToList();
+            var layoutControls = LayoutControls.Extract(_app, _value, containingViewport).ToList();
             var props = ControlPropertyExtractor.Extract(_value?.GetType());
             var regionProps = new LayoutProperties();
             ControlPropertySetter.Set(regionProps, props);
-            var controlSet = Positioner.Position(regionCol, regionRow, width, height, CaptionAlignment.Left, layoutControls, regionProps);
+            var controlSet = Positioner.Position(regionCol, regionRow, width, height, CaptionPosition.Left, layoutControls, regionProps, containingViewport);
             _height = controlSet.TotalHeight;
             _width = controlSet.TotalWidth;
             _column = regionCol;
             _row = regionRow;
             return controlSet;
+        }
+
+        public IEnumerable<ILayoutControl> GetLayoutControls()
+        {
+            yield break;
         }
 
         #endregion

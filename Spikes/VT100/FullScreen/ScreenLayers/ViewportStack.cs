@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace VT100.FullScreen.ScreenLayers
 {
@@ -29,7 +30,7 @@ namespace VT100.FullScreen.ScreenLayers
         
         public void AddViewports(IEnumerable<Viewport> viewports)
         {
-            _viewports.AddRange(viewports);
+            _viewports.AddRange(viewports.Except(_viewports));
             _tree = new ViewportTree(_viewports);
         }
         

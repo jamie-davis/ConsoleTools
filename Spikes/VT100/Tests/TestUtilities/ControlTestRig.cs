@@ -10,6 +10,7 @@ namespace VT100.Tests.TestUtilities
     {
         private readonly ILayoutControl _control;
         private readonly ValueWrapper<T> _valueWrapper;
+        private readonly Func<object, bool> _method;
         private readonly object[] _input;
         private readonly FakeFullScreenApplication _app;
         private readonly List<string> _keyReports = new List<string>();
@@ -22,6 +23,20 @@ namespace VT100.Tests.TestUtilities
             var fakeLayout = new FakeLayout();
             _app = new FakeFullScreenApplication(fakeLayout, 20, 1);
             _control.PropertyBind(_app, fakeLayout, _valueWrapper.GetValue, _valueWrapper.SetValue);
+            _control.Render(_app.Console);
+            _control.SetFocus(_app.Console);
+
+            MakeInitialReport();
+        }
+
+        public ControlTestRig(ILayoutControl control, Func<object, bool> method, object[] input, int width = 20, int height = 1)
+        {
+            _control = control;
+            _method = method;
+            _input = input;
+            var fakeLayout = new FakeLayout();
+            _app = new FakeFullScreenApplication(fakeLayout, width, height);
+            _control.MethodBind(_app, fakeLayout, method);
             _control.Render(_app.Console);
             _control.SetFocus(_app.Console);
 
@@ -55,8 +70,11 @@ namespace VT100.Tests.TestUtilities
         {
             var sb = new StringBuilder();
             sb.Append(_app.Console.GetDisplayReport());
-            sb.AppendLine();
-            sb.AppendLine($"Value is: -->{_valueWrapper.Value}<--");
+            if (_valueWrapper != null)
+            {
+                sb.AppendLine();
+                sb.AppendLine($"Value is: -->{_valueWrapper.Value}<--");
+            }
             return sb.ToString();
         }
 

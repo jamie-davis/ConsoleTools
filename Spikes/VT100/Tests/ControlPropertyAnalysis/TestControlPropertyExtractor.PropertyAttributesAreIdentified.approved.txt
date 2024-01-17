@@ -1,6 +1,7 @@
 Property Attribute                                                                             
 -------------------------                                                                      
 BorderAttribute                                                                                
+CaptionPositionAttribute                                                                       
 WidthAttribute                                                                                 
 BackgroundAttribute                                                                            
 ButtonBackgroundAttribute                                                                      

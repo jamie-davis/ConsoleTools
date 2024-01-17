@@ -79,16 +79,18 @@ namespace VT100.FullScreen
 
         public void Run()
         {
-            var layoutControls = LayoutControls.Extract(this, _layout).ToList();
             var props = ControlPropertyExtractor.Extract(_layout?.GetType());
             ControlPropertySetter.Set(_screenProperties, props);
-                
+
             var plateInterface = new PlateFullScreenConsole(Console.WindowWidth, Console.WindowHeight, _screenProperties.MakeBaseFormat());
             var regionProps = new LayoutProperties();
-            ControlPropertySetter.Set(regionProps, props);
             var plateStack = new PlateStack(plateInterface.Plate);
             var viewportStack = new ViewportStack(Console, plateStack);
-            _controls = Positioner.Position(0, 0, Console.WindowWidth, Console.WindowHeight, CaptionAlignment.Left, layoutControls, regionProps);
+
+            var layoutControls = LayoutControls.Extract(this, _layout, viewportStack.RootViewport).ToList();
+            ControlPropertySetter.Set(regionProps, props);
+            
+            _controls = Positioner.Position(0, 0, Console.WindowWidth, Console.WindowHeight, CaptionPosition.Left, layoutControls, regionProps, viewportStack.RootViewport);
             viewportStack.AddViewports(_controls.ExportViewports());
             _controls.Render(props, plateInterface);
             viewportStack.Render();

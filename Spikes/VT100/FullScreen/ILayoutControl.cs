@@ -51,5 +51,22 @@ namespace VT100.FullScreen
         /// The control can initialise this but it will normally be instantiated by the framework. 
         /// </summary>
         public TFormat Format { get; set; }
+
+        /// <summary>
+        /// Return the minimum size for this control. If the control has settings that limit the size, these should
+        /// be taken into account. 
+        /// </summary>
+        /// <returns>A width and height</returns>
+        (int Width, int Height) GetMinSize();
+
+        /// <summary>
+        /// Return the maximum size for this control. If the control has settings that limit the size, these should
+        /// be taken into account. 
+        /// </summary>
+        /// <param name="visibleWidth">The constraining screen area available for the control. This can be ignored,
+        /// but is used to provide reference so that if the control can occupy unlimited space, </param>
+        /// <returns>A width and height</returns>
+        (int Width, int Height) GetMaxSize(int visibleWidth, int visibleHeight);
+
     }
 }
