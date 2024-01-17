@@ -4,9 +4,9 @@ Initial Display                                     Focus Chain
 |│                                                │ Focus TextBoxControl "Real Name" (col 14, row 11)       
 |│ ┌────────────────────────────────────────────┐ │ Focus TextBoxControl "Nickname" (col 20, row 14)        
 |│ │                                            │ │ Focus TextBoxControl "Favourite Colour" (col 20, row 16)
-|│ │ Nested label     nested label value        │ │ Focus ButtonControl "Default" (col 12, row 18)          
-|│ │                                            │ │ Focus ButtonControl "OK" (col 22, row 18)               
->│ │ Nested text box  nested value              │ │ Focus ButtonControl "Cancel" (col 27, row 18)           
+|│ │ Nested label     nested label value        │ │ Focus ButtonControl "Default" (col 13, row 18)          
+|│ │                                            │ │ Focus ButtonControl "OK" (col 23, row 18)               
+>│ │ Nested text box  nested value              │ │ Focus ButtonControl "Cancel" (col 28, row 18)           
 |│ │                                            │ │                                                         
 |│ └────────────────────────────────────────────┘ │                                                         
 |│                                                │                                                         
@@ -18,9 +18,9 @@ Initial Display                                     Focus Chain
 |│                                                │                                                         
 |│ Favourite Colour  Red                          │                                                         
 |│                                                │                                                         
-|│           ┏━━━━━━━┓ ┏━━┓ ┏━━━━━━┓              │                                                         
-|│           ┃Default┃ ┃OK┃ ┃Cancel┃              │                                                         
-|│           ┗━━━━━━━┛ ┗━━┛ ┗━━━━━━┛              │                                                         
+|│            ┏━━━━━━━┓ ┏━━┓ ┏━━━━━━┓             │                                                         
+|│            ┃Default┃ ┃OK┃ ┃Cancel┃             │                                                         
+|│            ┗━━━━━━━┛ ┗━━┛ ┗━━━━━━┛             │                                                         
 |└────────────────────────────────────────────────┘                                                         
 |                                                                                                           
 |                                                                                                           
