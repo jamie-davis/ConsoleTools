@@ -32,17 +32,16 @@ namespace ConsoleToolkit.Utilities
 
         internal static object Invoke(MethodInfo method, object handler, params object[] parameters)
         {
+            FuncDelegate func;
             lock (_lock)
             {
-                FuncDelegate func;
                 if (!MethodFunctions.TryGetValue(method, out func))
                 {
                     func = Generate(method);
                     MethodFunctions[method] = func;
                 }
-
-                return func(handler, parameters ?? new object[0]);
             }
+            return func(handler, parameters ?? new object[0]);
         }
 
         private static FuncDelegate Generate(MethodInfo method)
