@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using ConsoleToolkit;
@@ -104,6 +105,25 @@ namespace ConsoleToolkitTests.ApplicationStyles
 
                 [Option]
                 public string TestOpt { get; set; }
+            }
+
+            [Command("as")]
+            public class SelfAsyncCommand
+            {
+                [Positional]
+                public string Pos { get; set; }
+
+                [Option]
+                public string TestOpt { get; set; }
+
+                [CommandHandler]
+                public async Task Handle(IConsoleAdapter console)
+                {
+                    await Task.Delay(1);
+                    console.WrapLine("Self handled async command.");
+                    console.WrapLine("Positional parameter: {0}", Pos);
+                    console.WrapLine("Option TestOpt      : {0}", TestOpt);
+                }
             }
 
             [CommandHandler]
@@ -290,7 +310,7 @@ namespace ConsoleToolkitTests.ApplicationStyles
             protected override void Initialise()
             {
                 SetConfigTypeFilter(t => t.DeclaringType == GetType());
-                HelpCommand<HelpMe>(h => null);
+                HelpCommand<HelpMe>(_ => null);
             }
         }
 
@@ -349,6 +369,13 @@ namespace ConsoleToolkitTests.ApplicationStyles
         public void SelfHandledCommandIsExecuted()
         {
             UnitTestAppRunner.Run<TestApp>(new[] { "d", "positional", "-TestOpt:opt" }, _console);
+            Approvals.Verify(_console.GetBuffer());
+        }
+
+        [Fact]
+        public void AsyncSelfHandledCommandIsExecuted()
+        {
+            UnitTestAppRunner.Run<TestApp>(new[] { "as", "positional", "-TestOpt:opt" }, _console);
             Approvals.Verify(_console.GetBuffer());
         }
 

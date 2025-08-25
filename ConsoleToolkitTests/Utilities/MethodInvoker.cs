@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using System.Threading.Tasks;
 using ConsoleToolkit.Utilities;
 using FluentAssertions;
 using Xunit;
@@ -12,6 +13,13 @@ namespace ConsoleToolkitTests.Utilities
 
         class Item
         {
+            public static void Clear()
+            {
+                StaticResult = null;
+            }
+
+            public static string StaticResult { get; set; }
+
             public string StringMethod(int n, string s)
             {
                 return string.Format("Int: {0}, String: {1}", n, s);
@@ -36,6 +44,18 @@ namespace ConsoleToolkitTests.Utilities
             {
                 return string.Format("Int: {0}, String: {1}", n, s);
             }
+
+            public static async Task StaticVoidAsyncMethod(int n, string s)
+            {
+                await Task.Delay(1);
+                StaticResult = $"{n}, {s}";
+            }
+
+            public static async Task<string> StaticAsyncStringMethod(int n, string s)
+            {
+                await Task.Delay(1);
+                return $"{n}, {s}";
+            }
         }
 
         #endregion
@@ -48,7 +68,7 @@ namespace ConsoleToolkitTests.Utilities
             var method = item.GetType().GetMethod("StringMethod");
 
             //Act
-            var result = MethodInvoker.Invoke(method, item, new object[] { 55, "bob" }) as string;
+            var result = MethodInvoker.Invoke(method, item, 55, "bob") as string;
 
             //Assert
             Assert.Equal(item.StringMethod(55, "bob"), result);
@@ -76,9 +96,37 @@ namespace ConsoleToolkitTests.Utilities
             var method = item.GetType().GetMethod("VoidMethod");
 
             //Act
-            MethodInvoker.Invoke(method, item, new object[] { 55, "bob" });
+            MethodInvoker.Invoke(method, item, 55, "bob");
 
             //Assert
+            //We expect no assertion
+        }
+        
+        [Fact]
+        public void StaticAsyncVoidMethodCanBeCalled()
+        {
+            //Arrange
+            var method = typeof(Item).GetMethod(nameof(Item.StaticVoidAsyncMethod), BindingFlags.Static | BindingFlags.Public);
+
+            //Act
+            MethodInvoker.Invoke(method, null, 55, "bob");
+
+            //Assert
+            Assert.Equal(Item.StaticResult, "55, bob");
+            //We expect no assertion
+        }
+        
+        [Fact]
+        public void StaticAsyncStringMethodCanBeCalled()
+        {
+            //Arrange
+            var method = typeof(Item).GetMethod(nameof(Item.StaticAsyncStringMethod), BindingFlags.Static | BindingFlags.Public);
+
+            //Act
+            var result = MethodInvoker.Invoke(method, null, 55, "bob");
+
+            //Assert
+            Assert.Equal("55, bob", result);
             //We expect no assertion
         }
 
@@ -87,10 +135,10 @@ namespace ConsoleToolkitTests.Utilities
         {
             //Arrange
             var item = new Item();
-            var method = item.GetType().GetMethod("StaticStringMethod", BindingFlags.Static | BindingFlags.Public);
+            var method = item.GetType().GetMethod(nameof(Item.StaticStringMethod), BindingFlags.Static | BindingFlags.Public);
 
             //Act
-            MethodInvoker.Invoke(method, null, new object[] { 55, "bob" });
+            MethodInvoker.Invoke(method, null, 55, "bob");
 
             //Assert
             //We expect no assertion
@@ -101,7 +149,7 @@ namespace ConsoleToolkitTests.Utilities
         {
             //Arrange
             var item = new Item();
-            var method = item.GetType().GetMethod("ThrowMethod");
+            var method = item.GetType().GetMethod(nameof(Item.ThrowMethod));
 
             //Act
             Action action = () => MethodInvoker.Invoke(method, item, 55, "bob");

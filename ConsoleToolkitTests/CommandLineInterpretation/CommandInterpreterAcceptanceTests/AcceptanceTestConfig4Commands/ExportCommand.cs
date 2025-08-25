@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using ConsoleToolkit.CommandLineInterpretation.ConfigurationAttributes;
 using ConsoleToolkit.ConsoleIO;
 
@@ -42,7 +43,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
         }
 
         [CommandHandler]
-        public void Handle(IConsoleAdapter adapter)
+        public async Task Handle(IConsoleAdapter adapter)
         {
             if (!DbOptions.ValidateDatabaseParameters(adapter))
             {
@@ -57,6 +58,7 @@ namespace ConsoleToolkitTests.CommandLineInterpretation.CommandInterpreterAccept
                              To.ToString().White(),
                              File.White());
 
+            await Task.Delay(50);
             adapter.WriteLine();
         }
     }

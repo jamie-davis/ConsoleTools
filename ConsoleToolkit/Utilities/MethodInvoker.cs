@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Threading.Tasks;
 using FuncDelegate = System.Func<object, System.Collections.Generic.IEnumerable<object>, object>;
 
 namespace ConsoleToolkit.Utilities
@@ -47,6 +47,7 @@ namespace ConsoleToolkit.Utilities
         private static FuncDelegate Generate(MethodInfo method)
         {
             var expressions = new List<Expression>();
+            var variables = new List<ParameterExpression>();
 
             //make function parameters
             var handlerVar = Expression.Variable(typeof(object), "obj");
@@ -58,6 +59,7 @@ namespace ConsoleToolkit.Utilities
 
             //copy the parameters from the supplied array of objects into the parameter variables
             var iterator = Expression.Variable(typeof (IEnumerator<object>), "enumerator");
+            variables.Add(iterator);
             expressions.Add(Expression.Assign(iterator, Expression.Call(parametersVar, GetEnumeratorMethod)));
             foreach (var methodParamVar in methodParamVars)
             {
@@ -73,17 +75,37 @@ namespace ConsoleToolkit.Utilities
                 call = Expression.Call(Expression.Convert(handlerVar, method.DeclaringType), method,
                                                 methodParamVars);
 
-            //void methods need to conform to the FuncDelegate return value, so return null.
             if (method.ReturnType == typeof (void))
             {
+                //void methods need to conform to the FuncDelegate return value, so return null.
                 expressions.Add(call);
                 expressions.Add(Expression.Constant(null));
             }
+            else if (method.ReturnType == typeof(Task))
+            {
+                //async Task methods need to wait and then return null.
+                var waitMethod = typeof(Task).GetMethods().Single(m => m.Name == "Wait" && m.GetParameters().Length == 0);
+                var waitCall = Expression.Call(call, waitMethod);
+                expressions.Add(waitCall);
+                expressions.Add(Expression.Constant(null));
+            }
+            else if (typeof(Task).IsAssignableFrom(method.ReturnType))
+            {
+                //async Task<result> methods need to wait and then return Result.
+                var taskVariable = Expression.Variable(method.ReturnType, "task");
+                variables.Add(taskVariable);
+                var assignTask = Expression.Assign(taskVariable, call);
+                expressions.Add(assignTask);
+                var resultProp = taskVariable.Type.GetProperty("Result");
+                expressions.Add(Expression.Convert(Expression.MakeMemberAccess(taskVariable, resultProp), typeof(object)));
+            }
             else
+            {
                 expressions.Add(Expression.Convert(call, typeof(object)));
+            }
 
             //construct the function
-            var parameters = methodParamVars.Concat(new [] {iterator});
+            var parameters = methodParamVars.Concat(variables);
             var block = Expression.Block(typeof(object), parameters, expressions);
             return Expression.Lambda<FuncDelegate>(block, new[] {handlerVar, parametersVar}).Compile();
         }
